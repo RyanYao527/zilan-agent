@@ -5,6 +5,7 @@ from validate_zilan_repo import (
     _check_platform_validation_doc,
     _check_portable_upgrade_doc,
     _check_runtime_evidence_docs,
+    _check_version_consistency,
     run_checks,
 )
 
@@ -117,3 +118,20 @@ def test_runtime_evidence_docs_missing_required_fragments_are_reported(tmp_path:
     assert any("Runtime Evidence Excerpts" in failure for failure in failures)
     assert any("mode: dry-run" in failure for failure in failures)
     assert any("Redaction note" in failure for failure in failures)
+
+
+def test_project_version_mismatch_is_reported(tmp_path: Path) -> None:
+    (tmp_path / "pyproject.toml").write_text('version = "2.4.3"\n', encoding="utf-8")
+    (tmp_path / "README.zh.md").write_text("**版本**：v2.4.3\n", encoding="utf-8")
+    (tmp_path / "README.en.md").write_text("**Version**: v2.4.3\n", encoding="utf-8")
+    (tmp_path / "CHANGELOG.md").write_text("## [2.4.2] - 2026-06-15\n", encoding="utf-8")
+    (tmp_path / "AGENT_UPGRADE_PORTABLE.md").write_text(
+        "Current project baseline: zilan-agent v2.4.3\n",
+        encoding="utf-8",
+    )
+    failures: list[str] = []
+
+    _check_version_consistency(tmp_path, failures)
+
+    assert any("Project version mismatch" in failure for failure in failures)
+    assert any("CHANGELOG.md=2.4.2" in failure for failure in failures)
