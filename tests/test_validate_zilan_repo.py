@@ -1,9 +1,11 @@
 from pathlib import Path
 
+import validate_zilan_repo
 from validate_zilan_repo import (
     _check_agent_prompts,
     _check_platform_validation_doc,
     _check_portable_upgrade_doc,
+    _check_public_style_boundaries,
     _check_runtime_evidence_docs,
     _check_version_consistency,
     run_checks,
@@ -122,6 +124,16 @@ def test_runtime_evidence_docs_missing_required_fragments_are_reported(tmp_path:
     assert any("Runtime Evidence Excerpts" in failure for failure in failures)
     assert any("mode: dry-run" in failure for failure in failures)
     assert any("Redaction note" in failure for failure in failures)
+
+
+def test_public_style_boundary_private_fragment_is_reported(tmp_path: Path, monkeypatch) -> None:
+    (tmp_path / "SKILL.md").write_text("认知带宽受限", encoding="utf-8")
+    monkeypatch.setattr(validate_zilan_repo, "PUBLIC_STYLE_BOUNDARY_FILES", ("SKILL.md",))
+    failures: list[str] = []
+
+    _check_public_style_boundaries(tmp_path, failures)
+
+    assert any("private/autobiographical public fragment" in failure for failure in failures)
 
 
 def test_project_version_mismatch_is_reported(tmp_path: Path) -> None:

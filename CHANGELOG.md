@@ -2,6 +2,18 @@
 
 All notable changes to zilan-agent are tracked here. Platform validation status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
+## [2.4.5] - 2026-06-15
+
+### Changed
+
+- Depersonalized public Skill, README, and Agent prompt descriptions by replacing private/autobiographical scenes with reusable application examples.
+- Added explicit material-layer boundaries so doctrine, method metaphors, application examples, and historical notes are not conflated.
+- Updated core context examples and regression prompts to use neutral daily-practice scenarios.
+
+### Added
+
+- Added repository validation for high-risk private/autobiographical fragments in public docs and prompt files.
+
 ## [2.4.4] - 2026-06-15
 
 ### Added
