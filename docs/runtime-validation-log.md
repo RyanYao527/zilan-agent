@@ -199,6 +199,53 @@ An initial operator attempt ran `validate_zilan_repo.py --check-generated` in pa
 
 This validates installation layout and helper availability only. It does not run Claude Code or validate answer quality.
 
+## 2026-06-15 Codex v2.4.5 Runtime Rerun And Claude Code Blocker
+
+| Field | Value |
+|---|---|
+| Runtime | Codex current session; Claude Code CLI control attempts |
+| Provider / model | Codex current session for ZC validation; Claude Code 2.1.169 reported local `deepseek-v4-pro[1m]` usage |
+| Tool version | Codex sub-agent tools available; Claude Code `claude -p` noninteractive mode |
+| Repository branch | `codex/runtime-rerun-20260615` |
+| Repository base commit | `6988f7b6a24fbe92e1175de2bca7043afa5bdd05` plus activation/task prompt-guard changes in this branch |
+| Prompt set | ZC-01 through ZC-06 from `CODEX_REGRESSION_TESTS.md` and `tests/regression_cases.yaml` after v2.4.5 public-doc depersonalization |
+| Transcript status | Summarized here; full transcripts are not committed. ZC-06 wrote `C:\tmp\zilan-validation-20260615-ZC06.md` outside the repository. |
+| Repository checks | `python -m ruff check scripts tests` pass; `python -m pytest` pass; `python scripts\validate_zilan_repo.py --check-generated --strict-yaml` pass |
+| Overall result | Codex `pass`; Claude Code `blocked` for exact wake-word prompts |
+
+### Codex Case Results
+
+| Case | Mode | Result | Notes |
+|---|---|---|---|
+| ZC-01 | Skill lightweight dialogue | `pass` | Parent-session review confirmed the v2.4.5 neutral `工作反馈` prompt is covered by `SKILL.md`, `context/心类学认知分析.md`, and `context/南传观禅指南.md`; expected boundary behavior remains present. |
+| ZC-02 | Skill concept lookup | `pass` | Parent-session review confirmed `context/因明推理引擎.md` and `context/摄类学工具箱.md` cover `遍是宗法性`, `同品定有性`, and `异品遍无性`. |
+| ZC-03 | Skill cross-domain explanation | `pass` | Parent-session review confirmed the neutral `收到批评后我很受挫` prompt is supported by the Collected Topics and cognitive-analysis context, including fact / concept-label / `受` / `想` / `瞋` distinctions. |
+| ZC-04 | Explicit sub-agent Agama search | `pass` | Spawned sub-agent `019eca67-84a4-7913-a06c-b89b7b5f82bf` (`Ptolemy`). It used repository-local `agents/zilan-codex.md`, `context/agama/agama-index.md`, and `scripts/search_agama.py`; searched Markdown only; excluded `_source`; returned distribution counts and representative citations. |
+| ZC-05 | Explicit sub-agent cross-domain research | `pass` | Spawned sub-agent `019eca67-b025-7e81-a216-c1c6d24f695e` (`Schrodinger`). It loaded Agama, Collected Topics, Buddhist logic, Madhyamaka, vipassana, and cognitive-analysis context; supplied stable local citations and practice / textual boundaries. |
+| ZC-06 | Long report output | `pass` | Spawned sub-agent `019eca67-da7e-73b2-aa12-1804163e8878` (`Curie`). It wrote `C:\tmp\zilan-validation-20260615-ZC06.md`; the file exists and includes search strategy, hit distribution, classification table, representative citations, analysis, boundary statements, and collation TODOs. |
+
+### Codex Sub-Agent Evidence
+
+| Case | Parent-observed agent ID | Evidence |
+|---|---|---|
+| ZC-04 | `019eca67-84a4-7913-a06c-b89b7b5f82bf` | Completion notification reported Markdown-only Agama search, `_source` exclusion, hit distribution (`雜阿含` 273 lines, `增壹阿含` 64, `中阿含` 55, `長阿含` 25), preliminary categories, and citations such as `context/agama/T0099-za-agama.md:147`. |
+| ZC-05 | `019eca67-b025-7e81-a216-c1c6d24f695e` | Completion notification reported local context loading, `search_agama.py` / `rg` use, reasoning chain through Agama + 摄类学 + 因明 + 中观 + 观禅, and representative citations including `context/agama/T0099-za-agama.md:147` and `context/agama/T0026-zhong-agama.md:2227`. |
+| ZC-06 | `019eca67-da7e-73b2-aa12-1804163e8878` | Completion notification confirmed file output at `C:\tmp\zilan-validation-20260615-ZC06.md`; local file check confirmed the report begins with search scope and excludes `_source` XML. |
+
+### Claude Code Control Attempts
+
+| Attempt | Result | Notes |
+|---|---|---|
+| `claude -p` with `--append-system-prompt` or `--system-prompt` and positional exact ZC-02 prompt | `blocked` | Returned only identity / activation greetings such as "孜澜在此", without answering `什么是因三相`. |
+| `claude -p` with `--safe-mode`, repository `agents/zilan-claude-code.md`, and exact wake-word prompts through stdin | `blocked` | Still returned identity greetings or interpreted the wake-word prompt as activation, not as a concrete task. |
+| `claude -p` with repository prompt through stdin but without the `孜澜` wake-word prefix | `pass-control` | Answered ZC-02 substantively, covering `遍是宗法性`, `同品定有性`, `异品遍无性`, and the dependency on `context/摄类学工具箱.md`. |
+
+### Claude Code Failure Mode
+
+Claude Code CLI 2.1.169 with the current local provider route did not pass the exact ZC prompt family when the prompt contained the Zilan wake word. The failures were not generic CLI failures: a minimal `claude -p --safe-mode "请只回答：OK"` returned `OK`, and a stdin control without the wake word answered ZC-02. The observed blocker is specific to the wake-word / route interaction, where a concrete task is reduced to an identity greeting.
+
+The branch adds prompt guards that state activation keywords plus concrete tasks must be answered directly, but the current Claude Code route still failed exact wake-word prompts during this session. Therefore `agents/openai.yaml` and `docs/platform-validation.md` conservatively downgrade Claude Code from `tested` to `blocked` until a future rerun demonstrates the exact ZC prompts complete successfully.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:

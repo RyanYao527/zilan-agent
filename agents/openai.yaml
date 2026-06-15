@@ -46,12 +46,12 @@ models:
 validation:
   codex:
     status: tested
-    date: "2026-06-12"
-    scope: "ZC-01 through ZC-06 passed in Codex on 2026-06-12 with local Markdown context; ZC-04 through ZC-06 used parent-observed sub-agent spawns."
+    date: "2026-06-15"
+    scope: "ZC-01 through ZC-06 rerun after v2.4.5 public-doc depersonalization; ZC-04 through ZC-06 used parent-observed sub-agent spawns with local Markdown context."
   claude_code:
-    status: tested
-    date: "2026-06-12"
-    scope: "ZC-01 through ZC-06 passed through Claude Code CLI 2.1.169 with agents/zilan-claude-code.md loaded; noninteractive direct agent-prompt route tested, background auto-spawn not separately audited."
+    status: blocked
+    date: "2026-06-15"
+    scope: "Claude Code CLI 2.1.169 route is currently blocked for exact ZC prompts containing the Zilan wake word: noninteractive runs returned identity greetings instead of executing concrete tasks. A stdin control without the wake word answered ZC-02 successfully, so this is tracked as a wake-word/route behavior issue."
   openai_api:
     status: harness-ready
     date: "2026-06-12"

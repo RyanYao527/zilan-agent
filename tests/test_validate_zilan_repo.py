@@ -87,6 +87,7 @@ runtime: codex-sub-agent
 
     _check_agent_prompts(tmp_path, failures)
 
+    assert any("激活与任务合并规则" in failure for failure in failures)
     assert any("search_agama.py --json" in failure for failure in failures)
     assert any("passage_citation" in failure for failure in failures)
 

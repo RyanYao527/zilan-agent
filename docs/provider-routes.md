@@ -30,7 +30,7 @@ The 2026-06-15 triage checked only whether common environment variables existed.
 
 The current conservative interpretation is:
 
-- Claude Code route: separately validated through Claude Code CLI on 2026-06-12.
+- Claude Code route: validated through Claude Code CLI on 2026-06-12, but blocked again in the 2026-06-15 wake-word noninteractive rerun; track that separately from native DeepSeek validation.
 - DeepSeek native route: still `config-only` until a native harness or dated provider run exists.
 - DeepSeek Anthropic-compatible route: keep the documented caveat visible if using Claude Code through that compatibility layer.
 
