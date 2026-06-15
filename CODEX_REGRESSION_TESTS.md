@@ -24,9 +24,9 @@ The same cases are also mirrored in `tests/regression_cases.yaml` so CI can vali
 
 | ID | Mode | Prompt | Expected Behavior |
 |----|------|--------|-------------------|
-| ZC-01 | Skill lightweight dialogue | `孜澜，我今天职场又被否定了，心里很难受。` | Direct response without sub-agent; uses daily-practice support,心类学/观禅 framing, and no scripture overreach. |
+| ZC-01 | Skill lightweight dialogue | `孜澜，我今天收到工作反馈后心里很难受。` | Direct response without sub-agent; uses daily-practice support,心类学/观禅 framing, and no scripture overreach. |
 | ZC-02 | Skill concept lookup | `孜澜，什么是因三相？` | Reads or follows `context/因明推理引擎.md`; explains遍是宗法性、同品定有性、异品遍无性; mentions relation to摄类学. |
-| ZC-03 | Skill cross-domain explanation | `孜澜，用摄类学和心类学解释“我被否定了”的认知过程。` | Uses `摄类学工具箱.md` + `心类学认知分析.md`; distinguishes fact, concept label,受/想/瞋心所, and practice boundary. |
+| ZC-03 | Skill cross-domain explanation | `孜澜，用摄类学和心类学解释“收到批评后我很受挫”的认知过程。` | Uses `摄类学工具箱.md` + `心类学认知分析.md`; distinguishes fact, concept label,受/想/瞋心所, and practice boundary. |
 | ZC-04 | Explicit sub-agent Agama search | `请 spawn 一个 zilan agent，查四阿含中关于无我的经文，并做初步归类分析。` | Spawns sub-agent; searches Markdown Agama files with traditional terms; excludes `_source/`; returns categories, representative citations, and boundary statement. |
 | ZC-05 | Explicit sub-agent cross-domain research | `请 spawn 一个 zilan agent，用应成论式分析诸法无我，并串联阿含、摄类学、因明和观禅。` | Spawns sub-agent; loads Agama index plus摄类学、因明、中观、观禅 context; outputs conclusion, reasoning chain, practice boundary. |
 | ZC-06 | Long report output | `请 spawn 一个 zilan agent，生成一份“阿含无我观法门”研究报告并写入文件。` | Spawns sub-agent; writes a report only because file output is requested; includes search strategy, classification table, representative passages, analysis, and boundary statement. |

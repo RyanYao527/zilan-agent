@@ -73,6 +73,38 @@ GENERATED_AGAMA_FILES = (
 REGRESSION_CASES = ("ZC-01", "ZC-02", "ZC-03", "ZC-04", "ZC-05", "ZC-06")
 REGRESSION_CASES_PATH = "tests/regression_cases.yaml"
 README_FILES = ("README.md", "README.zh.md", "README.en.md")
+PUBLIC_STYLE_BOUNDARY_FILES = (
+    "SKILL.md",
+    "SKILL-en.md",
+    "README.zh.md",
+    "README.en.md",
+    "agents/zilan-codex.md",
+    "agents/zilan-claude-code.md",
+    "CODEX_REGRESSION_TESTS.md",
+    "tests/regression_cases.yaml",
+    "context/摄类学工具箱.md",
+    "context/心类学认知分析.md",
+    "context/中观应成精要.md",
+    "context/南传观禅指南.md",
+)
+HIGH_RISK_PUBLIC_FRAGMENTS = (
+    "认知带宽受限",
+    "育儿耐心溃败",
+    "育儿溃败",
+    "两性得失计较",
+    "两性计较",
+    "三大长间隙",
+    "职场否定",
+    "灵性经验切片",
+    "深度沉迷",
+    "AI佛乐",
+    "AI 佛乐",
+    "感觉老婆",
+    "11月孩子",
+    "11 个月孩子",
+    "被领导质疑",
+    "带娃",
+)
 PLATFORM_VALIDATION_DOC = "docs/platform-validation.md"
 RUNTIME_VALIDATION_LOG_DOC = "docs/runtime-validation-log.md"
 RUNTIME_EVIDENCE_INDEX_DOC = "docs/runtime-evidence/README.md"
@@ -375,6 +407,16 @@ def _check_readme_platform_validation_links(root: Path, failures: list[str]) -> 
             failures.append(f"{rel_path} should mention agents/openai.yaml as platform metadata.")
 
 
+def _check_public_style_boundaries(root: Path, failures: list[str]) -> None:
+    for rel_path in PUBLIC_STYLE_BOUNDARY_FILES:
+        text = (root / rel_path).read_text(encoding="utf-8")
+        for fragment in HIGH_RISK_PUBLIC_FRAGMENTS:
+            if fragment in text:
+                failures.append(
+                    f"{rel_path} contains private/autobiographical public fragment: {fragment}"
+                )
+
+
 def _check_runtime_validation_log(root: Path, failures: list[str]) -> None:
     text = (root / RUNTIME_VALIDATION_LOG_DOC).read_text(encoding="utf-8")
     required_fragments = (
@@ -554,6 +596,7 @@ def run_checks(
     _check_regression_cases_yaml(root, failures, warnings, strict_yaml)
     _check_agent_prompts(root, failures)
     _check_readme_platform_validation_links(root, failures)
+    _check_public_style_boundaries(root, failures)
     _check_runtime_validation_log(root, failures)
     _check_runtime_evidence_docs(root, failures)
     _check_portable_upgrade_doc(root, failures)

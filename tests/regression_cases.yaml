@@ -5,7 +5,7 @@ cases:
   - id: ZC-01
     mode: skill
     category: lightweight_dialogue
-    prompt: "孜澜，我今天职场又被否定了，心里很难受。"
+    prompt: "孜澜，我今天收到工作反馈后心里很难受。"
     requires:
       subagent: false
       agama_search: false
@@ -16,7 +16,7 @@ cases:
         - context/心类学认知分析.md
         - context/南传观禅指南.md
       keywords:
-        - 职场否定
+        - 工作反馈
         - 觉察
         - 边界
       boundary_statement: true
@@ -43,7 +43,7 @@ cases:
   - id: ZC-03
     mode: skill
     category: cross_domain_explanation
-    prompt: "孜澜，用摄类学和心类学解释“我被否定了”的认知过程。"
+    prompt: "孜澜，用摄类学和心类学解释“收到批评后我很受挫”的认知过程。"
     requires:
       subagent: false
       agama_search: false
