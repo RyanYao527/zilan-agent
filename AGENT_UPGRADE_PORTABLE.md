@@ -23,7 +23,7 @@ Zilan now uses a dual-track design:
 |---|---|---|---|
 | Skill mode | `SKILL.md` / `SKILL-en.md` | Lightweight dialogue, daily practice reflection, simple concept explanation | Maintained in repository and covered by invariant checks |
 | Codex sub-agent | `agents/zilan-codex.md` | Explicit spawned research, Agama retrieval, cross-domain reports | `tested` as of 2026-06-12 |
-| Claude Code agent | `agents/zilan-claude-code.md` | Claude Code explicit agent route and local tool use | `tested` as of 2026-06-12 |
+| Claude Code agent | `agents/zilan-claude-code.md` | Claude Code explicit agent route and local tool use | `blocked` as of 2026-06-15 pending wake-word prompt rerun |
 | OpenAI API harness | `scripts/openai_api_harness.py` | Portable Responses API request construction and live validation path | `harness-ready`; live run still requires `OPENAI_API_KEY` evidence |
 | Provider metadata | `agents/openai.yaml` | DeepSeek, GLM, Qwen route metadata | `config-only` until native harnesses or dated runtime evidence exist |
 
@@ -81,7 +81,7 @@ An earlier Claude Code setup using a DeepSeek Anthropic-compatible endpoint prod
 
 Current conservative interpretation:
 
-- Claude Code itself has separate runtime evidence from 2026-06-12.
+- Claude Code had separate runtime evidence from 2026-06-12, but the 2026-06-15 rerun found a wake-word / noninteractive route blocker.
 - Native DeepSeek API support is not validated by that Claude Code compatibility-layer observation.
 - DeepSeek remains `config-only` in this repository until a native harness or dated provider run exists.
 
@@ -102,11 +102,12 @@ For clean install smoke testing, use a fresh clone and run the same checks seque
 
 ## Current Next Steps
 
-1. Run OpenAI API live validation only after `OPENAI_API_KEY` is available.
-2. Add transcript-backed excerpts for representative Codex and Claude Code cases where safe.
-3. Add native dry-run/live harnesses for DeepSeek, GLM, and Qwen before upgrading those routes.
-4. Improve Agama citation granularity and deduplication.
-5. Keep `CHANGELOG.md` updated for user-visible project changes.
+1. Resolve the Claude Code wake-word / noninteractive route blocker and rerun exact ZC prompts.
+2. Run OpenAI API live validation only after `OPENAI_API_KEY` is available.
+3. Add transcript-backed excerpts for representative Codex cases and future Claude Code passing cases where safe.
+4. Add native dry-run/live harnesses for DeepSeek, GLM, and Qwen before upgrading those routes.
+5. Improve Agama citation granularity and deduplication.
+6. Keep `CHANGELOG.md` updated for user-visible project changes.
 
 ## Historical Status
 

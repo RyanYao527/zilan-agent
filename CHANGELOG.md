@@ -9,10 +9,13 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Depersonalized public Skill, README, and Agent prompt descriptions by replacing private/autobiographical scenes with reusable application examples.
 - Added explicit material-layer boundaries so doctrine, method metaphors, application examples, and historical notes are not conflated.
 - Updated core context examples and regression prompts to use neutral daily-practice scenarios.
+- Clarified that activation keywords combined with concrete questions must be answered directly instead of stopping at identity greetings.
+- Recorded the 2026-06-15 Codex rerun and downgraded Claude Code to `blocked` pending a wake-word / noninteractive route fix.
 
 ### Added
 
 - Added repository validation for high-risk private/autobiographical fragments in public docs and prompt files.
+- Added agent prompt validation for the activation/task merge contract.
 
 ## [2.4.4] - 2026-06-15
 

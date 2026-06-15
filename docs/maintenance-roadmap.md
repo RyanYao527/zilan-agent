@@ -11,7 +11,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | CI | GitHub Actions runs repository invariants, generated Agama idempotency checks, pytest, ruff, and Agama search smoke tests. |
 | Repository invariants | `scripts/validate_zilan_repo.py` checks required files, context files, YAML shape, regression inventory, platform status consistency, agent prompt contracts, and Agama search behavior. |
 | Regression inventory | `CODEX_REGRESSION_TESTS.md` is mirrored by `tests/regression_cases.yaml`; CI validates structure, resources, and case IDs. |
-| Platform status | `agents/openai.yaml` is the machine-readable source; `docs/platform-validation.md` is the human-readable validation record. |
+| Platform status | `agents/openai.yaml` is the machine-readable source; `docs/platform-validation.md` is the human-readable validation record. Codex is `tested`; Claude Code is currently `blocked` pending wake-word prompt rerun. |
 | Runtime validation | `docs/runtime-validation-log.md` records manual runtime validation sessions and transcript availability. |
 | Runtime evidence policy | `docs/validation-evidence.md` defines evidence levels, transcript redaction, and status-promotion rules. |
 | Runtime evidence excerpts | `docs/runtime-evidence/` stores small redacted command-output or transcript excerpts that support validation-log entries. |
@@ -21,7 +21,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | OpenAI API harness | `scripts/openai_api_harness.py` builds dry-run or live Responses API requests from `agents/openai.yaml` and regression cases; live runs require `OPENAI_API_KEY`. |
 | Provider route triage | `docs/provider-routes.md` keeps OpenAI API, DeepSeek, GLM, and Qwen route claims conservative until live evidence exists. |
 | Agama search | `scripts/search_agama.py` searches Markdown only by default, filters known false positives, supports passage grouping, emits JSON, and provides stable `citation` / `passage_citation` fields. |
-| Agent prompts | Codex and Claude agent prompts are checked for the Agama citation contract and must prefer `search_agama.py --json` citation fields when available. |
+| Agent prompts | Codex and Claude agent prompts are checked for the Agama citation contract, activation/task merge behavior, and `search_agama.py --json` citation-field preference. |
 | Release notes | `CHANGELOG.md` records project-level release changes. |
 
 ## Operating Rules
@@ -39,7 +39,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 |---|---|---|---|
 | P0 | Runtime validation | Re-run ZC-01 through ZC-06 after prompt or routing changes and append to `docs/runtime-validation-log.md`. | A dated manual validation note records prompts, observed behavior, failures, transcript status, and checks run. |
 | P1 | Validation evidence | Replace summarized baselines with transcript-backed Codex and Claude Code sessions where practical. | Runtime results are auditable without relying on chat history. |
-| P1 | Claude Code route | Keep the Claude Code route current after prompt, installation-path, or tool-permission changes. | New ZC evidence is appended after material changes. |
+| P1 | Claude Code route | Resolve the 2026-06-15 wake-word / noninteractive route blocker and rerun exact ZC prompts. | Claude Code moves back from `blocked` to `tested` only after exact wake-word ZC prompts complete with dated evidence. |
 | P1 | OpenAI API route | Run the minimal harness in live mode with `OPENAI_API_KEY` and record a dated response summary. | OpenAI API can move from `harness-ready` to `tested` only after live evidence is recorded. |
 | P1 | Provider routes | Add native dry-run/live harnesses for DeepSeek, GLM, and Qwen, or record a concrete blocked state. | Each route has a dated tested or blocked entry with provider/model details and failure modes. |
 | P1 | Agama citations | Extract or preserve finer-grained sutra or section markers when present in the Markdown. | Search output can cite representative passages beyond file, line, and fascicle where the source supports it. |

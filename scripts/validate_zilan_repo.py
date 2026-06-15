@@ -143,6 +143,9 @@ PLATFORM_VALIDATION_LABELS = {
 AGENT_PROMPT_REQUIRED_FRAGMENTS = {
     "agents/zilan-codex.md": (
         "runtime: codex-sub-agent",
+        "首轮任务执行优先级",
+        "激活与任务合并规则",
+        "禁止只输出身份问候",
         "Codex 阿含检索规范",
         "引用阿含经时必须注明",
         "边界与限制",
@@ -154,6 +157,10 @@ AGENT_PROMPT_REQUIRED_FRAGMENTS = {
         "context/agama/T0099-za-agama.md:",
     ),
     "agents/zilan-claude-code.md": (
+        "首轮任务执行优先级",
+        "激活与任务合并规则",
+        "非交互运行护栏",
+        "禁止只输出身份问候",
         "引用阿含经时必须注明",
         "search_agama.py",
         "search_agama.py --json",
