@@ -2,6 +2,18 @@
 
 All notable changes to zilan-agent are tracked here. Platform validation status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
+## [2.4.4] - 2026-06-15
+
+### Added
+
+- Added `scripts/mock_install_smoke.py` to validate the Claude Code skill/agent install layout in a temporary mock home.
+- Added pytest coverage and CI smoke testing for the mock Claude install path.
+- Added runtime evidence for the mock install smoke.
+
+### Changed
+
+- Updated installation and engineering-check docs to include mock install validation.
+
 ## [2.4.3] - 2026-06-15
 
 ### Added

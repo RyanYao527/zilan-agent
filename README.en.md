@@ -2,7 +2,7 @@
 
 > Independent cognitive framework based on Upāsaka Yao Lei's Buddhist study system · Available to answer questions for others
 
-**Version**: v2.4.3 | **Established**: 2026-06-02 | **Last Updated**: 2026-06-15 | **Name**: Zilan (孜澜)
+**Version**: v2.4.4 | **Established**: 2026-06-02 | **Last Updated**: 2026-06-15 | **Name**: Zilan (孜澜)
 
 ---
 
@@ -156,6 +156,7 @@ This repository includes executable repository invariant checks, Agama search sm
 python scripts/validate_zilan_repo.py --check-generated
 python -m pytest
 python scripts/openai_api_harness.py --case ZC-02 --json
+python scripts/mock_install_smoke.py
 python scripts/search_agama.py --terms "無我|非我|緣起" --limit 10
 python scripts/search_agama.py --terms "非我" --passages --group-by juan --limit 10
 python scripts/search_agama.py --terms "緣起" --json --limit 5

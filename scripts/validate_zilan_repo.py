@@ -25,6 +25,7 @@ REQUIRED_FILES = (
     "docs/runtime-evidence/README.md",
     "docs/runtime-evidence/evidence-template.md",
     "docs/runtime-evidence/2026-06-15-clean-install-smoke.md",
+    "docs/runtime-evidence/2026-06-15-mock-claude-install-smoke.md",
     "docs/maintenance-roadmap.md",
     "docs/installation.md",
     "docs/validation-evidence.md",
@@ -39,6 +40,7 @@ REQUIRED_FILES = (
     "scripts/build_agama_context.py",
     "scripts/search_agama.py",
     "scripts/openai_api_harness.py",
+    "scripts/mock_install_smoke.py",
     "tests/regression_cases.yaml",
 )
 
@@ -76,6 +78,7 @@ RUNTIME_VALIDATION_LOG_DOC = "docs/runtime-validation-log.md"
 RUNTIME_EVIDENCE_INDEX_DOC = "docs/runtime-evidence/README.md"
 RUNTIME_EVIDENCE_TEMPLATE_DOC = "docs/runtime-evidence/evidence-template.md"
 RUNTIME_EVIDENCE_CLEAN_INSTALL_DOC = "docs/runtime-evidence/2026-06-15-clean-install-smoke.md"
+RUNTIME_EVIDENCE_MOCK_INSTALL_DOC = "docs/runtime-evidence/2026-06-15-mock-claude-install-smoke.md"
 MAINTENANCE_ROADMAP_DOC = "docs/maintenance-roadmap.md"
 INSTALLATION_DOC = "docs/installation.md"
 VALIDATION_EVIDENCE_DOC = "docs/validation-evidence.md"
@@ -389,11 +392,14 @@ def _check_runtime_validation_log(root: Path, failures: list[str]) -> None:
             failures.append(f"{RUNTIME_VALIDATION_LOG_DOC} missing regression case: {case}")
     if RUNTIME_EVIDENCE_CLEAN_INSTALL_DOC not in text:
         failures.append(f"{RUNTIME_VALIDATION_LOG_DOC} should link to {RUNTIME_EVIDENCE_CLEAN_INSTALL_DOC}.")
+    if RUNTIME_EVIDENCE_MOCK_INSTALL_DOC not in text:
+        failures.append(f"{RUNTIME_VALIDATION_LOG_DOC} should link to {RUNTIME_EVIDENCE_MOCK_INSTALL_DOC}.")
 
 
 def _check_runtime_evidence_docs(root: Path, failures: list[str]) -> None:
     index_text = (root / RUNTIME_EVIDENCE_INDEX_DOC).read_text(encoding="utf-8")
     clean_install_text = (root / RUNTIME_EVIDENCE_CLEAN_INSTALL_DOC).read_text(encoding="utf-8")
+    mock_install_text = (root / RUNTIME_EVIDENCE_MOCK_INSTALL_DOC).read_text(encoding="utf-8")
     template_text = (root / RUNTIME_EVIDENCE_TEMPLATE_DOC).read_text(encoding="utf-8")
 
     for fragment in (
@@ -413,6 +419,16 @@ def _check_runtime_evidence_docs(root: Path, failures: list[str]) -> None:
     ):
         if fragment not in clean_install_text:
             failures.append(f"{RUNTIME_EVIDENCE_CLEAN_INSTALL_DOC} missing required fragment: {fragment}")
+
+    for fragment in (
+        "2026-06-15 Mock Claude Install Smoke Evidence",
+        "mode: mock-claude-install",
+        "skill:scripts/search_agama.py: pass",
+        "agent:matches-source: pass",
+        "Found 1 matches",
+    ):
+        if fragment not in mock_install_text:
+            failures.append(f"{RUNTIME_EVIDENCE_MOCK_INSTALL_DOC} missing required fragment: {fragment}")
 
     for fragment in ("Redaction note", "Output Excerpts", "Limitations"):
         if fragment not in template_text:

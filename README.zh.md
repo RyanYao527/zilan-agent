@@ -2,7 +2,7 @@
 
 > 基于优婆塞姚磊佛学体系的独立认知框架 · 可为他人答疑解惑
 
-**版本**：v2.4.3 | **确立日期**：2026-06-02 | **最后更新**：2026-06-15 | **名字**：孜澜
+**版本**：v2.4.4 | **确立日期**：2026-06-02 | **最后更新**：2026-06-15 | **名字**：孜澜
 
 ---
 
@@ -160,6 +160,7 @@ Codex 回归测试矩阵见：`CODEX_REGRESSION_TESTS.md`。
 python scripts/validate_zilan_repo.py --check-generated
 python -m pytest
 python scripts/openai_api_harness.py --case ZC-02 --json
+python scripts/mock_install_smoke.py
 python scripts/search_agama.py --terms "無我|非我|緣起" --limit 10
 python scripts/search_agama.py --terms "非我" --passages --group-by juan --limit 10
 python scripts/search_agama.py --terms "緣起" --json --limit 5

@@ -174,6 +174,31 @@ Use conservative status labels:
 
 An initial operator attempt ran `validate_zilan_repo.py --check-generated` in parallel with pytest. Because the validation command may rebuild generated Agama Markdown, this can create a transient read/write race for tests that inspect generated files. The valid clean-install protocol is to run generated-file validation sequentially before pytest.
 
+## 2026-06-15 Mock Claude Install Smoke
+
+| Field | Value |
+|---|---|
+| Runtime | Mock Claude Code install smoke |
+| Tool | `scripts/mock_install_smoke.py` |
+| Repository commit | `a9121d21ae376533a837a450fb487012bcaa3401` |
+| Scope | Simulated `.claude/skills/zilan-agent` and `.claude/agents/zilan.md` install paths in a temporary mock home |
+| Transcript status | Command output summarized here and excerpted in `docs/runtime-evidence/2026-06-15-mock-claude-install-smoke.md`; no model transcript involved. |
+| Overall result | `pass` |
+
+### Checks
+
+| Check | Result | Notes |
+|---|---|---|
+| Mock skill copy | `pass` | Copied the repository into a temporary `.claude/skills/zilan-agent` path. |
+| Mock agent install | `pass` | Installed `agents/zilan-claude-code.md` as temporary `.claude/agents/zilan.md`. |
+| Required skill paths | `pass` | Confirmed `SKILL.md`, `scripts/search_agama.py`, `scripts/build_agama_context.py`, key context files, and Agama index files. |
+| Agent prompt fragments | `pass` | Confirmed `name: zilan`, `tools:`, `search_agama.py`, and `context/` fragments. |
+| Installed Agama search | `pass` | The copied skill's `scripts/search_agama.py --terms "緣起" --limit 1` returned a local Markdown citation. |
+
+### Boundary
+
+This validates installation layout and helper availability only. It does not run Claude Code or validate answer quality.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:

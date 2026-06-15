@@ -64,6 +64,7 @@ cp zilan-agent/agents/zilan-claude-code.md ~/.claude/agents/zilan.md
 | `scripts/validate_zilan_repo.py` | 仓库结构与语料 smoke 校验 · Repository invariant checks |
 | `scripts/search_agama.py` | 阿含 Markdown 检索工具 · Agama Markdown search helper |
 | `scripts/openai_api_harness.py` | OpenAI Responses API dry-run/live harness |
+| `scripts/mock_install_smoke.py` | Claude Code mock install smoke test |
 | `.github/workflows/ci.yml` | 自动化校验 · Automated CI checks |
 | `context/摄类学工具箱.md` | 摄类学推理工具链 · Collected Topics reasoning toolkit |
 | `context/因明推理引擎.md` | 因明逻辑引擎 · Buddhist logic engine |
@@ -95,6 +96,7 @@ cp zilan-agent/agents/zilan-claude-code.md ~/.claude/agents/zilan.md
 python scripts/validate_zilan_repo.py --check-generated
 python -m pytest
 python scripts/openai_api_harness.py --case ZC-02 --json
+python scripts/mock_install_smoke.py
 python scripts/search_agama.py --terms "無我|非我|緣起" --limit 10
 python scripts/search_agama.py --terms "非我" --passages --group-by juan --limit 10
 python scripts/search_agama.py --terms "緣起" --json --limit 5
