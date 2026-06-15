@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -81,6 +82,13 @@ VALIDATION_EVIDENCE_DOC = "docs/validation-evidence.md"
 PROVIDER_ROUTES_DOC = "docs/provider-routes.md"
 CHANGELOG_DOC = "CHANGELOG.md"
 PORTABLE_UPGRADE_DOC = "AGENT_UPGRADE_PORTABLE.md"
+VERSION_SOURCES = {
+    "pyproject.toml": r'(?m)^version = "([^"]+)"$',
+    "README.zh.md": r"\*\*版本\*\*：v([0-9]+\.[0-9]+\.[0-9]+)",
+    "README.en.md": r"\*\*Version\*\*: v([0-9]+\.[0-9]+\.[0-9]+)",
+    "CHANGELOG.md": r"(?m)^## \[([0-9]+\.[0-9]+\.[0-9]+)\] - ",
+    "AGENT_UPGRADE_PORTABLE.md": r"Current project baseline: zilan-agent v([0-9]+\.[0-9]+\.[0-9]+)",
+}
 ALLOWED_VALIDATION_STATUSES = (
     "tested",
     "definition-versioned",
@@ -130,6 +138,27 @@ def _check_paths(root: Path, failures: list[str]) -> None:
     for rel_path in REQUIRED_FILES + REQUIRED_CONTEXT_FILES:
         if not (root / rel_path).exists():
             failures.append(f"Missing required path: {rel_path}")
+
+
+def _extract_version(root: Path, rel_path: str, pattern: str, failures: list[str]) -> str | None:
+    text = (root / rel_path).read_text(encoding="utf-8")
+    match = re.search(pattern, text)
+    if not match:
+        failures.append(f"{rel_path} missing project version pattern.")
+        return None
+    return match.group(1)
+
+
+def _check_version_consistency(root: Path, failures: list[str]) -> None:
+    versions: dict[str, str] = {}
+    for rel_path, pattern in VERSION_SOURCES.items():
+        version = _extract_version(root, rel_path, pattern, failures)
+        if version is not None:
+            versions[rel_path] = version
+
+    if len(set(versions.values())) > 1:
+        details = ", ".join(f"{rel_path}={version}" for rel_path, version in sorted(versions.items()))
+        failures.append(f"Project version mismatch: {details}")
 
 
 def _check_regression_matrix(root: Path, failures: list[str]) -> None:
@@ -504,6 +533,7 @@ def run_checks(
     root = root.resolve()
 
     _check_paths(root, failures)
+    _check_version_consistency(root, failures)
     _check_regression_matrix(root, failures)
     _check_regression_cases_yaml(root, failures, warnings, strict_yaml)
     _check_agent_prompts(root, failures)
