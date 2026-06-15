@@ -29,6 +29,7 @@ YYYY-MM-DD-route-or-scenario.md
 Examples:
 
 - `2026-06-15-clean-install-smoke.md`
+- `2026-06-15-mock-claude-install-smoke.md`
 - `2026-06-XX-openai-api-zc-02-live.md`
 - `2026-06-XX-claude-code-zc-04-excerpt.md`
 

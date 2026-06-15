@@ -111,6 +111,10 @@ def test_runtime_evidence_docs_missing_required_fragments_are_reported(tmp_path:
         "# Clean install\n",
         encoding="utf-8",
     )
+    (evidence_dir / "2026-06-15-mock-claude-install-smoke.md").write_text(
+        "# Mock install\n",
+        encoding="utf-8",
+    )
     failures: list[str] = []
 
     _check_runtime_evidence_docs(tmp_path, failures)

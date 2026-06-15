@@ -60,6 +60,14 @@ Test-Path "$env:USERPROFILE\.claude\skills\zilan-agent\SKILL.md"
 Test-Path "$env:USERPROFILE\.claude\agents\zilan.md"
 ```
 
+To test the Claude Code install layout without touching your real user profile, run the mock install smoke:
+
+```powershell
+python scripts/mock_install_smoke.py
+```
+
+The smoke script creates a temporary mock home directory, copies the repository to `.claude/skills/zilan-agent`, installs `agents/zilan-claude-code.md` as `.claude/agents/zilan.md`, and runs an Agama search from the copied skill.
+
 Use lightweight prompts for Skill mode:
 
 ```text
@@ -93,6 +101,7 @@ Recommended local checks:
 python -m ruff check scripts tests
 python -m pytest
 python scripts/validate_zilan_repo.py --check-generated --strict-yaml
+python scripts/mock_install_smoke.py
 python scripts/search_agama.py --terms "無我|非我|緣起" --limit 5
 ```
 
