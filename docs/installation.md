@@ -1,8 +1,8 @@
 # Installation And Runtime Guide
 
-> Last updated: 2026-06-15
+> Last updated: 2026-06-16
 
-This guide separates the three supported operating routes for Zilan: Codex, Claude Code, and the OpenAI API harness. Platform validation status is tracked separately in `docs/platform-validation.md`.
+This guide separates the supported operating routes for Zilan: Codex, Claude Code, the OpenAI API harness, and OpenAI-compatible provider harnesses. Platform validation status is tracked separately in `docs/platform-validation.md`.
 
 ## Prerequisites
 
@@ -107,7 +107,7 @@ python scripts/search_agama.py --terms "無我|非我|緣起" --limit 5
 
 ## OpenAI API Harness
 
-The OpenAI route is implemented as a minimal Responses API harness. It is dry-run by default and does not require credentials:
+The native OpenAI route is implemented as a minimal Responses API harness. It is dry-run by default and does not require credentials:
 
 ```powershell
 python scripts/openai_api_harness.py --case ZC-02 --json
@@ -122,9 +122,30 @@ python scripts/openai_api_harness.py --case ZC-02 --live --json
 
 Do not commit API keys, live response payloads containing secrets, or private account metadata. Record live validation summaries according to `docs/validation-evidence.md`.
 
+## OpenAI-Compatible Provider Harness
+
+The same harness can build OpenAI-compatible Chat Completions requests for providers such as Volcengine. This is a separate route from native OpenAI API validation:
+
+```powershell
+$env:OPENAI_BASE_URL = "https://<provider-openai-compatible-base-url>/v1"
+$env:OPENAI_MODEL = "<provider-model-id>"
+$env:OPENAI_API_SURFACE = "chat-completions"
+$env:OPENAI_API_KEY_ENV = "VOLCENGINE_OPENAI_API_KEY"
+python scripts/openai_api_harness.py --case ZC-02 --json
+```
+
+Live mode uses the provider-specific key environment variable:
+
+```powershell
+$env:VOLCENGINE_OPENAI_API_KEY = "..."
+python scripts/openai_api_harness.py --case ZC-02 --live --json
+```
+
+Record a successful compatible-provider run under that provider route. Do not use it to mark native OpenAI API as `tested`.
+
 ## Provider Routes
 
-DeepSeek, GLM, and Qwen currently remain provider metadata routes unless a native harness, credentials, and dated runtime evidence are added. See `docs/provider-routes.md` for the current route triage.
+Volcengine OpenAI-compatible is `harness-ready`; DeepSeek, GLM, and Qwen currently remain provider metadata routes unless a native harness, credentials, and dated runtime evidence are added. See `docs/provider-routes.md` for the current route triage.
 
 ## Troubleshooting
 

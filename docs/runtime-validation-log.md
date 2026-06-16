@@ -209,7 +209,7 @@ This validates installation layout and helper availability only. It does not run
 | Repository branch | `codex/runtime-rerun-20260615` |
 | Repository base commit | `6988f7b6a24fbe92e1175de2bca7043afa5bdd05` plus activation/task prompt-guard changes in this branch |
 | Prompt set | ZC-01 through ZC-06 from `CODEX_REGRESSION_TESTS.md` and `tests/regression_cases.yaml` after v2.4.5 public-doc depersonalization |
-| Transcript status | Summarized here; full transcripts are not committed. ZC-06 wrote `C:\tmp\zilan-validation-20260615-ZC06.md` outside the repository. |
+| Transcript status | Summarized here; full transcripts are not committed. A compact evidence excerpt is committed at `docs/runtime-evidence/2026-06-15-codex-v245-runtime-rerun.md`. ZC-06 wrote `C:\tmp\zilan-validation-20260615-ZC06.md` outside the repository. |
 | Repository checks | `python -m ruff check scripts tests` pass; `python -m pytest` pass; `python scripts\validate_zilan_repo.py --check-generated --strict-yaml` pass |
 | Overall result | Codex `pass`; Claude Code `blocked` for exact wake-word prompts |
 
@@ -259,7 +259,7 @@ Superseding note: the 2026-06-16 rerun below reclassifies this failure as a Wind
 | Repository base commit | `8cebd83ed` plus Claude Code output hard-constraint prompt changes in this branch |
 | Prompt set | ZC-01 through ZC-06 from `CODEX_REGRESSION_TESTS.md` and `tests/regression_cases.yaml`, using exact wake-word style prompts where applicable |
 | Encoding setup | Windows PowerShell set `$OutputEncoding = [System.Text.UTF8Encoding]::new($false)` and `[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)` before piping Chinese prompts into `claude -p` |
-| Transcript status | Summarized here; full JSON outputs are not committed. ZC-06 wrote `C:\tmp\zilan-claude-validation-20260616-ZC06.md` outside the repository. |
+| Transcript status | Summarized here; full JSON outputs are not committed. A compact evidence excerpt is committed at `docs/runtime-evidence/2026-06-16-claude-code-utf8-rerun.md`. ZC-06 wrote `C:\tmp\zilan-claude-validation-20260616-ZC06.md` outside the repository. |
 | Repository checks | `python -m ruff check scripts tests` pass; `python -m pytest` pass; `python scripts\validate_zilan_repo.py --check-generated --strict-yaml` pass; `python scripts\mock_install_smoke.py` pass; `python scripts\openai_api_harness.py --case ZC-02` pass |
 | Overall result | Claude Code `pass` with UTF-8 stdin requirement and the limitations below |
 

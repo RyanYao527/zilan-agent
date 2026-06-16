@@ -6,9 +6,10 @@ This document records the current state of non-Codex provider routes. It is a tr
 
 ## Current Route Summary
 
-| Route | Current status | 2026-06-15 triage | Next action |
+| Route | Current status | Triage | Next action |
 |---|---|---|---|
 | OpenAI API | `harness-ready` | Dry-run Responses API harness exists and is covered by tests. `OPENAI_API_KEY` was not present in the local environment during this triage. | Run `scripts/openai_api_harness.py --live` with `OPENAI_API_KEY`, then record evidence. |
+| Volcengine OpenAI-Compatible | `harness-ready` | The shared harness can target a configurable OpenAI-compatible base URL and `chat-completions` surface. No Volcengine credential-backed live run is committed. | Run with `OPENAI_BASE_URL`, `OPENAI_MODEL`, `OPENAI_API_SURFACE=chat-completions`, and a provider-specific key env var; record evidence under this route, not under native OpenAI API. |
 | DeepSeek | `config-only` | Provider metadata exists. No native DeepSeek harness or `DEEPSEEK_API_KEY` was present. Claude Code local model usage is not the same as native DeepSeek route validation. | Add a native harness or document a blocked state with reproducible provider details. |
 | GLM | `config-only` | Provider metadata exists. No GLM harness or `ZHIPUAI_API_KEY` was present. | Add a minimal harness or keep as metadata only. |
 | Qwen | `config-only` | Provider metadata exists. No Qwen harness or `DASHSCOPE_API_KEY` was present. | Add a minimal harness or keep as metadata only. |
@@ -20,6 +21,7 @@ The 2026-06-15 triage checked only whether common environment variables existed.
 | Variable | Present |
 |---|---|
 | `OPENAI_API_KEY` | no |
+| `VOLCENGINE_OPENAI_API_KEY` | not checked in 2026-06-15 triage |
 | `DEEPSEEK_API_KEY` | no |
 | `ZHIPUAI_API_KEY` | no |
 | `DASHSCOPE_API_KEY` | no |
@@ -46,3 +48,18 @@ A provider harness should:
 - record response summaries according to `docs/validation-evidence.md`
 
 Do not update a provider to `tested` until the live run is recorded in `docs/runtime-validation-log.md`.
+
+## OpenAI-Compatible Provider Protocol
+
+For a provider such as Volcengine that exposes an OpenAI-compatible route, use provider-specific environment variables so the result cannot be mistaken for native OpenAI API validation:
+
+```powershell
+$env:OPENAI_BASE_URL = "https://<provider-openai-compatible-base-url>/v1"
+$env:OPENAI_MODEL = "<provider-model-id>"
+$env:OPENAI_API_SURFACE = "chat-completions"
+$env:OPENAI_API_KEY_ENV = "VOLCENGINE_OPENAI_API_KEY"
+$env:VOLCENGINE_OPENAI_API_KEY = "..."
+python scripts\openai_api_harness.py --case ZC-02 --live --json
+```
+
+Record a successful run as Volcengine OpenAI-compatible evidence unless the request uses `https://api.openai.com/v1` with an official `OPENAI_API_KEY`.

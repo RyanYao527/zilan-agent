@@ -20,6 +20,12 @@ models:
     model_id: gpt-5.5
     description: OpenAI Responses API 默认模型；由 scripts/openai_api_harness.py dry-run/live 调用
 
+  volcengine_openai_compatible:
+    provider: volcengine
+    model_id: "${OPENAI_MODEL}"
+    api_surface: chat-completions
+    description: 火山引擎 OpenAI-compatible 路线；通过 OPENAI_BASE_URL、OPENAI_MODEL 和自定义 key 环境变量调用，不等同于原生 OpenAI API 验证
+
   claude:
     provider: anthropic
     model_id: claude-opus-4-8
@@ -56,6 +62,10 @@ validation:
     status: harness-ready
     date: "2026-06-12"
     scope: "scripts/openai_api_harness.py builds OpenAI Responses API requests from agents/openai.yaml and regression cases; dry-run is tested, live --live execution still requires OPENAI_API_KEY evidence."
+  volcengine_openai_compatible:
+    status: harness-ready
+    date: "2026-06-16"
+    scope: "scripts/openai_api_harness.py can target an OpenAI-compatible base URL and chat-completions surface through OPENAI_BASE_URL, OPENAI_MODEL, OPENAI_API_SURFACE, and a configurable API key environment variable. No Volcengine credential-backed live run is committed."
   deepseek:
     status: config-only
     scope: "Provider metadata only. No native DeepSeek harness, DEEPSEEK_API_KEY-backed runtime evidence, or dated live transcript is committed. The Anthropic-compatible endpoint caveat is documented in AGENT_UPGRADE_PORTABLE.md and triaged in docs/provider-routes.md."

@@ -30,6 +30,9 @@ def test_search_returns_auditable_markdown_locations() -> None:
     assert all(match.citation.startswith(f"《{match.sutra_name}》({match.cbeta_id})") for match in matches)
     assert all(f"{match.file}:{match.line}" in match.citation for match in matches)
     assert all(f"{match.file}:{match.passage_start_line}" in match.passage_citation for match in matches)
+    marked_matches = search_agama("當觀色無常", root=ROOT, limit=1)
+    assert marked_matches[0].section_marker == "（一）"
+    assert "（一）" in marked_matches[0].citation
 
 
 def test_search_filters_known_false_positive_phrases() -> None:
@@ -69,6 +72,10 @@ def test_search_can_aggregate_by_passage() -> None:
     assert all(f"{passage.file}:{passage.start_line}" in passage.citation for passage in passages)
     assert len({(passage.file, passage.start_line, passage.end_line) for passage in passages}) == len(passages)
 
+    marked_passages = search_agama_passages("當觀色無常", root=ROOT, limit=1)
+    assert marked_passages[0].section_marker == "（一）"
+    assert "（一）" in marked_passages[0].citation
+
 
 def test_search_json_cli_output_is_machine_readable() -> None:
     result = subprocess.run(
@@ -82,9 +89,17 @@ def test_search_json_cli_output_is_machine_readable() -> None:
     data = json.loads(result.stdout)
 
     assert len(data) == 2
-    assert {"file", "line", "sutra_name", "cbeta_id", "juan", "citation", "passage_citation", "text"}.issubset(
-        data[0]
-    )
+    assert {
+        "file",
+        "line",
+        "sutra_name",
+        "cbeta_id",
+        "juan",
+        "section_marker",
+        "citation",
+        "passage_citation",
+        "text",
+    }.issubset(data[0])
 
 
 def test_search_text_cli_can_group_by_juan() -> None:

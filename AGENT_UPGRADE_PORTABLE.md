@@ -25,6 +25,7 @@ Zilan now uses a dual-track design:
 | Codex sub-agent | `agents/zilan-codex.md` | Explicit spawned research, Agama retrieval, cross-domain reports | `tested` as of 2026-06-15 |
 | Claude Code agent | `agents/zilan-claude-code.md` | Claude Code explicit agent route and local tool use | `tested` as of 2026-06-16 with UTF-8 stdin on Windows PowerShell |
 | OpenAI API harness | `scripts/openai_api_harness.py` | Portable Responses API request construction and live validation path | `harness-ready`; live run still requires `OPENAI_API_KEY` evidence |
+| Volcengine OpenAI-compatible harness | `scripts/openai_api_harness.py` | Configurable OpenAI-compatible base URL and `chat-completions` route | `harness-ready`; live run still requires provider-specific credential evidence |
 | Provider metadata | `agents/openai.yaml` | DeepSeek, GLM, Qwen route metadata | `config-only` until native harnesses or dated runtime evidence exist |
 
 Do not infer platform support from this file alone. Use `agents/openai.yaml` and `docs/platform-validation.md`.
@@ -105,9 +106,10 @@ For clean install smoke testing, use a fresh clone and run the same checks seque
 1. Keep the Claude Code UTF-8 stdin protocol documented and rerun exact ZC prompts after prompt, tool, or install-path changes.
 2. Run OpenAI API live validation only after `OPENAI_API_KEY` is available.
 3. Add transcript-backed excerpts for representative Codex cases and future Claude Code passing cases where safe.
-4. Add native dry-run/live harnesses for DeepSeek, GLM, and Qwen before upgrading those routes.
-5. Improve Agama citation granularity and deduplication.
-6. Keep `CHANGELOG.md` updated for user-visible project changes.
+4. Run the Volcengine OpenAI-compatible harness live only with provider-specific credentials and record it separately from native OpenAI API validation.
+5. Add native dry-run/live harnesses for DeepSeek, GLM, and Qwen before upgrading those routes.
+6. Improve Agama citation deduplication and publication-level collation.
+7. Keep `CHANGELOG.md` updated for user-visible project changes.
 
 ## Historical Status
 

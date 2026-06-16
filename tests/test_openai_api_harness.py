@@ -18,6 +18,17 @@ def test_openai_harness_builds_responses_api_request() -> None:
     assert request["reasoning"]["effort"] == "low"
 
 
+def test_openai_harness_builds_chat_completions_request() -> None:
+    case = load_regression_case(ROOT, "ZC-02")
+    request = build_request(ROOT, case, "volcengine-model", api_surface="chat-completions")
+
+    assert request["model"] == "volcengine-model"
+    assert request["messages"][0]["role"] == "system"
+    assert request["messages"][1]["role"] == "user"
+    assert request["messages"][1]["content"] == case.prompt
+    assert "context/因明推理引擎.md" in request["messages"][0]["content"]
+
+
 def test_openai_harness_dry_run_does_not_require_api_key(monkeypatch) -> None:
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
 
@@ -25,8 +36,30 @@ def test_openai_harness_dry_run_does_not_require_api_key(monkeypatch) -> None:
 
     assert result.mode == "dry-run"
     assert result.endpoint == OPENAI_RESPONSES_URL
+    assert result.base_url == "https://api.openai.com/v1"
+    assert result.api_surface == "responses"
     assert result.output_text is None
     assert "context/摄类学工具箱.md" in result.reference_files
+
+
+def test_openai_compatible_harness_can_target_chat_completions_base_url(monkeypatch) -> None:
+    monkeypatch.delenv("VOLCENGINE_OPENAI_API_KEY", raising=False)
+
+    result = run_harness(
+        root=ROOT,
+        case_id="ZC-02",
+        model="volcengine-model",
+        prompt_override=None,
+        base_url="https://example.volcengine.test/api/v3/",
+        api_surface="chat-completions",
+        api_key_env="VOLCENGINE_OPENAI_API_KEY",
+        live=False,
+    )
+
+    assert result.mode == "dry-run"
+    assert result.endpoint == "https://example.volcengine.test/api/v3/chat/completions"
+    assert result.api_key_env == "VOLCENGINE_OPENAI_API_KEY"
+    assert result.request["messages"][0]["role"] == "system"
 
 
 def test_openai_harness_live_requires_api_key(monkeypatch) -> None:
@@ -38,3 +71,23 @@ def test_openai_harness_live_requires_api_key(monkeypatch) -> None:
         assert "OPENAI_API_KEY" in str(exc)
     else:
         raise AssertionError("live OpenAI API harness should require OPENAI_API_KEY")
+
+
+def test_openai_compatible_harness_live_uses_configured_key_env(monkeypatch) -> None:
+    monkeypatch.delenv("VOLCENGINE_OPENAI_API_KEY", raising=False)
+
+    try:
+        run_harness(
+            root=ROOT,
+            case_id="ZC-02",
+            model="volcengine-model",
+            prompt_override=None,
+            base_url="https://example.volcengine.test/api/v3",
+            api_surface="chat-completions",
+            api_key_env="VOLCENGINE_OPENAI_API_KEY",
+            live=True,
+        )
+    except RuntimeError as exc:
+        assert "VOLCENGINE_OPENAI_API_KEY" in str(exc)
+    else:
+        raise AssertionError("live OpenAI-compatible harness should require the configured API key env var")

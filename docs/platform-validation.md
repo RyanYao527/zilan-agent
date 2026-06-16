@@ -22,6 +22,7 @@ This document is the source of truth for Zilan's platform validation status. It 
 | Codex | `tested` | 2026-06-15 | `docs/runtime-validation-log.md`, `CODEX_REGRESSION_TESTS.md`, `tests/regression_cases.yaml`, `agents/zilan-codex.md` | ZC-01 through ZC-06 were rerun after the v2.4.5 public-doc depersonalization changes. ZC-04 through ZC-06 used parent-observed sub-agent spawns with local Markdown context. CI validates the regression inventory and tooling; it does not grade answer quality. |
 | Claude Code | `tested` | 2026-06-16 | `docs/runtime-validation-log.md`, `CODEX_REGRESSION_TESTS.md`, `tests/regression_cases.yaml`, `agents/zilan-claude-code.md` | Claude Code CLI 2.1.169 passed ZC-01 through ZC-06 when Chinese prompts were piped through UTF-8 stdin with repository `agents/zilan-claude-code.md` loaded as the system prompt. Windows PowerShell must set `$OutputEncoding` and `[Console]::OutputEncoding` to UTF-8 before piping Chinese prompts; background auto-spawn behavior was not separately audited. |
 | OpenAI API | `harness-ready` | Dry-run harness: 2026-06-12 | `scripts/openai_api_harness.py`, `tests/test_openai_api_harness.py`, `docs/openai-api-harness.md`, `agents/openai.yaml` | The harness builds OpenAI Responses API requests and is covered by pytest. Live `--live` execution is not yet recorded and requires `OPENAI_API_KEY`. |
+| Volcengine OpenAI-Compatible | `harness-ready` | Dry-run harness: 2026-06-16 | `scripts/openai_api_harness.py`, `tests/test_openai_api_harness.py`, `docs/openai-api-harness.md`, `agents/openai.yaml` | The harness can target a configurable OpenAI-compatible base URL and `chat-completions` surface. This is not native OpenAI API validation and remains untested until a dated Volcengine credential-backed live run is recorded. |
 | DeepSeek | `config-only` | Not end-to-end tested | `agents/openai.yaml`, `AGENT_UPGRADE_PORTABLE.md`, `docs/provider-routes.md` | Provider metadata exists, but no native DeepSeek harness or credential-backed runtime evidence is committed. The Anthropic-compatible endpoint caveat is documented separately and should not be treated as native DeepSeek validation. |
 | GLM | `config-only` | Not end-to-end tested | `agents/openai.yaml`, `docs/provider-routes.md` | Provider metadata exists, but no GLM harness, credential-backed runtime transcript, or live evidence is committed. |
 | Qwen | `config-only` | Not end-to-end tested | `agents/openai.yaml`, `docs/provider-routes.md` | Provider metadata exists, but no Qwen harness, credential-backed runtime transcript, or live evidence is committed. |
@@ -72,13 +73,15 @@ Claude Code answer quality is validated manually with the same ZC prompt family 
 
 PowerShell encoding is part of the runtime protocol: before piping Chinese prompts into `claude -p`, set `$OutputEncoding = [System.Text.UTF8Encoding]::new($false)` and `[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)`. Without this, Chinese prompt text can arrive at Claude Code as question marks and produce misleading wake-word failures.
 
-### OpenAI API Harness
+### OpenAI API And Compatible Harness
 
 The OpenAI API route has a minimal harness at `scripts/openai_api_harness.py`. Dry-run mode builds a Responses API request from `agents/openai.yaml`, `tests/regression_cases.yaml`, and bounded local context. Live mode requires `OPENAI_API_KEY` and `--live`; do not mark OpenAI API `tested` until a dated live run is recorded.
 
+The same harness can also target an OpenAI-compatible provider by setting a base URL, model, API surface, and key environment variable. Compatible-provider success should be recorded under the provider route, not as native OpenAI API validation.
+
 ### Provider Routes
 
-The current non-OpenAI provider triage is in `docs/provider-routes.md`. DeepSeek, GLM, and Qwen remain `config-only` because this repository has provider metadata but no native dry-run/live harnesses or dated runtime evidence for those routes.
+The current non-OpenAI provider triage is in `docs/provider-routes.md`. Volcengine OpenAI-compatible is `harness-ready`; DeepSeek, GLM, and Qwen remain `config-only` because this repository has provider metadata but no native dry-run/live harnesses or dated runtime evidence for those routes.
 
 Before changing a route from `metadata-only`, `harness-ready`, or `config-only` to `tested`, commit or document:
 
