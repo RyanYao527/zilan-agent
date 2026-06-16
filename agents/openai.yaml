@@ -67,7 +67,7 @@ validation:
   volcengine_openai_compatible:
     status: tested
     date: "2026-06-16"
-    scope: "ZC-02 live run passed through Volcengine OpenAI-compatible chat-completions with model ark-code-latest, base URL https://ark.cn-beijing.volces.com/api/coding/v3, and provider-specific VOLCENGINE_OPENAI_API_KEY. This does not validate native OpenAI API."
+    scope: "ZC-01 through ZC-03 live runs passed through Volcengine OpenAI-compatible chat-completions with provider route volcengine_openai_compatible, model ark-code-latest, base URL https://ark.cn-beijing.volces.com/api/coding/v3, and provider-specific VOLCENGINE_OPENAI_API_KEY. This does not validate native OpenAI API."
   deepseek:
     status: config-only
     scope: "Provider metadata only. No native DeepSeek harness, DEEPSEEK_API_KEY-backed runtime evidence, or dated live transcript is committed. The Anthropic-compatible endpoint caveat is documented in AGENT_UPGRADE_PORTABLE.md and triaged in docs/provider-routes.md."
