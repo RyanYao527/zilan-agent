@@ -2,6 +2,18 @@
 
 All notable changes to zilan-agent are tracked here. Platform validation status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
+## [2.4.6] - 2026-06-16
+
+### Changed
+
+- Restored Claude Code to `tested` after a 2026-06-16 UTF-8 stdin rerun showed the blocker was caused by Windows PowerShell pipe encoding, not the ZC prompt contract itself.
+- Added a Claude Code output hard-constraint guard so concrete tasks cannot start with identity greetings, verse openers, or capability-menu prompts.
+- Updated platform validation, provider route triage, runtime validation, and maintenance docs for the Claude Code UTF-8 stdin protocol.
+
+### Added
+
+- Added repository validation for the Claude Code output hard-constraint prompt section.
+
 ## [2.4.5] - 2026-06-15
 
 ### Changed
@@ -11,7 +23,6 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Updated core context examples and regression prompts to use neutral daily-practice scenarios.
 - Clarified that activation keywords combined with concrete questions must be answered directly instead of stopping at identity greetings.
 - Recorded the 2026-06-15 Codex rerun and downgraded Claude Code to `blocked` pending a wake-word / noninteractive route fix.
-- Restored Claude Code to `tested` after a 2026-06-16 UTF-8 stdin rerun showed the blocker was caused by Windows PowerShell pipe encoding, not the ZC prompt contract itself.
 
 ### Added
 

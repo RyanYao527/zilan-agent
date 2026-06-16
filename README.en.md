@@ -2,7 +2,7 @@
 
 > Independent cognitive framework based on Upāsaka Yao Lei's Buddhist study system · Available to answer questions for others
 
-**Version**: v2.4.5 | **Established**: 2026-06-02 | **Last Updated**: 2026-06-15 | **Name**: Zilan (孜澜)
+**Version**: v2.4.6 | **Established**: 2026-06-02 | **Last Updated**: 2026-06-16 | **Name**: Zilan (孜澜)
 
 ---
 
