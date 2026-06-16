@@ -22,8 +22,10 @@ models:
 
   volcengine_openai_compatible:
     provider: volcengine
-    model_id: "${OPENAI_MODEL}"
+    model_id: ark-code-latest
+    base_url: https://ark.cn-beijing.volces.com/api/coding/v3
     api_surface: chat-completions
+    api_key_env: VOLCENGINE_OPENAI_API_KEY
     description: 火山引擎 OpenAI-compatible 路线；通过 OPENAI_BASE_URL、OPENAI_MODEL 和自定义 key 环境变量调用，不等同于原生 OpenAI API 验证
 
   claude:

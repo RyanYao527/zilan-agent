@@ -33,6 +33,7 @@ class HarnessResult:
     mode: str
     model: str
     case_id: str
+    provider_route: str | None
     endpoint: str
     base_url: str
     api_surface: str
@@ -89,6 +90,32 @@ def _default_prompt(root: Path) -> str:
     if isinstance(interface, dict) and isinstance(interface.get("default_prompt"), str):
         return interface["default_prompt"].strip()
     return "You are Zilan. Answer with precise Buddhist analysis and clear boundaries."
+
+
+def _provider_route_defaults(root: Path, provider_route: str | None) -> dict[str, str]:
+    if provider_route is None:
+        return {}
+
+    data = _load_yaml(root / "agents" / "openai.yaml")
+    models = data.get("models")
+    if not isinstance(models, dict):
+        raise ValueError("agents/openai.yaml missing models mapping.")
+
+    route = models.get(provider_route)
+    if not isinstance(route, dict):
+        raise ValueError(f"Unknown provider route: {provider_route}")
+
+    defaults: dict[str, str] = {}
+    for source_key, target_key in (
+        ("model_id", "model"),
+        ("base_url", "base_url"),
+        ("api_surface", "api_surface"),
+        ("api_key_env", "api_key_env"),
+    ):
+        value = route.get(source_key)
+        if isinstance(value, str) and value:
+            defaults[target_key] = value
+    return defaults
 
 
 def _read_context_bundle(root: Path, reference_files: list[str]) -> str:
@@ -245,16 +272,30 @@ def run_harness(
     case_id: str,
     model: str | None,
     prompt_override: str | None,
+    provider_route: str | None = None,
     base_url: str | None = None,
     api_surface: str | None = None,
     api_key_env: str | None = None,
     live: bool = False,
 ) -> HarnessResult:
     case = _load_regression_case(root, case_id)
-    selected_model = model or os.environ.get("OPENAI_MODEL") or _default_model(root)
-    selected_base_url = _normalize_base_url(base_url or os.environ.get("OPENAI_BASE_URL") or OPENAI_DEFAULT_BASE_URL)
-    selected_api_surface = api_surface or os.environ.get("OPENAI_API_SURFACE") or "responses"
-    selected_api_key_env = api_key_env or os.environ.get("OPENAI_API_KEY_ENV") or "OPENAI_API_KEY"
+    route_defaults = _provider_route_defaults(root, provider_route)
+    selected_model = model or os.environ.get("OPENAI_MODEL") or route_defaults.get("model") or _default_model(root)
+    selected_base_url = _normalize_base_url(
+        base_url or os.environ.get("OPENAI_BASE_URL") or route_defaults.get("base_url") or OPENAI_DEFAULT_BASE_URL
+    )
+    selected_api_surface = (
+        api_surface
+        or os.environ.get("OPENAI_API_SURFACE")
+        or route_defaults.get("api_surface")
+        or "responses"
+    )
+    selected_api_key_env = (
+        api_key_env
+        or os.environ.get("OPENAI_API_KEY_ENV")
+        or route_defaults.get("api_key_env")
+        or "OPENAI_API_KEY"
+    )
     if selected_api_surface not in API_SURFACES:
         raise ValueError(f"Unsupported API surface: {selected_api_surface}. Expected one of: {', '.join(API_SURFACES)}")
     endpoint = _endpoint_for(selected_base_url, selected_api_surface)
@@ -265,6 +306,7 @@ def run_harness(
             mode="dry-run",
             model=selected_model,
             case_id=case.case_id,
+            provider_route=provider_route,
             endpoint=endpoint,
             base_url=selected_base_url,
             api_surface=selected_api_surface,
@@ -283,6 +325,7 @@ def run_harness(
         mode="live",
         model=selected_model,
         case_id=case.case_id,
+        provider_route=provider_route,
         endpoint=endpoint,
         base_url=selected_base_url,
         api_surface=selected_api_surface,
@@ -303,6 +346,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Build or run a minimal Zilan OpenAI Responses API harness.")
     parser.add_argument("--root", type=Path, default=ROOT, help="Repository root.")
     parser.add_argument("--case", default="ZC-02", help="Regression case ID from tests/regression_cases.yaml.")
+    parser.add_argument(
+        "--provider-route",
+        help="Provider route key from agents/openai.yaml models, for example volcengine_openai_compatible.",
+    )
     parser.add_argument("--model", help="OpenAI model ID. Defaults to OPENAI_MODEL, agents/openai.yaml, or gpt-5.5.")
     parser.add_argument("--prompt", help="Override the regression case prompt.")
     parser.add_argument("--base-url", help="OpenAI-compatible API base URL. Defaults to OPENAI_BASE_URL or OpenAI /v1.")
@@ -329,6 +376,7 @@ def main() -> int:
             case_id=args.case,
             model=args.model,
             prompt_override=args.prompt,
+            provider_route=args.provider_route,
             base_url=args.base_url,
             api_surface=args.api_surface,
             api_key_env=args.api_key_env,
@@ -344,6 +392,8 @@ def main() -> int:
         print(f"mode: {result.mode}")
         print(f"model: {result.model}")
         print(f"case: {result.case_id}")
+        if result.provider_route is not None:
+            print(f"provider_route: {result.provider_route}")
         print(f"api_surface: {result.api_surface}")
         print(f"base_url: {result.base_url}")
         print(f"endpoint: {result.endpoint}")
