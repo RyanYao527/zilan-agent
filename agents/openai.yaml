@@ -63,9 +63,9 @@ validation:
     date: "2026-06-12"
     scope: "scripts/openai_api_harness.py builds OpenAI Responses API requests from agents/openai.yaml and regression cases; dry-run is tested, live --live execution still requires OPENAI_API_KEY evidence."
   volcengine_openai_compatible:
-    status: harness-ready
+    status: tested
     date: "2026-06-16"
-    scope: "scripts/openai_api_harness.py can target an OpenAI-compatible base URL and chat-completions surface through OPENAI_BASE_URL, OPENAI_MODEL, OPENAI_API_SURFACE, and a configurable API key environment variable. No Volcengine credential-backed live run is committed."
+    scope: "ZC-02 live run passed through Volcengine OpenAI-compatible chat-completions with model ark-code-latest, base URL https://ark.cn-beijing.volces.com/api/coding/v3, and provider-specific VOLCENGINE_OPENAI_API_KEY. This does not validate native OpenAI API."
   deepseek:
     status: config-only
     scope: "Provider metadata only. No native DeepSeek harness, DEEPSEEK_API_KEY-backed runtime evidence, or dated live transcript is committed. The Anthropic-compatible endpoint caveat is documented in AGENT_UPGRADE_PORTABLE.md and triaged in docs/provider-routes.md."

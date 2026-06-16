@@ -291,6 +291,34 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - Full JSON transcripts are summarized, not committed verbatim.
 - Windows PowerShell users must set UTF-8 output encodings before piping Chinese prompts to `claude -p`; otherwise prompt corruption can look like a route or wake-word failure.
 
+## 2026-06-16 Volcengine OpenAI-Compatible ZC-02 Live Run
+
+| Field | Value |
+|---|---|
+| Runtime | OpenAI-compatible provider harness |
+| Provider / model | Volcengine OpenAI-compatible endpoint; model `ark-code-latest` |
+| API surface | `chat-completions` |
+| Endpoint | `https://ark.cn-beijing.volces.com/api/coding/v3/chat/completions` |
+| Base URL | `https://ark.cn-beijing.volces.com/api/coding/v3` |
+| Key env | `VOLCENGINE_OPENAI_API_KEY`; value not committed |
+| Repository base | Post-PR #23 `main` at `a04bbe0`; evidence committed on `codex/volcengine-live-evidence` |
+| Prompt set | ZC-02 from `tests/regression_cases.yaml` |
+| Transcript status | Summarized here; compact redacted evidence is committed at `docs/runtime-evidence/2026-06-16-volcengine-openai-compatible-zc-02-live.md`. Full request/response payload and provider response ID are not committed. |
+| Overall result | `pass` for Volcengine OpenAI-compatible ZC-02; native OpenAI API remains `harness-ready` |
+
+### Case Result
+
+| Case | Mode | Result | Notes |
+|---|---|---|---|
+| ZC-02 | OpenAI-compatible chat-completions live | `pass` | Output explained `因三相` as a `正因` validator, covered `遍是宗法性`, `同品定有性`, and `异品遍无性`, used the `声，应是无常，以所作性故` example, cited `context/因明推理引擎.md` and `context/摄类学工具箱.md`, and did not rely on native OpenAI API. |
+
+### Known Limits
+
+- This validates only the Volcengine OpenAI-compatible `chat-completions` route for ZC-02.
+- It does not validate native OpenAI API or the Responses API endpoint.
+- It does not validate ZC-01, ZC-03, ZC-04, ZC-05, ZC-06, deeper Agama-search, or file-output cases on Volcengine.
+- Full provider payload and response ID are redacted.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:

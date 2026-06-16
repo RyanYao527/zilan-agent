@@ -9,7 +9,7 @@ This document records the current state of non-Codex provider routes. It is a tr
 | Route | Current status | Triage | Next action |
 |---|---|---|---|
 | OpenAI API | `harness-ready` | Dry-run Responses API harness exists and is covered by tests. `OPENAI_API_KEY` was not present in the local environment during this triage. | Run `scripts/openai_api_harness.py --live` with `OPENAI_API_KEY`, then record evidence. |
-| Volcengine OpenAI-Compatible | `harness-ready` | The shared harness can target a configurable OpenAI-compatible base URL and `chat-completions` surface. No Volcengine credential-backed live run is committed. | Run with `OPENAI_BASE_URL`, `OPENAI_MODEL`, `OPENAI_API_SURFACE=chat-completions`, and a provider-specific key env var; record evidence under this route, not under native OpenAI API. |
+| Volcengine OpenAI-Compatible | `tested` | ZC-02 passed on 2026-06-16 through the shared harness with `chat-completions`, base URL `https://ark.cn-beijing.volces.com/api/coding/v3`, model `ark-code-latest`, and provider-specific `VOLCENGINE_OPENAI_API_KEY`. Evidence is summarized in `docs/runtime-validation-log.md` and `docs/runtime-evidence/2026-06-16-volcengine-openai-compatible-zc-02-live.md`. | Keep native OpenAI API separate; expand this route with additional ZC cases if broader Volcengine validation is needed. |
 | DeepSeek | `config-only` | Provider metadata exists. No native DeepSeek harness or `DEEPSEEK_API_KEY` was present. Claude Code local model usage is not the same as native DeepSeek route validation. | Add a native harness or document a blocked state with reproducible provider details. |
 | GLM | `config-only` | Provider metadata exists. No GLM harness or `ZHIPUAI_API_KEY` was present. | Add a minimal harness or keep as metadata only. |
 | Qwen | `config-only` | Provider metadata exists. No Qwen harness or `DASHSCOPE_API_KEY` was present. | Add a minimal harness or keep as metadata only. |
@@ -21,7 +21,7 @@ The 2026-06-15 triage checked only whether common environment variables existed.
 | Variable | Present |
 |---|---|
 | `OPENAI_API_KEY` | no |
-| `VOLCENGINE_OPENAI_API_KEY` | not checked in 2026-06-15 triage |
+| `VOLCENGINE_OPENAI_API_KEY` | provided in the user's local PowerShell session for the 2026-06-16 ZC-02 run; value was not shared or committed |
 | `DEEPSEEK_API_KEY` | no |
 | `ZHIPUAI_API_KEY` | no |
 | `DASHSCOPE_API_KEY` | no |
