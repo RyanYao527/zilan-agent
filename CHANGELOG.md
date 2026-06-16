@@ -2,6 +2,18 @@
 
 All notable changes to zilan-agent are tracked here. Platform validation status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
+## [Unreleased]
+
+### Added
+
+- Added compact runtime evidence excerpts for the 2026-06-15 Codex rerun and 2026-06-16 Claude Code UTF-8 rerun.
+- Added OpenAI-compatible harness configuration for custom base URLs, API surfaces, and provider-specific key environment variables.
+- Added a Volcengine OpenAI-compatible route as `harness-ready` without upgrading native OpenAI API status.
+
+### Changed
+
+- Improved Agama search citations by carrying paragraph section markers such as `（一）` into line and passage citations when available.
+
 ## [2.4.6] - 2026-06-16
 
 ### Changed

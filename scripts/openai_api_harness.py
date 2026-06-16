@@ -13,9 +13,11 @@ from typing import Any
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses"
+OPENAI_DEFAULT_BASE_URL = "https://api.openai.com/v1"
+OPENAI_RESPONSES_URL = f"{OPENAI_DEFAULT_BASE_URL}/responses"
 DEFAULT_MODEL = "gpt-5.5"
 CONTEXT_CHAR_LIMIT = 5000
+API_SURFACES = ("responses", "chat-completions")
 
 
 @dataclass(frozen=True)
@@ -32,6 +34,9 @@ class HarnessResult:
     model: str
     case_id: str
     endpoint: str
+    base_url: str
+    api_surface: str
+    api_key_env: str
     prompt: str
     reference_files: list[str]
     request: dict[str, Any]
@@ -101,7 +106,25 @@ def _read_context_bundle(root: Path, reference_files: list[str]) -> str:
     return "\n\n".join(parts)
 
 
-def build_request(root: Path, case: HarnessCase, model: str, prompt_override: str | None = None) -> dict[str, Any]:
+def _normalize_base_url(base_url: str) -> str:
+    return base_url.rstrip("/")
+
+
+def _endpoint_for(base_url: str, api_surface: str) -> str:
+    if api_surface == "responses":
+        return f"{_normalize_base_url(base_url)}/responses"
+    if api_surface == "chat-completions":
+        return f"{_normalize_base_url(base_url)}/chat/completions"
+    raise ValueError(f"Unsupported API surface: {api_surface}")
+
+
+def build_request(
+    root: Path,
+    case: HarnessCase,
+    model: str,
+    prompt_override: str | None = None,
+    api_surface: str = "responses",
+) -> dict[str, Any]:
     prompt = prompt_override or case.prompt
     developer_prompt = "\n\n".join(
         [
@@ -112,6 +135,24 @@ def build_request(root: Path, case: HarnessCase, model: str, prompt_override: st
             _read_context_bundle(root, case.reference_files),
         ]
     )
+
+    if api_surface == "chat-completions":
+        return {
+            "model": model,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": developer_prompt,
+                },
+                {
+                    "role": "user",
+                    "content": prompt,
+                },
+            ],
+        }
+
+    if api_surface != "responses":
+        raise ValueError(f"Unsupported API surface: {api_surface}")
 
     return {
         "model": model,
@@ -148,9 +189,41 @@ def _extract_output_text(response: dict[str, Any]) -> str:
     return "\n".join(chunks)
 
 
-def call_openai(request_body: dict[str, Any], api_key: str) -> dict[str, Any]:
+def _extract_chat_completions_output_text(response: dict[str, Any]) -> str:
+    choices = response.get("choices")
+    if not isinstance(choices, list):
+        return ""
+    chunks: list[str] = []
+    for choice in choices:
+        if not isinstance(choice, dict):
+            continue
+        message = choice.get("message")
+        if not isinstance(message, dict):
+            continue
+        content = message.get("content")
+        if isinstance(content, str):
+            chunks.append(content)
+        elif isinstance(content, list):
+            for part in content:
+                if isinstance(part, dict) and isinstance(part.get("text"), str):
+                    chunks.append(part["text"])
+    return "\n".join(chunks)
+
+
+def _extract_response_id(response: dict[str, Any]) -> str | None:
+    response_id = response.get("id")
+    return response_id if isinstance(response_id, str) else None
+
+
+def _extract_output_for_surface(response: dict[str, Any], api_surface: str) -> str:
+    if api_surface == "chat-completions":
+        return _extract_chat_completions_output_text(response)
+    return _extract_output_text(response)
+
+
+def call_openai(endpoint: str, request_body: dict[str, Any], api_key: str) -> dict[str, Any]:
     request = urllib.request.Request(
-        OPENAI_RESPONSES_URL,
+        endpoint,
         data=json.dumps(request_body).encode("utf-8"),
         headers={
             "Authorization": f"Bearer {api_key}",
@@ -172,48 +245,81 @@ def run_harness(
     case_id: str,
     model: str | None,
     prompt_override: str | None,
-    live: bool,
+    base_url: str | None = None,
+    api_surface: str | None = None,
+    api_key_env: str | None = None,
+    live: bool = False,
 ) -> HarnessResult:
     case = _load_regression_case(root, case_id)
     selected_model = model or os.environ.get("OPENAI_MODEL") or _default_model(root)
-    request_body = build_request(root, case, selected_model, prompt_override)
+    selected_base_url = _normalize_base_url(base_url or os.environ.get("OPENAI_BASE_URL") or OPENAI_DEFAULT_BASE_URL)
+    selected_api_surface = api_surface or os.environ.get("OPENAI_API_SURFACE") or "responses"
+    selected_api_key_env = api_key_env or os.environ.get("OPENAI_API_KEY_ENV") or "OPENAI_API_KEY"
+    if selected_api_surface not in API_SURFACES:
+        raise ValueError(f"Unsupported API surface: {selected_api_surface}. Expected one of: {', '.join(API_SURFACES)}")
+    endpoint = _endpoint_for(selected_base_url, selected_api_surface)
+    request_body = build_request(root, case, selected_model, prompt_override, selected_api_surface)
 
     if not live:
         return HarnessResult(
             mode="dry-run",
             model=selected_model,
             case_id=case.case_id,
-            endpoint=OPENAI_RESPONSES_URL,
+            endpoint=endpoint,
+            base_url=selected_base_url,
+            api_surface=selected_api_surface,
+            api_key_env=selected_api_key_env,
             prompt=prompt_override or case.prompt,
             reference_files=case.reference_files,
             request=request_body,
         )
 
-    api_key = os.environ.get("OPENAI_API_KEY")
+    api_key = os.environ.get(selected_api_key_env)
     if not api_key:
-        raise RuntimeError("OPENAI_API_KEY is required when --live is set.")
+        raise RuntimeError(f"{selected_api_key_env} is required when --live is set.")
 
-    response = call_openai(request_body, api_key)
+    response = call_openai(endpoint, request_body, api_key)
     return HarnessResult(
         mode="live",
         model=selected_model,
         case_id=case.case_id,
-        endpoint=OPENAI_RESPONSES_URL,
+        endpoint=endpoint,
+        base_url=selected_base_url,
+        api_surface=selected_api_surface,
+        api_key_env=selected_api_key_env,
         prompt=prompt_override or case.prompt,
         reference_files=case.reference_files,
         request=request_body,
-        output_text=_extract_output_text(response),
-        response_id=response.get("id") if isinstance(response.get("id"), str) else None,
+        output_text=_extract_output_for_surface(response, selected_api_surface),
+        response_id=_extract_response_id(response),
     )
 
 
 def main() -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+
     parser = argparse.ArgumentParser(description="Build or run a minimal Zilan OpenAI Responses API harness.")
     parser.add_argument("--root", type=Path, default=ROOT, help="Repository root.")
     parser.add_argument("--case", default="ZC-02", help="Regression case ID from tests/regression_cases.yaml.")
     parser.add_argument("--model", help="OpenAI model ID. Defaults to OPENAI_MODEL, agents/openai.yaml, or gpt-5.5.")
     parser.add_argument("--prompt", help="Override the regression case prompt.")
-    parser.add_argument("--live", action="store_true", help="Call the OpenAI Responses API. Requires OPENAI_API_KEY.")
+    parser.add_argument("--base-url", help="OpenAI-compatible API base URL. Defaults to OPENAI_BASE_URL or OpenAI /v1.")
+    parser.add_argument(
+        "--api-surface",
+        choices=API_SURFACES,
+        help="API surface to call. Defaults to OPENAI_API_SURFACE or responses.",
+    )
+    parser.add_argument(
+        "--api-key-env",
+        help="Environment variable containing the API key. Defaults to OPENAI_API_KEY_ENV or OPENAI_API_KEY.",
+    )
+    parser.add_argument(
+        "--live",
+        action="store_true",
+        help="Call the configured API endpoint. Requires the selected API key environment variable.",
+    )
     parser.add_argument("--json", action="store_true", help="Emit JSON output.")
     args = parser.parse_args()
 
@@ -223,6 +329,9 @@ def main() -> int:
             case_id=args.case,
             model=args.model,
             prompt_override=args.prompt,
+            base_url=args.base_url,
+            api_surface=args.api_surface,
+            api_key_env=args.api_key_env,
             live=args.live,
         )
     except (OSError, RuntimeError, ValueError, yaml.YAMLError) as exc:
@@ -235,7 +344,10 @@ def main() -> int:
         print(f"mode: {result.mode}")
         print(f"model: {result.model}")
         print(f"case: {result.case_id}")
+        print(f"api_surface: {result.api_surface}")
+        print(f"base_url: {result.base_url}")
         print(f"endpoint: {result.endpoint}")
+        print(f"api_key_env: {result.api_key_env}")
         print("reference_files:")
         for path in result.reference_files:
             print(f"  - {path}")
