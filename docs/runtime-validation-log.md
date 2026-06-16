@@ -319,6 +319,37 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - It does not validate ZC-01, ZC-03, ZC-04, ZC-05, ZC-06, deeper Agama-search, or file-output cases on Volcengine.
 - Full provider payload and response ID are redacted.
 
+## 2026-06-16 Volcengine OpenAI-Compatible ZC-01 And ZC-03 Live Runs
+
+| Field | Value |
+|---|---|
+| Runtime | OpenAI-compatible provider harness |
+| Provider / model | Volcengine OpenAI-compatible endpoint; model `ark-code-latest` |
+| Provider route | `volcengine_openai_compatible` |
+| API surface | `chat-completions` |
+| Endpoint | `https://ark.cn-beijing.volces.com/api/coding/v3/chat/completions` |
+| Base URL | `https://ark.cn-beijing.volces.com/api/coding/v3` |
+| Key env | `VOLCENGINE_OPENAI_API_KEY`; value not committed |
+| Repository base | Post-PR #26 `main` at `6913178`; evidence committed on `codex/volcengine-zc01-zc03-evidence` |
+| Prompt set | ZC-01 and ZC-03 from `tests/regression_cases.yaml` |
+| Transcript status | Summarized here; compact redacted evidence is committed at `docs/runtime-evidence/2026-06-16-volcengine-openai-compatible-zc-01-zc-03-live.md`. Full request/response payloads and provider response IDs are not committed. |
+| Overall result | `pass` for Volcengine OpenAI-compatible ZC-01 and ZC-03; together with the prior ZC-02 entry, Volcengine live coverage now includes ZC-01 through ZC-03. Native OpenAI API remains `harness-ready`. |
+
+### Case Results
+
+| Case | Mode | Result | Notes |
+|---|---|---|---|
+| ZC-01 | OpenAI-compatible chat-completions live | `pass` | Output separated work feedback from self-worth, described the feedback →苦受→想心所→防御叙事 chain, cited `context/心类学认知分析.md` and `context/南传观禅指南.md`, and offered bounded lightweight observation steps. |
+| ZC-03 | OpenAI-compatible chat-completions live | `pass` | Output split the scenario into fact, interpretation, self-evaluation, and feeling layers; rejected `被批评 → 我无价值` as `不周遍`; used `触 → 作意 → 受 → 想 → 思`; cited `context/摄类学工具箱.md` and `context/心类学认知分析.md`; and stated a therapy/clinical-evaluation boundary. |
+
+### Known Limits
+
+- This validates ZC-01 and ZC-03 only on the Volcengine OpenAI-compatible `chat-completions` route.
+- Together with the prior ZC-02 live entry, this validates ZC-01 through ZC-03 only.
+- It does not validate native OpenAI API or the Responses API endpoint.
+- It does not validate ZC-04, ZC-05, ZC-06, deeper Agama-search, sub-agent routing, or file-output cases on Volcengine.
+- Full provider payloads and response IDs are redacted.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:

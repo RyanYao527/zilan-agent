@@ -51,7 +51,7 @@ python scripts\openai_api_harness.py --case ZC-02 --provider-route volcengine_op
 ## Status
 
 - Default mode: dry-run request construction, covered by pytest.
-- Live mode: implemented, but not run by CI. Native OpenAI remains `harness-ready` until a dated `OPENAI_API_KEY` run is recorded; Volcengine-compatible ZC-02 live evidence is recorded separately under the provider route.
+- Live mode: implemented, but not run by CI. Native OpenAI remains `harness-ready` until a dated `OPENAI_API_KEY` run is recorded; Volcengine-compatible ZC-01 through ZC-03 live evidence is recorded separately under the provider route.
 - Native OpenAI default: Responses API request with developer and user messages, `model`, `input`, and low reasoning effort.
 - Compatible provider option: Chat Completions request with system and user messages, `model`, and `messages`. `--provider-route volcengine_openai_compatible` loads the tested Volcengine defaults from `agents/openai.yaml`.
 - Credential boundary: `OPENAI_API_KEY` is required only with `--live` by default. Compatible routes can set `OPENAI_API_KEY_ENV` or `--api-key-env` to use a provider-specific environment variable.

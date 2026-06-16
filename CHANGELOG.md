@@ -7,6 +7,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 ### Added
 
 - Added `--provider-route` support to the OpenAI-compatible harness, with tested Volcengine defaults loaded from `agents/openai.yaml`.
+- Added redacted Volcengine OpenAI-compatible ZC-01 and ZC-03 live evidence, extending the route's live coverage to ZC-01 through ZC-03.
 
 ## [2.4.7] - 2026-06-16
 
