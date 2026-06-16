@@ -1,6 +1,6 @@
 # Runtime Validation Log
 
-> Last updated: 2026-06-15
+> Last updated: 2026-06-16
 
 This log records manual runtime validation evidence for zilan-agent. It complements CI and repository invariant checks; it does not replace `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, pytest, ruff, or platform status maintenance in `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -245,6 +245,51 @@ This validates installation layout and helper availability only. It does not run
 Claude Code CLI 2.1.169 with the current local provider route did not pass the exact ZC prompt family when the prompt contained the Zilan wake word. The failures were not generic CLI failures: a minimal `claude -p --safe-mode "请只回答：OK"` returned `OK`, and a stdin control without the wake word answered ZC-02. The observed blocker is specific to the wake-word / route interaction, where a concrete task is reduced to an identity greeting.
 
 The branch adds prompt guards that state activation keywords plus concrete tasks must be answered directly, but the current Claude Code route still failed exact wake-word prompts during this session. Therefore `agents/openai.yaml` and `docs/platform-validation.md` conservatively downgrade Claude Code from `tested` to `blocked` until a future rerun demonstrates the exact ZC prompts complete successfully.
+
+Superseding note: the 2026-06-16 rerun below reclassifies this failure as a Windows PowerShell stdin encoding issue for Chinese prompts.
+
+## 2026-06-16 Claude Code UTF-8 Stdin Rerun
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code 2.1.169; JSON model usage reported `deepseek-v4-pro[1m]` under the local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded through `--system-prompt` |
+| Repository branch | `codex/claude-utf8-rerun` |
+| Repository base commit | `8cebd83ed` plus Claude Code output hard-constraint prompt changes in this branch |
+| Prompt set | ZC-01 through ZC-06 from `CODEX_REGRESSION_TESTS.md` and `tests/regression_cases.yaml`, using exact wake-word style prompts where applicable |
+| Encoding setup | Windows PowerShell set `$OutputEncoding = [System.Text.UTF8Encoding]::new($false)` and `[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)` before piping Chinese prompts into `claude -p` |
+| Transcript status | Summarized here; full JSON outputs are not committed. ZC-06 wrote `C:\tmp\zilan-claude-validation-20260616-ZC06.md` outside the repository. |
+| Repository checks | `python -m ruff check scripts tests` pass; `python -m pytest` pass; `python scripts\validate_zilan_repo.py --check-generated --strict-yaml` pass; `python scripts\mock_install_smoke.py` pass; `python scripts\openai_api_harness.py --case ZC-02` pass |
+| Overall result | Claude Code `pass` with UTF-8 stdin requirement and the limitations below |
+
+### Encoding Diagnosis
+
+| Control | Result | Notes |
+|---|---|---|
+| Default PowerShell pipe into `claude -p` echo control | `fail-control` | Chinese prompt text arrived as `?????????????????`, proving that the previous wake-word prompt was not reaching Claude Code intact. |
+| UTF-8 PowerShell pipe into `claude -p` echo control | `pass-control` | The same prompt arrived as `孜澜，什么是因三相？请用三点回答。`. |
+
+The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin encoding failure for Chinese prompt piping. The prompt guard changes remain useful, but the critical runtime protocol is to force UTF-8 before piping Chinese prompts to Claude Code.
+
+### Case Results
+
+| Case | Mode | Result | Notes |
+|---|---|---|---|
+| ZC-01 | Skill lightweight dialogue | `pass` | Directly answered the `工作反馈` scenario, separated event,受挫感, and `我被否定了`; used `context/心类学认知分析.md` and `context/南传观禅指南.md`; no Agama overreach; boundary statement present. |
+| ZC-02 | Skill concept lookup | `pass` | Directly explained `遍是宗法性`, `同品定有性`, and `异品遍无性`, and connected them to Collected Topics; used `context/因明推理引擎.md` and `context/摄类学工具箱.md`; boundary statement present. |
+| ZC-03 | Skill cross-domain explanation | `pass` | Distinguished fact, concept label, `受`, `想`, and `瞋`; used `context/摄类学工具箱.md`, `context/心类学认知分析.md`, `SKILL.md`, and `tests/regression_cases.yaml`; boundary statement present. |
+| ZC-04 | Explicit agent Agama search | `pass` | Used repository-local context and `scripts/search_agama.py`; excluded `_source`; reported counts for `無我`, `非我`, and `無我所` across four Agama files; supplied representative local citations and classification boundaries. |
+| ZC-05 | Explicit agent cross-domain research | `pass` | Connected Agama, Collected Topics, Buddhist logic, Madhyamaka, and vipassana; supplied local citations and a reasoning chain. The run reported a `search_agama.py` attempt followed by `Grep` fallback for some citations, so this remains a transcript-backed pass with a tooling-note limitation. |
+| ZC-06 | Long report output | `pass` | Used `scripts/search_agama.py` and local context; wrote `C:\tmp\zilan-claude-validation-20260616-ZC06.md`; the file check confirmed search scope, keyword groups, match statistics, classification table, representative citations, analysis, collation TODOs, and boundary statements. |
+
+### Known Limits
+
+- This validates Claude Code CLI noninteractive execution with repository `agents/zilan-claude-code.md` loaded directly and UTF-8 stdin used for Chinese prompts.
+- It does not independently prove every user's installed `~/.claude/skills/zilan-agent` path is current.
+- Background auto-spawn behavior was not separately audited; explicit ZC-04 through ZC-06 prompts were executed through the loaded agent prompt.
+- Full JSON transcripts are summarized, not committed verbatim.
+- Windows PowerShell users must set UTF-8 output encodings before piping Chinese prompts to `claude -p`; otherwise prompt corruption can look like a route or wake-word failure.
 
 ## Next Validation Entries
 

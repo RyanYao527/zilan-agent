@@ -11,6 +11,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Updated core context examples and regression prompts to use neutral daily-practice scenarios.
 - Clarified that activation keywords combined with concrete questions must be answered directly instead of stopping at identity greetings.
 - Recorded the 2026-06-15 Codex rerun and downgraded Claude Code to `blocked` pending a wake-word / noninteractive route fix.
+- Restored Claude Code to `tested` after a 2026-06-16 UTF-8 stdin rerun showed the blocker was caused by Windows PowerShell pipe encoding, not the ZC prompt contract itself.
 
 ### Added
 

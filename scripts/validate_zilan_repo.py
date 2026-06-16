@@ -157,6 +157,7 @@ AGENT_PROMPT_REQUIRED_FRAGMENTS = {
         "context/agama/T0099-za-agama.md:",
     ),
     "agents/zilan-claude-code.md": (
+        "输出硬约束",
         "首轮任务执行优先级",
         "激活与任务合并规则",
         "非交互运行护栏",

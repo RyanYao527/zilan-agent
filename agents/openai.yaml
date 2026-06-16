@@ -49,9 +49,9 @@ validation:
     date: "2026-06-15"
     scope: "ZC-01 through ZC-06 rerun after v2.4.5 public-doc depersonalization; ZC-04 through ZC-06 used parent-observed sub-agent spawns with local Markdown context."
   claude_code:
-    status: blocked
-    date: "2026-06-15"
-    scope: "Claude Code CLI 2.1.169 route is currently blocked for exact ZC prompts containing the Zilan wake word: noninteractive runs returned identity greetings instead of executing concrete tasks. A stdin control without the wake word answered ZC-02 successfully, so this is tracked as a wake-word/route behavior issue."
+    status: tested
+    date: "2026-06-16"
+    scope: "Claude Code CLI 2.1.169 passed ZC-01 through ZC-06 through UTF-8 stdin with repository agents/zilan-claude-code.md loaded as the system prompt. Windows PowerShell must set $OutputEncoding and [Console]::OutputEncoding to UTF-8 before piping Chinese prompts; background auto-spawn behavior was not separately audited."
   openai_api:
     status: harness-ready
     date: "2026-06-12"
