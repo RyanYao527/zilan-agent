@@ -4,7 +4,9 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
-No unreleased changes.
+### Added
+
+- Added `--provider-route` support to the OpenAI-compatible harness, with tested Volcengine defaults loaded from `agents/openai.yaml`.
 
 ## [2.4.7] - 2026-06-16
 

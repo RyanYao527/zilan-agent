@@ -62,6 +62,45 @@ def test_openai_compatible_harness_can_target_chat_completions_base_url(monkeypa
     assert result.request["messages"][0]["role"] == "system"
 
 
+def test_provider_route_applies_volcengine_defaults(monkeypatch) -> None:
+    monkeypatch.delenv("OPENAI_MODEL", raising=False)
+    monkeypatch.delenv("OPENAI_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENAI_API_SURFACE", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY_ENV", raising=False)
+
+    result = run_harness(
+        root=ROOT,
+        case_id="ZC-02",
+        provider_route="volcengine_openai_compatible",
+        model=None,
+        prompt_override=None,
+        live=False,
+    )
+
+    assert result.provider_route == "volcengine_openai_compatible"
+    assert result.model == "ark-code-latest"
+    assert result.base_url == "https://ark.cn-beijing.volces.com/api/coding/v3"
+    assert result.endpoint == "https://ark.cn-beijing.volces.com/api/coding/v3/chat/completions"
+    assert result.api_surface == "chat-completions"
+    assert result.api_key_env == "VOLCENGINE_OPENAI_API_KEY"
+
+
+def test_provider_route_rejects_unknown_route() -> None:
+    try:
+        run_harness(
+            root=ROOT,
+            case_id="ZC-02",
+            provider_route="unknown_provider",
+            model=None,
+            prompt_override=None,
+            live=False,
+        )
+    except ValueError as exc:
+        assert "Unknown provider route: unknown_provider" in str(exc)
+    else:
+        raise AssertionError("unknown provider route should fail")
+
+
 def test_openai_harness_live_requires_api_key(monkeypatch) -> None:
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
 

@@ -127,6 +127,12 @@ Do not commit API keys, live response payloads containing secrets, or private ac
 The same harness can build OpenAI-compatible Chat Completions requests for providers such as Volcengine. This is a separate route from native OpenAI API validation:
 
 ```powershell
+python scripts\openai_api_harness.py --case ZC-02 --provider-route volcengine_openai_compatible --json
+```
+
+The provider route preset reads the tested Volcengine defaults from `agents/openai.yaml`. To override them manually:
+
+```powershell
 $env:OPENAI_BASE_URL = "https://<provider-openai-compatible-base-url>/v1"
 $env:OPENAI_MODEL = "<provider-model-id>"
 $env:OPENAI_API_SURFACE = "chat-completions"
@@ -138,7 +144,7 @@ Live mode uses the provider-specific key environment variable:
 
 ```powershell
 $env:VOLCENGINE_OPENAI_API_KEY = "..."
-python scripts/openai_api_harness.py --case ZC-02 --live --json
+python scripts/openai_api_harness.py --case ZC-02 --provider-route volcengine_openai_compatible --live --json
 ```
 
 Record a successful compatible-provider run under that provider route. Do not use it to mark native OpenAI API as `tested`.
