@@ -1,6 +1,6 @@
 # Platform Validation Status
 
-> Last updated: 2026-06-15
+> Last updated: 2026-06-16
 
 This document is the source of truth for Zilan's platform validation status. It keeps engineering checks, manual runtime validation, provider metadata, and scholarly collation boundaries separate so the project does not overclaim platform support.
 
@@ -20,7 +20,7 @@ This document is the source of truth for Zilan's platform validation status. It 
 | Platform route | Status | Last validated | Evidence | Boundary |
 |---|---|---|---|---|
 | Codex | `tested` | 2026-06-15 | `docs/runtime-validation-log.md`, `CODEX_REGRESSION_TESTS.md`, `tests/regression_cases.yaml`, `agents/zilan-codex.md` | ZC-01 through ZC-06 were rerun after the v2.4.5 public-doc depersonalization changes. ZC-04 through ZC-06 used parent-observed sub-agent spawns with local Markdown context. CI validates the regression inventory and tooling; it does not grade answer quality. |
-| Claude Code | `blocked` | 2026-06-15 | `docs/runtime-validation-log.md`, `CODEX_REGRESSION_TESTS.md`, `tests/regression_cases.yaml`, `agents/zilan-claude-code.md` | Claude Code CLI 2.1.169 currently fails exact noninteractive ZC prompts containing the Zilan wake word: runs returned identity greetings instead of executing concrete tasks. A stdin control without the wake word answered ZC-02 successfully, so this is tracked as a wake-word / route behavior issue before restoring `tested`. |
+| Claude Code | `tested` | 2026-06-16 | `docs/runtime-validation-log.md`, `CODEX_REGRESSION_TESTS.md`, `tests/regression_cases.yaml`, `agents/zilan-claude-code.md` | Claude Code CLI 2.1.169 passed ZC-01 through ZC-06 when Chinese prompts were piped through UTF-8 stdin with repository `agents/zilan-claude-code.md` loaded as the system prompt. Windows PowerShell must set `$OutputEncoding` and `[Console]::OutputEncoding` to UTF-8 before piping Chinese prompts; background auto-spawn behavior was not separately audited. |
 | OpenAI API | `harness-ready` | Dry-run harness: 2026-06-12 | `scripts/openai_api_harness.py`, `tests/test_openai_api_harness.py`, `docs/openai-api-harness.md`, `agents/openai.yaml` | The harness builds OpenAI Responses API requests and is covered by pytest. Live `--live` execution is not yet recorded and requires `OPENAI_API_KEY`. |
 | DeepSeek | `config-only` | Not end-to-end tested | `agents/openai.yaml`, `AGENT_UPGRADE_PORTABLE.md`, `docs/provider-routes.md` | Provider metadata exists, but no native DeepSeek harness or credential-backed runtime evidence is committed. The Anthropic-compatible endpoint caveat is documented separately and should not be treated as native DeepSeek validation. |
 | GLM | `config-only` | Not end-to-end tested | `agents/openai.yaml`, `docs/provider-routes.md` | Provider metadata exists, but no GLM harness, credential-backed runtime transcript, or live evidence is committed. |
@@ -68,7 +68,9 @@ The helper excludes `_source/` XML by default and filters known collisions such 
 
 ### Claude Code Runtime
 
-Claude Code answer quality is validated manually with the same ZC prompt family where practical. The 2026-06-12 run used `claude -p` noninteractive mode with `agents/zilan-claude-code.md` appended as the agent prompt and local repository tools enabled per case. Treat this as validation of the Claude Code CLI plus repository prompt route, not as proof that every user's installed `~/.claude/skills` path is current.
+Claude Code answer quality is validated manually with the same ZC prompt family where practical. The latest 2026-06-16 run used `claude -p` noninteractive mode with repository `agents/zilan-claude-code.md` loaded as the system prompt, local repository tools enabled per case, and UTF-8 stdin for Chinese prompt piping on Windows PowerShell. Treat this as validation of the Claude Code CLI plus repository prompt route, not as proof that every user's installed `~/.claude/skills` path is current.
+
+PowerShell encoding is part of the runtime protocol: before piping Chinese prompts into `claude -p`, set `$OutputEncoding = [System.Text.UTF8Encoding]::new($false)` and `[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)`. Without this, Chinese prompt text can arrive at Claude Code as question marks and produce misleading wake-word failures.
 
 ### OpenAI API Harness
 

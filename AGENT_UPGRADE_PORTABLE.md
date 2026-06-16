@@ -1,7 +1,7 @@
 # Zilan Skill To Agent Migration Record
 
 > Current document version: v2.0
-> Last updated: 2026-06-15
+> Last updated: 2026-06-16
 > Current project baseline: zilan-agent v2.4.5
 
 This document records how Zilan evolved from a passive skill-style knowledge bundle into a dual-track Skill / Agent framework. It is historical and architectural context, not the source of truth for platform validation.
@@ -22,8 +22,8 @@ Zilan now uses a dual-track design:
 | Track | Entry | Best for | Current status |
 |---|---|---|---|
 | Skill mode | `SKILL.md` / `SKILL-en.md` | Lightweight dialogue, daily practice reflection, simple concept explanation | Maintained in repository and covered by invariant checks |
-| Codex sub-agent | `agents/zilan-codex.md` | Explicit spawned research, Agama retrieval, cross-domain reports | `tested` as of 2026-06-12 |
-| Claude Code agent | `agents/zilan-claude-code.md` | Claude Code explicit agent route and local tool use | `blocked` as of 2026-06-15 pending wake-word prompt rerun |
+| Codex sub-agent | `agents/zilan-codex.md` | Explicit spawned research, Agama retrieval, cross-domain reports | `tested` as of 2026-06-15 |
+| Claude Code agent | `agents/zilan-claude-code.md` | Claude Code explicit agent route and local tool use | `tested` as of 2026-06-16 with UTF-8 stdin on Windows PowerShell |
 | OpenAI API harness | `scripts/openai_api_harness.py` | Portable Responses API request construction and live validation path | `harness-ready`; live run still requires `OPENAI_API_KEY` evidence |
 | Provider metadata | `agents/openai.yaml` | DeepSeek, GLM, Qwen route metadata | `config-only` until native harnesses or dated runtime evidence exist |
 
@@ -81,7 +81,7 @@ An earlier Claude Code setup using a DeepSeek Anthropic-compatible endpoint prod
 
 Current conservative interpretation:
 
-- Claude Code had separate runtime evidence from 2026-06-12, but the 2026-06-15 rerun found a wake-word / noninteractive route blocker.
+- Claude Code had separate runtime evidence from 2026-06-12. The 2026-06-15 wake-word blocker was reclassified on 2026-06-16 as a Windows PowerShell stdin encoding failure: without UTF-8, Chinese prompts were received as question marks.
 - Native DeepSeek API support is not validated by that Claude Code compatibility-layer observation.
 - DeepSeek remains `config-only` in this repository until a native harness or dated provider run exists.
 
@@ -102,7 +102,7 @@ For clean install smoke testing, use a fresh clone and run the same checks seque
 
 ## Current Next Steps
 
-1. Resolve the Claude Code wake-word / noninteractive route blocker and rerun exact ZC prompts.
+1. Keep the Claude Code UTF-8 stdin protocol documented and rerun exact ZC prompts after prompt, tool, or install-path changes.
 2. Run OpenAI API live validation only after `OPENAI_API_KEY` is available.
 3. Add transcript-backed excerpts for representative Codex cases and future Claude Code passing cases where safe.
 4. Add native dry-run/live harnesses for DeepSeek, GLM, and Qwen before upgrading those routes.

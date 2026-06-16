@@ -1,6 +1,6 @@
 # Provider Route Triage
 
-> Last updated: 2026-06-15
+> Last updated: 2026-06-16
 
 This document records the current state of non-Codex provider routes. It is a triage note, not runtime validation evidence. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -30,7 +30,7 @@ The 2026-06-15 triage checked only whether common environment variables existed.
 
 The current conservative interpretation is:
 
-- Claude Code route: validated through Claude Code CLI on 2026-06-12, but blocked again in the 2026-06-15 wake-word noninteractive rerun; track that separately from native DeepSeek validation.
+- Claude Code route: validated through Claude Code CLI on 2026-06-12 and rerun successfully on 2026-06-16 after identifying the 2026-06-15 failure as a Windows PowerShell UTF-8 stdin issue; track that separately from native DeepSeek validation.
 - DeepSeek native route: still `config-only` until a native harness or dated provider run exists.
 - DeepSeek Anthropic-compatible route: keep the documented caveat visible if using Claude Code through that compatibility layer.
 
