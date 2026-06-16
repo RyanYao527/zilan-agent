@@ -145,7 +145,7 @@ Record a successful compatible-provider run under that provider route. Do not us
 
 ## Provider Routes
 
-Volcengine OpenAI-compatible is `harness-ready`; DeepSeek, GLM, and Qwen currently remain provider metadata routes unless a native harness, credentials, and dated runtime evidence are added. See `docs/provider-routes.md` for the current route triage.
+Volcengine OpenAI-compatible is `tested` for one ZC-02 live run through `chat-completions`; native OpenAI API remains `harness-ready`. DeepSeek, GLM, and Qwen currently remain provider metadata routes unless a native harness, credentials, and dated runtime evidence are added. See `docs/provider-routes.md` for the current route triage.
 
 ## Troubleshooting
 

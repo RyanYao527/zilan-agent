@@ -28,6 +28,7 @@ REQUIRED_FILES = (
     "docs/runtime-evidence/2026-06-15-mock-claude-install-smoke.md",
     "docs/runtime-evidence/2026-06-15-codex-v245-runtime-rerun.md",
     "docs/runtime-evidence/2026-06-16-claude-code-utf8-rerun.md",
+    "docs/runtime-evidence/2026-06-16-volcengine-openai-compatible-zc-02-live.md",
     "docs/maintenance-roadmap.md",
     "docs/installation.md",
     "docs/validation-evidence.md",

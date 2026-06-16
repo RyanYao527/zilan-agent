@@ -32,6 +32,7 @@ Examples:
 - `2026-06-15-mock-claude-install-smoke.md`
 - `2026-06-15-codex-v245-runtime-rerun.md`
 - `2026-06-16-claude-code-utf8-rerun.md`
+- `2026-06-16-volcengine-openai-compatible-zc-02-live.md`
 - `2026-06-XX-openai-api-zc-02-live.md`
 - `2026-06-XX-claude-code-zc-04-excerpt.md`
 
