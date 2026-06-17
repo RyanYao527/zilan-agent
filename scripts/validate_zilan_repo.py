@@ -36,6 +36,8 @@ REQUIRED_FILES = (
     "docs/provider-routes.md",
     "docs/openai-api-harness.md",
     "docs/architecture/reasoning-contract.md",
+    "docs/architecture/reasoning-contract-review.md",
+    "docs/architecture/semantic-retrieval-interface.md",
     "LICENSE",
     "CONTRIBUTING.md",
     "CONTRIBUTING-en.md",
