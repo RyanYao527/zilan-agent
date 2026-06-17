@@ -4,6 +4,11 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+### Added
+
+- Added Reasoning Contract v0 documentation and seed `ZR-*` reasoning fixtures for Hetuvidya, Collected Topics, Madhyamaka prasaṅga, cognitive-analysis, and Agama-evidence structures.
+- Added repository validation for `tests/reasoning_cases.yaml` schema, local references, allowed contract families, and boundary-statement fields without changing runtime platform status.
+
 ## [2.4.8] - 2026-06-17
 
 ### Added

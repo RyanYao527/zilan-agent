@@ -11,6 +11,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | CI | GitHub Actions runs repository invariants, generated Agama idempotency checks, pytest, ruff, and Agama search smoke tests. |
 | Repository invariants | `scripts/validate_zilan_repo.py` checks required files, context files, YAML shape, regression inventory, platform status consistency, agent prompt contracts, and Agama search behavior. |
 | Regression inventory | `CODEX_REGRESSION_TESTS.md` is mirrored by `tests/regression_cases.yaml`; CI validates structure, resources, and case IDs. |
+| Reasoning contract | `docs/architecture/reasoning-contract.md` defines the v0 structured reasoning contract; `tests/reasoning_cases.yaml` maps seed `ZR-*` cases to ZC runtime families without claiming automated doctrinal grading. |
 | Platform status | `agents/openai.yaml` is the machine-readable source; `docs/platform-validation.md` is the human-readable validation record. Codex is `tested`; Claude Code is `tested` as of 2026-06-16 when Windows PowerShell stdin is forced to UTF-8. |
 | Runtime validation | `docs/runtime-validation-log.md` records manual runtime validation sessions and transcript availability. |
 | Runtime evidence policy | `docs/validation-evidence.md` defines evidence levels, transcript redaction, and status-promotion rules. |
@@ -44,6 +45,8 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | P1 | OpenAI API route | Run the minimal harness in live mode with `OPENAI_API_KEY` and record a dated response summary. | OpenAI API can move from `harness-ready` to `tested` only after live evidence is recorded. |
 | P1 | Volcengine compatible route | Expand the 2026-06-16 ZC-01 through ZC-03 live pass to ZC-04 through ZC-06 only if broader provider-route confidence is needed. | Volcengine evidence remains separated from native OpenAI API validation, with provider/model details and limitations recorded. |
 | P1 | Provider routes | Add native dry-run/live harnesses for DeepSeek, GLM, and Qwen, or record a concrete blocked state. | Each route has a dated tested or blocked entry with provider/model details and failure modes. |
+| P1 | Reasoning quality | Compare ZC-02, ZC-03, and ZC-05 runtime answers against `tests/reasoning_cases.yaml`, then decide whether prompt wording needs a structured-output nudge. | Runtime review can say which `ZR-*` contract each answer satisfied, without replacing manual doctrinal review. |
+| P1 | Semantic retrieval | Design citation-preserving semantic chunks only after the reasoning contract stabilizes. | A dry-run chunk interface preserves Agama citations and can feed the `agama_evidence` and cross-domain reasoning cases. |
 | P1 | Agama citations | Extract or preserve finer-grained sutra or section markers when present in the Markdown. | Search output can cite representative passages beyond file, line, and fascicle where the source supports it. |
 | P2 | Scholarly collation | Add a stricter collation path from Markdown hits back to CBETA XML-P5 and relevant parallels. | Publication-level work has a documented verification route. |
 | P2 | Installation docs | Keep install paths and activation expectations current after platform changes. | New users can install the skill or agent without reading implementation history. |
