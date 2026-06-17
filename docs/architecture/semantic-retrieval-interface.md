@@ -75,6 +75,7 @@ Required invariants:
 - `citation` or `passage_citation` must remain stable enough for prompt use.
 - `chunk_type` must be explicit.
 - `reasoning_roles` should use contract language where possible, such as `agama_evidence`, `hetuvidya`, `collected_topics`, `cognitive_analysis`, or `madhyamaka_prasanga`.
+- `source_hash` is a future strengthening field; fixture v0 validates line anchors and text presence first.
 
 ## Query Understanding Fields
 
@@ -105,15 +106,31 @@ expected_sources:
 
 This is enough to route retrieval without committing to a model provider.
 
-## First Implementation PR
+## Fixture v0
 
-The next PR after Reasoning Contract v0 should stay local and fixture-based:
+The first fixture lives at `tests/fixtures/retrieval_chunks/semantic_chunks.yaml`.
 
-1. Add a tiny fixture file under `tests/fixtures/retrieval_chunks/`.
-2. Add a dry-run script or validation helper that reads fixture chunks and checks citation fields.
-3. Reuse `search_agama.py` output where possible instead of duplicating citation parsing.
-4. Add tests for source-file existence, line-range sanity, and stable citation fields.
-5. Do not add embeddings, vector storage, or a reranker until fixtures and contracts prove useful.
+Repository validation checks:
+
+- chunk IDs are unique
+- chunk types are one of `agama_passage`, `context_topic`, `reasoning_case`, or `argument_unit`
+- `source_file` exists
+- line ranges are valid for the source file
+- `text` appears in the referenced source range
+- `citation` and `passage_citation` include local line anchors
+- `reasoning_roles` use the Reasoning Contract v0 role vocabulary
+- dry-run query fixtures only reference known chunk IDs
+
+This gives the project a citation-preserving retrieval surface without introducing embeddings, vector storage, or a reranker.
+
+## Next Implementation PR
+
+The next retrieval PR should still stay local and fixture-based:
+
+1. Generate fixture candidates from `search_agama.py --json` instead of hand-maintaining all Agama passage fields.
+2. Add a tiny dry-run retrieval helper that loads query fixtures and returns expected chunks.
+3. Keep `search_agama.py` as the keyword baseline.
+4. Do not add embeddings, vector storage, or a reranker until fixture-based dry runs prove useful.
 
 ## Rollback Path
 

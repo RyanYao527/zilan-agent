@@ -50,6 +50,7 @@ REQUIRED_FILES = (
     "scripts/mock_install_smoke.py",
     "tests/regression_cases.yaml",
     "tests/reasoning_cases.yaml",
+    "tests/fixtures/retrieval_chunks/semantic_chunks.yaml",
 )
 
 REQUIRED_CONTEXT_FILES = (
@@ -81,6 +82,7 @@ GENERATED_AGAMA_FILES = (
 REGRESSION_CASES = ("ZC-01", "ZC-02", "ZC-03", "ZC-04", "ZC-05", "ZC-06")
 REGRESSION_CASES_PATH = "tests/regression_cases.yaml"
 REASONING_CASES_PATH = "tests/reasoning_cases.yaml"
+RETRIEVAL_CHUNKS_PATH = "tests/fixtures/retrieval_chunks/semantic_chunks.yaml"
 README_FILES = ("README.md", "README.zh.md", "README.en.md")
 PUBLIC_STYLE_BOUNDARY_FILES = (
     "SKILL.md",
@@ -156,6 +158,8 @@ ALLOWED_HETUVIDYA_RESULTS = (
     "boundary_only",
 )
 ALLOWED_REASONING_CHECK_STATUSES = ("pass", "fail", "boundary", "not_applicable")
+ALLOWED_RETRIEVAL_CHUNK_TYPES = ("agama_passage", "argument_unit", "context_topic", "reasoning_case")
+ALLOWED_RETRIEVAL_NEEDS = (*ALLOWED_REASONING_CONTRACTS, "practice_boundary")
 PLATFORM_VALIDATION_LABELS = {
     "codex": "Codex",
     "claude_code": "Claude Code",
@@ -426,6 +430,170 @@ def _check_agama_evidence_contract(case_id: str, expected: dict[str, object], fa
             failures.append(f"{REASONING_CASES_PATH} {case_id} expected.agama_evidence.{field} must be boolean.")
     if not isinstance(agama_evidence.get("search_scope"), str) or not agama_evidence["search_scope"]:
         failures.append(f"{REASONING_CASES_PATH} {case_id} expected.agama_evidence.search_scope must be a string.")
+
+
+def _check_retrieval_chunk_metadata(
+    case_id: str,
+    chunk_type: object,
+    metadata: object,
+    failures: list[str],
+) -> None:
+    if not isinstance(metadata, dict):
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {case_id} metadata must be a mapping.")
+        return
+
+    if not _is_non_empty_string_list(metadata.get("topics")):
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {case_id} metadata.topics must be a list.")
+
+    roles = metadata.get("reasoning_roles")
+    if not _is_non_empty_string_list(roles):
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {case_id} metadata.reasoning_roles must be a list.")
+    else:
+        invalid_roles = [role for role in roles if role not in ALLOWED_REASONING_CONTRACTS]
+        if invalid_roles:
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {case_id} has invalid reasoning roles: {invalid_roles}")
+
+    if chunk_type == "agama_passage":
+        for field in ("collection", "cbeta_id", "juan"):
+            if not isinstance(metadata.get(field), str) or not metadata[field]:
+                failures.append(f"{RETRIEVAL_CHUNKS_PATH} {case_id} metadata.{field} must be a string.")
+        cbeta_id = metadata.get("cbeta_id")
+        if isinstance(cbeta_id, str) and not re.fullmatch(r"T\d{2}n\d{4}", cbeta_id):
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {case_id} metadata.cbeta_id is not a CBETA id.")
+
+
+def _check_retrieval_queries(
+    root: Path,
+    queries: object,
+    chunk_ids: set[str],
+    failures: list[str],
+) -> None:
+    if not isinstance(queries, list) or not queries:
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} must contain a non-empty queries list.")
+        return
+
+    seen_query_ids: set[str] = set()
+    for item in queries:
+        if not isinstance(item, dict):
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} contains a non-mapping query.")
+            continue
+
+        query_id = item.get("id")
+        if not isinstance(query_id, str) or not re.fullmatch(r"SRQ-\d{2}", query_id):
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} contains a query without an SRQ-XX id.")
+            continue
+        if query_id in seen_query_ids:
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} contains duplicate query id: {query_id}")
+        seen_query_ids.add(query_id)
+
+        if not isinstance(item.get("query"), str) or not item["query"]:
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} query must be a string.")
+
+        needs = item.get("needs")
+        if not _is_non_empty_string_list(needs):
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} needs must be a list.")
+        else:
+            invalid_needs = [need for need in needs if need not in ALLOWED_RETRIEVAL_NEEDS]
+            if invalid_needs:
+                failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} has invalid needs: {invalid_needs}")
+
+        keywords = item.get("keywords")
+        if not isinstance(keywords, dict):
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} keywords must be a mapping.")
+        else:
+            for field in ("classical", "modern"):
+                if not _is_non_empty_string_list(keywords.get(field)):
+                    failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} keywords.{field} must be a list.")
+
+        expected_sources = item.get("expected_sources")
+        if not _is_non_empty_string_list(expected_sources):
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} expected_sources must be a list.")
+        else:
+            for rel_path in expected_sources:
+                normalized = rel_path.rstrip("/")
+                if not (root / normalized).exists():
+                    failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} source missing: {rel_path}")
+
+        expected_chunk_ids = item.get("expected_chunk_ids")
+        if not _is_non_empty_string_list(expected_chunk_ids):
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} expected_chunk_ids must be a list.")
+        else:
+            missing = [chunk_id for chunk_id in expected_chunk_ids if chunk_id not in chunk_ids]
+            if missing:
+                failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} unknown expected chunks: {missing}")
+
+
+def _check_retrieval_chunks_yaml(root: Path, failures: list[str], warnings: list[str], strict_yaml: bool) -> None:
+    data = _load_yaml(root, RETRIEVAL_CHUNKS_PATH, failures, warnings, strict_yaml)
+    if data is None:
+        return
+    if not isinstance(data, dict):
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} must be a mapping.")
+        return
+    if data.get("version") != 1:
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} version must be 1.")
+
+    source = data.get("source")
+    if not isinstance(source, str) or not (root / source).exists():
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} source must reference an existing local file.")
+    if not isinstance(data.get("purpose"), str) or not data["purpose"]:
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} purpose must be a non-empty string.")
+
+    chunks = data.get("chunks")
+    if not isinstance(chunks, list) or not chunks:
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} must contain a non-empty chunks list.")
+        return
+
+    chunk_ids: set[str] = set()
+    for item in chunks:
+        if not isinstance(item, dict):
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} contains a non-mapping chunk.")
+            continue
+
+        chunk_id = item.get("chunk_id")
+        if not isinstance(chunk_id, str) or not chunk_id:
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} contains a chunk without a string id.")
+            continue
+        if chunk_id in chunk_ids:
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} contains duplicate chunk id: {chunk_id}")
+        chunk_ids.add(chunk_id)
+
+        chunk_type = item.get("chunk_type")
+        if chunk_type not in ALLOWED_RETRIEVAL_CHUNK_TYPES:
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} has invalid chunk_type: {chunk_type}")
+
+        source_file = item.get("source_file")
+        if not isinstance(source_file, str) or not (root / source_file).exists():
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} source_file must exist.")
+            continue
+
+        start_line = item.get("start_line")
+        end_line = item.get("end_line")
+        if not isinstance(start_line, int) or not isinstance(end_line, int) or start_line < 1 or end_line < start_line:
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} line range is invalid.")
+            continue
+
+        lines = (root / source_file).read_text(encoding="utf-8").splitlines()
+        if end_line > len(lines):
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} line range exceeds source length.")
+            continue
+
+        snippet = item.get("text")
+        if not isinstance(snippet, str) or not snippet:
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} text must be a string.")
+        else:
+            selected = "\n".join(lines[start_line - 1 : end_line])
+            if snippet not in selected:
+                failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} text is not present in source range.")
+
+        for field in ("citation", "passage_citation"):
+            value = item.get(field)
+            if not isinstance(value, str) or source_file not in value or f":{start_line}" not in value:
+                failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} {field} must include the local line anchor.")
+
+        _check_retrieval_chunk_metadata(chunk_id, chunk_type, item.get("metadata"), failures)
+
+    _check_retrieval_queries(root, data.get("queries"), chunk_ids, failures)
 
 
 def _check_reasoning_cases_yaml(root: Path, failures: list[str], warnings: list[str], strict_yaml: bool) -> None:
@@ -823,6 +991,7 @@ def run_checks(
     _check_regression_matrix(root, failures)
     _check_regression_cases_yaml(root, failures, warnings, strict_yaml)
     _check_reasoning_cases_yaml(root, failures, warnings, strict_yaml)
+    _check_retrieval_chunks_yaml(root, failures, warnings, strict_yaml)
     _check_agent_prompts(root, failures)
     _check_readme_platform_validation_links(root, failures)
     _check_public_style_boundaries(root, failures)
