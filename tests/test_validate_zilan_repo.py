@@ -6,6 +6,7 @@ from validate_zilan_repo import (
     _check_platform_validation_doc,
     _check_portable_upgrade_doc,
     _check_public_style_boundaries,
+    _check_reasoning_cases_yaml,
     _check_runtime_evidence_docs,
     _check_version_consistency,
     run_checks,
@@ -90,6 +91,54 @@ runtime: codex-sub-agent
     assert any("激活与任务合并规则" in failure for failure in failures)
     assert any("search_agama.py --json" in failure for failure in failures)
     assert any("passage_citation" in failure for failure in failures)
+
+
+def test_reasoning_cases_schema_errors_are_reported(tmp_path: Path) -> None:
+    docs = tmp_path / "docs" / "architecture"
+    docs.mkdir(parents=True)
+    (docs / "reasoning-contract.md").write_text("# Reasoning Contract\n", encoding="utf-8")
+    context = tmp_path / "context"
+    context.mkdir()
+    (context / "因明推理引擎.md").write_text("# 因明推理引擎\n", encoding="utf-8")
+    tests = tmp_path / "tests"
+    tests.mkdir()
+    (tests / "reasoning_cases.yaml").write_text(
+        """version: 1
+source: docs/architecture/reasoning-contract.md
+purpose: Test reasoning fixtures.
+cases:
+  - id: ZR-01
+    title: Broken hetuvidya case
+    source_regression_cases:
+      - ZC-02
+    contracts:
+      - hetuvidya
+    prompt: "检验论式。"
+    reference_files:
+      - context/因明推理引擎.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 有法
+      hetuvidya:
+        subject: 声
+        predicate: 无常
+        result: impossible_result
+        checks:
+          paksa_dharmata: pass
+          sapaksa_sattva: pass
+""",
+        encoding="utf-8",
+    )
+    failures: list[str] = []
+    warnings: list[str] = []
+
+    _check_reasoning_cases_yaml(tmp_path, failures, warnings, strict_yaml=True)
+
+    assert warnings == []
+    assert any("expected.hetuvidya.reason" in failure for failure in failures)
+    assert any("expected.hetuvidya.result" in failure for failure in failures)
+    assert any("checks.vipaksa_asattva" in failure for failure in failures)
 
 
 def test_portable_upgrade_doc_missing_current_fragments_is_reported(tmp_path: Path) -> None:
