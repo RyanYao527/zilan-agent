@@ -2,7 +2,7 @@
 
 > Independent cognitive framework based on Upāsaka Yao Lei's Buddhist study system · Available to answer questions for others
 
-**Version**: v2.4.7 | **Established**: 2026-06-02 | **Last Updated**: 2026-06-16 | **Name**: Zilan (孜澜)
+**Version**: v2.4.8 | **Established**: 2026-06-02 | **Last Updated**: 2026-06-17 | **Name**: Zilan (孜澜)
 
 ---
 
@@ -181,9 +181,9 @@ Installation paths are documented in `docs/installation.md`. Runtime evidence an
 ## Compatibility And Collation Boundaries
 
 - **Platform status**: `agents/openai.yaml` is the machine-readable metadata source; `docs/platform-validation.md` records status definitions, validation evidence, and update rules.
-- **Current validation**: Codex and Claude Code were runtime-tested on 2026-06-12; OpenAI API has a dry-run harness and still needs live `OPENAI_API_KEY` evidence before it is end-to-end tested.
-- **Provider routes**: DeepSeek, GLM, and Qwen remain `config-only`; see `docs/provider-routes.md`.
-- **Runtime boundary**: Codex, Claude Code, OpenAI API, DeepSeek, GLM, and Qwen routes must not be described as tested unless the platform validation document says so.
+- **Current validation**: Codex is `tested` for ZC-01 through ZC-06 as of 2026-06-15; Claude Code is `tested` for ZC-01 through ZC-06 through UTF-8 stdin as of 2026-06-16; Volcengine OpenAI-Compatible is `tested` for ZC-01 through ZC-03 as of 2026-06-16; native OpenAI API remains `harness-ready`.
+- **Provider routes**: Volcengine OpenAI-Compatible is recorded only as a compatible-provider partial `tested` route; DeepSeek, GLM, and Qwen remain `config-only`; see `docs/provider-routes.md`.
+- **Runtime boundary**: Codex, Claude Code, native OpenAI API, Volcengine OpenAI-Compatible, DeepSeek, GLM, and Qwen routes must not be described as tested unless the platform validation document says so.
 - **Scholarly collation**: the local Agama Markdown files are a searchable working corpus; publication-level citation should verify against CBETA XML and relevant parallel texts.
 
 ---

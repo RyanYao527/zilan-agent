@@ -4,10 +4,16 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+## [2.4.8] - 2026-06-17
+
 ### Added
 
 - Added `--provider-route` support to the OpenAI-compatible harness, with tested Volcengine defaults loaded from `agents/openai.yaml`.
 - Added redacted Volcengine OpenAI-compatible ZC-01 and ZC-03 live evidence, extending the route's live coverage to ZC-01 through ZC-03.
+
+### Changed
+
+- Updated README compatibility summaries to match `docs/platform-validation.md`: Codex and Claude Code are tested, Volcengine OpenAI-Compatible is tested only for ZC-01 through ZC-03, and native OpenAI API remains `harness-ready`.
 
 ## [2.4.7] - 2026-06-16
 

@@ -2,7 +2,7 @@
 
 > 基于优婆塞姚磊佛学体系的独立认知框架 · 可为他人答疑解惑
 
-**版本**：v2.4.7 | **确立日期**：2026-06-02 | **最后更新**：2026-06-16 | **名字**：孜澜
+**版本**：v2.4.8 | **确立日期**：2026-06-02 | **最后更新**：2026-06-17 | **名字**：孜澜
 
 ---
 
@@ -185,9 +185,9 @@ GitHub Actions 会在 push 和 pull request 时自动运行同类检查。
 ## 兼容性与校勘边界
 
 - **平台状态**：`agents/openai.yaml` 是机器可读的跨平台元数据来源；`docs/platform-validation.md` 记录状态定义、验证证据与更新规则。
-- **当前验证**：Codex 与 Claude Code 已在 2026-06-12 完成运行复测；OpenAI API 已具备 dry-run harness，仍需 `OPENAI_API_KEY` live 证据后才能标为端到端 tested。
-- **Provider 路线**：DeepSeek、GLM、千问当前保持 `config-only`；详见 `docs/provider-routes.md`。
-- **运行边界**：Codex、Claude Code、OpenAI API、DeepSeek、GLM、千问等路线，只有在平台验证文档中满足定义后，才可称为已测试。
+- **当前验证**：Codex 已在 2026-06-15 通过 ZC-01 至 ZC-06；Claude Code 已在 2026-06-16 通过 UTF-8 stdin 路线的 ZC-01 至 ZC-06；Volcengine OpenAI-Compatible 已在 2026-06-16 通过 ZC-01 至 ZC-03；原生 OpenAI API 仍为 `harness-ready`。
+- **Provider 路线**：Volcengine OpenAI-Compatible 当前仅按兼容 provider 路线记录为部分 `tested`；DeepSeek、GLM、千问当前保持 `config-only`；详见 `docs/provider-routes.md`。
+- **运行边界**：Codex、Claude Code、原生 OpenAI API、Volcengine OpenAI-Compatible、DeepSeek、GLM、千问等路线，只有在平台验证文档中满足定义后，才可称为已测试。
 - **学术校勘**：本地阿含 Markdown 是可检索工作语料；面向发表或严肃引用时，应回校 CBETA XML，并视需要比对平行译本与巴利对应文本。
 
 ---
