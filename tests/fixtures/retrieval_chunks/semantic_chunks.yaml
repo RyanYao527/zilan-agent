@@ -159,6 +159,10 @@ queries:
         forbidden_terms:
           - 保证证悟
           - 已证空性
+    answer_boundary_samples:
+      - id: srq01-practice-boundary-pass
+        file: tests/fixtures/answers/srq01-practice-boundary-pass.md
+        expected_status: pass
     keywords:
       classical:
         - 無我

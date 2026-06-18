@@ -132,6 +132,7 @@ def build_dry_run(
         "needs": selected_query.get("needs", []),
         "non_chunk_needs": selected_query.get("non_chunk_needs", []),
         "answer_boundary_contracts": selected_query.get("answer_boundary_contracts", {}),
+        "answer_boundary_samples": selected_query.get("answer_boundary_samples", []),
         "keywords": selected_query.get("keywords", {}),
         "expected_sources": selected_query.get("expected_sources", []),
         "expected_chunk_ids": expected_chunk_ids,

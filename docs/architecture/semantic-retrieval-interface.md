@@ -241,12 +241,14 @@ Example:
 
 ```powershell
 python scripts/semantic_answer_boundary_review.py --query-id SRQ-01 --answer-text "边界：以下只是基于本地 context 的义理分析，不等于修证，也不构成临床、医疗或心理治疗建议。" --json
+python scripts/semantic_answer_boundary_review.py --query-id SRQ-01 --sample-id srq01-practice-boundary-pass --json
 ```
 
 The answer-boundary helper:
 
 - reuses the same query fixture used by retrieval dry runs
 - checks only `non_chunk_needs` such as `practice_boundary`
+- can read checked-in sample answers from `tests/fixtures/answers/` through `--sample-id`
 - reports missing required terms and present forbidden terms
 - does not generate answers, call providers, grade doctrine, or upgrade platform validation
 
@@ -257,7 +259,7 @@ and rejects overclaims such as "保证证悟" or "已证空性".
 
 The next retrieval PR should still stay local and fixture-based:
 
-1. Add a tiny checked-in answer sample fixture for `SRQ-01` so answer-boundary review can run without inline CLI text.
+1. Add a deliberately failing checked-in `SRQ-01` answer sample only if a negative fixture is useful for regression review.
 2. Keep fixture updates explicit; do not auto-overwrite checked-in chunks.
 3. Keep `search_agama.py` as the keyword baseline.
 4. Do not add embeddings, vector storage, or a reranker until fixture-based dry runs prove useful.
@@ -267,5 +269,6 @@ The next retrieval PR should still stay local and fixture-based:
 This interface is local and fixture-only. If it proves too early, revert this document, the fixture, and
 `scripts/semantic_retrieval_dry_run.py` / `scripts/semantic_fixture_candidates.py` /
 `scripts/semantic_fixture_review.py` / `scripts/semantic_context_bundle.py` /
-`scripts/semantic_role_coverage.py` / `scripts/semantic_answer_boundary_review.py` without affecting
+`scripts/semantic_role_coverage.py` / `scripts/semantic_answer_boundary_review.py` /
+`tests/fixtures/answers/` without affecting
 `search_agama.py`, platform validation, runtime evidence, or installed Skill behavior.
