@@ -261,11 +261,35 @@ The answer-boundary helper:
 For `SRQ-01`, `practice_boundary` currently requires a visible boundary marker and an explicit "不等于修证" statement,
 and rejects overclaims such as "保证证悟" or "已证空性".
 
+## Answer Contract Review v0
+
+`scripts/semantic_answer_contract_review.py` checks downstream answer text against fixture-defined answer contracts for
+reasoning-error cases.
+
+Example:
+
+```powershell
+python scripts/semantic_answer_contract_review.py --query-id SRQ-02 --sample-id srq02-hetuvidya-error-pass --json
+python scripts/semantic_answer_contract_review.py --query-id SRQ-02 --sample-id srq02-hetuvidya-error-fail --json
+```
+
+The answer-contract helper:
+
+- reuses the same query fixture used by retrieval dry runs
+- checks explicit `answer_contracts` rather than non-chunk practice boundaries
+- can read checked-in sample answers from `tests/fixtures/answers/` through `--sample-id`
+- reports missing required terms and present forbidden terms
+- does not generate answers, call providers, grade doctrine, or upgrade platform validation
+
+For `SRQ-02`, the current `hetuvidya_error_detection` contract requires the answer to identify the unestablished
+reason, the failed first trairupya check, and the specific `声` / `色形` relation. It rejects answers that say the
+three marks of the reason are fully satisfied or that the reason is established.
+
 ## Next Implementation PR
 
 The next retrieval PR should still stay local and fixture-based:
 
-1. Add an answer-level sample review for `SRQ-02` only after a concrete reasoning-error output contract is defined.
+1. Add a second narrow answer-contract fixture only after another concrete SRQ reasoning gap is selected.
 2. Keep fixture updates explicit; do not auto-overwrite checked-in chunks.
 3. Keep `search_agama.py` as the keyword baseline.
 4. Do not add embeddings, vector storage, or a reranker until fixture-based dry runs prove useful.
@@ -276,5 +300,6 @@ This interface is local and fixture-only. If it proves too early, revert this do
 `scripts/semantic_retrieval_dry_run.py` / `scripts/semantic_fixture_candidates.py` /
 `scripts/semantic_fixture_review.py` / `scripts/semantic_context_bundle.py` /
 `scripts/semantic_role_coverage.py` / `scripts/semantic_answer_boundary_review.py` /
+`scripts/semantic_answer_contract_review.py` /
 `tests/fixtures/answers/` without affecting
 `search_agama.py`, platform validation, runtime evidence, or installed Skill behavior.

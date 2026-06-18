@@ -174,6 +174,19 @@ queries:
     query: "sample query"
     needs:
       - invalid_need
+    answer_contracts:
+      Bad-Key:
+        description: Broken key
+        required_terms:
+          - sample
+      empty_contract:
+        description: ""
+        required_terms: []
+        forbidden_terms: invalid
+    answer_contract_samples:
+      - id: Bad ID
+        file: missing-answer.md
+        expected_status: maybe
     keywords:
       classical:
         - sample
@@ -195,6 +208,13 @@ queries:
     assert any("text is not present" in failure for failure in failures)
     assert any("invalid reasoning roles" in failure for failure in failures)
     assert any("invalid needs" in failure for failure in failures)
+    assert any("answer_contracts key must be snake_case" in failure for failure in failures)
+    assert any("answer_contracts.empty_contract.description" in failure for failure in failures)
+    assert any("answer_contracts.empty_contract.required_terms" in failure for failure in failures)
+    assert any("answer_contracts.empty_contract.forbidden_terms" in failure for failure in failures)
+    assert any("answer_contract_samples id must be kebab-case" in failure for failure in failures)
+    assert any("answer_contract_samples Bad ID file missing" in failure for failure in failures)
+    assert any("answer_contract_samples Bad ID expected_status" in failure for failure in failures)
     assert any("unknown expected chunks" in failure for failure in failures)
 
 
