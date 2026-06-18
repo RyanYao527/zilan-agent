@@ -167,6 +167,7 @@ ALLOWED_REASONING_CHECK_STATUSES = ("pass", "fail", "boundary", "not_applicable"
 ALLOWED_RETRIEVAL_CHUNK_TYPES = ("agama_passage", "argument_unit", "context_topic", "reasoning_case")
 ALLOWED_RETRIEVAL_NEEDS = (*ALLOWED_REASONING_CONTRACTS, "practice_boundary")
 ALLOWED_RETRIEVAL_NON_CHUNK_NEEDS = ("practice_boundary",)
+ALLOWED_ANSWER_BOUNDARY_SAMPLE_STATUSES = ("pass", "fail")
 PLATFORM_VALIDATION_LABELS = {
     "codex": "Codex",
     "claude_code": "Claude Code",
@@ -469,6 +470,58 @@ def _check_retrieval_chunk_metadata(
             failures.append(f"{RETRIEVAL_CHUNKS_PATH} {case_id} metadata.cbeta_id is not a CBETA id.")
 
 
+def _check_answer_boundary_samples(
+    root: Path,
+    query_id: str,
+    samples: object,
+    failures: list[str],
+) -> None:
+    if not isinstance(samples, list) or not samples:
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer_boundary_samples must be a non-empty list.")
+        return
+
+    seen_sample_ids: set[str] = set()
+    for sample in samples:
+        if not isinstance(sample, dict):
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} contains a non-mapping answer sample.")
+            continue
+
+        sample_id = sample.get("id")
+        if not isinstance(sample_id, str) or not re.fullmatch(r"[a-z0-9][a-z0-9-]*", sample_id):
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer sample id must be kebab-case.")
+        elif sample_id in seen_sample_ids:
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} contains duplicate answer sample id: {sample_id}")
+        else:
+            seen_sample_ids.add(sample_id)
+
+        rel_file = sample.get("file")
+        if not isinstance(rel_file, str) or not rel_file:
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer sample {sample_id} missing file.")
+        else:
+            sample_path = root / rel_file
+            try:
+                sample_path.resolve().relative_to(root.resolve())
+            except ValueError:
+                failures.append(
+                    f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer sample {sample_id} file must stay under repo root."
+                )
+            if not sample_path.exists() or not sample_path.is_file():
+                failures.append(
+                    f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer sample {sample_id} file missing: {rel_file}"
+                )
+            elif not sample_path.read_text(encoding="utf-8").strip():
+                failures.append(
+                    f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer sample {sample_id} file is empty: {rel_file}"
+                )
+
+        expected_status = sample.get("expected_status")
+        if expected_status not in ALLOWED_ANSWER_BOUNDARY_SAMPLE_STATUSES:
+            failures.append(
+                f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer sample {sample_id} expected_status must be one of "
+                f"{', '.join(ALLOWED_ANSWER_BOUNDARY_SAMPLE_STATUSES)}."
+            )
+
+
 def _check_retrieval_queries(
     root: Path,
     queries: object,
@@ -563,6 +616,14 @@ def _check_retrieval_queries(
                             f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer_boundary_contracts.{key}.forbidden_terms "
                             "must be a list when present."
                         )
+
+        if "answer_boundary_samples" in item:
+            if not answer_boundary_contracts:
+                failures.append(
+                    f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer_boundary_samples requires "
+                    "answer_boundary_contracts."
+                )
+            _check_answer_boundary_samples(root, query_id, item.get("answer_boundary_samples"), failures)
 
         keywords = item.get("keywords")
         if not isinstance(keywords, dict):

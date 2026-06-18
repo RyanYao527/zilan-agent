@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from semantic_retrieval_dry_run import DEFAULT_FIXTURE, FixtureError, build_dry_run
+from semantic_retrieval_dry_run import DEFAULT_FIXTURE, ROOT, FixtureError, build_dry_run
 
 MODE = "semantic-answer-boundary-review"
 LIMITATIONS = (
@@ -20,6 +20,21 @@ def _string_list(value: Any) -> list[str]:
     if not isinstance(value, list):
         return []
     return [item for item in value if isinstance(item, str) and item]
+
+
+def _display_path(path: Path) -> str:
+    try:
+        return path.resolve().relative_to(ROOT).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def _mapping_list(value: Any, field: str) -> list[dict[str, Any]]:
+    if value is None:
+        return []
+    if not isinstance(value, list) or not all(isinstance(item, dict) for item in value):
+        raise FixtureError(f"{field} must be a list of mappings.")
+    return value
 
 
 def _review_contract(need: str, contract: dict[str, Any], answer_text: str) -> dict[str, Any]:
@@ -70,11 +85,19 @@ def build_answer_boundary_review(
     *,
     query_id: str | None = None,
     query: str | None = None,
-    answer_text: str,
+    answer_text: str | None = None,
+    answer_file: Path | None = None,
+    sample_id: str | None = None,
 ) -> dict[str, Any]:
     """Review answer text against fixture-defined non-chunk boundary contracts."""
 
     dry_run = build_dry_run(fixture_path, query_id=query_id, query=query)
+    resolved_answer_text, answer_source = _resolve_answer_source(
+        dry_run,
+        answer_text=answer_text,
+        answer_file=answer_file,
+        sample_id=sample_id,
+    )
     non_chunk_needs = _string_list(dry_run.get("non_chunk_needs"))
     contracts = dry_run.get("answer_boundary_contracts", {})
     if not isinstance(contracts, dict):
@@ -96,7 +119,7 @@ def build_answer_boundary_review(
                 }
             )
             continue
-        reviews.append(_review_contract(need, contract, answer_text))
+        reviews.append(_review_contract(need, contract, resolved_answer_text))
 
     if not non_chunk_needs:
         overall_status = "no_non_chunk_needs"
@@ -111,24 +134,59 @@ def build_answer_boundary_review(
         "query_id": dry_run["query_id"],
         "query": dry_run["query"],
         "non_chunk_needs": non_chunk_needs,
+        "answer_source": answer_source,
         "overall_status": overall_status,
         "reviews": reviews,
         "limitations": list(LIMITATIONS),
     }
+    expected_status = answer_source.get("expected_status")
+    if isinstance(expected_status, str) and expected_status:
+        result["expected_status"] = expected_status
+        result["expected_status_match"] = overall_status == expected_status
     result["review_text"] = _render_review_text(result)
     return result
 
 
-def _read_answer_text(answer_text: str | None, answer_file: Path | None) -> str:
-    if answer_text and answer_file:
-        raise FixtureError("Use either --answer-text or --answer-file, not both.")
+def _resolve_answer_source(
+    dry_run: dict[str, Any],
+    *,
+    answer_text: str | None,
+    answer_file: Path | None,
+    sample_id: str | None,
+) -> tuple[str, dict[str, Any]]:
+    source_count = sum(source is not None for source in (answer_text, answer_file, sample_id))
+    if source_count != 1:
+        raise FixtureError("Provide exactly one of --answer-text, --answer-file, or --sample-id.")
+
     if answer_text is not None:
-        return answer_text
+        return answer_text, {"type": "inline"}
     if answer_file is not None:
         if not answer_file.exists():
             raise FixtureError(f"Answer file not found: {answer_file}")
-        return answer_file.read_text(encoding="utf-8")
-    raise FixtureError("Provide --answer-text or --answer-file.")
+        return answer_file.read_text(encoding="utf-8"), {
+            "type": "file",
+            "file": _display_path(answer_file),
+        }
+
+    samples = _mapping_list(dry_run.get("answer_boundary_samples"), "answer_boundary_samples")
+    for sample in samples:
+        if sample.get("id") != sample_id:
+            continue
+
+        rel_file = sample.get("file")
+        if not isinstance(rel_file, str) or not rel_file:
+            raise FixtureError(f"Answer boundary sample {sample_id} missing file.")
+        sample_path = ROOT / rel_file
+        if not sample_path.exists():
+            raise FixtureError(f"Answer boundary sample file not found: {rel_file}")
+        return sample_path.read_text(encoding="utf-8"), {
+            "type": "sample",
+            "sample_id": sample_id,
+            "file": _display_path(sample_path),
+            "expected_status": sample.get("expected_status"),
+        }
+
+    raise FixtureError(f"Unknown answer boundary sample id for {dry_run['query_id']}: {sample_id}")
 
 
 def main() -> int:
@@ -145,16 +203,18 @@ def main() -> int:
     parser.add_argument("--query", help="Exact query text to match from the fixture.")
     parser.add_argument("--answer-text", help="Answer text to review.")
     parser.add_argument("--answer-file", type=Path, help="UTF-8 answer text file to review.")
+    parser.add_argument("--sample-id", help="Checked-in answer sample id to review.")
     parser.add_argument("--json", action="store_true", dest="json_output", help="Emit machine-readable JSON.")
     args = parser.parse_args()
 
     try:
-        answer_text = _read_answer_text(args.answer_text, args.answer_file)
         result = build_answer_boundary_review(
             args.fixture,
             query_id=args.query_id,
             query=args.query,
-            answer_text=answer_text,
+            answer_text=args.answer_text,
+            answer_file=args.answer_file,
+            sample_id=args.sample_id,
         )
     except FixtureError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)

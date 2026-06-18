@@ -20,10 +20,29 @@ def test_answer_boundary_review_passes_when_required_terms_are_present() -> None
 
     assert result["mode"] == "semantic-answer-boundary-review"
     assert result["overall_status"] == "pass"
+    assert result["answer_source"] == {"type": "inline"}
     assert result["non_chunk_needs"] == ["practice_boundary"]
     assert result["reviews"][0]["need"] == "practice_boundary"
     assert result["reviews"][0]["missing_required_terms"] == []
     assert result["reviews"][0]["present_forbidden_terms"] == []
+
+
+def test_answer_boundary_review_passes_from_checked_in_sample() -> None:
+    result = build_answer_boundary_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-01",
+        sample_id="srq01-practice-boundary-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["expected_status"] == "pass"
+    assert result["expected_status_match"] is True
+    assert result["answer_source"] == {
+        "type": "sample",
+        "sample_id": "srq01-practice-boundary-pass",
+        "file": "tests/fixtures/answers/srq01-practice-boundary-pass.md",
+        "expected_status": "pass",
+    }
 
 
 def test_answer_boundary_review_fails_when_required_terms_are_missing() -> None:
@@ -77,3 +96,27 @@ def test_answer_boundary_review_cli_json_output_is_machine_readable() -> None:
     assert data["query_id"] == "SRQ-01"
     assert data["overall_status"] == "pass"
     assert data["reviews"][0]["status"] == "pass"
+
+
+def test_answer_boundary_review_cli_can_use_checked_in_sample() -> None:
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT),
+            "--query-id",
+            "SRQ-01",
+            "--sample-id",
+            "srq01-practice-boundary-pass",
+            "--json",
+        ],
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8",
+        capture_output=True,
+        check=True,
+    )
+    data = json.loads(result.stdout)
+
+    assert data["overall_status"] == "pass"
+    assert data["answer_source"]["type"] == "sample"
+    assert data["expected_status_match"] is True
