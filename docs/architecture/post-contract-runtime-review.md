@@ -68,13 +68,14 @@ Result: targeted `SRQ-02` and `SRQ-03` passed their current answer contracts. Ta
 
 Second follow-up executed on 2026-06-18: `docs/runtime-evidence/2026-06-18-claude-code-agama-contract-fix-review.md` records the narrow Agama evidence output-contract fix. Result: direct `SRQ-04` and broad `ZC-05` now pass the `SRQ-04` Agama citation-boundary contract on Claude Code UTF-8 stdin. Broad `ZC-05` still fails `SRQ-03` only on the missing literal `对方承许`, which remains the next Madhyamaka/prasaṅga boundary task.
 
-Run a small transcript-backed target review instead of changing prompts immediately:
+Third follow-up executed on 2026-06-18: `docs/runtime-evidence/2026-06-18-claude-code-madhyamaka-contract-fix-review.md` records the narrow Madhyamaka prasaṅga output-contract fix. Result: broad `ZC-05` now passes `SRQ-03` and continues to pass `SRQ-04` on Claude Code UTF-8 stdin. This closes the residual `对方承许` gap without changing platform status.
 
-1. Run the exact `SRQ-02`, `SRQ-03`, and `SRQ-04` prompts in one selected tested route, preferably Codex or Claude Code.
-2. Run `ZC-05` once with transcript capture or a redacted answer excerpt that preserves the specific prasaṅga and Agama citation passages.
-3. Store compact answer excerpts under `docs/runtime-evidence/`.
-4. Re-run `semantic_answer_contract_review.py --answer-file` against those excerpts.
-5. Only change agent prompts if the transcript-backed outputs actually miss the contracts.
+Current follow-up state:
+
+1. Targeted `SRQ-02` and `SRQ-03` passed in the post-contract target review.
+2. Targeted `SRQ-04` and broad `ZC-05` pass after the Agama evidence output-contract fix.
+3. Broad `ZC-05` passes `SRQ-03` after the Madhyamaka prasaṅga output-contract fix.
+4. Future work should preserve these contracts across prompt changes and avoid treating keyword-contract checks as doctrinal grading.
 
 ## Non-Actions
 
@@ -82,4 +83,4 @@ Run a small transcript-backed target review instead of changing prompts immediat
 - Do not promote Volcengine beyond its current ZC-01 through ZC-03 scope.
 - Do not introduce an LLM judge for this review.
 - Do not treat keyword-contract checks as doctrinal grading.
-- Do not rewrite the prompt before transcript-backed failures identify a concrete wording gap.
+- Do not rewrite broader reasoning prompts unless transcript-backed failures identify a concrete wording gap.

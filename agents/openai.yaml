@@ -14,7 +14,9 @@ interface:
     supplied. For Āgama evidence answers, state the search scope, mark
     selected passages as representative when they are not exhaustive, and
     preserve collation boundaries such as pending CBETA XML-P5 or parallel-text
-    verification. When uncertain, clearly mark boundaries.
+    verification. For Madhyamaka prasaṅga answers, explicitly distinguish
+    对方承许 from the prasaṅga consequence and include 自性有, 归谬, 缘起, 矛盾,
+    and 不立自宗 when relevant. When uncertain, clearly mark boundaries.
 
 # ── 模型配置 ──────────────────────────────────────────
 
@@ -136,4 +138,5 @@ policy:
   require_citation: true
   citation_format: "《经名》(CBETA编号) 卷X/经号或品名，local-file.md:line"
   agama_evidence_contract: "阿含证据回答必须说明检索范围，使用 CBETA 编号和 context/agama/ 本地锚点，标明代表性命中，并保留字面短语“待校勘”；不得把本地检索说成“校勘完成”或“校勘确认”；无我/非我主题可得时至少包含一条《雜阿含經》(T02n0099) 代表引用。"
+  madhyamaka_prasanga_contract: "中观应成回答必须区分对方承许与自身边界，保留 自性有、归谬、缘起、矛盾、不立自宗 等关键节点；不得把应成法写成正面建立自宗，也不得把空性表达成一切法在任何层面都不存在。"
   boundary_statement: "止观实修需在善知识指导下进行；模因分析不替代义理判教"

@@ -410,6 +410,34 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - It does not validate native OpenAI API or the Responses API endpoint.
 - The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
 
+## 2026-06-18 Claude Code Madhyamaka Contract Fix Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.169`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `4970810` plus branch changes for the Madhyamaka prasaṅga output contract |
+| Prompt set | One broad `ZC-05` cross-domain prompt |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact answer excerpt committed under `docs/runtime-evidence/2026-06-18-claude-code-madhyamaka-contract-fix-zc-05-answer.md`; raw JSON kept local only |
+| Repository checks | `python scripts\semantic_answer_contract_review.py --query-id SRQ-03 --answer-file ... --json` pass; `python scripts\semantic_answer_contract_review.py --query-id SRQ-04 --answer-file ... --json` pass; `python scripts\validate_zilan_repo.py --strict-yaml` pass; targeted pytest and ruff pass; full repository checks run before PR handoff |
+| Overall result | `target-pass`: broad `ZC-05` answer now passes both the `SRQ-03` Madhyamaka prasaṅga-boundary contract and the `SRQ-04` Agama citation-boundary contract |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---|---|
+| `2026-06-18-claude-code-madhyamaka-contract-fix-zc-05-answer.md` | `SRQ-03` | `pass` | Includes `对方承许`, `归谬`, `自性有`, `缘起`, `矛盾`, and `不立自宗`; no forbidden prasaṅga-overclaim terms. |
+| `2026-06-18-claude-code-madhyamaka-contract-fix-zc-05-answer.md` | `SRQ-04` | `pass` | Preserves `CBETA`, `T02n0099`, local `context/agama/` anchors, `检索范围`, `代表性`, and `待校勘`; no forbidden collation-overclaim terms. |
+
+### Known Limits
+
+- This is target-contract evidence, not a full ZC-01 through ZC-06 platform rerun.
+- It validates the narrow Madhyamaka prasaṅga output-contract fix and checks that the prior Agama evidence contract still holds for `ZC-05`.
+- It does not validate native OpenAI API or the Responses API endpoint.
+- The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:
