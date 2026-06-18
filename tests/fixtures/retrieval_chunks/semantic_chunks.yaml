@@ -150,6 +150,15 @@ queries:
       - practice_boundary
     non_chunk_needs:
       - practice_boundary
+    answer_boundary_contracts:
+      practice_boundary:
+        description: "Answer must mark practice guidance and realization claims as bounded."
+        required_terms:
+          - 边界
+          - 不等于修证
+        forbidden_terms:
+          - 保证证悟
+          - 已证空性
     keywords:
       classical:
         - 無我
