@@ -25,6 +25,7 @@ def test_dry_run_returns_expected_chunks_for_query_fixture() -> None:
     ]
     assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
     assert result["non_chunk_needs"] == ["practice_boundary"]
+    assert result["answer_boundary_contracts"]["practice_boundary"]["required_terms"] == ["边界", "不等于修证"]
     assert all("source_file" in chunk for chunk in result["chunks"])
     assert all("citation" in chunk for chunk in result["chunks"])
     assert any("no embeddings" in item for item in result["limitations"])

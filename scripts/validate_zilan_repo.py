@@ -46,6 +46,7 @@ REQUIRED_FILES = (
     "agents/zilan-codex.md",
     "scripts/build_agama_context.py",
     "scripts/search_agama.py",
+    "scripts/semantic_answer_boundary_review.py",
     "scripts/semantic_context_bundle.py",
     "scripts/semantic_fixture_candidates.py",
     "scripts/semantic_fixture_review.py",
@@ -522,6 +523,46 @@ def _check_retrieval_queries(
                         f"{RETRIEVAL_CHUNKS_PATH} {query_id} non_chunk_needs are not listed in needs: "
                         f"{missing_non_chunk_needs}"
                     )
+
+        answer_boundary_contracts = item.get("answer_boundary_contracts", {})
+        if answer_boundary_contracts:
+            if not isinstance(answer_boundary_contracts, dict):
+                failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer_boundary_contracts must be a mapping.")
+            elif not non_chunk_needs:
+                failures.append(
+                    f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer_boundary_contracts requires non_chunk_needs."
+                )
+            else:
+                invalid_contract_keys = [
+                    key for key in answer_boundary_contracts if not isinstance(key, str) or key not in non_chunk_needs
+                ]
+                if invalid_contract_keys:
+                    failures.append(
+                        f"{RETRIEVAL_CHUNKS_PATH} {query_id} has answer boundary contracts outside "
+                        f"non_chunk_needs: {invalid_contract_keys}"
+                    )
+                for key, contract in answer_boundary_contracts.items():
+                    if not isinstance(contract, dict):
+                        failures.append(
+                            f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer_boundary_contracts.{key} must be a mapping."
+                        )
+                        continue
+                    if not isinstance(contract.get("description"), str) or not contract["description"]:
+                        failures.append(
+                            f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer_boundary_contracts.{key}.description "
+                            "must be a string."
+                        )
+                    if not _is_non_empty_string_list(contract.get("required_terms")):
+                        failures.append(
+                            f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer_boundary_contracts.{key}.required_terms "
+                            "must be a list."
+                        )
+                    forbidden_terms = contract.get("forbidden_terms", [])
+                    if forbidden_terms and not _is_non_empty_string_list(forbidden_terms):
+                        failures.append(
+                            f"{RETRIEVAL_CHUNKS_PATH} {query_id} answer_boundary_contracts.{key}.forbidden_terms "
+                            "must be a list when present."
+                        )
 
         keywords = item.get("keywords")
         if not isinstance(keywords, dict):
