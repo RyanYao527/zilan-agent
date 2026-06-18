@@ -21,6 +21,46 @@ chunks:
       reasoning_roles:
         - agama_evidence
 
+  - chunk_id: agama:T01n0001:juan-1:line-881
+    chunk_type: agama_passage
+    source_file: context/agama/T0001-chang-agama.md
+    start_line: 881
+    end_line: 881
+    citation: "《長阿含經》(T01n0001) 卷 1, context/agama/T0001-chang-agama.md:881"
+    passage_citation: "《長阿含經》(T01n0001) 卷 1, context/agama/T0001-chang-agama.md:881"
+    text: "若學決定法，知諸法無我；"
+    metadata:
+      collection: 長阿含經
+      cbeta_id: T01n0001
+      juan: 卷 1
+      section_marker:
+      topics:
+        - 無我
+        - 非我
+      reasoning_roles:
+        - agama_evidence
+      source_hash: "sha256:89372a4f6f93f7aa3cdb58d51ccc103a064636f7c5f3a6a00d4a85fecc13abcd"
+
+  - chunk_id: agama:T01n0001:juan-3:line-1829
+    chunk_type: agama_passage
+    source_file: context/agama/T0001-chang-agama.md
+    start_line: 1829
+    end_line: 1829
+    citation: "《長阿含經》(T01n0001) 卷 3, context/agama/T0001-chang-agama.md:1829"
+    passage_citation: "《長阿含經》(T01n0001) 卷 3, context/agama/T0001-chang-agama.md:1829"
+    text: "陰、界、入無我，乃名第一供。」"
+    metadata:
+      collection: 長阿含經
+      cbeta_id: T01n0001
+      juan: 卷 3
+      section_marker:
+      topics:
+        - 無我
+        - 陰界入
+      reasoning_roles:
+        - agama_evidence
+      source_hash: "sha256:2215c02d0e8da74dfcdb2b2cd5931b22992cc739f552aa8e8a2a9398f12a2277"
+
   - chunk_id: context:hetuvidya:trairupya
     chunk_type: context_topic
     source_file: context/因明推理引擎.md
@@ -91,5 +131,7 @@ queries:
       - context/中观应成精要.md
     expected_chunk_ids:
       - agama:T02n0099:juan-1:line-147
+      - agama:T01n0001:juan-1:line-881
+      - agama:T01n0001:juan-3:line-1829
       - context:hetuvidya:trairupya
       - reasoning:ZR-01:hetuvidya
