@@ -165,6 +165,7 @@ ALLOWED_HETUVIDYA_RESULTS = (
 ALLOWED_REASONING_CHECK_STATUSES = ("pass", "fail", "boundary", "not_applicable")
 ALLOWED_RETRIEVAL_CHUNK_TYPES = ("agama_passage", "argument_unit", "context_topic", "reasoning_case")
 ALLOWED_RETRIEVAL_NEEDS = (*ALLOWED_REASONING_CONTRACTS, "practice_boundary")
+ALLOWED_RETRIEVAL_NON_CHUNK_NEEDS = ("practice_boundary",)
 PLATFORM_VALIDATION_LABELS = {
     "codex": "Codex",
     "claude_code": "Claude Code",
@@ -501,6 +502,26 @@ def _check_retrieval_queries(
             invalid_needs = [need for need in needs if need not in ALLOWED_RETRIEVAL_NEEDS]
             if invalid_needs:
                 failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} has invalid needs: {invalid_needs}")
+
+        non_chunk_needs = item.get("non_chunk_needs", [])
+        if non_chunk_needs:
+            if not _is_non_empty_string_list(non_chunk_needs):
+                failures.append(f"{RETRIEVAL_CHUNKS_PATH} {query_id} non_chunk_needs must be a list.")
+            else:
+                invalid_non_chunk_needs = [
+                    need for need in non_chunk_needs if need not in ALLOWED_RETRIEVAL_NON_CHUNK_NEEDS
+                ]
+                if invalid_non_chunk_needs:
+                    failures.append(
+                        f"{RETRIEVAL_CHUNKS_PATH} {query_id} has invalid non_chunk_needs: "
+                        f"{invalid_non_chunk_needs}"
+                    )
+                missing_non_chunk_needs = [need for need in non_chunk_needs if need not in needs]
+                if missing_non_chunk_needs:
+                    failures.append(
+                        f"{RETRIEVAL_CHUNKS_PATH} {query_id} non_chunk_needs are not listed in needs: "
+                        f"{missing_non_chunk_needs}"
+                    )
 
         keywords = item.get("keywords")
         if not isinstance(keywords, dict):

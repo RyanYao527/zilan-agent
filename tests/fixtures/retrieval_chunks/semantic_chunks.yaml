@@ -91,6 +91,38 @@ chunks:
       reasoning_roles:
         - hetuvidya
 
+  - chunk_id: context:collected-topics:prasanga-runtime
+    chunk_type: context_topic
+    source_file: context/摄类学工具箱.md
+    start_line: 300
+    end_line: 352
+    citation: "context/摄类学工具箱.md:300-352"
+    passage_citation: "context/摄类学工具箱.md:300-352"
+    text: "应成论式 = ⟨ 有法, 应成法, 因 ⟩"
+    metadata:
+      topics:
+        - 应成论式
+        - 周遍校验
+        - 不周遍
+      reasoning_roles:
+        - collected_topics
+
+  - chunk_id: context:madhyamaka:prasanga-method
+    chunk_type: context_topic
+    source_file: context/中观应成精要.md
+    start_line: 83
+    end_line: 126
+    citation: "context/中观应成精要.md:83-126"
+    passage_citation: "context/中观应成精要.md:83-126"
+    text: "只归谬：有自性 → 非缘起 → 与事实矛盾 → 故有自性不成立。"
+    metadata:
+      topics:
+        - 应成派
+        - 归谬
+        - 无自性
+      reasoning_roles:
+        - madhyamaka_prasanga
+
   - chunk_id: argument:work-feedback:non-pervasive
     chunk_type: argument_unit
     source_file: tests/reasoning_cases.yaml
@@ -116,6 +148,8 @@ queries:
       - hetuvidya
       - madhyamaka_prasanga
       - practice_boundary
+    non_chunk_needs:
+      - practice_boundary
     keywords:
       classical:
         - 無我
@@ -135,3 +169,5 @@ queries:
       - agama:T01n0001:juan-3:line-1829
       - context:hetuvidya:trairupya
       - reasoning:ZR-01:hetuvidya
+      - context:collected-topics:prasanga-runtime
+      - context:madhyamaka:prasanga-method

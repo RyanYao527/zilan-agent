@@ -20,8 +20,12 @@ def test_context_bundle_preserves_fixture_order_and_citations() -> None:
         "agama:T01n0001:juan-3:line-1829",
         "context:hetuvidya:trairupya",
         "reasoning:ZR-01:hetuvidya",
+        "context:collected-topics:prasanga-runtime",
+        "context:madhyamaka:prasanga-method",
     ]
     assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["chunk_ids"]
+    assert result["non_chunk_needs"] == ["practice_boundary"]
+    assert "Non-chunk needs: practice_boundary" in result["bundle_text"]
     assert all(chunk["citation"] for chunk in result["chunks"])
     assert all(chunk["source_file"] for chunk in result["chunks"])
     assert result["bundle_text"].index("agama:T02n0099:juan-1:line-147") < result["bundle_text"].index(
@@ -63,5 +67,5 @@ def test_context_bundle_cli_json_output_is_machine_readable() -> None:
 
     assert data["mode"] == "semantic-context-bundle"
     assert data["query_id"] == "SRQ-01"
-    assert len(data["chunks"]) == 5
+    assert len(data["chunks"]) == 7
     assert "# Semantic Retrieval Context Bundle" in data["bundle_text"]
