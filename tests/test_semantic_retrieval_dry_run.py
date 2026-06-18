@@ -20,8 +20,11 @@ def test_dry_run_returns_expected_chunks_for_query_fixture() -> None:
         "agama:T01n0001:juan-3:line-1829",
         "context:hetuvidya:trairupya",
         "reasoning:ZR-01:hetuvidya",
+        "context:collected-topics:prasanga-runtime",
+        "context:madhyamaka:prasanga-method",
     ]
     assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
+    assert result["non_chunk_needs"] == ["practice_boundary"]
     assert all("source_file" in chunk for chunk in result["chunks"])
     assert all("citation" in chunk for chunk in result["chunks"])
     assert any("no embeddings" in item for item in result["limitations"])
@@ -93,4 +96,4 @@ def test_dry_run_cli_json_output_is_machine_readable() -> None:
 
     assert data["mode"] == "fixture-dry-run"
     assert data["query_id"] == "SRQ-01"
-    assert len(data["chunks"]) == 5
+    assert len(data["chunks"]) == 7

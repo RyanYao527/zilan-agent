@@ -16,6 +16,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Expanded `SRQ-01` semantic retrieval fixture coverage with reviewed `長阿含經` Agama chunks selected from the fixture review workflow.
 - Added a fixture-only semantic context-bundle dry run that assembles selected chunks into prompt-ready order.
 - Added a fixture-only semantic role-coverage review that compares query `needs` with selected chunk `reasoning_roles`.
+- Expanded `SRQ-01` semantic role fixture coverage with Collected Topics and Madhyamaka prasaṅga context chunks, while keeping `practice_boundary` as a non-chunk answer boundary need.
 - Added repository validation for `tests/reasoning_cases.yaml` schema, local references, allowed contract families, and boundary-statement fields without changing runtime platform status.
 
 ## [2.4.8] - 2026-06-17

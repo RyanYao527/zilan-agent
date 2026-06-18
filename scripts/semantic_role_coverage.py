@@ -85,6 +85,14 @@ def _render_review_text(result: dict[str, Any]) -> str:
     else:
         lines.append("- none")
 
+    lines.extend(["", "## Non-Chunk Needs"])
+    non_chunk_needs = result["non_chunk_needs"]
+    if non_chunk_needs:
+        for need in non_chunk_needs:
+            lines.append(f"- {need}")
+    else:
+        lines.append("- none")
+
     lines.extend(["", "## Missing Needs"])
     missing_needs = result["missing_needs"]
     if missing_needs:
@@ -113,14 +121,16 @@ def build_role_coverage(
 
     bundle = build_context_bundle(fixture_path, query_id=query_id, query=query, limit=limit)
     needs = _unique_ordered([need for need in bundle["needs"] if isinstance(need, str)])
+    non_chunk_needs = _unique_ordered([need for need in bundle["non_chunk_needs"] if isinstance(need, str)])
+    role_needs = [need for need in needs if need not in set(non_chunk_needs)]
     chunks = bundle["chunks"]
-    coverage_by_need = _coverage_by_need(needs, chunks)
+    coverage_by_need = _coverage_by_need(role_needs, chunks)
     covered_needs = {need: chunk_ids for need, chunk_ids in coverage_by_need.items() if chunk_ids}
     missing_needs = [need for need, chunk_ids in coverage_by_need.items() if not chunk_ids]
     all_roles = _unique_ordered([role for chunk in chunks for role in _chunk_roles(chunk)])
-    extra_roles = [role for role in all_roles if role not in set(needs)]
-    coverage_status = "complete" if needs and not missing_needs else "partial"
-    if not needs:
+    extra_roles = [role for role in all_roles if role not in set(role_needs)]
+    coverage_status = "complete" if role_needs and not missing_needs else "partial"
+    if not role_needs:
         coverage_status = "no_needs_declared"
 
     result = {
@@ -129,12 +139,14 @@ def build_role_coverage(
         "query_id": bundle["query_id"],
         "query": bundle["query"],
         "needs": needs,
+        "role_needs": role_needs,
+        "non_chunk_needs": non_chunk_needs,
         "chunk_ids": bundle["chunk_ids"],
         "coverage_status": coverage_status,
         "covered_needs": covered_needs,
         "missing_needs": missing_needs,
         "extra_roles": extra_roles,
-        "chunk_role_map": _chunk_role_map(needs, chunks),
+        "chunk_role_map": _chunk_role_map(role_needs, chunks),
         "limitations": list(LIMITATIONS),
     }
     result["review_text"] = _render_review_text(result)

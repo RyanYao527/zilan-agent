@@ -224,19 +224,20 @@ python scripts/semantic_role_coverage.py --query-id SRQ-01 --json
 The role coverage helper:
 
 - reuses `semantic_context_bundle.py` so review is applied after fixture selection and bundle limiting
-- reports `covered_needs`, `missing_needs`, `extra_roles`, and a per-chunk role map
+- reports `role_needs`, `non_chunk_needs`, `covered_needs`, `missing_needs`, `extra_roles`, and a per-chunk role map
 - treats missing needs as review findings, not runtime validation failures
 - does not edit fixtures, add chunks, call providers, or infer doctrinal completeness
 
-For the current `SRQ-01` fixture, the review intentionally exposes partial coverage: Agama evidence and Hetuvidya are
-covered, while Collected Topics, Madhyamaka prasaṅga, and practice-boundary coverage remain explicit next-step gaps.
+For the current `SRQ-01` fixture, Agama evidence, Collected Topics, Hetuvidya, and Madhyamaka prasaṅga are represented
+as chunk-covered role needs. `practice_boundary` remains a non-chunk need because it constrains answer behavior rather
+than selecting a specific evidentiary passage.
 
 ## Next Implementation PR
 
 The next retrieval PR should still stay local and fixture-based:
 
-1. Add reviewed `collected_topics` and `madhyamaka_prasanga` fixture chunks for `SRQ-01`, then decide whether
-   `practice_boundary` should remain bundle metadata or become a dedicated review role.
+1. Add a small answer-boundary review contract that checks whether downstream generated answers preserve
+   `practice_boundary` without treating it as retrieval evidence.
 2. Keep fixture updates explicit; do not auto-overwrite checked-in chunks.
 3. Keep `search_agama.py` as the keyword baseline.
 4. Do not add embeddings, vector storage, or a reranker until fixture-based dry runs prove useful.

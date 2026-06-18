@@ -130,6 +130,7 @@ def build_dry_run(
         "query_id": selected_query.get("id"),
         "query": selected_query.get("query"),
         "needs": selected_query.get("needs", []),
+        "non_chunk_needs": selected_query.get("non_chunk_needs", []),
         "keywords": selected_query.get("keywords", {}),
         "expected_sources": selected_query.get("expected_sources", []),
         "expected_chunk_ids": expected_chunk_ids,
