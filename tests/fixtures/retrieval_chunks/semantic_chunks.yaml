@@ -1,0 +1,95 @@
+version: 1
+source: docs/architecture/semantic-retrieval-interface.md
+purpose: Fixture-only semantic retrieval chunks for citation-preserving validation.
+chunks:
+  - chunk_id: agama:T02n0099:juan-1:line-147
+    chunk_type: agama_passage
+    source_file: context/agama/T0099-za-agama.md
+    start_line: 147
+    end_line: 149
+    citation: "《雜阿含經》(T02n0099) 卷 1, context/agama/T0099-za-agama.md:147"
+    passage_citation: "《雜阿含經》(T02n0099) 卷 1, context/agama/T0099-za-agama.md:147-149"
+    text: "色無常，無常即苦，苦即非我"
+    metadata:
+      collection: 雜阿含經
+      cbeta_id: T02n0099
+      juan: 卷 1
+      section_marker:
+      topics:
+        - 無我
+        - 五蘊
+      reasoning_roles:
+        - agama_evidence
+
+  - chunk_id: context:hetuvidya:trairupya
+    chunk_type: context_topic
+    source_file: context/因明推理引擎.md
+    start_line: 19
+    end_line: 32
+    citation: "context/因明推理引擎.md:19-32"
+    passage_citation: "context/因明推理引擎.md:19-32"
+    text: "因三相 —— 推理正确性验证器"
+    metadata:
+      topics:
+        - 因三相
+        - 正因
+      reasoning_roles:
+        - hetuvidya
+
+  - chunk_id: reasoning:ZR-01:hetuvidya
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 5
+    end_line: 33
+    citation: "tests/reasoning_cases.yaml:5-33"
+    passage_citation: "tests/reasoning_cases.yaml:5-33"
+    text: "声，应是无常，以所作性故"
+    metadata:
+      topics:
+        - 因三相
+        - 声无常
+      reasoning_roles:
+        - hetuvidya
+
+  - chunk_id: argument:work-feedback:non-pervasive
+    chunk_type: argument_unit
+    source_file: tests/reasoning_cases.yaml
+    start_line: 35
+    end_line: 63
+    citation: "tests/reasoning_cases.yaml:35-63"
+    passage_citation: "tests/reasoning_cases.yaml:35-63"
+    text: "被批评者"
+    metadata:
+      topics:
+        - 不周遍
+        - 工作反馈
+      reasoning_roles:
+        - collected_topics
+        - cognitive_analysis
+
+queries:
+  - id: SRQ-01
+    query: "用应成论式分析诸法无我"
+    needs:
+      - agama_evidence
+      - collected_topics
+      - hetuvidya
+      - madhyamaka_prasanga
+      - practice_boundary
+    keywords:
+      classical:
+        - 無我
+        - 非我
+        - 五陰
+      modern:
+        - 无我
+        - 应成论式
+    expected_sources:
+      - context/agama/
+      - context/摄类学工具箱.md
+      - context/因明推理引擎.md
+      - context/中观应成精要.md
+    expected_chunk_ids:
+      - agama:T02n0099:juan-1:line-147
+      - context:hetuvidya:trairupya
+      - reasoning:ZR-01:hetuvidya

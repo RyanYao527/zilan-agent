@@ -7,6 +7,7 @@ from validate_zilan_repo import (
     _check_portable_upgrade_doc,
     _check_public_style_boundaries,
     _check_reasoning_cases_yaml,
+    _check_retrieval_chunks_yaml,
     _check_runtime_evidence_docs,
     _check_version_consistency,
     run_checks,
@@ -139,6 +140,62 @@ cases:
     assert any("expected.hetuvidya.reason" in failure for failure in failures)
     assert any("expected.hetuvidya.result" in failure for failure in failures)
     assert any("checks.vipaksa_asattva" in failure for failure in failures)
+
+
+def test_retrieval_chunk_schema_errors_are_reported(tmp_path: Path) -> None:
+    docs = tmp_path / "docs" / "architecture"
+    docs.mkdir(parents=True)
+    (docs / "semantic-retrieval-interface.md").write_text("# Semantic Retrieval\n", encoding="utf-8")
+    context = tmp_path / "context"
+    context.mkdir()
+    (context / "sample.md").write_text("line one\nline two\n", encoding="utf-8")
+    fixtures = tmp_path / "tests" / "fixtures" / "retrieval_chunks"
+    fixtures.mkdir(parents=True)
+    (fixtures / "semantic_chunks.yaml").write_text(
+        """version: 1
+source: docs/architecture/semantic-retrieval-interface.md
+purpose: Test retrieval chunks.
+chunks:
+  - chunk_id: chunk-1
+    chunk_type: context_topic
+    source_file: context/sample.md
+    start_line: 1
+    end_line: 1
+    citation: "context/sample.md:1"
+    passage_citation: "context/sample.md:1"
+    text: "missing text"
+    metadata:
+      topics:
+        - sample
+      reasoning_roles:
+        - invalid_role
+queries:
+  - id: SRQ-01
+    query: "sample query"
+    needs:
+      - invalid_need
+    keywords:
+      classical:
+        - sample
+      modern:
+        - sample
+    expected_sources:
+      - context/sample.md
+    expected_chunk_ids:
+      - missing-chunk
+""",
+        encoding="utf-8",
+    )
+    failures: list[str] = []
+    warnings: list[str] = []
+
+    _check_retrieval_chunks_yaml(tmp_path, failures, warnings, strict_yaml=True)
+
+    assert warnings == []
+    assert any("text is not present" in failure for failure in failures)
+    assert any("invalid reasoning roles" in failure for failure in failures)
+    assert any("invalid needs" in failure for failure in failures)
+    assert any("unknown expected chunks" in failure for failure in failures)
 
 
 def test_portable_upgrade_doc_missing_current_fragments_is_reported(tmp_path: Path) -> None:
