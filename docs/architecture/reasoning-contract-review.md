@@ -38,6 +38,8 @@ Reason:
 
 ## Post-Merge Runtime Review
 
+Follow-up: `docs/architecture/post-contract-runtime-review.md` records a 2026-06-18 review of existing ZC-02, ZC-03, and ZC-05 evidence summaries against `SRQ-02` through `SRQ-04`. The review found that committed summaries are not transcript-rich enough to prove the newer answer contracts; it does not downgrade any platform status.
+
 After this PR lands, the next runtime review should check:
 
 1. ZC-02 against ZR-01:
