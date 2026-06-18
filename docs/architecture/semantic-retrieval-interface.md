@@ -123,15 +123,39 @@ Repository validation checks:
 
 This gives the project a citation-preserving retrieval surface without introducing embeddings, vector storage, or a reranker.
 
+## Dry-Run Helper v0
+
+`scripts/semantic_retrieval_dry_run.py` demonstrates the first executable retrieval interface while staying fully
+fixture-based.
+
+Example:
+
+```powershell
+python scripts/semantic_retrieval_dry_run.py --query-id SRQ-01 --json
+```
+
+The helper:
+
+- loads `tests/fixtures/retrieval_chunks/semantic_chunks.yaml`
+- selects a query fixture by `--query-id` or exact `--query`
+- returns the query's `expected_chunk_ids` as full chunk objects
+- preserves `source_file`, `citation`, and `passage_citation`
+- states that the result is fixture-defined and performs no embeddings, vector search, reranking, or provider calls
+
+This is intentionally not a ranking algorithm. It is a contract proof that query fixtures can route to
+citation-preserving chunks before a real semantic retrieval implementation exists.
+
 ## Next Implementation PR
 
 The next retrieval PR should still stay local and fixture-based:
 
 1. Generate fixture candidates from `search_agama.py --json` instead of hand-maintaining all Agama passage fields.
-2. Add a tiny dry-run retrieval helper that loads query fixtures and returns expected chunks.
+2. Add tests showing generated Agama candidates keep `citation` and `passage_citation`.
 3. Keep `search_agama.py` as the keyword baseline.
 4. Do not add embeddings, vector storage, or a reranker until fixture-based dry runs prove useful.
 
 ## Rollback Path
 
-This interface is documentation only. If it proves too early, revert this document without affecting `search_agama.py`, platform validation, runtime evidence, or installed Skill behavior.
+This interface is local and fixture-only. If it proves too early, revert this document, the fixture, and
+`scripts/semantic_retrieval_dry_run.py` without affecting `search_agama.py`, platform validation, runtime evidence,
+or installed Skill behavior.

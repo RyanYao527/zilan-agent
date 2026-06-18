@@ -46,6 +46,7 @@ REQUIRED_FILES = (
     "agents/zilan-codex.md",
     "scripts/build_agama_context.py",
     "scripts/search_agama.py",
+    "scripts/semantic_retrieval_dry_run.py",
     "scripts/openai_api_harness.py",
     "scripts/mock_install_smoke.py",
     "tests/regression_cases.yaml",
