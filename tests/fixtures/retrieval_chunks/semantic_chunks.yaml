@@ -208,6 +208,25 @@ queries:
     query: "检验论式：声，应是可见，以是色形故。"
     needs:
       - hetuvidya
+    answer_contracts:
+      hetuvidya_error_detection:
+        description: "Answer must identify the unestablished reason and failed first trairupya check."
+        required_terms:
+          - 因不成
+          - 遍是宗法性
+          - 色形
+          - 声
+          - 不成立
+        forbidden_terms:
+          - 因三相完全满足
+          - 正因成立
+    answer_contract_samples:
+      - id: srq02-hetuvidya-error-pass
+        file: tests/fixtures/answers/srq02-hetuvidya-error-pass.md
+        expected_status: pass
+      - id: srq02-hetuvidya-error-fail
+        file: tests/fixtures/answers/srq02-hetuvidya-error-fail.md
+        expected_status: fail
     keywords:
       classical:
         - 因不成

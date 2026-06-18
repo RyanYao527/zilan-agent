@@ -61,6 +61,29 @@ def test_dry_run_returns_hetuvidya_error_fixture_for_srq02() -> None:
         "reasoning:ZR-03:hetuvidya-error",
     ]
     assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
+    assert result["answer_contracts"]["hetuvidya_error_detection"]["required_terms"] == [
+        "因不成",
+        "遍是宗法性",
+        "色形",
+        "声",
+        "不成立",
+    ]
+    assert result["answer_contracts"]["hetuvidya_error_detection"]["forbidden_terms"] == [
+        "因三相完全满足",
+        "正因成立",
+    ]
+    assert result["answer_contract_samples"] == [
+        {
+            "id": "srq02-hetuvidya-error-pass",
+            "file": "tests/fixtures/answers/srq02-hetuvidya-error-pass.md",
+            "expected_status": "pass",
+        },
+        {
+            "id": "srq02-hetuvidya-error-fail",
+            "file": "tests/fixtures/answers/srq02-hetuvidya-error-fail.md",
+            "expected_status": "fail",
+        },
+    ]
     assert result["chunks"][1]["text"] == "检验论式：声，应是可见，以是色形故。"
 
 
