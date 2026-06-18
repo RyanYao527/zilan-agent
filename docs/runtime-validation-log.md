@@ -350,6 +350,37 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - It does not validate ZC-04, ZC-05, ZC-06, deeper Agama-search, sub-agent routing, or file-output cases on Volcengine.
 - Full provider payloads and response IDs are redacted.
 
+## 2026-06-18 Claude Code Post-Contract Target Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.169`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `af90038` |
+| Prompt set | Target prompts for `SRQ-02`, `SRQ-03`, `SRQ-04`, plus one broad `ZC-05` cross-domain prompt |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact answer excerpts committed under `docs/runtime-evidence/2026-06-18-claude-code-post-contract-*-answer.md`; raw JSON kept local only |
+| Repository checks | `python scripts\semantic_answer_contract_review.py --answer-file ...` rerun on committed excerpts; `python scripts\validate_zilan_repo.py --strict-yaml` pass; `python scripts\validate_zilan_repo.py --check-generated --strict-yaml` pass; `python -m ruff check scripts tests` pass; `python -m pytest` pass; `git diff --check` pass |
+| Overall result | `mixed`: targeted `SRQ-02` and `SRQ-03` pass; targeted `SRQ-04` and broad `ZC-05` reveal answer-contract gaps; no platform status change |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---|---|
+| `2026-06-18-claude-code-post-contract-srq-02-answer.md` | `SRQ-02` | `pass` | Identifies `因不成`, failed `遍是宗法性`, and the `声` / `色形` mismatch. |
+| `2026-06-18-claude-code-post-contract-srq-03-answer.md` | `SRQ-03` | `pass` | Preserves `对方承许`, `归谬`, `自性有`, `缘起`, `矛盾`, and `不立自宗`. |
+| `2026-06-18-claude-code-post-contract-srq-04-answer.md` | `SRQ-04` | `fail` | Missing explicit `context/agama/` local anchor wording and `代表性` status language. |
+| `2026-06-18-claude-code-post-contract-zc-05-answer.md` | `SRQ-03` | `fail` | Missing explicit `对方承许`, `自性有`, and `不立自宗`; keyword review also flags `断灭`, likely from a warning against `断灭见` rather than an endorsed forbidden claim. |
+| `2026-06-18-claude-code-post-contract-zc-05-answer.md` | `SRQ-04` | `fail` | Missing explicit `CBETA`, `检索范围`, `代表性`, and `待校勘` boundary terms. |
+
+### Known Limits
+
+- This is target-contract evidence, not a full ZC-01 through ZC-06 platform rerun.
+- This does not validate native OpenAI API or the Responses API endpoint.
+- The keyword contract helper is a minimum explicitness check; it can produce substring false positives, as with the `断灭` warning case.
+- Follow-up work should tighten prompt/output-contract guidance for broad ZC-05-style answers before claiming SRQ-03/SRQ-04 boundaries are robust in multi-domain responses.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:

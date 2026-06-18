@@ -62,6 +62,10 @@ python scripts\semantic_answer_contract_review.py --query-id SRQ-04 --answer-fil
 
 ## Highest-ROI Next Step
 
+Follow-up executed on 2026-06-18: `docs/runtime-evidence/2026-06-18-claude-code-post-contract-target-review.md` records a Claude Code UTF-8 target review with committed answer excerpts for `SRQ-02`, `SRQ-03`, `SRQ-04`, and `ZC-05`.
+
+Result: targeted `SRQ-02` and `SRQ-03` passed their current answer contracts. Targeted `SRQ-04` failed only the local-anchor / representative-status terms (`context/agama/`, `代表性`). Broad `ZC-05` still failed the narrow `SRQ-03` and `SRQ-04` contracts, showing that the cross-domain prompt needs stronger output-contract guidance if those boundaries should be guaranteed in broad answers.
+
 Run a small transcript-backed target review instead of changing prompts immediately:
 
 1. Run the exact `SRQ-02`, `SRQ-03`, and `SRQ-04` prompts in one selected tested route, preferably Codex or Claude Code.

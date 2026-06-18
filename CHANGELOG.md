@@ -25,6 +25,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added `SRQ-03` as a fixture-only Madhyamaka prasaṅga boundary query with checked-in pass/fail answer-contract samples.
 - Added `SRQ-04` as a fixture-only Agama citation-boundary query with checked-in pass/fail answer-contract samples.
 - Added a post-contract runtime evidence review that checks existing ZC-02/ZC-03/ZC-05 summaries against SRQ-02 through SRQ-04 without changing platform status.
+- Added Claude Code UTF-8 target-review evidence for `SRQ-02`, `SRQ-03`, `SRQ-04`, and `ZC-05`, including committed answer excerpts and contract-review results.
 - Added repository validation for `tests/reasoning_cases.yaml` schema, local references, allowed contract families, and boundary-statement fields without changing runtime platform status.
 
 ## [2.4.8] - 2026-06-17
