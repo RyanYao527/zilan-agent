@@ -49,6 +49,7 @@ REQUIRED_FILES = (
     "scripts/semantic_context_bundle.py",
     "scripts/semantic_fixture_candidates.py",
     "scripts/semantic_fixture_review.py",
+    "scripts/semantic_role_coverage.py",
     "scripts/semantic_retrieval_dry_run.py",
     "scripts/openai_api_harness.py",
     "scripts/mock_install_smoke.py",

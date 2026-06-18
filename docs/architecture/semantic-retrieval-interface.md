@@ -209,12 +209,34 @@ The bundle helper:
 
 This proves the context-assembly surface before adding embeddings, vector storage, reranking, or provider calls.
 
+## Role Coverage Review v0
+
+`scripts/semantic_role_coverage.py` reviews whether a fixture-selected context bundle covers the query's declared
+`needs` through selected chunk `reasoning_roles`.
+
+Example:
+
+```powershell
+python scripts/semantic_role_coverage.py --query-id SRQ-01
+python scripts/semantic_role_coverage.py --query-id SRQ-01 --json
+```
+
+The role coverage helper:
+
+- reuses `semantic_context_bundle.py` so review is applied after fixture selection and bundle limiting
+- reports `covered_needs`, `missing_needs`, `extra_roles`, and a per-chunk role map
+- treats missing needs as review findings, not runtime validation failures
+- does not edit fixtures, add chunks, call providers, or infer doctrinal completeness
+
+For the current `SRQ-01` fixture, the review intentionally exposes partial coverage: Agama evidence and Hetuvidya are
+covered, while Collected Topics, Madhyamaka prasaṅga, and practice-boundary coverage remain explicit next-step gaps.
+
 ## Next Implementation PR
 
 The next retrieval PR should still stay local and fixture-based:
 
-1. Add a role-coverage review for context bundles, showing which query `needs` are covered by selected chunk roles and
-   which are intentionally missing.
+1. Add reviewed `collected_topics` and `madhyamaka_prasanga` fixture chunks for `SRQ-01`, then decide whether
+   `practice_boundary` should remain bundle metadata or become a dedicated review role.
 2. Keep fixture updates explicit; do not auto-overwrite checked-in chunks.
 3. Keep `search_agama.py` as the keyword baseline.
 4. Do not add embeddings, vector storage, or a reranker until fixture-based dry runs prove useful.
@@ -223,5 +245,6 @@ The next retrieval PR should still stay local and fixture-based:
 
 This interface is local and fixture-only. If it proves too early, revert this document, the fixture, and
 `scripts/semantic_retrieval_dry_run.py` / `scripts/semantic_fixture_candidates.py` /
-`scripts/semantic_fixture_review.py` / `scripts/semantic_context_bundle.py` without affecting `search_agama.py`,
-platform validation, runtime evidence, or installed Skill behavior.
+`scripts/semantic_fixture_review.py` / `scripts/semantic_context_bundle.py` /
+`scripts/semantic_role_coverage.py` without affecting `search_agama.py`, platform validation, runtime evidence, or
+installed Skill behavior.
