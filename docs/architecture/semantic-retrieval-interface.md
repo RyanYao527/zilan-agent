@@ -188,12 +188,33 @@ The review helper reports:
 This keeps fixture refreshes explicit: a maintainer can inspect the report, then decide whether to copy any
 candidate chunks into `tests/fixtures/retrieval_chunks/semantic_chunks.yaml`.
 
+## Context Bundle Dry Run v0
+
+`scripts/semantic_context_bundle.py` assembles fixture-selected chunks into prompt-ready Markdown without changing the
+retrieval route.
+
+Example:
+
+```powershell
+python scripts/semantic_context_bundle.py --query-id SRQ-01
+python scripts/semantic_context_bundle.py --query-id SRQ-01 --json
+```
+
+The bundle helper:
+
+- reuses `semantic_retrieval_dry_run.py` for fixture selection and chunk order
+- renders chunks in `expected_chunk_ids` order
+- preserves chunk IDs, source files, citations, reasoning roles, and text
+- emits either prompt-ready Markdown or JSON with the same `bundle_text`
+
+This proves the context-assembly surface before adding embeddings, vector storage, reranking, or provider calls.
+
 ## Next Implementation PR
 
 The next retrieval PR should still stay local and fixture-based:
 
-1. Add a small context-bundle dry run that assembles selected fixture chunks into the prompt-ready order expected by
-   future retrieval code.
+1. Add a role-coverage review for context bundles, showing which query `needs` are covered by selected chunk roles and
+   which are intentionally missing.
 2. Keep fixture updates explicit; do not auto-overwrite checked-in chunks.
 3. Keep `search_agama.py` as the keyword baseline.
 4. Do not add embeddings, vector storage, or a reranker until fixture-based dry runs prove useful.
@@ -202,5 +223,5 @@ The next retrieval PR should still stay local and fixture-based:
 
 This interface is local and fixture-only. If it proves too early, revert this document, the fixture, and
 `scripts/semantic_retrieval_dry_run.py` / `scripts/semantic_fixture_candidates.py` /
-`scripts/semantic_fixture_review.py` without affecting `search_agama.py`, platform validation, runtime evidence, or
-installed Skill behavior.
+`scripts/semantic_fixture_review.py` / `scripts/semantic_context_bundle.py` without affecting `search_agama.py`,
+platform validation, runtime evidence, or installed Skill behavior.
