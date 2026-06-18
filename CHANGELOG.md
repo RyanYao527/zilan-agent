@@ -27,6 +27,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added a post-contract runtime evidence review that checks existing ZC-02/ZC-03/ZC-05 summaries against SRQ-02 through SRQ-04 without changing platform status.
 - Added Claude Code UTF-8 target-review evidence for `SRQ-02`, `SRQ-03`, `SRQ-04`, and `ZC-05`, including committed answer excerpts and contract-review results.
 - Added repository validation for `tests/reasoning_cases.yaml` schema, local references, allowed contract families, and boundary-statement fields without changing runtime platform status.
+- Added an explicit Agama evidence output contract to agent prompts and OpenAI metadata, requiring search scope, CBETA/local `context/agama/` anchors, representative-status wording, and collation boundaries.
 
 ## [2.4.8] - 2026-06-17
 

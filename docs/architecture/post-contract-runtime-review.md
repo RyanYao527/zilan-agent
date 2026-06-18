@@ -66,6 +66,8 @@ Follow-up executed on 2026-06-18: `docs/runtime-evidence/2026-06-18-claude-code-
 
 Result: targeted `SRQ-02` and `SRQ-03` passed their current answer contracts. Targeted `SRQ-04` failed only the local-anchor / representative-status terms (`context/agama/`, `代表性`). Broad `ZC-05` still failed the narrow `SRQ-03` and `SRQ-04` contracts, showing that the cross-domain prompt needs stronger output-contract guidance if those boundaries should be guaranteed in broad answers.
 
+Second follow-up executed on 2026-06-18: `docs/runtime-evidence/2026-06-18-claude-code-agama-contract-fix-review.md` records the narrow Agama evidence output-contract fix. Result: direct `SRQ-04` and broad `ZC-05` now pass the `SRQ-04` Agama citation-boundary contract on Claude Code UTF-8 stdin. Broad `ZC-05` still fails `SRQ-03` only on the missing literal `对方承许`, which remains the next Madhyamaka/prasaṅga boundary task.
+
 Run a small transcript-backed target review instead of changing prompts immediately:
 
 1. Run the exact `SRQ-02`, `SRQ-03`, and `SRQ-04` prompts in one selected tested route, preferably Codex or Claude Code.

@@ -381,6 +381,35 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - The keyword contract helper is a minimum explicitness check; it can produce substring false positives, as with the `断灭` warning case.
 - Follow-up work should tighten prompt/output-contract guidance for broad ZC-05-style answers before claiming SRQ-03/SRQ-04 boundaries are robust in multi-domain responses.
 
+## 2026-06-18 Claude Code Agama Contract Fix Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.169`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `5d1de60` plus branch changes for the Agama evidence output contract |
+| Prompt set | Target `SRQ-04` plus one broad `ZC-05` cross-domain prompt |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact answer excerpts committed under `docs/runtime-evidence/2026-06-18-claude-code-agama-contract-fix-*-answer.md`; raw JSON kept local only |
+| Repository checks | `python scripts\semantic_answer_contract_review.py --answer-file ...` rerun on committed excerpts; `python scripts\validate_zilan_repo.py --strict-yaml` pass; `python -m pytest tests\test_semantic_answer_contract_review_srq04.py tests\test_validate_zilan_repo.py` pass; full repository checks run before PR handoff |
+| Overall result | `target-pass`: `SRQ-04` direct answer and broad `ZC-05` answer pass the Agama citation-boundary contract; `ZC-05` still fails `SRQ-03` because `对方承许` remains absent |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---|---|
+| `2026-06-18-claude-code-agama-contract-fix-srq-04-answer.md` | `SRQ-04` | `pass` | Includes `CBETA`, `T02n0099`, local `context/agama/` anchors, `检索范围`, `代表性`, and `待校勘`; no forbidden collation-overclaim terms. |
+| `2026-06-18-claude-code-agama-contract-fix-zc-05-answer.md` | `SRQ-04` | `pass` | Broad answer now keeps Agama evidence in the main response and satisfies the Agama citation-boundary terms. |
+| `2026-06-18-claude-code-agama-contract-fix-zc-05-answer.md` | `SRQ-03` | `fail` | Residual expected gap: answer omits literal `对方承许`; Madhyamaka/prasaṅga boundary hardening remains next work. |
+
+### Known Limits
+
+- This is target-contract evidence, not a full ZC-01 through ZC-06 platform rerun.
+- It validates the Agama citation-boundary fix only; it does not claim the broad `ZC-05` prompt now satisfies all reasoning contracts.
+- It does not validate native OpenAI API or the Responses API endpoint.
+- The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:

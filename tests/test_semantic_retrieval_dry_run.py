@@ -151,6 +151,8 @@ def test_dry_run_returns_agama_citation_boundary_fixture_for_srq04() -> None:
         "已穷尽",
         "无需校勘",
         "可作为定本",
+        "校勘完成",
+        "校勘确认",
     ]
     assert result["answer_contract_samples"] == [
         {
