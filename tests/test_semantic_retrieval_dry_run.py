@@ -31,7 +31,12 @@ def test_dry_run_returns_expected_chunks_for_query_fixture() -> None:
             "id": "srq01-practice-boundary-pass",
             "file": "tests/fixtures/answers/srq01-practice-boundary-pass.md",
             "expected_status": "pass",
-        }
+        },
+        {
+            "id": "srq01-practice-boundary-fail",
+            "file": "tests/fixtures/answers/srq01-practice-boundary-fail.md",
+            "expected_status": "fail",
+        },
     ]
     assert all("source_file" in chunk for chunk in result["chunks"])
     assert all("citation" in chunk for chunk in result["chunks"])

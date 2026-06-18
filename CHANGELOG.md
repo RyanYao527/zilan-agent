@@ -19,6 +19,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Expanded `SRQ-01` semantic role fixture coverage with Collected Topics and Madhyamaka prasaṅga context chunks, while keeping `practice_boundary` as a non-chunk answer boundary need.
 - Added a fixture-only semantic answer-boundary review for `practice_boundary` so downstream answer text can be checked without treating boundary guidance as retrieval evidence.
 - Added a checked-in `SRQ-01` answer-boundary sample fixture and `--sample-id` review path so boundary checks can run without inline CLI answer text.
+- Added a checked-in negative `SRQ-01` answer-boundary sample so committed sample review covers expected `pass` and `fail` outcomes.
 - Added repository validation for `tests/reasoning_cases.yaml` schema, local references, allowed contract families, and boundary-statement fields without changing runtime platform status.
 
 ## [2.4.8] - 2026-06-17

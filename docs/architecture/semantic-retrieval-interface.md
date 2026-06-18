@@ -242,6 +242,7 @@ Example:
 ```powershell
 python scripts/semantic_answer_boundary_review.py --query-id SRQ-01 --answer-text "边界：以下只是基于本地 context 的义理分析，不等于修证，也不构成临床、医疗或心理治疗建议。" --json
 python scripts/semantic_answer_boundary_review.py --query-id SRQ-01 --sample-id srq01-practice-boundary-pass --json
+python scripts/semantic_answer_boundary_review.py --query-id SRQ-01 --sample-id srq01-practice-boundary-fail --json
 ```
 
 The answer-boundary helper:
@@ -259,7 +260,7 @@ and rejects overclaims such as "保证证悟" or "已证空性".
 
 The next retrieval PR should still stay local and fixture-based:
 
-1. Add a deliberately failing checked-in `SRQ-01` answer sample only if a negative fixture is useful for regression review.
+1. Add a second semantic query fixture only after a specific reasoning or citation gap is identified.
 2. Keep fixture updates explicit; do not auto-overwrite checked-in chunks.
 3. Keep `search_agama.py` as the keyword baseline.
 4. Do not add embeddings, vector storage, or a reranker until fixture-based dry runs prove useful.

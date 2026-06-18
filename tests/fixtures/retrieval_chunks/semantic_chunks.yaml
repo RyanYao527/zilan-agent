@@ -163,6 +163,9 @@ queries:
       - id: srq01-practice-boundary-pass
         file: tests/fixtures/answers/srq01-practice-boundary-pass.md
         expected_status: pass
+      - id: srq01-practice-boundary-fail
+        file: tests/fixtures/answers/srq01-practice-boundary-fail.md
+        expected_status: fail
     keywords:
       classical:
         - 無我

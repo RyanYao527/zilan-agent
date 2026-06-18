@@ -45,6 +45,20 @@ def test_answer_boundary_review_passes_from_checked_in_sample() -> None:
     }
 
 
+def test_answer_boundary_review_fails_from_checked_in_negative_sample() -> None:
+    result = build_answer_boundary_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-01",
+        sample_id="srq01-practice-boundary-fail",
+    )
+
+    assert result["overall_status"] == "fail"
+    assert result["expected_status"] == "fail"
+    assert result["expected_status_match"] is True
+    assert result["reviews"][0]["missing_required_terms"] == ["不等于修证"]
+    assert result["reviews"][0]["present_forbidden_terms"] == ["保证证悟", "已证空性"]
+
+
 def test_answer_boundary_review_fails_when_required_terms_are_missing() -> None:
     result = build_answer_boundary_review(DEFAULT_FIXTURE, query_id="SRQ-01", answer_text="诸法无我，可以这样理解。")
 
