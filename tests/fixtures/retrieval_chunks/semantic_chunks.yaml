@@ -155,6 +155,22 @@ chunks:
       reasoning_roles:
         - madhyamaka_prasanga
 
+  - chunk_id: reasoning:ZR-05:agama-evidence
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 138
+    end_line: 166
+    citation: "tests/reasoning_cases.yaml:138-166"
+    passage_citation: "tests/reasoning_cases.yaml:138-166"
+    text: "查四阿含中关于无我的经文，并说明检索范围与待校勘边界。"
+    metadata:
+      topics:
+        - 阿含证据
+        - CBETA
+        - 待校勘
+      reasoning_roles:
+        - agama_evidence
+
   - chunk_id: argument:work-feedback:non-pervasive
     chunk_type: argument_unit
     source_file: tests/reasoning_cases.yaml
@@ -297,3 +313,45 @@ queries:
     expected_chunk_ids:
       - context:madhyamaka:prasanga-method
       - reasoning:ZR-04:madhyamaka-prasanga
+
+  - id: SRQ-04
+    query: "查四阿含中关于无我的经文，并说明检索范围与待校勘边界。"
+    needs:
+      - agama_evidence
+    answer_contracts:
+      agama_citation_boundary:
+        description: "Answer must cite Agama evidence with CBETA/local anchors and mark search/collation boundaries."
+        required_terms:
+          - CBETA
+          - T02n0099
+          - context/agama/
+          - 检索范围
+          - 代表性
+          - 待校勘
+        forbidden_terms:
+          - 已穷尽
+          - 无需校勘
+          - 可作为定本
+    answer_contract_samples:
+      - id: srq04-agama-citation-boundary-pass
+        file: tests/fixtures/answers/srq04-agama-citation-boundary-pass.md
+        expected_status: pass
+      - id: srq04-agama-citation-boundary-fail
+        file: tests/fixtures/answers/srq04-agama-citation-boundary-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 無我
+        - 非我
+        - 五陰
+      modern:
+        - CBETA
+        - 待校勘
+    expected_sources:
+      - context/agama/
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - agama:T02n0099:juan-1:line-147
+      - agama:T01n0001:juan-1:line-881
+      - agama:T01n0001:juan-3:line-1829
+      - reasoning:ZR-05:agama-evidence

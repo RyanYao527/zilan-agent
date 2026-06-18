@@ -126,6 +126,47 @@ def test_dry_run_returns_madhyamaka_prasanga_fixture_for_srq03() -> None:
     assert result["chunks"][1]["text"] == "若有人承许诸法自性有，如何用应成法指出矛盾？"
 
 
+def test_dry_run_returns_agama_citation_boundary_fixture_for_srq04() -> None:
+    result = build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-04")
+
+    assert result["query"] == "查四阿含中关于无我的经文，并说明检索范围与待校勘边界。"
+    assert result["needs"] == ["agama_evidence"]
+    assert result["non_chunk_needs"] == []
+    assert result["expected_chunk_ids"] == [
+        "agama:T02n0099:juan-1:line-147",
+        "agama:T01n0001:juan-1:line-881",
+        "agama:T01n0001:juan-3:line-1829",
+        "reasoning:ZR-05:agama-evidence",
+    ]
+    assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
+    assert result["answer_contracts"]["agama_citation_boundary"]["required_terms"] == [
+        "CBETA",
+        "T02n0099",
+        "context/agama/",
+        "检索范围",
+        "代表性",
+        "待校勘",
+    ]
+    assert result["answer_contracts"]["agama_citation_boundary"]["forbidden_terms"] == [
+        "已穷尽",
+        "无需校勘",
+        "可作为定本",
+    ]
+    assert result["answer_contract_samples"] == [
+        {
+            "id": "srq04-agama-citation-boundary-pass",
+            "file": "tests/fixtures/answers/srq04-agama-citation-boundary-pass.md",
+            "expected_status": "pass",
+        },
+        {
+            "id": "srq04-agama-citation-boundary-fail",
+            "file": "tests/fixtures/answers/srq04-agama-citation-boundary-fail.md",
+            "expected_status": "fail",
+        },
+    ]
+    assert result["chunks"][3]["text"] == "查四阿含中关于无我的经文，并说明检索范围与待校勘边界。"
+
+
 def test_dry_run_unknown_query_id_is_reported() -> None:
     try:
         build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-99")
