@@ -39,4 +39,6 @@ def test_answer_contract_review_fails_for_agama_citation_boundary_negative_sampl
         "已穷尽",
         "无需校勘",
         "可作为定本",
+        "校勘完成",
+        "校勘确认",
     ]

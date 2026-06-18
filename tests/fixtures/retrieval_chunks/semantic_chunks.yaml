@@ -332,6 +332,8 @@ queries:
           - 已穷尽
           - 无需校勘
           - 可作为定本
+          - 校勘完成
+          - 校勘确认
     answer_contract_samples:
       - id: srq04-agama-citation-boundary-pass
         file: tests/fixtures/answers/srq04-agama-citation-boundary-pass.md
