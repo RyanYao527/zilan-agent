@@ -167,12 +167,32 @@ The generator:
 This is still not semantic ranking. It is a fixture-refresh aid that keeps candidate generation tied to the
 auditable keyword baseline.
 
+## Fixture Review v0
+
+`scripts/semantic_fixture_review.py` compares generated Agama candidates with the checked-in fixture without
+writing files.
+
+Example:
+
+```powershell
+python scripts/semantic_fixture_review.py --terms "無我|非我" --limit 5 --json
+```
+
+The review helper reports:
+
+- `already_present`: generated candidates whose `chunk_id` already exists in the fixture
+- `range_matches`: generated candidates whose source file and line range already exist under a different ID
+- `new_candidates`: generated candidates that are not represented in the fixture
+- `fixture_only_agama_chunks`: checked-in Agama chunks not produced by the current candidate command
+
+This keeps fixture refreshes explicit: a maintainer can inspect the report, then decide whether to copy any
+candidate chunks into `tests/fixtures/retrieval_chunks/semantic_chunks.yaml`.
+
 ## Next Implementation PR
 
 The next retrieval PR should still stay local and fixture-based:
 
-1. Add a reviewed fixture-refresh workflow that compares generated candidates with existing
-   `tests/fixtures/retrieval_chunks/semantic_chunks.yaml`.
+1. Use the review helper to select one or two additional Agama fixture chunks for `SRQ-01` coverage.
 2. Keep fixture updates explicit; do not auto-overwrite checked-in chunks.
 3. Keep `search_agama.py` as the keyword baseline.
 4. Do not add embeddings, vector storage, or a reranker until fixture-based dry runs prove useful.
@@ -180,5 +200,6 @@ The next retrieval PR should still stay local and fixture-based:
 ## Rollback Path
 
 This interface is local and fixture-only. If it proves too early, revert this document, the fixture, and
-`scripts/semantic_retrieval_dry_run.py` / `scripts/semantic_fixture_candidates.py` without affecting
-`search_agama.py`, platform validation, runtime evidence, or installed Skill behavior.
+`scripts/semantic_retrieval_dry_run.py` / `scripts/semantic_fixture_candidates.py` /
+`scripts/semantic_fixture_review.py` without affecting `search_agama.py`, platform validation, runtime evidence, or
+installed Skill behavior.
