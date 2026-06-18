@@ -132,3 +132,43 @@ def test_answer_contract_review_cli_can_use_checked_in_sample() -> None:
     assert data["overall_status"] == "pass"
     assert data["answer_source"]["type"] == "sample"
     assert data["expected_status_match"] is True
+
+
+def test_answer_contract_review_passes_for_madhyamaka_prasanga_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-03",
+        sample_id="srq03-madhyamaka-prasanga-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["expected_status"] == "pass"
+    assert result["expected_status_match"] is True
+    assert result["reviews"][0]["contract_id"] == "madhyamaka_prasanga_boundary"
+    assert result["reviews"][0]["missing_required_terms"] == []
+    assert result["reviews"][0]["present_forbidden_terms"] == []
+
+
+def test_answer_contract_review_fails_for_madhyamaka_prasanga_negative_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-03",
+        sample_id="srq03-madhyamaka-prasanga-fail",
+    )
+
+    assert result["overall_status"] == "fail"
+    assert result["expected_status"] == "fail"
+    assert result["expected_status_match"] is True
+    assert result["reviews"][0]["missing_required_terms"] == [
+        "对方承许",
+        "归谬",
+        "自性有",
+        "缘起",
+        "矛盾",
+        "不立自宗",
+    ]
+    assert result["reviews"][0]["present_forbidden_terms"] == [
+        "我方建立自宗",
+        "证明诸法绝对不存在",
+        "断灭",
+    ]

@@ -22,6 +22,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added a checked-in negative `SRQ-01` answer-boundary sample so committed sample review covers expected `pass` and `fail` outcomes.
 - Added `SRQ-02` as a fixture-only Hetuvidya error-detection query for the `ZR-03` `reason_unestablished` case.
 - Added fixture-only `SRQ-02` answer-contract review with checked-in pass/fail samples for Hetuvidya error detection.
+- Added `SRQ-03` as a fixture-only Madhyamaka prasaṅga boundary query with checked-in pass/fail answer-contract samples.
 - Added repository validation for `tests/reasoning_cases.yaml` schema, local references, allowed contract families, and boundary-statement fields without changing runtime platform status.
 
 ## [2.4.8] - 2026-06-17
