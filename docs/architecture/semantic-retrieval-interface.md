@@ -134,6 +134,7 @@ Example:
 python scripts/semantic_retrieval_dry_run.py --query-id SRQ-01 --json
 python scripts/semantic_retrieval_dry_run.py --query-id SRQ-02 --json
 python scripts/semantic_retrieval_dry_run.py --query-id SRQ-03 --json
+python scripts/semantic_retrieval_dry_run.py --query-id SRQ-04 --json
 ```
 
 The helper:
@@ -242,6 +243,11 @@ Agama evidence or practice-boundary samples because the gap is formal inference 
 to the Madhyamaka prasaṅga method chunk plus the `ZR-04` reasoning case. It deliberately checks the no-independent-thesis
 boundary so an answer does not turn prasaṅga into a self-standing proof or a nihilistic claim.
 
+`SRQ-04` is a narrow Agama citation-boundary fixture. It routes the question "查四阿含中关于无我的经文，并说明检索范围与待校勘边界。"
+to representative Agama evidence chunks plus the `ZR-05` Agama-evidence reasoning case. It deliberately checks CBETA/local
+anchors, search-scope language, representative-status language, and the collation boundary so an answer does not claim
+exhaustive search, skip collation, or present local fixture evidence as a publication-ready critical edition.
+
 ## Answer Boundary Review v0
 
 `scripts/semantic_answer_boundary_review.py` checks downstream answer text against fixture-defined non-chunk boundary
@@ -278,6 +284,8 @@ python scripts/semantic_answer_contract_review.py --query-id SRQ-02 --sample-id 
 python scripts/semantic_answer_contract_review.py --query-id SRQ-02 --sample-id srq02-hetuvidya-error-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-03 --sample-id srq03-madhyamaka-prasanga-pass --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-03 --sample-id srq03-madhyamaka-prasanga-fail --json
+python scripts/semantic_answer_contract_review.py --query-id SRQ-04 --sample-id srq04-agama-citation-boundary-pass --json
+python scripts/semantic_answer_contract_review.py --query-id SRQ-04 --sample-id srq04-agama-citation-boundary-fail --json
 ```
 
 The answer-contract helper:
@@ -296,11 +304,15 @@ For `SRQ-03`, the current `madhyamaka_prasanga_boundary` contract requires the a
 run a prasaṅga, state the `自性有` / `缘起` contradiction, and preserve the `不立自宗` boundary. It rejects answers that
 claim to establish a self-standing thesis, prove that all dharmas absolutely do not exist, or fall into annihilationism.
 
+For `SRQ-04`, the current `agama_citation_boundary` contract requires CBETA identity, a local `context/agama/` anchor,
+explicit search-scope language, representative-status language, and a `待校勘` boundary. It rejects answers that claim the
+search is exhausted, say collation is unnecessary, or present the local working corpus as a definitive edition.
+
 ## Next Implementation PR
 
 The next retrieval PR should still stay local and fixture-based:
 
-1. Add another answer-contract fixture only after a new concrete SRQ reasoning gap is selected.
+1. Prefer post-contract runtime review of ZC/ZR answers before adding another fixture-level answer contract.
 2. Keep fixture updates explicit; do not auto-overwrite checked-in chunks.
 3. Keep `search_agama.py` as the keyword baseline.
 4. Do not add embeddings, vector storage, or a reranker until fixture-based dry runs prove useful.
