@@ -139,6 +139,22 @@ chunks:
       reasoning_roles:
         - madhyamaka_prasanga
 
+  - chunk_id: reasoning:ZR-04:madhyamaka-prasanga
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 109
+    end_line: 136
+    citation: "tests/reasoning_cases.yaml:109-136"
+    passage_citation: "tests/reasoning_cases.yaml:109-136"
+    text: "若有人承许诸法自性有，如何用应成法指出矛盾？"
+    metadata:
+      topics:
+        - 应成法
+        - 归谬
+        - 诸法自性有
+      reasoning_roles:
+        - madhyamaka_prasanga
+
   - chunk_id: argument:work-feedback:non-pervasive
     chunk_type: argument_unit
     source_file: tests/reasoning_cases.yaml
@@ -241,3 +257,43 @@ queries:
     expected_chunk_ids:
       - context:hetuvidya:trairupya
       - reasoning:ZR-03:hetuvidya-error
+
+  - id: SRQ-03
+    query: "若有人承许诸法自性有，如何用应成法指出矛盾？"
+    needs:
+      - madhyamaka_prasanga
+    answer_contracts:
+      madhyamaka_prasanga_boundary:
+        description: "Answer must run a prasaṅga from the opponent premise while preserving the no-independent-thesis boundary."
+        required_terms:
+          - 对方承许
+          - 归谬
+          - 自性有
+          - 缘起
+          - 矛盾
+          - 不立自宗
+        forbidden_terms:
+          - 我方建立自宗
+          - 证明诸法绝对不存在
+          - 断灭
+    answer_contract_samples:
+      - id: srq03-madhyamaka-prasanga-pass
+        file: tests/fixtures/answers/srq03-madhyamaka-prasanga-pass.md
+        expected_status: pass
+      - id: srq03-madhyamaka-prasanga-fail
+        file: tests/fixtures/answers/srq03-madhyamaka-prasanga-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 应成法
+        - 自性有
+        - 归谬
+      modern:
+        - 矛盾
+        - 不立自宗
+    expected_sources:
+      - context/中观应成精要.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:madhyamaka:prasanga-method
+      - reasoning:ZR-04:madhyamaka-prasanga
