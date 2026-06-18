@@ -192,7 +192,8 @@ candidate chunks into `tests/fixtures/retrieval_chunks/semantic_chunks.yaml`.
 
 The next retrieval PR should still stay local and fixture-based:
 
-1. Use the review helper to select one or two additional Agama fixture chunks for `SRQ-01` coverage.
+1. Add a small context-bundle dry run that assembles selected fixture chunks into the prompt-ready order expected by
+   future retrieval code.
 2. Keep fixture updates explicit; do not auto-overwrite checked-in chunks.
 3. Keep `search_agama.py` as the keyword baseline.
 4. Do not add embeddings, vector storage, or a reranker until fixture-based dry runs prove useful.

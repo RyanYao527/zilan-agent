@@ -16,6 +16,8 @@ def test_dry_run_returns_expected_chunks_for_query_fixture() -> None:
     assert result["query_id"] == "SRQ-01"
     assert result["expected_chunk_ids"] == [
         "agama:T02n0099:juan-1:line-147",
+        "agama:T01n0001:juan-1:line-881",
+        "agama:T01n0001:juan-3:line-1829",
         "context:hetuvidya:trairupya",
         "reasoning:ZR-01:hetuvidya",
     ]
@@ -91,4 +93,4 @@ def test_dry_run_cli_json_output_is_machine_readable() -> None:
 
     assert data["mode"] == "fixture-dry-run"
     assert data["query_id"] == "SRQ-01"
-    assert len(data["chunks"]) == 3
+    assert len(data["chunks"]) == 5
