@@ -132,6 +132,7 @@ Example:
 
 ```powershell
 python scripts/semantic_retrieval_dry_run.py --query-id SRQ-01 --json
+python scripts/semantic_retrieval_dry_run.py --query-id SRQ-02 --json
 ```
 
 The helper:
@@ -232,6 +233,10 @@ For the current `SRQ-01` fixture, Agama evidence, Collected Topics, Hetuvidya, a
 as chunk-covered role needs. `practice_boundary` remains a non-chunk need because it constrains answer behavior rather
 than selecting a specific evidentiary passage.
 
+`SRQ-02` is a narrower Hetuvidya error-detection fixture. It routes the question "检验论式：声，应是可见，以是色形故。"
+to the trairupya context chunk plus the `ZR-03` `reason_unestablished` reasoning case. It deliberately does not select
+Agama evidence or practice-boundary samples because the gap is formal inference validation.
+
 ## Answer Boundary Review v0
 
 `scripts/semantic_answer_boundary_review.py` checks downstream answer text against fixture-defined non-chunk boundary
@@ -260,7 +265,7 @@ and rejects overclaims such as "保证证悟" or "已证空性".
 
 The next retrieval PR should still stay local and fixture-based:
 
-1. Add a second semantic query fixture only after a specific reasoning or citation gap is identified.
+1. Add an answer-level sample review for `SRQ-02` only after a concrete reasoning-error output contract is defined.
 2. Keep fixture updates explicit; do not auto-overwrite checked-in chunks.
 3. Keep `search_agama.py` as the keyword baseline.
 4. Do not add embeddings, vector storage, or a reranker until fixture-based dry runs prove useful.

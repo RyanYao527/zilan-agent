@@ -60,6 +60,22 @@ def test_role_coverage_respects_chunk_limit_before_review() -> None:
     assert result["non_chunk_needs"] == ["practice_boundary"]
 
 
+def test_role_coverage_reports_hetuvidya_error_fixture_complete() -> None:
+    result = build_role_coverage(DEFAULT_FIXTURE, query_id="SRQ-02")
+
+    assert result["coverage_status"] == "complete"
+    assert result["role_needs"] == ["hetuvidya"]
+    assert result["non_chunk_needs"] == []
+    assert result["covered_needs"] == {
+        "hetuvidya": [
+            "context:hetuvidya:trairupya",
+            "reasoning:ZR-03:hetuvidya-error",
+        ],
+    }
+    assert result["missing_needs"] == []
+    assert result["extra_roles"] == []
+
+
 def test_role_coverage_unknown_query_id_is_reported() -> None:
     try:
         build_role_coverage(DEFAULT_FIXTURE, query_id="SRQ-99")

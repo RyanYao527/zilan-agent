@@ -50,6 +50,20 @@ def test_dry_run_can_limit_expected_chunks() -> None:
     assert len(result["chunks"]) == 1
 
 
+def test_dry_run_returns_hetuvidya_error_fixture_for_srq02() -> None:
+    result = build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-02")
+
+    assert result["query"] == "检验论式：声，应是可见，以是色形故。"
+    assert result["needs"] == ["hetuvidya"]
+    assert result["non_chunk_needs"] == []
+    assert result["expected_chunk_ids"] == [
+        "context:hetuvidya:trairupya",
+        "reasoning:ZR-03:hetuvidya-error",
+    ]
+    assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
+    assert result["chunks"][1]["text"] == "检验论式：声，应是可见，以是色形故。"
+
+
 def test_dry_run_unknown_query_id_is_reported() -> None:
     try:
         build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-99")
