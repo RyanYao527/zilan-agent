@@ -248,6 +248,48 @@ def test_dry_run_returns_madhyamaka_prasanga_fixture_for_srq03() -> None:
     assert result["chunks"][1]["text"] == "若有人承许诸法自性有，如何用应成法指出矛盾？"
 
 
+def test_dry_run_returns_madhyamaka_nihilism_boundary_fixture_for_srq08() -> None:
+    result = build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-08")
+
+    assert result["query"] == "既然诸法无自性，是否可以推出因果也不存在？"
+    assert result["needs"] == ["madhyamaka_prasanga"]
+    assert result["non_chunk_needs"] == []
+    assert result["expected_chunk_ids"] == [
+        "context:madhyamaka:prasanga-method",
+        "reasoning:ZR-09:madhyamaka-nihilism-boundary",
+    ]
+    assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
+    assert result["answer_contracts"]["madhyamaka_nihilism_boundary"]["required_terms"] == [
+        "中观",
+        "无自性",
+        "只破自性有",
+        "缘起",
+        "因果",
+        "断灭",
+        "二谛",
+        "不成立",
+    ]
+    assert result["answer_contracts"]["madhyamaka_nihilism_boundary"]["forbidden_terms"] == [
+        "空性等于什么都没有",
+        "因果已经被取消",
+        "可以直接推出断灭",
+        "无需二谛",
+    ]
+    assert result["answer_contract_samples"] == [
+        {
+            "id": "srq08-madhyamaka-nihilism-boundary-pass",
+            "file": "tests/fixtures/answers/srq08-madhyamaka-nihilism-boundary-pass.md",
+            "expected_status": "pass",
+        },
+        {
+            "id": "srq08-madhyamaka-nihilism-boundary-fail",
+            "file": "tests/fixtures/answers/srq08-madhyamaka-nihilism-boundary-fail.md",
+            "expected_status": "fail",
+        },
+    ]
+    assert result["chunks"][1]["text"] == "既然诸法无自性，是否可以推出因果也不存在？"
+
+
 def test_dry_run_returns_agama_citation_boundary_fixture_for_srq04() -> None:
     result = build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-04")
 

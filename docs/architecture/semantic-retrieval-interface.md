@@ -138,6 +138,7 @@ python scripts/semantic_retrieval_dry_run.py --query-id SRQ-04 --json
 python scripts/semantic_retrieval_dry_run.py --query-id SRQ-05 --json
 python scripts/semantic_retrieval_dry_run.py --query-id SRQ-06 --json
 python scripts/semantic_retrieval_dry_run.py --query-id SRQ-07 --json
+python scripts/semantic_retrieval_dry_run.py --query-id SRQ-08 --json
 ```
 
 The helper:
@@ -246,6 +247,10 @@ Agama evidence or practice-boundary samples because the gap is formal inference 
 to the Madhyamaka prasaṅga method chunk plus the `ZR-04` reasoning case. It deliberately checks the no-independent-thesis
 boundary so an answer does not turn prasaṅga into a self-standing proof or a nihilistic claim.
 
+`SRQ-08` is a narrow Madhyamaka nihilism-boundary fixture. It routes the question "既然诸法无自性，是否可以推出因果也不存在？"
+to the Madhyamaka prasaṅga method chunk plus the `ZR-09` reasoning case. It deliberately checks that an answer rejects the
+mistake of reading emptiness as the cancellation of dependent arising, causality, or the two-truths boundary.
+
 `SRQ-04` is a narrow Agama citation-boundary fixture. It routes the question "查四阿含中关于无我的经文，并说明检索范围与待校勘边界。"
 to representative Agama evidence chunks plus the `ZR-05` Agama-evidence reasoning case. It deliberately checks CBETA/local
 anchors, search-scope language, representative-status language, and the collation boundary so an answer does not claim
@@ -305,6 +310,8 @@ python scripts/semantic_answer_contract_review.py --query-id SRQ-07 --sample-id 
 python scripts/semantic_answer_contract_review.py --query-id SRQ-07 --sample-id srq07-collected-topics-total-part-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-03 --sample-id srq03-madhyamaka-prasanga-pass --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-03 --sample-id srq03-madhyamaka-prasanga-fail --json
+python scripts/semantic_answer_contract_review.py --query-id SRQ-08 --sample-id srq08-madhyamaka-nihilism-boundary-pass --json
+python scripts/semantic_answer_contract_review.py --query-id SRQ-08 --sample-id srq08-madhyamaka-nihilism-boundary-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-04 --sample-id srq04-agama-citation-boundary-pass --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-04 --sample-id srq04-agama-citation-boundary-fail --json
 ```
@@ -345,6 +352,10 @@ inference or say total/part distinction is unnecessary.
 For `SRQ-03`, the current `madhyamaka_prasanga_boundary` contract requires the answer to name the opponent's premise,
 run a prasaṅga, state the `自性有` / `缘起` contradiction, and preserve the `不立自宗` boundary. It rejects answers that
 claim to establish a self-standing thesis, prove that all dharmas absolutely do not exist, or fall into annihilationism.
+
+For `SRQ-08`, the current `madhyamaka_nihilism_boundary` contract requires the answer to reject the move from
+`诸法无自性` to cancelled causality, preserve the `只破自性有` boundary, and state dependent arising, causality, and the
+two truths. It rejects answers that equate emptiness with nothingness or claim causality has been cancelled.
 
 For `SRQ-04`, the current `agama_citation_boundary` contract requires CBETA identity, a local `context/agama/` anchor,
 explicit search-scope language, representative-status language, and a `待校勘` boundary. It rejects answers that claim the

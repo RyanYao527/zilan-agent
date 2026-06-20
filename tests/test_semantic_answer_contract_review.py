@@ -189,6 +189,49 @@ def test_answer_contract_review_fails_for_madhyamaka_prasanga_negative_sample() 
     ]
 
 
+def test_answer_contract_review_passes_for_madhyamaka_nihilism_boundary_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-08",
+        sample_id="srq08-madhyamaka-nihilism-boundary-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["expected_status"] == "pass"
+    assert result["expected_status_match"] is True
+    assert result["reviews"][0]["contract_id"] == "madhyamaka_nihilism_boundary"
+    assert result["reviews"][0]["missing_required_terms"] == []
+    assert result["reviews"][0]["missing_required_slots"] == []
+    assert result["reviews"][0]["present_forbidden_terms"] == []
+
+
+def test_answer_contract_review_fails_for_madhyamaka_nihilism_boundary_negative_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-08",
+        sample_id="srq08-madhyamaka-nihilism-boundary-fail",
+    )
+
+    assert result["overall_status"] == "fail"
+    assert result["expected_status"] == "fail"
+    assert result["expected_status_match"] is True
+    assert "中观" in result["reviews"][0]["missing_required_terms"]
+    assert "无自性" in result["reviews"][0]["missing_required_terms"]
+    assert "只破自性有" in result["reviews"][0]["missing_required_terms"]
+    assert "缘起" in result["reviews"][0]["missing_required_terms"]
+    assert "不成立" in result["reviews"][0]["missing_required_terms"]
+    assert result["reviews"][0]["present_forbidden_terms"] == [
+        "空性等于什么都没有",
+        "因果已经被取消",
+        "可以直接推出断灭",
+        "无需二谛",
+    ]
+    assert result["reviews"][0]["missing_required_slots"] == [
+        "proposition_decomposition",
+        "emptiness_boundary",
+    ]
+
+
 def test_answer_contract_review_passes_for_hetuvidya_non_pervasive_sample() -> None:
     result = build_answer_contract_review(
         DEFAULT_FIXTURE,
