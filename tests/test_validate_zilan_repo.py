@@ -183,6 +183,9 @@ queries:
         description: ""
         required_terms: []
         forbidden_terms: invalid
+        required_slots:
+          - label: Bad Label
+            terms: []
     answer_contract_samples:
       - id: Bad ID
         file: missing-answer.md
@@ -212,6 +215,8 @@ queries:
     assert any("answer_contracts.empty_contract.description" in failure for failure in failures)
     assert any("answer_contracts.empty_contract.required_terms" in failure for failure in failures)
     assert any("answer_contracts.empty_contract.forbidden_terms" in failure for failure in failures)
+    assert any("answer_contracts.empty_contract.required_slots[0].label" in failure for failure in failures)
+    assert any("answer_contracts.empty_contract.required_slots[0].terms" in failure for failure in failures)
     assert any("answer_contract_samples id must be kebab-case" in failure for failure in failures)
     assert any("answer_contract_samples Bad ID file missing" in failure for failure in failures)
     assert any("answer_contract_samples Bad ID expected_status" in failure for failure in failures)

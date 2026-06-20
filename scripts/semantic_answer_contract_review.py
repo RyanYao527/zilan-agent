@@ -11,7 +11,7 @@ from semantic_retrieval_dry_run import DEFAULT_FIXTURE, ROOT, FixtureError, buil
 MODE = "semantic-answer-contract-review"
 LIMITATIONS = (
     "Fixture-defined answer contract review only; no provider calls or answer generation.",
-    "Keyword checks are a minimum contract and do not grade doctrinal correctness.",
+    "Term and slot checks are a minimum contract and do not grade doctrinal correctness.",
     "This helper checks explicit answer expectations, not retrieval completeness or platform behavior.",
 )
 
@@ -42,7 +42,14 @@ def _review_contract(contract_id: str, contract: dict[str, Any], answer_text: st
     forbidden_terms = _string_list(contract.get("forbidden_terms"))
     missing_required_terms = [term for term in required_terms if term not in answer_text]
     present_forbidden_terms = [term for term in forbidden_terms if term in answer_text]
-    status = "pass" if not missing_required_terms and not present_forbidden_terms else "fail"
+    required_slots = _mapping_list(contract.get("required_slots"), "required_slots")
+    slot_reviews = [_review_required_slot(slot, answer_text) for slot in required_slots]
+    missing_required_slots = [slot["label"] for slot in slot_reviews if slot["status"] == "fail"]
+    status = (
+        "pass"
+        if not missing_required_terms and not present_forbidden_terms and not missing_required_slots
+        else "fail"
+    )
 
     return {
         "contract_id": contract_id,
@@ -52,6 +59,20 @@ def _review_contract(contract_id: str, contract: dict[str, Any], answer_text: st
         "missing_required_terms": missing_required_terms,
         "forbidden_terms": forbidden_terms,
         "present_forbidden_terms": present_forbidden_terms,
+        "required_slots": slot_reviews,
+        "missing_required_slots": missing_required_slots,
+    }
+
+
+def _review_required_slot(slot: dict[str, Any], answer_text: str) -> dict[str, Any]:
+    label = slot.get("label", "")
+    terms = _string_list(slot.get("terms"))
+    matched_terms = [term for term in terms if term in answer_text]
+    return {
+        "label": label,
+        "terms": terms,
+        "matched_terms": matched_terms,
+        "status": "pass" if matched_terms else "fail",
     }
 
 
@@ -75,6 +96,7 @@ def _render_review_text(result: dict[str, Any]) -> str:
                 f"- Description: {review['description']}",
                 f"- Missing required terms: {', '.join(review['missing_required_terms']) or 'none'}",
                 f"- Present forbidden terms: {', '.join(review['present_forbidden_terms']) or 'none'}",
+                f"- Missing required slots: {', '.join(review.get('missing_required_slots', [])) or 'none'}",
             ]
         )
     return "\n".join(lines).rstrip() + "\n"

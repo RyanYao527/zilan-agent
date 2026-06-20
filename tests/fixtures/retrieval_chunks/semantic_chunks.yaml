@@ -249,6 +249,22 @@ queries:
           - 色形
           - 声
           - 不成立
+        required_slots:
+          - label: argument_decomposition
+            terms:
+              - 论式
+              - 有法
+              - 所立法
+          - label: trairupya_check
+            terms:
+              - 第一相
+              - 三相检查
+              - 遍是宗法性
+          - label: error_classification
+            terms:
+              - 因不成
+              - 错误类型
+              - 不成立
         forbidden_terms:
           - 因三相完全满足
           - 正因成立
@@ -288,6 +304,23 @@ queries:
           - 缘起
           - 矛盾
           - 不立自宗
+        required_slots:
+          - label: opponent_premise
+            terms:
+              - 对方承许
+              - 承许
+          - label: prasanga_move
+            terms:
+              - 归谬
+              - 推出
+          - label: contradiction
+            terms:
+              - 矛盾
+              - 相违
+          - label: thesis_boundary
+            terms:
+              - 不立自宗
+              - 边界
         forbidden_terms:
           - 我方建立自宗
           - 证明诸法绝对不存在
@@ -328,6 +361,24 @@ queries:
           - 检索范围
           - 代表性
           - 待校勘
+        required_slots:
+          - label: search_scope
+            terms:
+              - 检索范围
+              - 本次只基于
+          - label: citation_anchor
+            terms:
+              - CBETA
+              - T02n0099
+              - context/agama/
+          - label: evidence_status
+            terms:
+              - 代表性
+              - 初步证据
+          - label: collation_boundary
+            terms:
+              - 待校勘
+              - 出版级
         forbidden_terms:
           - 已穷尽
           - 无需校勘

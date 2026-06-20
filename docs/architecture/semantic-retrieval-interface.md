@@ -272,7 +272,7 @@ The answer-boundary helper:
 For `SRQ-01`, `practice_boundary` currently requires a visible boundary marker and an explicit "不等于修证" statement,
 and rejects overclaims such as "保证证悟" or "已证空性".
 
-## Answer Contract Review v0
+## Answer Contract Review v0.1
 
 `scripts/semantic_answer_contract_review.py` checks downstream answer text against fixture-defined answer contracts for
 reasoning-error cases.
@@ -294,7 +294,13 @@ The answer-contract helper:
 - checks explicit `answer_contracts` rather than non-chunk practice boundaries
 - can read checked-in sample answers from `tests/fixtures/answers/` through `--sample-id`
 - reports missing required terms and present forbidden terms
+- reports missing required answer slots when `required_slots` are defined
 - does not generate answers, call providers, grade doctrine, or upgrade platform validation
+
+`required_slots` add a shallow structural check on top of required / forbidden terms. A slot passes when at least one
+of its configured terms appears in the answer. This is meant to preserve visible answer parts such as argument
+decomposition, trairupya checking, opponent-premise framing, contradiction analysis, citation anchors, or collation
+boundaries. It is not a substitute for human doctrinal review.
 
 For `SRQ-02`, the current `hetuvidya_error_detection` contract requires the answer to identify the unestablished
 reason, the failed first trairupya check, and the specific `声` / `色形` relation. It rejects answers that say the

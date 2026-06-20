@@ -11,6 +11,7 @@ Zilan already has rich reasoning materials in `context/因明推理引擎.md`, `
 The contract is intentionally conservative:
 
 - It validates data shape, local references, and boundary markers.
+- It can check minimum answer structure through fixture-defined answer slots, but only as an explicitness guard.
 - It does not claim to automatically decide Buddhist doctrinal correctness.
 - It does not replace manual ZC runtime review.
 - It does not change platform validation status.
@@ -110,6 +111,20 @@ Each case must include:
 3. Map ZC-02, ZC-03, and ZC-05 to reasoning cases before changing prompt behavior.
 4. Use runtime review to compare real answers against these cases.
 5. Only after this contract stabilizes, design citation-preserving semantic chunks that can feed these structures.
+
+## Answer Contract v0.1
+
+`tests/fixtures/retrieval_chunks/semantic_chunks.yaml` may attach `answer_contracts` to semantic query fixtures.
+Each answer contract can include:
+
+- `required_terms`: literal terms that must appear somewhere in the answer.
+- `forbidden_terms`: literal terms that must not appear in the answer.
+- `required_slots`: coarse answer-structure slots. Each slot has a `label` and a list of `terms`; at least one term
+  in each slot must appear in the answer.
+
+This slot check is still deliberately shallow. It confirms that an answer visibly includes a structural part such as
+`argument_decomposition`, `trairupya_check`, `opponent_premise`, or `collation_boundary`; it does not grade the
+doctrinal correctness of that part.
 
 ## Rollback Path
 
