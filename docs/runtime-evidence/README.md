@@ -1,6 +1,6 @@
 # Runtime Evidence Excerpts
 
-> Last updated: 2026-06-18
+> Last updated: 2026-06-20
 
 This directory stores small, redacted validation excerpts that support entries in `docs/runtime-validation-log.md`.
 
@@ -36,6 +36,7 @@ Examples:
 - `2026-06-16-volcengine-openai-compatible-zc-02-live.md`
 - `2026-06-18-claude-code-agama-contract-fix-review.md`
 - `2026-06-18-claude-code-madhyamaka-contract-fix-review.md`
+- `2026-06-18-claude-code-post-contract-full-rerun.md`
 - `2026-06-18-claude-code-post-contract-target-review.md`
 - `2026-06-XX-openai-api-zc-02-live.md`
 - `2026-06-XX-claude-code-zc-04-excerpt.md`

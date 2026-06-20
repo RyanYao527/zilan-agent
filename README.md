@@ -84,7 +84,7 @@ cp zilan-agent/agents/zilan-claude-code.md ~/.claude/agents/zilan.md
 ## ✅ Compatibility status · 兼容性状态
 
 - **Platform status**: `agents/openai.yaml` is the machine-readable metadata source; `docs/platform-validation.md` records status definitions, validation evidence, and update rules.
-- **Current validation**: Codex is `tested` for ZC-01 through ZC-06 as of 2026-06-15; Claude Code is `tested` for ZC-01 through ZC-06 through UTF-8 stdin as of 2026-06-16; Volcengine OpenAI-Compatible is `tested` for ZC-01 through ZC-03 as of 2026-06-16; native OpenAI API remains `harness-ready`.
+- **Current validation**: Codex is `tested` for ZC-01 through ZC-06 as of 2026-06-15; Claude Code is `tested` for ZC-01 through ZC-06 through UTF-8 stdin as of the 2026-06-18 post-contract full rerun; Volcengine OpenAI-Compatible is `tested` for ZC-01 through ZC-03 as of 2026-06-16; native OpenAI API remains `harness-ready`.
 - **Runtime boundary**: Codex, Claude Code, native OpenAI API, Volcengine OpenAI-Compatible, DeepSeek, GLM, and Qwen routes must not be described as tested unless the platform validation document says so.
 - **Scholarly collation**: local Agama Markdown is a searchable working corpus; publication-level work should verify against CBETA XML and parallel texts.
 

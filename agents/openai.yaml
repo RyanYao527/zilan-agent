@@ -64,8 +64,8 @@ validation:
     scope: "ZC-01 through ZC-06 rerun after v2.4.5 public-doc depersonalization; ZC-04 through ZC-06 used parent-observed sub-agent spawns with local Markdown context."
   claude_code:
     status: tested
-    date: "2026-06-16"
-    scope: "Claude Code CLI 2.1.169 passed ZC-01 through ZC-06 through UTF-8 stdin with repository agents/zilan-claude-code.md loaded as the system prompt. Windows PowerShell must set $OutputEncoding and [Console]::OutputEncoding to UTF-8 before piping Chinese prompts; background auto-spawn behavior was not separately audited."
+    date: "2026-06-18"
+    scope: "Claude Code CLI 2.1.169 passed ZC-01 through ZC-06 after the Agama and Madhyamaka output-contract changes through UTF-8 stdin with repository agents/zilan-claude-code.md loaded as the system prompt. Windows PowerShell must set $OutputEncoding and [Console]::OutputEncoding to UTF-8 before piping Chinese prompts; background auto-spawn behavior was not separately audited."
   openai_api:
     status: harness-ready
     date: "2026-06-12"

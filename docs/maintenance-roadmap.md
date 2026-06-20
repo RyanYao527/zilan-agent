@@ -1,6 +1,6 @@
 # Maintenance Roadmap
 
-> Last updated: 2026-06-18
+> Last updated: 2026-06-20
 
 This roadmap records engineering maintenance state and next priorities for zilan-agent. It is not platform validation evidence. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -12,8 +12,8 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | Repository invariants | `scripts/validate_zilan_repo.py` checks required files, context files, YAML shape, regression inventory, platform status consistency, agent prompt contracts, and Agama search behavior. |
 | Regression inventory | `CODEX_REGRESSION_TESTS.md` is mirrored by `tests/regression_cases.yaml`; CI validates structure, resources, and case IDs. |
 | Reasoning contract | `docs/architecture/reasoning-contract.md` defines the v0 structured reasoning contract; `docs/architecture/reasoning-contract-review.md` maps current ZC evidence to `ZR-*` cases without claiming a new runtime pass; `docs/architecture/post-contract-runtime-review.md` records committed-evidence gaps against `SRQ-02` through `SRQ-04`; `tests/reasoning_cases.yaml` stores schema-validated seed fixtures. |
-| Platform status | `agents/openai.yaml` is the machine-readable source; `docs/platform-validation.md` is the human-readable validation record. Codex is `tested`; Claude Code is `tested` as of 2026-06-16 when Windows PowerShell stdin is forced to UTF-8. |
-| Runtime validation | `docs/runtime-validation-log.md` records manual runtime validation sessions and transcript availability, including the 2026-06-18 Claude Code post-contract target review, Agama contract fix review for `SRQ-04` / `ZC-05`, and Madhyamaka contract fix review for broad `ZC-05`. |
+| Platform status | `agents/openai.yaml` is the machine-readable source; `docs/platform-validation.md` is the human-readable validation record. Codex is `tested`; Claude Code is `tested` as of the 2026-06-18 post-contract full rerun when Windows PowerShell stdin is forced to UTF-8. |
+| Runtime validation | `docs/runtime-validation-log.md` records manual runtime validation sessions and transcript availability, including the 2026-06-18 Claude Code post-contract target review, Agama contract fix review for `SRQ-04` / `ZC-05`, Madhyamaka contract fix review for broad `ZC-05`, and post-contract full `ZC-01` through `ZC-06` rerun. |
 | Runtime evidence policy | `docs/validation-evidence.md` defines evidence levels, transcript redaction, and status-promotion rules. |
 | Runtime evidence excerpts | `docs/runtime-evidence/` stores small redacted command-output or transcript excerpts that support validation-log entries. |
 | Installation docs | `docs/installation.md` separates Codex, Claude Code, and OpenAI API operating paths. |
@@ -40,7 +40,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 
 | Priority | Track | Work | Done when |
 |---|---|---|---|
-| P0 | Runtime validation | Re-run ZC-01 through ZC-06 after prompt or routing changes and append to `docs/runtime-validation-log.md`. | A dated manual validation note records prompts, observed behavior, failures, transcript status, and checks run. |
+| P0 | Runtime validation | Re-run ZC-01 through ZC-06 after prompt or routing changes and append to `docs/runtime-validation-log.md`. | A dated manual validation note records prompts, observed behavior, failures, transcript status, and checks run. Latest Claude Code post-contract full rerun is recorded for 2026-06-18. |
 | P1 | Validation evidence | Replace summarized baselines with transcript-backed Codex and Claude Code sessions where practical. | Runtime results are auditable without relying on chat history. |
 | P1 | Claude Code route | Keep the UTF-8 stdin validation protocol visible and rerun exact ZC prompts after prompt, tool, or install-path changes. | Claude Code remains `tested` only while dated evidence documents the exact prompts, encoding setup, known limits, and repository checks. |
 | P1 | OpenAI API route | Run the minimal harness in live mode with `OPENAI_API_KEY` and record a dated response summary. | OpenAI API can move from `harness-ready` to `tested` only after live evidence is recorded. |

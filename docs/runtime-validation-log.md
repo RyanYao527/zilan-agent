@@ -1,6 +1,6 @@
 # Runtime Validation Log
 
-> Last updated: 2026-06-16
+> Last updated: 2026-06-20
 
 This log records manual runtime validation evidence for zilan-agent. It complements CI and repository invariant checks; it does not replace `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, pytest, ruff, or platform status maintenance in `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -437,6 +437,39 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - It validates the narrow Madhyamaka prasaṅga output-contract fix and checks that the prior Agama evidence contract still holds for `ZC-05`.
 - It does not validate native OpenAI API or the Responses API endpoint.
 - The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
+
+## 2026-06-18 Claude Code Post-Contract Full Rerun
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.169`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `3b14473` (`Tighten Madhyamaka prasanga output contract (#48)`) |
+| Branch | `codex/claude-post-contract-full-rerun-20260618` |
+| Prompt set | `ZC-01` through `ZC-06` from `tests/regression_cases.yaml` |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact evidence committed at `docs/runtime-evidence/2026-06-18-claude-code-post-contract-full-rerun.md`; raw JSON and answer Markdown kept local only under `C:\tmp\zilan-claude-post-contract-full-rerun-20260618` |
+| Repository checks | `python scripts\semantic_answer_contract_review.py --query-id SRQ-03 --answer-file C:\tmp\zilan-claude-post-contract-full-rerun-20260618\ZC-05.answer.md --json` pass; `python scripts\semantic_answer_contract_review.py --query-id SRQ-04 --answer-file C:\tmp\zilan-claude-post-contract-full-rerun-20260618\ZC-05.answer.md --json` pass; full repository checks run before PR handoff |
+| Overall result | `pass` with limitations: the Claude Code route still requires UTF-8 stdin for Chinese prompts; ZC-04 had minor local-anchor formatting variance; ZC-06 wrote its report to the installed skill reports path rather than the repository |
+
+### Case Results
+
+| Case | Mode | Result | Notes |
+|---|---|---|---|
+| ZC-01 | Skill lightweight dialogue | `pass` | Directly answered the work-feedback scenario, separated event from self-worth, used the five-mental-factor chain, and stated bounded practice guidance. |
+| ZC-02 | Skill concept lookup | `pass` | Explained `因三相` with `遍是宗法性`, `同品定有性`, and `异品遍无性`. |
+| ZC-03 | Skill cross-domain explanation | `pass` | Combined Collected Topics and cognitive-analysis framing, including `不周遍`, `受`, `想`, `瞋`, and a practice / clinical boundary. |
+| ZC-04 | Explicit agent Agama search | `pass` | Produced an Agama no-self search and preliminary classification with CBETA identifiers, local Markdown line anchors, representative evidence, and collation boundaries. Some local references used shorter file anchors instead of the full `context/agama/` prefix; this case was not reviewed against `SRQ-04`. |
+| ZC-05 | Explicit agent cross-domain research | `pass` | Broad cross-domain answer preserved Agama evidence and Madhyamaka prasaṅga boundaries after the prompt-contract fixes; `SRQ-03` and `SRQ-04` contract review both passed. |
+| ZC-06 | Long report output | `pass` | Generated the requested long report and wrote it to `~/.claude/skills/zilan-agent/reports/阿含无我观法门研究报告.md`; local file check confirmed the report exists. |
+
+### Known Limits
+
+- This refreshes Claude Code post-contract validation evidence; it does not validate native OpenAI API or any OpenAI-compatible provider route.
+- Background auto-spawn behavior was not separately audited; ZC-04 through ZC-06 used explicit spawn-style prompts through the loaded Claude Code agent prompt.
+- Full JSON and answer transcripts are not committed. The committed evidence is a compact review summary.
+- The answer-contract helper is a minimum explicitness check, not doctrinal grading.
 
 ## Next Validation Entries
 
