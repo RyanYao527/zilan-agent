@@ -576,6 +576,32 @@ def _check_answer_contracts(query_id: str, contracts: object, field_name: str, f
                 f"{RETRIEVAL_CHUNKS_PATH} {query_id} {field_name}.{key}.forbidden_terms "
                 "must be a list when present."
             )
+        required_slots = contract.get("required_slots", [])
+        if required_slots:
+            if not isinstance(required_slots, list):
+                failures.append(
+                    f"{RETRIEVAL_CHUNKS_PATH} {query_id} {field_name}.{key}.required_slots "
+                    "must be a list when present."
+                )
+                continue
+            for index, slot in enumerate(required_slots):
+                if not isinstance(slot, dict):
+                    failures.append(
+                        f"{RETRIEVAL_CHUNKS_PATH} {query_id} {field_name}.{key}.required_slots[{index}] "
+                        "must be a mapping."
+                    )
+                    continue
+                label = slot.get("label")
+                if not isinstance(label, str) or not re.fullmatch(r"[a-z0-9][a-z0-9_]*", label):
+                    failures.append(
+                        f"{RETRIEVAL_CHUNKS_PATH} {query_id} {field_name}.{key}.required_slots[{index}].label "
+                        "must be snake_case."
+                    )
+                if not _is_non_empty_string_list(slot.get("terms")):
+                    failures.append(
+                        f"{RETRIEVAL_CHUNKS_PATH} {query_id} {field_name}.{key}.required_slots[{index}].terms "
+                        "must be a non-empty string list."
+                    )
 
 
 def _check_retrieval_queries(

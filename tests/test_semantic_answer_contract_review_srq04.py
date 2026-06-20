@@ -15,6 +15,7 @@ def test_answer_contract_review_passes_for_agama_citation_boundary_sample() -> N
     assert result["reviews"][0]["contract_id"] == "agama_citation_boundary"
     assert result["reviews"][0]["missing_required_terms"] == []
     assert result["reviews"][0]["present_forbidden_terms"] == []
+    assert result["reviews"][0]["missing_required_slots"] == []
 
 
 def test_answer_contract_review_fails_for_agama_citation_boundary_negative_sample() -> None:

@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "semantic_answer_contract_review.py"
 
 
-PASSING_ANSWER = "判定：因不成。第一相遍是宗法性不成立：色形不是声的属性。"
+PASSING_ANSWER = "论式判定：因不成。第一相遍是宗法性不成立：色形不是声的属性。"
 
 
 def test_answer_contract_review_passes_when_required_terms_are_present() -> None:
@@ -22,6 +22,8 @@ def test_answer_contract_review_passes_when_required_terms_are_present() -> None
     assert result["reviews"][0]["contract_id"] == "hetuvidya_error_detection"
     assert result["reviews"][0]["missing_required_terms"] == []
     assert result["reviews"][0]["present_forbidden_terms"] == []
+    assert result["reviews"][0]["missing_required_slots"] == []
+    assert result["reviews"][0]["required_slots"][0]["label"] == "argument_decomposition"
 
 
 def test_answer_contract_review_passes_from_checked_in_sample() -> None:
@@ -63,6 +65,19 @@ def test_answer_contract_review_fails_when_required_terms_are_missing() -> None:
     assert "因不成" in result["reviews"][0]["missing_required_terms"]
     assert "遍是宗法性" in result["reviews"][0]["missing_required_terms"]
     assert "不成立" in result["reviews"][0]["missing_required_terms"]
+
+
+def test_answer_contract_review_fails_when_required_slot_is_missing() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-02",
+        answer_text="判定：因不成。遍是宗法性不成立：色形不是声的属性。",
+    )
+
+    assert result["overall_status"] == "fail"
+    assert result["reviews"][0]["missing_required_terms"] == []
+    assert result["reviews"][0]["present_forbidden_terms"] == []
+    assert result["reviews"][0]["missing_required_slots"] == ["argument_decomposition"]
 
 
 def test_answer_contract_review_fails_when_forbidden_terms_are_present() -> None:
