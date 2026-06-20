@@ -9,6 +9,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASES = ROOT / "tests" / "reasoning_cases.yaml"
 MODE = "hetuvidya-validator-v0"
+OUTPUT_SCHEMA = "hetuvidya-validator-output-v0.1"
 LIMITATIONS = (
     "Prototype reads structured tests/reasoning_cases.yaml fixtures only.",
     "No natural-language argument parsing, provider calls, prompt changes, or doctrinal grading.",
@@ -20,6 +21,83 @@ RESULT_LABELS = {
     "non_pervasive": "不周遍",
     "inconclusive_or_contradictory": "不定因或相违因需进一步判别",
     "boundary_only": "边界性推理，不作三相实判",
+}
+
+RESULT_STATUSES = {
+    "positive_reason": "valid",
+    "reason_unestablished": "invalid",
+    "non_pervasive": "invalid",
+    "inconclusive_or_contradictory": "indeterminate",
+    "boundary_only": "boundary",
+}
+
+RESULT_SUMMARIES = {
+    "positive_reason": "All three reason marks are declared as satisfied in the fixture.",
+    "reason_unestablished": "The reason is not established on the subject, so the first reason mark fails.",
+    "non_pervasive": "The reason is established on the subject but fails the opposite-side pervasion check.",
+    "inconclusive_or_contradictory": "The reason cannot decide the thesis without further classification.",
+    "boundary_only": "The fixture records a boundary case and does not claim a full trairupya adjudication.",
+}
+
+CHECK_DEFINITIONS = {
+    "paksa_dharmata": {
+        "name": "遍是宗法性",
+        "role": "subject_reason_relation",
+        "description": "The reason must be established on the subject.",
+    },
+    "sapaksa_sattva": {
+        "name": "同品定有性",
+        "role": "same_side_presence",
+        "description": "The reason must be present in at least one same-side case.",
+    },
+    "vipaksa_asattva": {
+        "name": "异品遍无性",
+        "role": "opposite_side_absence",
+        "description": "The reason must be absent from opposite-side cases.",
+    },
+}
+
+CHECK_STATUS_LABELS = {
+    "pass": "passes",
+    "fail": "fails",
+    "boundary": "boundary",
+    "not_applicable": "not applicable",
+}
+
+DIAGNOSTIC_MESSAGES = {
+    "positive_reason": [],
+    "reason_unestablished": [
+        {
+            "code": "reason_unestablished",
+            "severity": "error",
+            "check_id": "paksa_dharmata",
+            "message": "The reason is not established on the subject.",
+        }
+    ],
+    "non_pervasive": [
+        {
+            "code": "non_pervasive",
+            "severity": "error",
+            "check_id": "vipaksa_asattva",
+            "message": "The reason is not pervaded by the predicate because the opposite-side check fails.",
+        }
+    ],
+    "inconclusive_or_contradictory": [
+        {
+            "code": "inconclusive_or_contradictory",
+            "severity": "warning",
+            "check_id": "vipaksa_asattva",
+            "message": "The reason occurs where it cannot decide the thesis without further classification.",
+        }
+    ],
+    "boundary_only": [
+        {
+            "code": "boundary_only",
+            "severity": "info",
+            "check_id": None,
+            "message": "This case requires boundary language rather than a full three-mark adjudication.",
+        }
+    ],
 }
 
 
@@ -72,6 +150,33 @@ def _select_cases(cases: list[dict[str, Any]], case_id: str | None) -> list[dict
     raise HetuvidyaValidatorError(f"Unknown reasoning case id: {case_id}")
 
 
+def _structured_check(check_id: str, status: Any) -> dict[str, Any]:
+    definition = CHECK_DEFINITIONS[check_id]
+    status_text = status if isinstance(status, str) else "unknown"
+    return {
+        "id": check_id,
+        "name": definition["name"],
+        "role": definition["role"],
+        "status": status_text,
+        "status_label": CHECK_STATUS_LABELS.get(status_text, "unknown"),
+        "description": definition["description"],
+    }
+
+
+def _structured_judgment(result: str, checks: dict[str, Any], *, boundary_required: bool) -> dict[str, Any]:
+    failed_checks = [check_id for check_id, status in checks.items() if status == "fail"]
+    boundary_checks = [check_id for check_id, status in checks.items() if status == "boundary"]
+    return {
+        "result": result,
+        "status": RESULT_STATUSES.get(result, "unknown"),
+        "label": RESULT_LABELS.get(result, "未知判定"),
+        "summary": RESULT_SUMMARIES.get(result, "The fixture result is not recognized by this validator."),
+        "failed_checks": failed_checks,
+        "boundary_checks": boundary_checks,
+        "boundary_statement_required": boundary_required,
+    }
+
+
 def _validate_case(case: dict[str, Any]) -> dict[str, Any]:
     case_id = case.get("id")
     expected = case.get("expected")
@@ -92,6 +197,13 @@ def _validate_case(case: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(result, str) or not result:
         raise HetuvidyaValidatorError(f"{case_id} expected.hetuvidya.result must be a non-empty string.")
 
+    normalized_checks = {
+        "paksa_dharmata": checks.get("paksa_dharmata"),
+        "sapaksa_sattva": checks.get("sapaksa_sattva"),
+        "vipaksa_asattva": checks.get("vipaksa_asattva"),
+    }
+    boundary_required = bool(expected.get("boundary_statement", False))
+
     return {
         "case_id": case_id,
         "title": case.get("title", ""),
@@ -101,14 +213,17 @@ def _validate_case(case: dict[str, Any]) -> dict[str, Any]:
             "predicate": hetuvidya.get("predicate"),
             "reason": hetuvidya.get("reason"),
         },
-        "checks": {
-            "paksa_dharmata": checks.get("paksa_dharmata"),
-            "sapaksa_sattva": checks.get("sapaksa_sattva"),
-            "vipaksa_asattva": checks.get("vipaksa_asattva"),
-        },
+        "checks": normalized_checks,
+        "trairupya_checks": [
+            _structured_check("paksa_dharmata", normalized_checks["paksa_dharmata"]),
+            _structured_check("sapaksa_sattva", normalized_checks["sapaksa_sattva"]),
+            _structured_check("vipaksa_asattva", normalized_checks["vipaksa_asattva"]),
+        ],
         "result": result,
         "classification": RESULT_LABELS.get(result, "未知判定"),
-        "boundary_statement_required": expected.get("boundary_statement", False),
+        "judgment": _structured_judgment(result, normalized_checks, boundary_required=boundary_required),
+        "diagnostics": DIAGNOSTIC_MESSAGES.get(result, []),
+        "boundary_statement_required": boundary_required,
     }
 
 
@@ -124,6 +239,7 @@ def build_hetuvidya_validation(cases_path: Path = DEFAULT_CASES, *, case_id: str
 
     return {
         "mode": MODE,
+        "output_schema": OUTPUT_SCHEMA,
         "source": _display_path(cases_path),
         "case_id": case_id,
         "count": len(validations),
@@ -138,16 +254,22 @@ def _print_text(result: dict[str, Any]) -> None:
     for item in result["validations"]:
         argument = item["argument"]
         checks = item["checks"]
+        judgment = item["judgment"]
         print("")
         print(f"{item['case_id']}: {item['classification']}")
         print(f"  prompt: {item['prompt']}")
         print(f"  argument: 有法={argument['subject']} / 所立法={argument['predicate']} / 因={argument['reason']}")
+        print(f"  judgment: {judgment['status']} / {judgment['result']}")
         print(
             "  checks: "
             f"遍是宗法性={checks['paksa_dharmata']}, "
             f"同品定有性={checks['sapaksa_sattva']}, "
             f"异品遍无性={checks['vipaksa_asattva']}"
         )
+        if item["diagnostics"]:
+            print("  diagnostics:")
+            for diagnostic in item["diagnostics"]:
+                print(f"  - {diagnostic['code']}: {diagnostic['message']}")
     print("")
     print("limitations:")
     for item in result["limitations"]:
