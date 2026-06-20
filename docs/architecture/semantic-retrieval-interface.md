@@ -282,6 +282,8 @@ Example:
 ```powershell
 python scripts/semantic_answer_contract_review.py --query-id SRQ-02 --sample-id srq02-hetuvidya-error-pass --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-02 --sample-id srq02-hetuvidya-error-fail --json
+python scripts/semantic_answer_contract_review.py --query-id SRQ-05 --sample-id srq05-hetuvidya-non-pervasive-pass --json
+python scripts/semantic_answer_contract_review.py --query-id SRQ-05 --sample-id srq05-hetuvidya-non-pervasive-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-03 --sample-id srq03-madhyamaka-prasanga-pass --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-03 --sample-id srq03-madhyamaka-prasanga-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-04 --sample-id srq04-agama-citation-boundary-pass --json

@@ -237,3 +237,32 @@ cases:
         citation_required: true
         search_scope: representative_search
         collation_boundary: true
+
+  - id: ZR-07
+    title: 不周遍样例
+    source_regression_cases:
+      - ZC-02
+    contracts:
+      - hetuvidya
+    prompt: "检验论式：声，应是无常，以是所知故。"
+    reference_files:
+      - context/因明推理引擎.md
+      - context/摄类学工具箱.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 有法
+        - 所立法
+        - 因
+        - 第一相校验
+        - 第三相校验
+        - 错误类型
+      hetuvidya:
+        subject: 声
+        predicate: 无常
+        reason: 所知
+        result: non_pervasive
+        checks:
+          paksa_dharmata: pass
+          sapaksa_sattva: pass
+          vipaksa_asattva: fail
