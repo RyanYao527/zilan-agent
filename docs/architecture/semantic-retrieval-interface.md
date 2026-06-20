@@ -137,6 +137,7 @@ python scripts/semantic_retrieval_dry_run.py --query-id SRQ-03 --json
 python scripts/semantic_retrieval_dry_run.py --query-id SRQ-04 --json
 python scripts/semantic_retrieval_dry_run.py --query-id SRQ-05 --json
 python scripts/semantic_retrieval_dry_run.py --query-id SRQ-06 --json
+python scripts/semantic_retrieval_dry_run.py --query-id SRQ-07 --json
 ```
 
 The helper:
@@ -258,6 +259,10 @@ subject-side establishment from a failed opposite-side pervasion check.
 to the trairupya context chunk plus the `ZR-08` reasoning case. It deliberately checks that the answer marks the reason
 as occurring in both same-side and opposite-side cases, so it cannot decide the thesis.
 
+`SRQ-07` is a narrow Collected Topics total/part fixture. It routes the question "用摄类学检验命题：这份报告有三处问题，所以我这个人没有价值。"
+to the total/part context chunk plus the `ZR-02` work-feedback reasoning case. It deliberately checks that local project
+or report defects are not treated as a valid pervasion to whole-person value denial.
+
 ## Answer Boundary Review v0
 
 `scripts/semantic_answer_boundary_review.py` checks downstream answer text against fixture-defined non-chunk boundary
@@ -296,6 +301,8 @@ python scripts/semantic_answer_contract_review.py --query-id SRQ-05 --sample-id 
 python scripts/semantic_answer_contract_review.py --query-id SRQ-05 --sample-id srq05-hetuvidya-non-pervasive-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-06 --sample-id srq06-hetuvidya-indeterminate-pass --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-06 --sample-id srq06-hetuvidya-indeterminate-fail --json
+python scripts/semantic_answer_contract_review.py --query-id SRQ-07 --sample-id srq07-collected-topics-total-part-pass --json
+python scripts/semantic_answer_contract_review.py --query-id SRQ-07 --sample-id srq07-collected-topics-total-part-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-03 --sample-id srq03-madhyamaka-prasanga-pass --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-03 --sample-id srq03-madhyamaka-prasanga-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-04 --sample-id srq04-agama-citation-boundary-pass --json
@@ -329,6 +336,11 @@ For `SRQ-06`, the current `hetuvidya_indeterminate_detection` contract requires 
 appears in both same-side and opposite-side cases for the claim that `声` is `常`, so the reason is an indeterminate
 reason and cannot decide the thesis. It rejects answers that call the reason established or classify this fixture as a
 contradictory reason.
+
+For `SRQ-07`, the current `collected_topics_total_part_error` contract requires the answer to identify the `总与别`
+or total/part confusion, mark the inference from a report defect to whole-person value denial as `不周遍`, and preserve
+the distinction between a local `别法` and the larger `总法`. It rejects answers that directly endorse the self-denial
+inference or say total/part distinction is unnecessary.
 
 For `SRQ-03`, the current `madhyamaka_prasanga_boundary` contract requires the answer to name the opponent's premise,
 run a prasaṅga, state the `自性有` / `缘起` contradiction, and preserve the `不立自宗` boundary. It rejects answers that

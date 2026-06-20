@@ -167,6 +167,48 @@ def test_dry_run_returns_hetuvidya_indeterminate_fixture_for_srq06() -> None:
     assert result["chunks"][1]["text"] == "检验论式：声，应是常，以是所知故。"
 
 
+def test_dry_run_returns_collected_topics_total_part_fixture_for_srq07() -> None:
+    result = build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-07")
+
+    assert result["query"] == "用摄类学检验命题：这份报告有三处问题，所以我这个人没有价值。"
+    assert result["needs"] == ["collected_topics"]
+    assert result["non_chunk_needs"] == []
+    assert result["expected_chunk_ids"] == [
+        "context:collected-topics:total-part",
+        "argument:work-feedback:non-pervasive",
+    ]
+    assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
+    assert result["answer_contracts"]["collected_topics_total_part_error"]["required_terms"] == [
+        "摄类学",
+        "总与别",
+        "别法",
+        "总法",
+        "不周遍",
+        "报告",
+        "我这个人",
+        "不成立",
+    ]
+    assert result["answer_contracts"]["collected_topics_total_part_error"]["forbidden_terms"] == [
+        "所以我没有价值",
+        "可以直接推出",
+        "不需区分总别",
+    ]
+    assert result["answer_contract_samples"] == [
+        {
+            "id": "srq07-collected-topics-total-part-pass",
+            "file": "tests/fixtures/answers/srq07-collected-topics-total-part-pass.md",
+            "expected_status": "pass",
+        },
+        {
+            "id": "srq07-collected-topics-total-part-fail",
+            "file": "tests/fixtures/answers/srq07-collected-topics-total-part-fail.md",
+            "expected_status": "fail",
+        },
+    ]
+    assert result["chunks"][0]["text"] == "总与别 —— 继承/子类关系"
+    assert result["chunks"][1]["text"] == "被批评者"
+
+
 def test_dry_run_returns_madhyamaka_prasanga_fixture_for_srq03() -> None:
     result = build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-03")
 
