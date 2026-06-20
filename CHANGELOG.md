@@ -35,6 +35,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added `SRQ-06` / `ZR-08` as a fixture-only Hetuvidya `不定因` error-detection case for “声，应是常，以是所知故”.
 - Added a minimal `scripts/hetuvidya_validator.py` prototype that reads structured `tests/reasoning_cases.yaml` Hetuvidya fixtures and emits deterministic validation results without model calls or natural-language parsing.
 - Added `SRQ-07` as a fixture-only Collected Topics total/part error case for local-feedback-to-whole-self overgeneralization.
+- Added `SRQ-08` / `ZR-09` as a fixture-only Madhyamaka nihilism-boundary case that rejects reading emptiness as cancellation of dependent arising or causality.
 
 ## [2.4.8] - 2026-06-17
 

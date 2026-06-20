@@ -296,3 +296,31 @@ cases:
           paksa_dharmata: pass
           sapaksa_sattva: pass
           vipaksa_asattva: fail
+
+  - id: ZR-09
+    title: 中观断灭误读样例
+    source_regression_cases:
+      - ZC-05
+    contracts:
+      - madhyamaka_prasanga
+    prompt: "既然诸法无自性，是否可以推出因果也不存在？"
+    reference_files:
+      - context/中观应成精要.md
+      - context/摄类学工具箱.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 命题拆解
+        - 无自性边界
+        - 缘起与因果
+        - 断灭误读
+        - 二谛边界
+      madhyamaka_prasanga:
+        opponent_premise: 无自性等于什么都没有
+        accepted_commitments:
+          - 若完全不存在，则不能解释缘起显现与因果作用
+          - 中观只破自性有，不破世俗缘起安立
+        contradiction:
+          - 承许缘起而否定因果作用自相矛盾
+          - 将空性理解为断灭会落入中观所破边
+        no_independent_thesis: true

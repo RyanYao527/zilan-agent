@@ -203,6 +203,22 @@ chunks:
       reasoning_roles:
         - madhyamaka_prasanga
 
+  - chunk_id: reasoning:ZR-09:madhyamaka-nihilism-boundary
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 300
+    end_line: 326
+    citation: "tests/reasoning_cases.yaml:300-326"
+    passage_citation: "tests/reasoning_cases.yaml:300-326"
+    text: "既然诸法无自性，是否可以推出因果也不存在？"
+    metadata:
+      topics:
+        - 中观
+        - 断灭误读
+        - 缘起因果
+      reasoning_roles:
+        - madhyamaka_prasanga
+
   - chunk_id: reasoning:ZR-05:agama-evidence
     chunk_type: reasoning_case
     source_file: tests/reasoning_cases.yaml
@@ -575,6 +591,71 @@ queries:
     expected_chunk_ids:
       - context:madhyamaka:prasanga-method
       - reasoning:ZR-04:madhyamaka-prasanga
+
+  - id: SRQ-08
+    query: "既然诸法无自性，是否可以推出因果也不存在？"
+    needs:
+      - madhyamaka_prasanga
+    answer_contracts:
+      madhyamaka_nihilism_boundary:
+        description: "Answer must reject the nihilistic reading that emptiness cancels dependent arising or causality."
+        required_terms:
+          - 中观
+          - 无自性
+          - 只破自性有
+          - 缘起
+          - 因果
+          - 断灭
+          - 二谛
+          - 不成立
+        required_slots:
+          - label: proposition_decomposition
+            terms:
+              - 命题
+              - 前提
+              - 结论
+          - label: emptiness_boundary
+            terms:
+              - 无自性
+              - 只破自性有
+          - label: dependent_arising_check
+            terms:
+              - 缘起
+              - 因果
+          - label: nihilism_error
+            terms:
+              - 断灭
+              - 不成立
+          - label: two_truths_boundary
+            terms:
+              - 二谛
+              - 世俗
+        forbidden_terms:
+          - 空性等于什么都没有
+          - 因果已经被取消
+          - 可以直接推出断灭
+          - 无需二谛
+    answer_contract_samples:
+      - id: srq08-madhyamaka-nihilism-boundary-pass
+        file: tests/fixtures/answers/srq08-madhyamaka-nihilism-boundary-pass.md
+        expected_status: pass
+      - id: srq08-madhyamaka-nihilism-boundary-fail
+        file: tests/fixtures/answers/srq08-madhyamaka-nihilism-boundary-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 中观
+        - 无自性
+        - 缘起
+      modern:
+        - 因果
+        - 断灭
+    expected_sources:
+      - context/中观应成精要.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:madhyamaka:prasanga-method
+      - reasoning:ZR-09:madhyamaka-nihilism-boundary
 
   - id: SRQ-04
     query: "查四阿含中关于无我的经文，并说明检索范围与待校勘边界。"
