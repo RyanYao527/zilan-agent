@@ -266,3 +266,33 @@ cases:
           paksa_dharmata: pass
           sapaksa_sattva: pass
           vipaksa_asattva: fail
+
+  - id: ZR-08
+    title: 不定因样例
+    source_regression_cases:
+      - ZC-02
+    contracts:
+      - hetuvidya
+    prompt: "检验论式：声，应是常，以是所知故。"
+    reference_files:
+      - context/因明推理引擎.md
+      - context/摄类学工具箱.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 有法
+        - 所立法
+        - 因
+        - 第一相校验
+        - 同品校验
+        - 异品校验
+        - 错误类型
+      hetuvidya:
+        subject: 声
+        predicate: 常
+        reason: 所知
+        result: inconclusive_or_contradictory
+        checks:
+          paksa_dharmata: pass
+          sapaksa_sattva: pass
+          vipaksa_asattva: fail

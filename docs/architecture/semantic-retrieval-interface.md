@@ -135,6 +135,8 @@ python scripts/semantic_retrieval_dry_run.py --query-id SRQ-01 --json
 python scripts/semantic_retrieval_dry_run.py --query-id SRQ-02 --json
 python scripts/semantic_retrieval_dry_run.py --query-id SRQ-03 --json
 python scripts/semantic_retrieval_dry_run.py --query-id SRQ-04 --json
+python scripts/semantic_retrieval_dry_run.py --query-id SRQ-05 --json
+python scripts/semantic_retrieval_dry_run.py --query-id SRQ-06 --json
 ```
 
 The helper:
@@ -248,6 +250,14 @@ to representative Agama evidence chunks plus the `ZR-05` Agama-evidence reasonin
 anchors, search-scope language, representative-status language, and the collation boundary so an answer does not claim
 exhaustive search, skip collation, or present local fixture evidence as a publication-ready critical edition.
 
+`SRQ-05` is a narrow Hetuvidya non-pervasive fixture. It routes the question "检验论式：声，应是无常，以是所知故。"
+to the trairupya context chunk plus the `ZR-07` reasoning case. It deliberately checks that the answer distinguishes
+subject-side establishment from a failed opposite-side pervasion check.
+
+`SRQ-06` is a narrow Hetuvidya indeterminate-reason fixture. It routes the question "检验论式：声，应是常，以是所知故。"
+to the trairupya context chunk plus the `ZR-08` reasoning case. It deliberately checks that the answer marks the reason
+as occurring in both same-side and opposite-side cases, so it cannot decide the thesis.
+
 ## Answer Boundary Review v0
 
 `scripts/semantic_answer_boundary_review.py` checks downstream answer text against fixture-defined non-chunk boundary
@@ -284,6 +294,8 @@ python scripts/semantic_answer_contract_review.py --query-id SRQ-02 --sample-id 
 python scripts/semantic_answer_contract_review.py --query-id SRQ-02 --sample-id srq02-hetuvidya-error-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-05 --sample-id srq05-hetuvidya-non-pervasive-pass --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-05 --sample-id srq05-hetuvidya-non-pervasive-fail --json
+python scripts/semantic_answer_contract_review.py --query-id SRQ-06 --sample-id srq06-hetuvidya-indeterminate-pass --json
+python scripts/semantic_answer_contract_review.py --query-id SRQ-06 --sample-id srq06-hetuvidya-indeterminate-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-03 --sample-id srq03-madhyamaka-prasanga-pass --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-03 --sample-id srq03-madhyamaka-prasanga-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-04 --sample-id srq04-agama-citation-boundary-pass --json
@@ -307,6 +319,16 @@ boundaries. It is not a substitute for human doctrinal review.
 For `SRQ-02`, the current `hetuvidya_error_detection` contract requires the answer to identify the unestablished
 reason, the failed first trairupya check, and the specific `声` / `色形` relation. It rejects answers that say the
 three marks of the reason are fully satisfied or that the reason is established.
+
+For `SRQ-05`, the current `hetuvidya_non_pervasive_detection` contract requires the answer to identify that `所知`
+is established on `声` but fails the opposite-side pervasion check because `常法` can also be knowable. It rejects
+answers that say the reason fully satisfies the three marks, that the reason is established, or that the first check
+failed.
+
+For `SRQ-06`, the current `hetuvidya_indeterminate_detection` contract requires the answer to identify that `所知`
+appears in both same-side and opposite-side cases for the claim that `声` is `常`, so the reason is an indeterminate
+reason and cannot decide the thesis. It rejects answers that call the reason established or classify this fixture as a
+contradictory reason.
 
 For `SRQ-03`, the current `madhyamaka_prasanga_boundary` contract requires the answer to name the opponent's premise,
 run a prasaṅga, state the `自性有` / `缘起` contradiction, and preserve the `不立自宗` boundary. It rejects answers that

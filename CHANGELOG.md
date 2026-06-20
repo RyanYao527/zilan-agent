@@ -32,6 +32,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added Claude Code post-contract full `ZC-01` through `ZC-06` rerun evidence after the Agama and Madhyamaka output-contract fixes.
 - Added answer-contract v0.1 required slots so fixture reviews can check shallow answer structure in addition to required and forbidden terms.
 - Added `SRQ-05` / `ZR-07` as a fixture-only Hetuvidya `不周遍` error-detection case for “声，应是无常，以是所知故”.
+- Added `SRQ-06` / `ZR-08` as a fixture-only Hetuvidya `不定因` error-detection case for “声，应是常，以是所知故”.
 
 ## [2.4.8] - 2026-06-17
 
