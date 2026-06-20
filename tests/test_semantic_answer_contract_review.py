@@ -263,3 +263,43 @@ def test_answer_contract_review_fails_for_hetuvidya_indeterminate_negative_sampl
         "subject_check",
         "error_classification",
     ]
+
+
+def test_answer_contract_review_passes_for_collected_topics_total_part_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-07",
+        sample_id="srq07-collected-topics-total-part-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["expected_status"] == "pass"
+    assert result["expected_status_match"] is True
+    assert result["reviews"][0]["contract_id"] == "collected_topics_total_part_error"
+    assert result["reviews"][0]["missing_required_terms"] == []
+    assert result["reviews"][0]["missing_required_slots"] == []
+    assert result["reviews"][0]["present_forbidden_terms"] == []
+
+
+def test_answer_contract_review_fails_for_collected_topics_total_part_negative_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-07",
+        sample_id="srq07-collected-topics-total-part-fail",
+    )
+
+    assert result["overall_status"] == "fail"
+    assert result["expected_status"] == "fail"
+    assert result["expected_status_match"] is True
+    assert "总与别" in result["reviews"][0]["missing_required_terms"]
+    assert "不周遍" in result["reviews"][0]["missing_required_terms"]
+    assert result["reviews"][0]["present_forbidden_terms"] == [
+        "所以我没有价值",
+        "可以直接推出",
+        "不需区分总别",
+    ]
+    assert result["reviews"][0]["missing_required_slots"] == [
+        "proposition_decomposition",
+        "pervasion_check",
+        "error_classification",
+    ]
