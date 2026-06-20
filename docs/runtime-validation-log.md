@@ -471,6 +471,32 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - Full JSON and answer transcripts are not committed. The committed evidence is a compact review summary.
 - The answer-contract helper is a minimum explicitness check, not doctrinal grading.
 
+## 2026-06-20 Claude Code SRQ-05 Spot Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.169`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `8ea2144` (`Add Hetuvidya non-pervasive fixture (#51)`) |
+| Prompt set | One target `SRQ-05`-style Hetuvidya prompt: `孜澜，检验论式：声，应是无常，以是所知故。` |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console before passing Chinese prompt text to `claude -p` |
+| Transcript status | Compact answer excerpt committed at `docs/runtime-evidence/2026-06-20-claude-code-srq-05-spot-review-answer.md`; raw transcript not committed |
+| Repository checks | `python scripts\semantic_answer_contract_review.py --query-id SRQ-05 --answer-file docs\runtime-evidence\2026-06-20-claude-code-srq-05-spot-review-answer.md --json` pass; full repository checks run before PR handoff |
+| Overall result | `target-pass`: Claude Code's direct SRQ-05 answer satisfies the Hetuvidya `不周遍` answer contract; no platform status change |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---|---|
+| `2026-06-20-claude-code-srq-05-spot-review-answer.md` | `SRQ-05` | `pass` | Identifies the论式 decomposition, first-check success, failed `异品遍无性`, `常法` counterexamples, and `不周遍` classification. |
+
+### Known Limits
+
+- This is a target-contract spot review, not a full ZC-01 through ZC-06 platform rerun.
+- It does not validate native OpenAI API or any OpenAI-compatible provider route.
+- The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:
