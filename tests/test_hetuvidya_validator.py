@@ -14,6 +14,7 @@ def test_hetuvidya_validator_returns_reason_unestablished_case() -> None:
     validation = result["validations"][0]
 
     assert result["mode"] == "hetuvidya-validator-v0"
+    assert result["output_schema"] == "hetuvidya-validator-output-v0.1"
     assert result["source"] == "tests/reasoning_cases.yaml"
     assert result["count"] == 1
     assert validation["case_id"] == "ZR-03"
@@ -28,6 +29,49 @@ def test_hetuvidya_validator_returns_reason_unestablished_case() -> None:
         "sapaksa_sattva": "not_applicable",
         "vipaksa_asattva": "not_applicable",
     }
+    assert validation["trairupya_checks"] == [
+        {
+            "id": "paksa_dharmata",
+            "name": "遍是宗法性",
+            "role": "subject_reason_relation",
+            "status": "fail",
+            "status_label": "fails",
+            "description": "The reason must be established on the subject.",
+        },
+        {
+            "id": "sapaksa_sattva",
+            "name": "同品定有性",
+            "role": "same_side_presence",
+            "status": "not_applicable",
+            "status_label": "not applicable",
+            "description": "The reason must be present in at least one same-side case.",
+        },
+        {
+            "id": "vipaksa_asattva",
+            "name": "异品遍无性",
+            "role": "opposite_side_absence",
+            "status": "not_applicable",
+            "status_label": "not applicable",
+            "description": "The reason must be absent from opposite-side cases.",
+        },
+    ]
+    assert validation["judgment"] == {
+        "result": "reason_unestablished",
+        "status": "invalid",
+        "label": "因不成",
+        "summary": "The reason is not established on the subject, so the first reason mark fails.",
+        "failed_checks": ["paksa_dharmata"],
+        "boundary_checks": [],
+        "boundary_statement_required": True,
+    }
+    assert validation["diagnostics"] == [
+        {
+            "code": "reason_unestablished",
+            "severity": "error",
+            "check_id": "paksa_dharmata",
+            "message": "The reason is not established on the subject.",
+        }
+    ]
 
 
 def test_hetuvidya_validator_returns_all_hetuvidya_cases_by_default() -> None:
@@ -66,6 +110,9 @@ def test_hetuvidya_validator_cli_json_output_is_machine_readable() -> None:
     data = json.loads(result.stdout)
 
     assert data["mode"] == "hetuvidya-validator-v0"
+    assert data["output_schema"] == "hetuvidya-validator-output-v0.1"
     assert data["count"] == 1
     assert data["validations"][0]["case_id"] == "ZR-07"
     assert data["validations"][0]["classification"] == "不周遍"
+    assert data["validations"][0]["judgment"]["status"] == "invalid"
+    assert data["validations"][0]["judgment"]["failed_checks"] == ["vipaksa_asattva"]

@@ -44,6 +44,11 @@ Required structure:
 
 This contract only records the expected shape and declared result. It does not prove that the declared result is correct.
 
+`scripts/hetuvidya_validator.py` consumes only checked-in `hetuvidya` fixtures and emits
+`hetuvidya-validator-output-v0.1`. The output preserves legacy fields such as `checks` and `classification`, and adds
+structured `trairupya_checks`, `judgment`, and `diagnostics` fields so future tooling can consume verdicts without
+claiming natural-language parsing or doctrinal grading.
+
 ### `collected_topics`
 
 Use for concept, category, pervasion, tetralemma, and debate-protocol analysis.
