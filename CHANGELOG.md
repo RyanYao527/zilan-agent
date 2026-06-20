@@ -33,6 +33,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added answer-contract v0.1 required slots so fixture reviews can check shallow answer structure in addition to required and forbidden terms.
 - Added `SRQ-05` / `ZR-07` as a fixture-only Hetuvidya `不周遍` error-detection case for “声，应是无常，以是所知故”.
 - Added `SRQ-06` / `ZR-08` as a fixture-only Hetuvidya `不定因` error-detection case for “声，应是常，以是所知故”.
+- Added a minimal `scripts/hetuvidya_validator.py` prototype that reads structured `tests/reasoning_cases.yaml` Hetuvidya fixtures and emits deterministic validation results without model calls or natural-language parsing.
 
 ## [2.4.8] - 2026-06-17
 
