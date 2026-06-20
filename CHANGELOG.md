@@ -29,6 +29,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added repository validation for `tests/reasoning_cases.yaml` schema, local references, allowed contract families, and boundary-statement fields without changing runtime platform status.
 - Added an explicit Agama evidence output contract to agent prompts and OpenAI metadata, requiring search scope, CBETA/local `context/agama/` anchors, representative-status wording, and collation boundaries.
 - Added an explicit Madhyamaka prasaṅga output contract to agent prompts and OpenAI metadata so broad answers preserve `对方承许`, `归谬`, `自性有`, `缘起`, `矛盾`, and `不立自宗` boundaries.
+- Added Claude Code post-contract full `ZC-01` through `ZC-06` rerun evidence after the Agama and Madhyamaka output-contract fixes.
 
 ## [2.4.8] - 2026-06-17
 
