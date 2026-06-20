@@ -87,6 +87,45 @@ def test_dry_run_returns_hetuvidya_error_fixture_for_srq02() -> None:
     assert result["chunks"][1]["text"] == "检验论式：声，应是可见，以是色形故。"
 
 
+def test_dry_run_returns_hetuvidya_non_pervasive_fixture_for_srq05() -> None:
+    result = build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-05")
+
+    assert result["query"] == "检验论式：声，应是无常，以是所知故。"
+    assert result["needs"] == ["hetuvidya"]
+    assert result["non_chunk_needs"] == []
+    assert result["expected_chunk_ids"] == [
+        "context:hetuvidya:trairupya",
+        "reasoning:ZR-07:hetuvidya-non-pervasive",
+    ]
+    assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
+    assert result["answer_contracts"]["hetuvidya_non_pervasive_detection"]["required_terms"] == [
+        "不周遍",
+        "遍是宗法性",
+        "异品遍无性",
+        "所知",
+        "常法",
+        "不成立",
+    ]
+    assert result["answer_contracts"]["hetuvidya_non_pervasive_detection"]["forbidden_terms"] == [
+        "因三相完全满足",
+        "正因成立",
+        "第一相不成立",
+    ]
+    assert result["answer_contract_samples"] == [
+        {
+            "id": "srq05-hetuvidya-non-pervasive-pass",
+            "file": "tests/fixtures/answers/srq05-hetuvidya-non-pervasive-pass.md",
+            "expected_status": "pass",
+        },
+        {
+            "id": "srq05-hetuvidya-non-pervasive-fail",
+            "file": "tests/fixtures/answers/srq05-hetuvidya-non-pervasive-fail.md",
+            "expected_status": "fail",
+        },
+    ]
+    assert result["chunks"][1]["text"] == "检验论式：声，应是无常，以是所知故。"
+
+
 def test_dry_run_returns_madhyamaka_prasanga_fixture_for_srq03() -> None:
     result = build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-03")
 

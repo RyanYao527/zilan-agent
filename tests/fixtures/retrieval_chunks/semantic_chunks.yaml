@@ -107,6 +107,22 @@ chunks:
       reasoning_roles:
         - hetuvidya
 
+  - chunk_id: reasoning:ZR-07:hetuvidya-non-pervasive
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 247
+    end_line: 247
+    citation: "tests/reasoning_cases.yaml:247"
+    passage_citation: "tests/reasoning_cases.yaml:247"
+    text: "检验论式：声，应是无常，以是所知故。"
+    metadata:
+      topics:
+        - 不周遍
+        - 因三相
+        - 声无常
+      reasoning_roles:
+        - hetuvidya
+
   - chunk_id: context:collected-topics:prasanga-runtime
     chunk_type: context_topic
     source_file: context/摄类学工具箱.md
@@ -289,6 +305,65 @@ queries:
     expected_chunk_ids:
       - context:hetuvidya:trairupya
       - reasoning:ZR-03:hetuvidya-error
+
+  - id: SRQ-05
+    query: "检验论式：声，应是无常，以是所知故。"
+    needs:
+      - hetuvidya
+    answer_contracts:
+      hetuvidya_non_pervasive_detection:
+        description: "Answer must identify that the reason is established on the subject but not pervaded by the predicate."
+        required_terms:
+          - 不周遍
+          - 遍是宗法性
+          - 异品遍无性
+          - 所知
+          - 常法
+          - 不成立
+        required_slots:
+          - label: argument_decomposition
+            terms:
+              - 论式
+              - 有法
+              - 所立法
+          - label: subject_check
+            terms:
+              - 第一相
+              - 遍是宗法性
+          - label: pervasion_failure
+            terms:
+              - 不周遍
+              - 异品遍无性
+              - 第三相
+          - label: counterexample
+            terms:
+              - 常法
+              - 异品
+        forbidden_terms:
+          - 因三相完全满足
+          - 正因成立
+          - 第一相不成立
+    answer_contract_samples:
+      - id: srq05-hetuvidya-non-pervasive-pass
+        file: tests/fixtures/answers/srq05-hetuvidya-non-pervasive-pass.md
+        expected_status: pass
+      - id: srq05-hetuvidya-non-pervasive-fail
+        file: tests/fixtures/answers/srq05-hetuvidya-non-pervasive-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 不周遍
+        - 异品遍无性
+        - 因三相
+      modern:
+        - 声无常
+        - 所知
+    expected_sources:
+      - context/因明推理引擎.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:hetuvidya:trairupya
+      - reasoning:ZR-07:hetuvidya-non-pervasive
 
   - id: SRQ-03
     query: "若有人承许诸法自性有，如何用应成法指出矛盾？"

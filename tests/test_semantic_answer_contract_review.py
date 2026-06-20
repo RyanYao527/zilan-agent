@@ -187,3 +187,44 @@ def test_answer_contract_review_fails_for_madhyamaka_prasanga_negative_sample() 
         "证明诸法绝对不存在",
         "断灭",
     ]
+
+
+def test_answer_contract_review_passes_for_hetuvidya_non_pervasive_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-05",
+        sample_id="srq05-hetuvidya-non-pervasive-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["expected_status"] == "pass"
+    assert result["expected_status_match"] is True
+    assert result["reviews"][0]["contract_id"] == "hetuvidya_non_pervasive_detection"
+    assert result["reviews"][0]["missing_required_terms"] == []
+    assert result["reviews"][0]["missing_required_slots"] == []
+    assert result["reviews"][0]["present_forbidden_terms"] == []
+
+
+def test_answer_contract_review_fails_for_hetuvidya_non_pervasive_negative_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-05",
+        sample_id="srq05-hetuvidya-non-pervasive-fail",
+    )
+
+    assert result["overall_status"] == "fail"
+    assert result["expected_status"] == "fail"
+    assert result["expected_status_match"] is True
+    assert result["reviews"][0]["missing_required_terms"] == [
+        "不周遍",
+        "遍是宗法性",
+        "异品遍无性",
+        "常法",
+        "不成立",
+    ]
+    assert result["reviews"][0]["present_forbidden_terms"] == ["因三相完全满足", "正因成立"]
+    assert result["reviews"][0]["missing_required_slots"] == [
+        "subject_check",
+        "pervasion_failure",
+        "counterexample",
+    ]
