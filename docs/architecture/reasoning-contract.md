@@ -49,6 +49,11 @@ This contract only records the expected shape and declared result. It does not p
 structured `trairupya_checks`, `judgment`, and `diagnostics` fields so future tooling can consume verdicts without
 claiming natural-language parsing or doctrinal grading.
 
+`scripts/reasoning_contract_runner.py` combines the local semantic retrieval dry run, role coverage review,
+answer-contract review, and Hetuvidya structured validator into one fixture-only entrypoint. Its `pass`, `fail`, and
+`review_needed` statuses are contract-review statuses only; they do not generate answers, call providers, grade doctrine,
+or change platform validation status.
+
 ### `collected_topics`
 
 Use for concept, category, pervasion, tetralemma, and debate-protocol analysis.

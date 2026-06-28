@@ -361,6 +361,27 @@ For `SRQ-04`, the current `agama_citation_boundary` contract requires CBETA iden
 explicit search-scope language, representative-status language, and a `待校勘` boundary. It rejects answers that claim the
 search is exhausted, say collation is unnecessary, or present the local working corpus as a definitive edition.
 
+## Reasoning Contract Runner v0
+
+`scripts/reasoning_contract_runner.py` combines the fixture-only retrieval dry run, semantic role coverage,
+answer-contract review, and the Hetuvidya structured validator into one local review command.
+
+Example:
+
+```powershell
+python scripts/reasoning_contract_runner.py --query-id SRQ-05 --sample-id srq05-hetuvidya-non-pervasive-pass --json
+python scripts/reasoning_contract_runner.py --query-id SRQ-08 --sample-id srq08-madhyamaka-nihilism-boundary-pass --json
+python scripts/reasoning_contract_runner.py --query-id SRQ-05 --json
+```
+
+The runner reports `pass`, `fail`, or `review_needed` for the combined local contract review. `review_needed` means the
+query has answer contracts but no answer text, answer file, or checked-in sample was supplied. In v0, only Hetuvidya has
+a structured validator wired into the runner; Collected Topics, Madhyamaka, and Agama cases are represented through
+retrieval-role coverage and answer-contract checks until their validators exist.
+
+This is still not runtime validation. The runner does not generate answers, call providers, evaluate doctrinal truth, or
+change `docs/platform-validation.md` status.
+
 ## Next Implementation PR
 
 The next retrieval PR should still stay local and fixture-based:
@@ -377,5 +398,6 @@ This interface is local and fixture-only. If it proves too early, revert this do
 `scripts/semantic_fixture_review.py` / `scripts/semantic_context_bundle.py` /
 `scripts/semantic_role_coverage.py` / `scripts/semantic_answer_boundary_review.py` /
 `scripts/semantic_answer_contract_review.py` /
+`scripts/reasoning_contract_runner.py` /
 `tests/fixtures/answers/` without affecting
 `search_agama.py`, platform validation, runtime evidence, or installed Skill behavior.
