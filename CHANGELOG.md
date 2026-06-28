@@ -38,6 +38,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added `SRQ-08` / `ZR-09` as a fixture-only Madhyamaka nihilism-boundary case that rejects reading emptiness as cancellation of dependent arising or causality.
 - Expanded `scripts/hetuvidya_validator.py` with `hetuvidya-validator-output-v0.1`, including structured trairupya checks, judgment status, and diagnostics while preserving existing fields.
 - Added `scripts/reasoning_contract_runner.py` as a fixture-only runner that combines semantic retrieval dry runs, role coverage, answer-contract review, and the Hetuvidya validator without provider calls or platform-status changes.
+- Added Claude Code `SRQ-08` / `ZC-05` runtime spot-review evidence showing the current answers still need more explicit nihilism-boundary wording for the `SRQ-08` contract; no platform status change.
 
 ## [2.4.8] - 2026-06-17
 

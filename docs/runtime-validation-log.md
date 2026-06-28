@@ -497,6 +497,34 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - It does not validate native OpenAI API or any OpenAI-compatible provider route.
 - The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
 
+## 2026-06-28 Claude Code SRQ-08 / ZC-05 Spot Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.195`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `fd7f7cc` (`Add reasoning contract runner (#58)`) |
+| Branch | `codex/runtime-spot-review-srq08-zc05-20260628` |
+| Prompt set | One direct `SRQ-08` prompt plus one broad `ZC-05` cross-domain prompt |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact evidence committed at `docs/runtime-evidence/2026-06-28-claude-code-srq-08-zc-05-spot-review.md`; raw JSON and extracted answer Markdown kept local only under `C:\tmp\zilan-srq08-zc05-spot-review-20260628` |
+| Repository checks | `python scripts\reasoning_contract_runner.py --query-id SRQ-08 --answer-file ...` run on both extracted answers; full repository checks run before PR handoff |
+| Overall result | `target-gap`: both answers mechanically fail the `SRQ-08` answer contract; no platform status change |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---:|---|
+| `SRQ-08.answer.md` | `SRQ-08` / `madhyamaka_nihilism_boundary` | `fail` | The answer explicitly rejects deriving `因果不存在` from `无自性` and states a two-truths-style distinction, but misses literal required terms `只破自性有`, `断灭`, and `不成立`, plus the `nihilism_error` slot. |
+| `ZC-05.answer.md` | `SRQ-08` / `madhyamaka_nihilism_boundary` | `fail` | The broad ZC-05 answer preserves existing no-self, Agama, Collected Topics, Hetuvidya, Madhyamaka, and practice boundaries, but does not explicitly surface the causality-cancellation / nihilism boundary required by `SRQ-08`. |
+
+### Known Limits
+
+- This is a target-contract spot review, not a full ZC-01 through ZC-06 platform rerun.
+- It does not validate native OpenAI API or any OpenAI-compatible provider route.
+- The mechanical failure is an explicitness gap, not by itself proof of doctrinal failure.
+- Follow-up work should decide whether to tighten the agent prompt for SRQ-08 wording, loosen the fixture to accept `断见`-style wording, or both.
 ## Next Validation Entries
 
 Use this template for future manual sessions:
