@@ -53,6 +53,7 @@ REQUIRED_FILES = (
     "scripts/semantic_fixture_review.py",
     "scripts/semantic_role_coverage.py",
     "scripts/semantic_retrieval_dry_run.py",
+    "scripts/reasoning_contract_runner.py",
     "scripts/openai_api_harness.py",
     "scripts/mock_install_smoke.py",
     "tests/regression_cases.yaml",
