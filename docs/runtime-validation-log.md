@@ -525,6 +525,35 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - It does not validate native OpenAI API or any OpenAI-compatible provider route.
 - The mechanical failure is an explicitness gap, not by itself proof of doctrinal failure.
 - Follow-up work should decide whether to tighten the agent prompt for SRQ-08 wording, loosen the fixture to accept `断见`-style wording, or both.
+
+## 2026-06-28 Claude Code SRQ-08 Boundary Fix Spot Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.195`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `787d4bd` plus this PR's prompt-contract changes |
+| Branch | `codex/srq08-nihilism-boundary-prompt-20260628` |
+| Prompt set | One direct `SRQ-08` prompt plus one broad `ZC-05` cross-domain prompt |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact evidence committed at `docs/runtime-evidence/2026-06-28-claude-code-srq-08-boundary-fix.md`; raw JSON and extracted answer Markdown kept local only under `C:\tmp\zilan-srq08-boundary-fix-20260628` |
+| Repository checks | `python scripts\reasoning_contract_runner.py --query-id SRQ-08 --answer-file ...` run on both extracted answers; full repository checks run before PR handoff |
+| Overall result | `pass`: both answers pass the `SRQ-08` answer contract; no platform status change |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---:|---|
+| `SRQ-08.answer.md` | `SRQ-08` / `madhyamaka_nihilism_boundary` | `pass` | Required terms and slots all present, including `只破自性有`, `断灭`, and `二谛`; no forbidden terms present. |
+| `ZC-05.answer.md` | `SRQ-08` / `madhyamaka_nihilism_boundary` | `pass` | Broad ZC-05 answer now explicitly preserves the same nihilism boundary in the Madhyamaka segment; no forbidden terms present. |
+
+### Known Limits
+
+- This is a target-contract spot review, not a full ZC-01 through ZC-06 platform rerun.
+- It does not validate native OpenAI API or any OpenAI-compatible provider route.
+- The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:

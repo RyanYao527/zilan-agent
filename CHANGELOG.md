@@ -39,6 +39,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Expanded `scripts/hetuvidya_validator.py` with `hetuvidya-validator-output-v0.1`, including structured trairupya checks, judgment status, and diagnostics while preserving existing fields.
 - Added `scripts/reasoning_contract_runner.py` as a fixture-only runner that combines semantic retrieval dry runs, role coverage, answer-contract review, and the Hetuvidya validator without provider calls or platform-status changes.
 - Added Claude Code `SRQ-08` / `ZC-05` runtime spot-review evidence showing the current answers still need more explicit nihilism-boundary wording for the `SRQ-08` contract; no platform status change.
+- Tightened the Madhyamaka nihilism-boundary prompt contract across Skill, Codex, Claude Code, and OpenAI metadata so emptiness/no-self/dependent-arising answers explicitly preserve `只破自性有`, `断灭`, and `二谛` boundaries.
 
 ## [2.4.8] - 2026-06-17
 
