@@ -1,6 +1,6 @@
 # Runtime Validation Log
 
-> Last updated: 2026-06-20
+> Last updated: 2026-07-02
 
 This log records manual runtime validation evidence for zilan-agent. It complements CI and repository invariant checks; it does not replace `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, pytest, ruff, or platform status maintenance in `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -547,6 +547,34 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 |---|---|---:|---|
 | `SRQ-08.answer.md` | `SRQ-08` / `madhyamaka_nihilism_boundary` | `pass` | Required terms and slots all present, including `只破自性有`, `断灭`, and `二谛`; no forbidden terms present. |
 | `ZC-05.answer.md` | `SRQ-08` / `madhyamaka_nihilism_boundary` | `pass` | Broad ZC-05 answer now explicitly preserves the same nihilism boundary in the Madhyamaka segment; no forbidden terms present. |
+
+### Known Limits
+
+- This is a target-contract spot review, not a full ZC-01 through ZC-06 platform rerun.
+- It does not validate native OpenAI API or any OpenAI-compatible provider route.
+- The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
+
+## 2026-07-02 Claude Code SRQ-07 Collected Topics Boundary Fix Spot Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.195`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `57ea21e` plus this PR's prompt-contract changes |
+| Branch | `collected-topics-boundary-contract` |
+| Prompt set | One direct `SRQ-07` prompt plus one broad `ZC-03` work-feedback prompt |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact evidence committed at `docs/runtime-evidence/2026-07-02-claude-code-srq-07-collected-topics-boundary-fix.md`; raw JSON and extracted answer Markdown kept local only under `C:\tmp\zilan-srq07-collected-topics-boundary-20260702` |
+| Repository checks | `python scripts\reasoning_contract_runner.py --query-id SRQ-07 --answer-file ...` run on the direct answer; ZC-03 checked by literal Collected Topics boundary term scan; full repository checks run before PR handoff |
+| Overall result | `pass`: direct SRQ-07 passes the `collected_topics_total_part_error` contract, and broad ZC-03 explicitly surfaces the same boundary terms; no platform status change |
+
+### Review Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---:|---|
+| `SRQ-07-rerun.answer.md` | `SRQ-07` / `collected_topics_total_part_error` | `pass` | Required terms and slots all present, including `总别混淆`, `局部别法`, `整体总法`, `不周遍`, and `不成立`; no forbidden terms present. |
+| `ZC-03-rerun.answer.md` | Collected Topics boundary term scan | `pass` | Broad work-feedback answer explicitly includes `总与别`, `局部别法`, `整体总法`, `总别混淆`, `不周遍`, and `不成立`. |
 
 ### Known Limits
 
