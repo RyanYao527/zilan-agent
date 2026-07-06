@@ -611,6 +611,35 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
 - The result is an explicitness gap, not by itself proof of doctrinal failure.
 
+## 2026-07-06 Claude Code SRQ-09 Boundary Fix Spot Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.195`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `01c998e` plus this PR's prompt-contract changes |
+| Branch | `srq09-cognitive-practice-boundary-prompt` |
+| Prompt set | One direct `SRQ-09` prompt plus one broad `ZC-03` work-feedback prompt |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact evidence committed at `docs/runtime-evidence/2026-07-06-claude-code-srq-09-boundary-fix.md`; raw JSON and extracted answer Markdown kept local only under `C:\tmp\zilan-srq09-boundary-fix-20260706` |
+| Repository checks | `python scripts\reasoning_contract_runner.py --query-id SRQ-09 --answer-file ...` run on both final extracted answers; full repository checks run before PR handoff |
+| Overall result | `pass`: both final answers pass the `SRQ-09` answer contract; no platform status change |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---:|---|
+| `SRQ-09.final.answer.md` | `SRQ-09` / `cognitive_practice_boundary` | `pass` | Required terms and slots all present, including the five-universal chain, `颠倒知`, `念`, `慧`, `无瞋`, `行舍`, `名色分别`, `缘摄受`, `三相印证`, `非心理治疗`, and `善知识指导`; no forbidden terms present. |
+| `ZC-03.final.answer.md` | `SRQ-09` / `cognitive_practice_boundary` | `pass` | Broad work-feedback answer also preserves `颠倒知`, `犹豫识`, `比量`, corrective factors, vipassana mapping, and practice-boundary terms; no forbidden terms present. |
+
+### Known Limits
+
+- This is a target-contract spot review, not a full ZC-01 through ZC-06 platform rerun.
+- It does not validate native OpenAI API or any OpenAI-compatible provider route.
+- The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
+- `--dangerously-skip-permissions` was used only to keep local noninteractive Claude Code validation from stopping at file-read approval prompts.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:
