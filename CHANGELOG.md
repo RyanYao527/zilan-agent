@@ -42,6 +42,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Tightened the Madhyamaka nihilism-boundary prompt contract across Skill, Codex, Claude Code, and OpenAI metadata so emptiness/no-self/dependent-arising answers explicitly preserve `只破自性有`, `断灭`, and `二谛` boundaries.
 - Tightened the Collected Topics total/part prompt contract and `SRQ-07` answer fixture so work-feedback overgeneralization answers explicitly preserve `总与别`, `局部别法`, `整体总法`, `总别混淆`, `不周遍`, and `不成立` boundaries.
 - Added `SRQ-09` / `ZR-10` as a fixture-only cognitive-analysis and practice-boundary case for work-feedback distress, covering the five-universal chain, cognitive-quality downgrade, corrective mental factors, vipassana mapping, and non-clinical practice boundaries.
+- Added Claude Code `SRQ-09` / `ZC-03` runtime spot-review evidence showing current answers still need more explicit cognitive-quality, vipassana-mapping, and non-clinical practice-boundary wording for the `SRQ-09` contract; no platform status change.
 
 ## [2.4.8] - 2026-06-17
 
