@@ -1,6 +1,6 @@
 # Runtime Validation Log
 
-> Last updated: 2026-07-02
+> Last updated: 2026-07-06
 
 This log records manual runtime validation evidence for zilan-agent. It complements CI and repository invariant checks; it does not replace `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, pytest, ruff, or platform status maintenance in `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -581,6 +581,35 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - This is a target-contract spot review, not a full ZC-01 through ZC-06 platform rerun.
 - It does not validate native OpenAI API or any OpenAI-compatible provider route.
 - The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
+
+## 2026-07-06 Claude Code SRQ-09 Cognitive Practice Boundary Spot Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.195`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `7bbaa62` (`Add SRQ-09 cognitive practice boundary fixture (#62)`) |
+| Branch | `srq09-runtime-spot-review` |
+| Prompt set | One direct `SRQ-09` prompt plus one broad `ZC-03` work-feedback prompt |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact evidence committed at `docs/runtime-evidence/2026-07-06-claude-code-srq-09-spot-review.md`; raw JSON and extracted answer Markdown kept local only under `C:\tmp\zilan-srq09-spot-review-20260706` |
+| Repository checks | `python scripts\reasoning_contract_runner.py --query-id SRQ-09 --answer-file ...` run on both extracted answers; full repository checks run before PR handoff |
+| Overall result | `target-gap`: both answers mechanically fail the `SRQ-09` answer contract; no platform status change |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---:|---|
+| `SRQ-09.answer.md` | `SRQ-09` / `cognitive_practice_boundary` | `fail` | Covers the five-universal chain and a practice boundary with no forbidden terms, but misses the `cognitive_quality` slot and required explicit terms including `颠倒知`, `慧`, `无瞋`, `行舍`, `缘摄受`, `三相印证`, and `非心理治疗`. |
+| `ZC-03.answer.md` | `SRQ-09` / `cognitive_practice_boundary` | `fail` | Covers the cognitive-quality path and several corrective factors with no forbidden terms, but misses the `vipassana_mapping` slot and required explicit terms including `名色分别`, `缘摄受`, `三相印证`, `非心理治疗`, and `善知识指导`. |
+
+### Known Limits
+
+- This is a target-contract spot review, not a full ZC-01 through ZC-06 platform rerun.
+- It does not validate native OpenAI API or any OpenAI-compatible provider route.
+- The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
+- The result is an explicitness gap, not by itself proof of doctrinal failure.
 
 ## Next Validation Entries
 
