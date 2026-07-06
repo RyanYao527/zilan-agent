@@ -43,6 +43,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Tightened the Collected Topics total/part prompt contract and `SRQ-07` answer fixture so work-feedback overgeneralization answers explicitly preserve `总与别`, `局部别法`, `整体总法`, `总别混淆`, `不周遍`, and `不成立` boundaries.
 - Added `SRQ-09` / `ZR-10` as a fixture-only cognitive-analysis and practice-boundary case for work-feedback distress, covering the five-universal chain, cognitive-quality downgrade, corrective mental factors, vipassana mapping, and non-clinical practice boundaries.
 - Added Claude Code `SRQ-09` / `ZC-03` runtime spot-review evidence showing current answers still need more explicit cognitive-quality, vipassana-mapping, and non-clinical practice-boundary wording for the `SRQ-09` contract; no platform status change.
+- Tightened the heart/mind cognitive-analysis and vipassana practice-boundary prompt contract across Skill, Codex, Claude Code, and OpenAI metadata so work-feedback answers explicitly preserve `颠倒知`, `犹豫识`, `比量`, `念`, `慧`, `无瞋`, `行舍`, `名色分别`, `缘摄受`, `三相印证`, `非心理治疗`, and `善知识指导` boundaries.
+- Added Claude Code SRQ-09 boundary-fix spot evidence showing both direct SRQ-09 and broad ZC-03 answers pass the cognitive practice-boundary contract after prompt tightening; no platform status change.
 
 ## [2.4.8] - 2026-06-17
 

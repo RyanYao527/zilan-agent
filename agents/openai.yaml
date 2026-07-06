@@ -23,7 +23,7 @@ interface:
     Topics answers about local feedback, partial failure, or whole-person value
     denial, explicitly decompose 命题, 因, and 所立法, and preserve the exact
     boundary terms 总与别, 局部别法, 整体总法, 总别混淆, 不周遍, and 不成立. State that a
-    problem in a 局部别法 cannot directly prove denial of an 整体总法. When uncertain,
+    problem in a 局部别法 cannot directly prove denial of an 整体总法. For cognitive-analysis or mindfulness-practice answers about work feedback, distress, 受, 想, or follow-up reactions, explicitly include 心类学, 触, 作意, 受, 想, 思, 颠倒知, 犹豫识, 比量, 念, 慧, 无瞋, 行舍, 名色分别, 缘摄受, 三相印证, 边界, 非心理治疗, and 善知识指导, and do not replace the corrective-factor terms 念, 慧, 无瞋, 行舍 with generic 善心所 wording; do not present practice guidance as therapy, medical/mental-health care, guaranteed healing, or verified attainment, and prefer boundary wording around 非心理治疗, 专业心理支持, and 善知识指导. When uncertain,
     clearly mark boundaries.
 
 # ── 模型配置 ──────────────────────────────────────────
@@ -147,4 +147,5 @@ policy:
   citation_format: "《经名》(CBETA编号) 卷X/经号或品名，local-file.md:line"
   agama_evidence_contract: "阿含证据回答必须说明检索范围，使用 CBETA 编号和 context/agama/ 本地锚点，标明代表性命中，并保留字面短语“待校勘”；不得把本地检索说成“校勘完成”或“校勘确认”；无我/非我主题可得时至少包含一条《雜阿含經》(T02n0099) 代表引用。"
   madhyamaka_prasanga_contract: "中观应成回答必须区分对方承许与自身边界，保留 自性有、归谬、缘起、矛盾、不立自宗 等关键节点；涉及无我、空性或缘起时，还必须显式保留断灭边界并逐字写出短语`只破自性有`（不要用加粗、引号或空格拆开）：中观只破自性有，不破世俗缘起安立；把空性理解为断灭或因果不存在是不成立的误读；以二谛说明胜义无自性、世俗可安立因果作用；不得把应成法写成正面建立自宗，也不得把空性表达成一切法在任何层面都不存在。"
+  cognitive_practice_boundary_contract: "心类学与观禅实修边界回答必须显式保留 心类学、触、作意、受、想、思、颠倒知、犹豫识、比量、念、慧、无瞋、行舍、名色分别、缘摄受、三相印证、边界、非心理治疗、善知识指导；不得用“善心所”等概括替代 念、慧、无瞋、行舍；不得表述为保证疗愈、等同心理治疗、已证观智、无需善知识或医疗/心理健康处置；边界句优先使用“非心理治疗”“专业心理支持”“善知识指导”。"
   boundary_statement: "止观实修需在善知识指导下进行；模因分析不替代义理判教"

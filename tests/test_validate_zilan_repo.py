@@ -92,6 +92,7 @@ runtime: codex-sub-agent
     assert any("激活与任务合并规则" in failure for failure in failures)
     assert any("search_agama.py --json" in failure for failure in failures)
     assert any("passage_citation" in failure for failure in failures)
+    assert any("心类学与观禅实修边界输出契约" in failure for failure in failures)
 
 
 def test_reasoning_cases_schema_errors_are_reported(tmp_path: Path) -> None:
