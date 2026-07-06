@@ -122,3 +122,18 @@ def test_reasoning_contract_runner_cli_json_output_is_machine_readable() -> None
     assert data["query_id"] == "SRQ-05"
     assert data["overall_status"] == "pass"
     assert data["validators"]["hetuvidya"]["case_ids"] == ["ZR-07"]
+
+
+def test_reasoning_contract_runner_passes_cognitive_practice_boundary_sample() -> None:
+    result = build_reasoning_contract_run(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-09",
+        sample_id="srq09-cognitive-practice-boundary-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["role_coverage"]["coverage_status"] == "complete"
+    assert result["role_coverage"]["missing_needs"] == []
+    assert result["answer_review_status"] == "pass"
+    assert result["answer_contract_review"]["overall_status"] == "pass"
+    assert result["validators"]["hetuvidya"]["status"] == "not_applicable"

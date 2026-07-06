@@ -251,6 +251,100 @@ chunks:
         - collected_topics
         - cognitive_analysis
 
+  - chunk_id: context:cognitive-analysis:five-universal-chain
+    chunk_type: context_topic
+    source_file: context/心类学认知分析.md
+    start_line: 95
+    end_line: 109
+    citation: "context/心类学认知分析.md:95-109"
+    passage_citation: "context/心类学认知分析.md:95-109"
+    text: |-
+      | **触** | 根·境·识三者和合 | `connect()` — 建立感知连接 |
+      | **作意** | 令心朝向所缘 | `focus()` — 注意力分配 |
+      | **受** | 领纳苦·乐·舍 | `eval()` — 情感标记 |
+      | **想** | 取相安立名言 | `classify()` — 特征提取+命名 |
+      | **思** | 令心造作、发动业 | `exec()` — 意志执行 |
+    metadata:
+      topics:
+        - 五遍行
+        - 触
+        - 作意
+        - 受
+        - 想
+        - 思
+      reasoning_roles:
+        - cognitive_analysis
+
+  - chunk_id: context:cognitive-analysis:cognitive-quality
+    chunk_type: context_topic
+    source_file: context/心类学认知分析.md
+    start_line: 172
+    end_line: 228
+    citation: "context/心类学认知分析.md:172-228"
+    passage_citation: "context/心类学认知分析.md:172-228"
+    text: |-
+      "被批评 = 工作无价值"
+        → 这是什么类型的认知？
+        → 不是现量（不是直接感知到的客观事实）
+        → 不是正比量（没有正因：被批评 ⊆ 工作无价值？→ 不周遍）
+        → 是颠倒知（将"一个人的单次评价"等同于"客观价值"——遍计所执性）
+    metadata:
+      topics:
+        - 量与非量
+        - 颠倒知
+        - 犹豫识
+        - 比量
+      reasoning_roles:
+        - cognitive_analysis
+
+  - chunk_id: context:vipassana:work-feedback-debug
+    chunk_type: context_topic
+    source_file: context/南传观禅指南.md
+    start_line: 246
+    end_line: 266
+    citation: "context/南传观禅指南.md:246-266"
+    passage_citation: "context/南传观禅指南.md:246-266"
+    text: |-
+      ① 名色分别（第一智）：
+         "对方的批评或修正意见" = 声波（色法）
+         "我的紧张" = 身体感受（色法）
+         "知道被批评了" = 意识（名法）
+         "觉得被否定了" = 想心所的归类动作（名法）
+         → 这些都是名色法，没有"我"在其中。
+
+      ② 缘摄受（第二智）：
+         声波（缘）→ 耳识（识）→ 苦受（受）→ 归类为"否定"（想）→ 瞋生起（心所）
+         → 没有"我"在推动这条链，是自动运行的。
+
+      ③ 三相印证（第三智）：
+         "这种难受的感觉，会永远持续吗？" → 不，它正在变化。
+         "我能控制它不出现吗？" → 不——控制本身就是妄想。
+         → 它是无常的、被生灭逼迫的（苦）、不可控的（无我）。
+    metadata:
+      topics:
+        - 观禅 Debug
+        - 名色分别
+        - 缘摄受
+        - 三相印证
+      reasoning_roles:
+        - cognitive_analysis
+
+  - chunk_id: reasoning:ZR-10:cognitive-practice-boundary
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 328
+    end_line: 362
+    citation: "tests/reasoning_cases.yaml:328-362"
+    passage_citation: "tests/reasoning_cases.yaml:328-362"
+    text: "收到批评后，我如何区分事实、受、想心所和后续反应？"
+    metadata:
+      topics:
+        - 心类学
+        - 观禅边界
+        - 工作反馈
+      reasoning_roles:
+        - cognitive_analysis
+
 queries:
   - id: SRQ-01
     query: "用应成论式分析诸法无我"
@@ -539,6 +633,97 @@ queries:
     expected_chunk_ids:
       - context:collected-topics:total-part
       - argument:work-feedback:non-pervasive
+
+  - id: SRQ-09
+    query: "收到批评后，我如何区分事实、受、想心所和后续反应？"
+    needs:
+      - cognitive_analysis
+      - practice_boundary
+    non_chunk_needs:
+      - practice_boundary
+    answer_contracts:
+      cognitive_practice_boundary:
+        description: "Answer must map work-feedback distress through Buddhist cognitive-analysis while preserving practice and clinical boundaries."
+        required_terms:
+          - 心类学
+          - 触
+          - 作意
+          - 受
+          - 想
+          - 思
+          - 颠倒知
+          - 念
+          - 慧
+          - 无瞋
+          - 行舍
+          - 名色分别
+          - 缘摄受
+          - 三相印证
+          - 边界
+          - 非心理治疗
+          - 善知识指导
+        required_slots:
+          - label: cognitive_chain
+            terms:
+              - 触
+              - 作意
+              - 受
+              - 想
+              - 思
+          - label: cognitive_quality
+            terms:
+              - 颠倒知
+              - 犹豫识
+              - 比量
+          - label: corrective_factors
+            terms:
+              - 念
+              - 慧
+              - 无瞋
+              - 行舍
+          - label: vipassana_mapping
+            terms:
+              - 名色分别
+              - 缘摄受
+              - 三相印证
+          - label: practice_boundary
+            terms:
+              - 边界
+              - 非心理治疗
+              - 善知识指导
+        forbidden_terms:
+          - 保证疗愈
+          - 等同心理治疗
+          - 已证观智
+          - 无需善知识
+          - 临床建议
+    answer_contract_samples:
+      - id: srq09-cognitive-practice-boundary-pass
+        file: tests/fixtures/answers/srq09-cognitive-practice-boundary-pass.md
+        expected_status: pass
+      - id: srq09-cognitive-practice-boundary-fail
+        file: tests/fixtures/answers/srq09-cognitive-practice-boundary-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 触
+        - 作意
+        - 受
+        - 想
+        - 思
+      modern:
+        - 批评
+        - 事实
+        - 后续反应
+    expected_sources:
+      - context/心类学认知分析.md
+      - context/南传观禅指南.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:cognitive-analysis:five-universal-chain
+      - context:cognitive-analysis:cognitive-quality
+      - context:vipassana:work-feedback-debug
+      - reasoning:ZR-10:cognitive-practice-boundary
 
   - id: SRQ-03
     query: "若有人承许诸法自性有，如何用应成法指出矛盾？"

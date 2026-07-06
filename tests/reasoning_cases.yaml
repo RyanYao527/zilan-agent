@@ -324,3 +324,39 @@ cases:
           - 承许缘起而否定因果作用自相矛盾
           - 将空性理解为断灭会落入中观所破边
         no_independent_thesis: true
+
+  - id: ZR-10
+    title: 心类学与观禅边界样例
+    source_regression_cases:
+      - ZC-01
+      - ZC-03
+    contracts:
+      - cognitive_analysis
+    prompt: "收到批评后，我如何区分事实、受、想心所和后续反应？"
+    reference_files:
+      - context/心类学认知分析.md
+      - context/南传观禅指南.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 事实层
+        - 五遍行链路
+        - 认知质量判定
+        - 对治心所
+        - 实修边界
+      cognitive_analysis:
+        chain:
+          - 触
+          - 作意
+          - 受
+          - 想
+          - 思
+        afflictions:
+          - 瞋
+          - 慢
+          - 染污疑
+        corrective_factors:
+          - 念
+          - 慧
+          - 无瞋
+          - 行舍
