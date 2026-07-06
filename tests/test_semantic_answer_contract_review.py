@@ -346,3 +346,46 @@ def test_answer_contract_review_fails_for_collected_topics_total_part_negative_s
         "pervasion_check",
         "error_classification",
     ]
+
+
+def test_answer_contract_review_passes_for_cognitive_practice_boundary_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-09",
+        sample_id="srq09-cognitive-practice-boundary-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["expected_status"] == "pass"
+    assert result["expected_status_match"] is True
+    assert result["reviews"][0]["contract_id"] == "cognitive_practice_boundary"
+    assert result["reviews"][0]["missing_required_terms"] == []
+    assert result["reviews"][0]["missing_required_slots"] == []
+    assert result["reviews"][0]["present_forbidden_terms"] == []
+
+
+def test_answer_contract_review_fails_for_cognitive_practice_boundary_negative_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-09",
+        sample_id="srq09-cognitive-practice-boundary-fail",
+    )
+
+    assert result["overall_status"] == "fail"
+    assert result["expected_status"] == "fail"
+    assert result["expected_status_match"] is True
+    assert "心类学" in result["reviews"][0]["missing_required_terms"]
+    assert "触" in result["reviews"][0]["missing_required_terms"]
+    assert result["reviews"][0]["present_forbidden_terms"] == [
+        "保证疗愈",
+        "等同心理治疗",
+        "已证观智",
+        "无需善知识",
+    ]
+    assert result["reviews"][0]["missing_required_slots"] == [
+        "cognitive_chain",
+        "cognitive_quality",
+        "corrective_factors",
+        "vipassana_mapping",
+        "practice_boundary",
+    ]

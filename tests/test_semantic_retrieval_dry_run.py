@@ -396,3 +396,58 @@ def test_dry_run_cli_json_output_is_machine_readable() -> None:
     assert data["mode"] == "fixture-dry-run"
     assert data["query_id"] == "SRQ-01"
     assert len(data["chunks"]) == 7
+
+
+def test_dry_run_returns_cognitive_practice_boundary_fixture_for_srq09() -> None:
+    result = build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-09")
+
+    assert result["query"] == "收到批评后，我如何区分事实、受、想心所和后续反应？"
+    assert result["needs"] == ["cognitive_analysis", "practice_boundary"]
+    assert result["non_chunk_needs"] == ["practice_boundary"]
+    assert result["expected_chunk_ids"] == [
+        "context:cognitive-analysis:five-universal-chain",
+        "context:cognitive-analysis:cognitive-quality",
+        "context:vipassana:work-feedback-debug",
+        "reasoning:ZR-10:cognitive-practice-boundary",
+    ]
+    assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
+    assert result["answer_contracts"]["cognitive_practice_boundary"]["required_terms"] == [
+        "心类学",
+        "触",
+        "作意",
+        "受",
+        "想",
+        "思",
+        "颠倒知",
+        "念",
+        "慧",
+        "无瞋",
+        "行舍",
+        "名色分别",
+        "缘摄受",
+        "三相印证",
+        "边界",
+        "非心理治疗",
+        "善知识指导",
+    ]
+    assert result["answer_contracts"]["cognitive_practice_boundary"]["forbidden_terms"] == [
+        "保证疗愈",
+        "等同心理治疗",
+        "已证观智",
+        "无需善知识",
+        "临床建议",
+    ]
+    assert result["answer_contract_samples"] == [
+        {
+            "id": "srq09-cognitive-practice-boundary-pass",
+            "file": "tests/fixtures/answers/srq09-cognitive-practice-boundary-pass.md",
+            "expected_status": "pass",
+        },
+        {
+            "id": "srq09-cognitive-practice-boundary-fail",
+            "file": "tests/fixtures/answers/srq09-cognitive-practice-boundary-fail.md",
+            "expected_status": "fail",
+        },
+    ]
+    assert all(term in result["chunks"][0]["text"] for term in ["触", "作意", "受", "想", "思"])
+    assert result["chunks"][3]["text"] == "收到批评后，我如何区分事实、受、想心所和后续反应？"
