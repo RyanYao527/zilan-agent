@@ -345,6 +345,70 @@ chunks:
       reasoning_roles:
         - cognitive_analysis
 
+  - chunk_id: context:cognitive-analysis:caregiving-pressure
+    chunk_type: context_topic
+    source_file: context/心类学认知分析.md
+    start_line: 297
+    end_line: 318
+    citation: "context/心类学认知分析.md:297-318"
+    passage_citation: "context/心类学认知分析.md:297-318"
+    text: |-
+      触发序列：
+        触（听到声音或遇到照护压力） → 作意 → 受（苦受）
+        → 想（"对方在故意为难我"） → 思 → 瞋/忿/恼
+
+      心所链：
+        触 → 受(苦) → 想(错误归因："故意") → 思 → 瞋 → 忿 → 恼
+    metadata:
+      topics:
+        - 家庭照护
+        - 错误归因
+        - 瞋
+        - 忿
+        - 恼
+      reasoning_roles:
+        - cognitive_analysis
+
+  - chunk_id: context:vipassana:caregiving-pressure-debug
+    chunk_type: context_topic
+    source_file: context/南传观禅指南.md
+    start_line: 272
+    end_line: 296
+    citation: "context/南传观禅指南.md:272-296"
+    passage_citation: "context/南传观禅指南.md:272-296"
+    text: |-
+      ① 名色分别（第一智）：
+         外界声音或照护压力 = 声波/触境等色法
+         身体紧绷、心跳加速 = 色法
+         愤怒 = 瞋心所（名法）
+         "对方在故意为难我" = 想心所的错误归因（名法）
+         → 关键在于：区分"事实"（名色法的生灭）与"叙事"（想心所的二次加工）
+    metadata:
+      topics:
+        - 家庭照护
+        - 名色分别
+        - 缘摄受
+        - 三相印证
+      reasoning_roles:
+        - cognitive_analysis
+
+  - chunk_id: reasoning:ZR-11:cognitive-caregiving-boundary
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 363
+    end_line: 399
+    citation: "tests/reasoning_cases.yaml:363-399"
+    passage_citation: "tests/reasoning_cases.yaml:363-399"
+    text: "家庭照护压力下，我觉得对方在故意为难我，如何用心类学和观禅拆解？"
+    metadata:
+      topics:
+        - 心类学
+        - 家庭照护
+        - 瞋心所
+        - 观禅边界
+      reasoning_roles:
+        - cognitive_analysis
+
 queries:
   - id: SRQ-01
     query: "用应成论式分析诸法无我"
@@ -724,6 +788,110 @@ queries:
       - context:cognitive-analysis:cognitive-quality
       - context:vipassana:work-feedback-debug
       - reasoning:ZR-10:cognitive-practice-boundary
+
+  - id: SRQ-10
+    query: "家庭照护压力下，我觉得对方在故意为难我，如何用心类学和观禅拆解？"
+    needs:
+      - cognitive_analysis
+      - practice_boundary
+    non_chunk_needs:
+      - practice_boundary
+    answer_contracts:
+      cognitive_caregiving_boundary:
+        description: "Answer must map caregiving-pressure anger through Buddhist cognitive-analysis while preserving practice and support boundaries."
+        required_terms:
+          - 心类学
+          - 家庭照护
+          - 触
+          - 作意
+          - 受
+          - 想
+          - 思
+          - 错误归因
+          - 故意为难
+          - 动机推断
+          - 瞋
+          - 忿
+          - 恼
+          - 念
+          - 慧
+          - 无瞋
+          - 不害
+          - 名色分别
+          - 缘摄受
+          - 三相印证
+          - 边界
+          - 非心理治疗
+          - 善知识指导
+        required_slots:
+          - label: cognitive_chain
+            terms:
+              - 触
+              - 作意
+              - 受
+              - 想
+              - 思
+          - label: attribution_error
+            terms:
+              - 错误归因
+              - 故意为难
+              - 动机推断
+          - label: affliction_chain
+            terms:
+              - 瞋
+              - 忿
+              - 恼
+          - label: corrective_factors
+            terms:
+              - 念
+              - 慧
+              - 无瞋
+              - 不害
+          - label: vipassana_mapping
+            terms:
+              - 名色分别
+              - 缘摄受
+              - 三相印证
+          - label: practice_boundary
+            terms:
+              - 边界
+              - 非心理治疗
+              - 善知识指导
+        forbidden_terms:
+          - 对方一定故意
+          - 直接压下愤怒
+          - 保证疗愈
+          - 等同心理治疗
+          - 已证观智
+          - 无需善知识
+          - 临床建议
+    answer_contract_samples:
+      - id: srq10-cognitive-caregiving-boundary-pass
+        file: tests/fixtures/answers/srq10-cognitive-caregiving-boundary-pass.md
+        expected_status: pass
+      - id: srq10-cognitive-caregiving-boundary-fail
+        file: tests/fixtures/answers/srq10-cognitive-caregiving-boundary-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 瞋
+        - 忿
+        - 恼
+        - 无瞋
+        - 不害
+      modern:
+        - 家庭照护
+        - 故意为难
+        - 失控感
+    expected_sources:
+      - context/心类学认知分析.md
+      - context/南传观禅指南.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:cognitive-analysis:five-universal-chain
+      - context:cognitive-analysis:caregiving-pressure
+      - context:vipassana:caregiving-pressure-debug
+      - reasoning:ZR-11:cognitive-caregiving-boundary
 
   - id: SRQ-03
     query: "若有人承许诸法自性有，如何用应成法指出矛盾？"
