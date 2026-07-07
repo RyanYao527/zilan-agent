@@ -137,3 +137,17 @@ def test_reasoning_contract_runner_passes_cognitive_practice_boundary_sample() -
     assert result["answer_review_status"] == "pass"
     assert result["answer_contract_review"]["overall_status"] == "pass"
     assert result["validators"]["hetuvidya"]["status"] == "not_applicable"
+
+def test_reasoning_contract_runner_passes_cognitive_caregiving_boundary_sample() -> None:
+    result = build_reasoning_contract_run(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-10",
+        sample_id="srq10-cognitive-caregiving-boundary-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["role_coverage"]["coverage_status"] == "complete"
+    assert result["role_coverage"]["missing_needs"] == []
+    assert result["answer_review_status"] == "pass"
+    assert result["answer_contract_review"]["overall_status"] == "pass"
+    assert result["validators"]["hetuvidya"]["status"] == "not_applicable"

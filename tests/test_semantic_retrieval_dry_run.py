@@ -451,3 +451,45 @@ def test_dry_run_returns_cognitive_practice_boundary_fixture_for_srq09() -> None
     ]
     assert all(term in result["chunks"][0]["text"] for term in ["触", "作意", "受", "想", "思"])
     assert result["chunks"][3]["text"] == "收到批评后，我如何区分事实、受、想心所和后续反应？"
+
+def test_dry_run_returns_cognitive_caregiving_boundary_fixture_for_srq10() -> None:
+    result = build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-10")
+
+    assert result["query"] == "家庭照护压力下，我觉得对方在故意为难我，如何用心类学和观禅拆解？"
+    assert result["needs"] == ["cognitive_analysis", "practice_boundary"]
+    assert result["non_chunk_needs"] == ["practice_boundary"]
+    assert result["expected_chunk_ids"] == [
+        "context:cognitive-analysis:five-universal-chain",
+        "context:cognitive-analysis:caregiving-pressure",
+        "context:vipassana:caregiving-pressure-debug",
+        "reasoning:ZR-11:cognitive-caregiving-boundary",
+    ]
+    assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
+    contract = result["answer_contracts"]["cognitive_caregiving_boundary"]
+    assert contract["required_slots"][1] == {
+        "label": "attribution_error",
+        "terms": ["错误归因", "故意为难", "动机推断"],
+    }
+    assert contract["forbidden_terms"] == [
+        "对方一定故意",
+        "直接压下愤怒",
+        "保证疗愈",
+        "等同心理治疗",
+        "已证观智",
+        "无需善知识",
+        "临床建议",
+    ]
+    assert result["answer_contract_samples"] == [
+        {
+            "id": "srq10-cognitive-caregiving-boundary-pass",
+            "file": "tests/fixtures/answers/srq10-cognitive-caregiving-boundary-pass.md",
+            "expected_status": "pass",
+        },
+        {
+            "id": "srq10-cognitive-caregiving-boundary-fail",
+            "file": "tests/fixtures/answers/srq10-cognitive-caregiving-boundary-fail.md",
+            "expected_status": "fail",
+        },
+    ]
+    assert "对方在故意为难我" in result["chunks"][1]["text"]
+    assert "名色分别" in result["chunks"][2]["text"]

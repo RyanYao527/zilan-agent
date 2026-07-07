@@ -360,3 +360,40 @@ cases:
           - 慧
           - 无瞋
           - 行舍
+  - id: ZR-11
+    title: 家庭照护压力下的瞋心归因样例
+    source_regression_cases:
+      - ZC-01
+      - ZC-03
+    contracts:
+      - cognitive_analysis
+    prompt: "家庭照护压力下，我觉得对方在故意为难我，如何用心类学和观禅拆解？"
+    reference_files:
+      - context/心类学认知分析.md
+      - context/南传观禅指南.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 触发事实
+        - 五遍行链路
+        - 错误归因
+        - 瞋心所链
+        - 对治心所
+        - 观禅映射
+        - 实修边界
+      cognitive_analysis:
+        chain:
+          - 触
+          - 作意
+          - 受
+          - 想
+          - 思
+        afflictions:
+          - 瞋
+          - 忿
+          - 恼
+        corrective_factors:
+          - 念
+          - 慧
+          - 无瞋
+          - 不害
