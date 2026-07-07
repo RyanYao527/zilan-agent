@@ -50,6 +50,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Integrated the cognitive-analysis mapper into `scripts/reasoning_contract_runner.py` so `SRQ-09` and `SRQ-10` now expose structured cognitive mappings under `validators.cognitive_analysis`.
 - Added a minimal `scripts/collected_topics_analyzer.py` prototype that reads structured Collected Topics fixtures and emits deterministic `concepts`, `relation_checks`, and `error_type` analyses without model calls or natural-language parsing.
 - Integrated the Collected Topics analyzer into `scripts/reasoning_contract_runner.py` so `SRQ-07` / `ZR-02` now exposes structured total/part and non-pervasion analysis under `validators.collected_topics`.
+- Added a minimal `scripts/madhyamaka_critique_engine.py` prototype that reads structured Madhyamaka prasaṅga fixtures and emits deterministic opponent-premise, accepted-commitment, contradiction, no-independent-thesis, critique-step, and diagnostic critiques without model calls or natural-language parsing.
+- Integrated the Madhyamaka critique engine into `scripts/reasoning_contract_runner.py` so Madhyamaka query fixtures such as `SRQ-08` / `ZR-09` expose structured prasaṅga critiques under `validators.madhyamaka_prasanga`.
 
 ## [2.4.8] - 2026-06-17
 
