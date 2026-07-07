@@ -46,6 +46,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Tightened the heart/mind cognitive-analysis and vipassana practice-boundary prompt contract across Skill, Codex, Claude Code, and OpenAI metadata so work-feedback answers explicitly preserve `颠倒知`, `犹豫识`, `比量`, `念`, `慧`, `无瞋`, `行舍`, `名色分别`, `缘摄受`, `三相印证`, `非心理治疗`, and `善知识指导` boundaries.
 - Added Claude Code SRQ-09 boundary-fix spot evidence showing both direct SRQ-09 and broad ZC-03 answers pass the cognitive practice-boundary contract after prompt tightening; no platform status change.
 - Added SRQ-10 / ZR-11 as a fixture-only cognitive-analysis and practice-boundary case for caregiving-pressure attribution, covering the five-universal chain, attribution error, affliction chain, corrective mental factors, vipassana mapping, and non-clinical practice boundaries.
+- Added a minimal `scripts/cognitive_analysis_mapper.py` prototype that reads structured cognitive-analysis fixtures and emits deterministic five-universal, affliction, corrective-factor, and practice-boundary mappings without model calls or natural-language parsing.
 
 ## [2.4.8] - 2026-06-17
 
