@@ -247,6 +247,7 @@ chunks:
       topics:
         - 不周遍
         - 工作反馈
+      reasoning_case_id: ZR-02
       reasoning_roles:
         - collected_topics
         - cognitive_analysis
