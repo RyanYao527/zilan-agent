@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from cognitive_analysis_mapper import CognitiveAnalysisMapperError, build_cognitive_analysis_mapping
 from hetuvidya_validator import DEFAULT_CASES, HetuvidyaValidatorError, build_hetuvidya_validation
 from semantic_answer_contract_review import build_answer_contract_review
 from semantic_retrieval_dry_run import DEFAULT_FIXTURE, ROOT, FixtureError, build_dry_run
@@ -16,8 +17,8 @@ OUTPUT_SCHEMA = "reasoning-contract-runner-output-v0"
 LIMITATIONS = (
     "Local fixture runner only; no answer generation, provider calls, embeddings, vector search, or reranking.",
     "Answer contracts are minimum explicitness checks and do not grade doctrinal correctness.",
-    "Only the Hetuvidya structured validator is wired in v0; other families use retrieval, "
-    "role coverage, and answer contracts.",
+    "Hetuvidya and cognitive-analysis structured validators are wired in v0; other families use "
+    "retrieval, role coverage, and answer contracts.",
     "This runner does not change platform validation status.",
 )
 
@@ -139,6 +140,44 @@ def _build_hetuvidya_validator(cases_path: Path, dry_run: dict[str, Any]) -> dic
     }
 
 
+def _build_cognitive_analysis_validator(cases_path: Path, dry_run: dict[str, Any]) -> dict[str, Any]:
+    case_ids = _reasoning_case_ids_for_role(dry_run, "cognitive_analysis")
+    if not case_ids:
+        return {
+            "status": "not_applicable",
+            "case_ids": [],
+            "mappings": [],
+            "limitations": [
+                "No selected reasoning case with cognitive_analysis role was found for this query fixture.",
+            ],
+        }
+
+    mappings: list[dict[str, Any]] = []
+    mode = ""
+    output_schema = ""
+    source = _display_path(cases_path)
+    limitations: list[str] = []
+
+    for case_id in case_ids:
+        result = build_cognitive_analysis_mapping(cases_path, case_id=case_id)
+        mode = result["mode"]
+        output_schema = result["output_schema"]
+        source = result["source"]
+        mappings.extend(result["mappings"])
+        for limitation in result["limitations"]:
+            if limitation not in limitations:
+                limitations.append(limitation)
+
+    return {
+        "status": "run",
+        "mode": mode,
+        "output_schema": output_schema,
+        "source": source,
+        "case_ids": case_ids,
+        "mappings": mappings,
+        "limitations": limitations,
+    }
+
 def _overall_status(role_coverage: dict[str, Any], answer_review_status: str) -> str:
     if role_coverage.get("missing_needs"):
         return "fail"
@@ -175,6 +214,7 @@ def build_reasoning_contract_run(
     )
     validators = {
         "hetuvidya": _build_hetuvidya_validator(cases_path, dry_run),
+        "cognitive_analysis": _build_cognitive_analysis_validator(cases_path, dry_run),
     }
     status = _overall_status(role_coverage, answer_review_status)
 
@@ -198,6 +238,7 @@ def build_reasoning_contract_run(
 def _render_text(result: dict[str, Any]) -> str:
     answer_status = result["answer_review_status"]
     hetuvidya_status = result["validators"]["hetuvidya"]["status"]
+    cognitive_analysis_status = result["validators"]["cognitive_analysis"]["status"]
     lines = [
         "# Reasoning Contract Runner",
         "",
@@ -207,6 +248,7 @@ def _render_text(result: dict[str, Any]) -> str:
         f"Role coverage: {result['role_coverage']['coverage_status']}",
         f"Answer review: {answer_status}",
         f"Hetuvidya validator: {hetuvidya_status}",
+        f"Cognitive-analysis mapper: {cognitive_analysis_status}",
         "",
         "Boundary: local fixture runner only; this is not runtime platform validation.",
         "",
@@ -257,7 +299,7 @@ def main() -> int:
             answer_file=args.answer_file,
             sample_id=args.sample_id,
         )
-    except (FixtureError, HetuvidyaValidatorError) as exc:
+    except (FixtureError, HetuvidyaValidatorError, CognitiveAnalysisMapperError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
 
