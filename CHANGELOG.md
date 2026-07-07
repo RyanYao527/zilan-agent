@@ -48,6 +48,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added SRQ-10 / ZR-11 as a fixture-only cognitive-analysis and practice-boundary case for caregiving-pressure attribution, covering the five-universal chain, attribution error, affliction chain, corrective mental factors, vipassana mapping, and non-clinical practice boundaries.
 - Added a minimal `scripts/cognitive_analysis_mapper.py` prototype that reads structured cognitive-analysis fixtures and emits deterministic five-universal, affliction, corrective-factor, and practice-boundary mappings without model calls or natural-language parsing.
 - Integrated the cognitive-analysis mapper into `scripts/reasoning_contract_runner.py` so `SRQ-09` and `SRQ-10` now expose structured cognitive mappings under `validators.cognitive_analysis`.
+- Added a minimal `scripts/collected_topics_analyzer.py` prototype that reads structured Collected Topics fixtures and emits deterministic `concepts`, `relation_checks`, and `error_type` analyses without model calls or natural-language parsing.
+- Integrated the Collected Topics analyzer into `scripts/reasoning_contract_runner.py` so `SRQ-07` / `ZR-02` now exposes structured total/part and non-pervasion analysis under `validators.collected_topics`.
 
 ## [2.4.8] - 2026-06-17
 

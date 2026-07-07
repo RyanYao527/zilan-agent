@@ -18,6 +18,15 @@ NOT_APPLICABLE_HETUVIDYA = {
     ],
 }
 
+NOT_APPLICABLE_COLLECTED_TOPICS = {
+    "status": "not_applicable",
+    "case_ids": [],
+    "analyses": [],
+    "limitations": [
+        "No selected reasoning case with collected_topics role was found for this query fixture.",
+    ],
+}
+
 NOT_APPLICABLE_COGNITIVE_ANALYSIS = {
     "status": "not_applicable",
     "case_ids": [],
@@ -62,6 +71,7 @@ def test_reasoning_contract_runner_passes_hetuvidya_sample() -> None:
     assert validator["validations"][0]["case_id"] == "ZR-07"
     assert validator["validations"][0]["judgment"]["status"] == "invalid"
     assert validator["validations"][0]["judgment"]["failed_checks"] == ["vipaksa_asattva"]
+    assert result["validators"]["collected_topics"] == NOT_APPLICABLE_COLLECTED_TOPICS
     assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
 
 
@@ -81,6 +91,7 @@ def test_reasoning_contract_runner_skips_structured_validators_for_madhyamaka_sa
     }
     assert result["answer_contract_review"]["overall_status"] == "pass"
     assert result["validators"]["hetuvidya"] == NOT_APPLICABLE_HETUVIDYA
+    assert result["validators"]["collected_topics"] == NOT_APPLICABLE_COLLECTED_TOPICS
     assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
 
 
@@ -91,6 +102,7 @@ def test_reasoning_contract_runner_marks_answer_contracts_without_answer_as_revi
     assert result["answer_review_status"] == "review_needed"
     assert result["answer_contract_review"] is None
     assert result["validators"]["hetuvidya"]["status"] == "run"
+    assert result["validators"]["collected_topics"] == NOT_APPLICABLE_COLLECTED_TOPICS
     assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
 
 
@@ -105,6 +117,7 @@ def test_reasoning_contract_runner_fails_when_role_coverage_is_incomplete() -> N
         "madhyamaka_prasanga",
     ]
     assert result["validators"]["hetuvidya"] == NOT_APPLICABLE_HETUVIDYA
+    assert result["validators"]["collected_topics"] == NOT_APPLICABLE_COLLECTED_TOPICS
     assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
 
 
@@ -145,7 +158,37 @@ def test_reasoning_contract_runner_cli_json_output_is_machine_readable() -> None
     assert data["query_id"] == "SRQ-05"
     assert data["overall_status"] == "pass"
     assert data["validators"]["hetuvidya"]["case_ids"] == ["ZR-07"]
+    assert data["validators"]["collected_topics"] == NOT_APPLICABLE_COLLECTED_TOPICS
     assert data["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
+
+
+def test_reasoning_contract_runner_runs_collected_topics_analyzer_for_srq07() -> None:
+    result = build_reasoning_contract_run(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-07",
+        sample_id="srq07-collected-topics-total-part-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["role_coverage"]["coverage_status"] == "complete"
+    assert result["role_coverage"]["missing_needs"] == []
+    assert result["answer_review_status"] == "pass"
+    assert result["answer_contract_review"]["overall_status"] == "pass"
+    assert result["validators"]["hetuvidya"] == NOT_APPLICABLE_HETUVIDYA
+    assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
+
+    collected_topics_validator = result["validators"]["collected_topics"]
+    assert collected_topics_validator["status"] == "run"
+    assert collected_topics_validator["case_ids"] == ["ZR-02"]
+    assert collected_topics_validator["analyses"][0]["case_id"] == "ZR-02"
+    relation_checks = {
+        item["id"]: item["status"]
+        for item in collected_topics_validator["analyses"][0]["collected_topics"]["relation_checks"]
+    }
+    assert relation_checks == {
+        "pervasion": "fail",
+        "total_part_distinction": "required",
+    }
 
 
 def test_reasoning_contract_runner_runs_cognitive_mapper_for_srq09() -> None:
@@ -161,6 +204,7 @@ def test_reasoning_contract_runner_runs_cognitive_mapper_for_srq09() -> None:
     assert result["answer_review_status"] == "pass"
     assert result["answer_contract_review"]["overall_status"] == "pass"
     assert result["validators"]["hetuvidya"] == NOT_APPLICABLE_HETUVIDYA
+    assert result["validators"]["collected_topics"] == NOT_APPLICABLE_COLLECTED_TOPICS
 
     cognitive_validator = result["validators"]["cognitive_analysis"]
     assert cognitive_validator["status"] == "run"
@@ -185,6 +229,7 @@ def test_reasoning_contract_runner_runs_cognitive_mapper_for_srq10() -> None:
     assert result["answer_review_status"] == "pass"
     assert result["answer_contract_review"]["overall_status"] == "pass"
     assert result["validators"]["hetuvidya"] == NOT_APPLICABLE_HETUVIDYA
+    assert result["validators"]["collected_topics"] == NOT_APPLICABLE_COLLECTED_TOPICS
 
     cognitive_validator = result["validators"]["cognitive_analysis"]
     assert cognitive_validator["status"] == "run"
