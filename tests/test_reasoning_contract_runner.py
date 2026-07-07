@@ -9,6 +9,32 @@ from semantic_retrieval_dry_run import DEFAULT_FIXTURE, FixtureError
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "reasoning_contract_runner.py"
 
+NOT_APPLICABLE_HETUVIDYA = {
+    "status": "not_applicable",
+    "case_ids": [],
+    "validations": [],
+    "limitations": [
+        "No selected reasoning case with hetuvidya role was found for this query fixture.",
+    ],
+}
+
+NOT_APPLICABLE_COGNITIVE_ANALYSIS = {
+    "status": "not_applicable",
+    "case_ids": [],
+    "mappings": [],
+    "limitations": [
+        "No selected reasoning case with cognitive_analysis role was found for this query fixture.",
+    ],
+}
+
+CHAIN_STEP_ROLES = [
+    "input_contact",
+    "attention_orientation",
+    "feeling_tone",
+    "classification_labeling",
+    "volitional_response",
+]
+
 
 def test_reasoning_contract_runner_passes_hetuvidya_sample() -> None:
     result = build_reasoning_contract_run(
@@ -36,9 +62,10 @@ def test_reasoning_contract_runner_passes_hetuvidya_sample() -> None:
     assert validator["validations"][0]["case_id"] == "ZR-07"
     assert validator["validations"][0]["judgment"]["status"] == "invalid"
     assert validator["validations"][0]["judgment"]["failed_checks"] == ["vipaksa_asattva"]
+    assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
 
 
-def test_reasoning_contract_runner_skips_hetuvidya_validator_for_madhyamaka_sample() -> None:
+def test_reasoning_contract_runner_skips_structured_validators_for_madhyamaka_sample() -> None:
     result = build_reasoning_contract_run(
         DEFAULT_FIXTURE,
         query_id="SRQ-08",
@@ -53,14 +80,8 @@ def test_reasoning_contract_runner_skips_hetuvidya_validator_for_madhyamaka_samp
         ],
     }
     assert result["answer_contract_review"]["overall_status"] == "pass"
-    assert result["validators"]["hetuvidya"] == {
-        "status": "not_applicable",
-        "case_ids": [],
-        "validations": [],
-        "limitations": [
-            "No selected reasoning case with hetuvidya role was found for this query fixture.",
-        ],
-    }
+    assert result["validators"]["hetuvidya"] == NOT_APPLICABLE_HETUVIDYA
+    assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
 
 
 def test_reasoning_contract_runner_marks_answer_contracts_without_answer_as_review_needed() -> None:
@@ -70,6 +91,7 @@ def test_reasoning_contract_runner_marks_answer_contracts_without_answer_as_revi
     assert result["answer_review_status"] == "review_needed"
     assert result["answer_contract_review"] is None
     assert result["validators"]["hetuvidya"]["status"] == "run"
+    assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
 
 
 def test_reasoning_contract_runner_fails_when_role_coverage_is_incomplete() -> None:
@@ -82,7 +104,8 @@ def test_reasoning_contract_runner_fails_when_role_coverage_is_incomplete() -> N
         "hetuvidya",
         "madhyamaka_prasanga",
     ]
-    assert result["validators"]["hetuvidya"]["status"] == "not_applicable"
+    assert result["validators"]["hetuvidya"] == NOT_APPLICABLE_HETUVIDYA
+    assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
 
 
 def test_reasoning_contract_runner_rejects_multiple_answer_sources() -> None:
@@ -122,9 +145,10 @@ def test_reasoning_contract_runner_cli_json_output_is_machine_readable() -> None
     assert data["query_id"] == "SRQ-05"
     assert data["overall_status"] == "pass"
     assert data["validators"]["hetuvidya"]["case_ids"] == ["ZR-07"]
+    assert data["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
 
 
-def test_reasoning_contract_runner_passes_cognitive_practice_boundary_sample() -> None:
+def test_reasoning_contract_runner_runs_cognitive_mapper_for_srq09() -> None:
     result = build_reasoning_contract_run(
         DEFAULT_FIXTURE,
         query_id="SRQ-09",
@@ -136,9 +160,19 @@ def test_reasoning_contract_runner_passes_cognitive_practice_boundary_sample() -
     assert result["role_coverage"]["missing_needs"] == []
     assert result["answer_review_status"] == "pass"
     assert result["answer_contract_review"]["overall_status"] == "pass"
-    assert result["validators"]["hetuvidya"]["status"] == "not_applicable"
+    assert result["validators"]["hetuvidya"] == NOT_APPLICABLE_HETUVIDYA
 
-def test_reasoning_contract_runner_passes_cognitive_caregiving_boundary_sample() -> None:
+    cognitive_validator = result["validators"]["cognitive_analysis"]
+    assert cognitive_validator["status"] == "run"
+    assert cognitive_validator["case_ids"] == ["ZR-10"]
+    assert cognitive_validator["mappings"][0]["case_id"] == "ZR-10"
+    assert cognitive_validator["mappings"][0]["cognitive_analysis"]["practice_boundary"] == {
+        "required": True,
+        "status": "required",
+    }
+
+
+def test_reasoning_contract_runner_runs_cognitive_mapper_for_srq10() -> None:
     result = build_reasoning_contract_run(
         DEFAULT_FIXTURE,
         query_id="SRQ-10",
@@ -150,4 +184,11 @@ def test_reasoning_contract_runner_passes_cognitive_caregiving_boundary_sample()
     assert result["role_coverage"]["missing_needs"] == []
     assert result["answer_review_status"] == "pass"
     assert result["answer_contract_review"]["overall_status"] == "pass"
-    assert result["validators"]["hetuvidya"]["status"] == "not_applicable"
+    assert result["validators"]["hetuvidya"] == NOT_APPLICABLE_HETUVIDYA
+
+    cognitive_validator = result["validators"]["cognitive_analysis"]
+    assert cognitive_validator["status"] == "run"
+    assert cognitive_validator["case_ids"] == ["ZR-11"]
+    assert cognitive_validator["mappings"][0]["case_id"] == "ZR-11"
+    chain_steps = cognitive_validator["mappings"][0]["cognitive_analysis"]["chain_steps"]
+    assert [item["role"] for item in chain_steps] == CHAIN_STEP_ROLES
