@@ -6,8 +6,12 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from reasoning_validator_output import build_validator_output
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASES = ROOT / "tests" / "reasoning_cases.yaml"
+VALIDATOR = "hetuvidya_validator"
+CONTRACT_FAMILY = "hetuvidya"
 MODE = "hetuvidya-validator-v0"
 OUTPUT_SCHEMA = "hetuvidya-validator-output-v0.1"
 LIMITATIONS = (
@@ -237,15 +241,17 @@ def build_hetuvidya_validation(cases_path: Path = DEFAULT_CASES, *, case_id: str
 
     validations = [_validate_case(case) for case in selected]
 
-    return {
-        "mode": MODE,
-        "output_schema": OUTPUT_SCHEMA,
-        "source": _display_path(cases_path),
-        "case_id": case_id,
-        "count": len(validations),
-        "validations": validations,
-        "limitations": list(LIMITATIONS),
-    }
+    return build_validator_output(
+        validator=VALIDATOR,
+        contract_family=CONTRACT_FAMILY,
+        mode=MODE,
+        output_schema=OUTPUT_SCHEMA,
+        source=_display_path(cases_path),
+        case_id=case_id,
+        payload_key="validations",
+        payload=validations,
+        limitations=LIMITATIONS,
+    )
 
 
 def _print_text(result: dict[str, Any]) -> None:

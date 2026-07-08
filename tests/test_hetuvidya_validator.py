@@ -13,9 +13,13 @@ def test_hetuvidya_validator_returns_reason_unestablished_case() -> None:
     result = build_hetuvidya_validation(DEFAULT_CASES, case_id="ZR-03")
     validation = result["validations"][0]
 
+    assert result["status"] == "run"
+    assert result["validator"] == "hetuvidya_validator"
+    assert result["contract_family"] == "hetuvidya"
     assert result["mode"] == "hetuvidya-validator-v0"
     assert result["output_schema"] == "hetuvidya-validator-output-v0.1"
     assert result["source"] == "tests/reasoning_cases.yaml"
+    assert result["case_ids"] == ["ZR-03"]
     assert result["count"] == 1
     assert validation["case_id"] == "ZR-03"
     assert validation["classification"] == "因不成"

@@ -15,9 +15,13 @@ SCRIPT = ROOT / "scripts" / "collected_topics_analyzer.py"
 def test_collected_topics_analyzer_maps_zr02_total_part_error() -> None:
     result = build_collected_topics_analysis(case_id="ZR-02")
 
+    assert result["status"] == "run"
+    assert result["validator"] == "collected_topics_analyzer"
+    assert result["contract_family"] == "collected_topics"
     assert result["mode"] == "collected-topics-analyzer-v0"
     assert result["output_schema"] == "collected-topics-analyzer-output-v0"
     assert result["case_id"] == "ZR-02"
+    assert result["case_ids"] == ["ZR-02"]
     assert result["count"] == 1
 
     analysis = result["analyses"][0]
