@@ -170,6 +170,10 @@ ALLOWED_RETRIEVAL_CHUNK_TYPES = ("agama_passage", "argument_unit", "context_topi
 ALLOWED_RETRIEVAL_NEEDS = (*ALLOWED_REASONING_CONTRACTS, "practice_boundary")
 ALLOWED_RETRIEVAL_NON_CHUNK_NEEDS = ("practice_boundary",)
 ALLOWED_ANSWER_SAMPLE_STATUSES = ("pass", "fail")
+RETRIEVAL_HASH_ALGORITHM = "sha256"
+RETRIEVAL_SOURCE_SCRIPT = "scripts/search_agama.py"
+RETRIEVAL_SOURCE_HASH_SCOPE = "legacy_alias_for_line_text_hash"
+RETRIEVAL_LINE_TEXT_HASH_SCOPE = "trimmed_non_empty_lines_joined_with_lf"
 PLATFORM_VALIDATION_LABELS = {
     "codex": "Codex",
     "claude_code": "Claude Code",
@@ -409,6 +413,89 @@ def _is_non_empty_string_list(value: object) -> bool:
     return isinstance(value, list) and bool(value) and all(isinstance(item, str) and item for item in value)
 
 
+def _is_non_empty_int_list(value: object) -> bool:
+    return isinstance(value, list) and bool(value) and all(
+        isinstance(item, int) and not isinstance(item, bool) for item in value
+    )
+
+
+def _retrieval_line_text_hash(source_lines: list[str], start_line: int, end_line: int) -> str:
+    text = "\n".join(line.strip() for line in source_lines[start_line - 1 : end_line] if line.strip())
+    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    return f"{RETRIEVAL_HASH_ALGORITHM}:{digest}"
+
+
+def _check_agama_passage_provenance(
+    *,
+    chunk_id: str,
+    metadata: dict[str, object],
+    source_file: str,
+    start_line: int,
+    end_line: int,
+    source_lines: list[str],
+    failures: list[str],
+) -> None:
+    expected_hash = _retrieval_line_text_hash(source_lines, start_line, end_line)
+    source_hash = metadata.get("source_hash")
+    line_text_hash = metadata.get("line_text_hash")
+
+    if source_hash != expected_hash:
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.source_hash must match source range hash.")
+    if line_text_hash != expected_hash:
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.line_text_hash must match source range hash.")
+    if source_hash != line_text_hash:
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.source_hash must equal line_text_hash.")
+
+    matched_lines = metadata.get("matched_lines")
+    matched_lines_valid = _is_non_empty_int_list(matched_lines)
+    if not matched_lines_valid:
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.matched_lines must be a line-number list.")
+    else:
+        out_of_range = [line for line in matched_lines if line < start_line or line > end_line]
+        if out_of_range:
+            failures.append(
+                f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.matched_lines must fall within the line range."
+            )
+
+    provenance = metadata.get("provenance")
+    if not isinstance(provenance, dict):
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.provenance must be a mapping.")
+        return
+
+    if provenance.get("source_script") != RETRIEVAL_SOURCE_SCRIPT:
+        failures.append(
+            f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.provenance.source_script must be "
+            f"{RETRIEVAL_SOURCE_SCRIPT}."
+        )
+    if provenance.get("source_file") != source_file:
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.provenance.source_file must match source_file.")
+    if provenance.get("line_range") != {"start": start_line, "end": end_line}:
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.provenance.line_range must match line range.")
+    if matched_lines_valid and provenance.get("matched_lines") != matched_lines:
+        failures.append(
+            f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.provenance.matched_lines must match metadata.matched_lines."
+        )
+    if provenance.get("hash_algorithm") != RETRIEVAL_HASH_ALGORITHM:
+        failures.append(
+            f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.provenance.hash_algorithm must be "
+            f"{RETRIEVAL_HASH_ALGORITHM}."
+        )
+    if provenance.get("line_text_hash") != expected_hash:
+        failures.append(
+            f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.provenance.line_text_hash must match source range hash."
+        )
+    if provenance.get("source_hash_scope") != RETRIEVAL_SOURCE_HASH_SCOPE:
+        failures.append(
+            f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.provenance.source_hash_scope must be "
+            f"{RETRIEVAL_SOURCE_HASH_SCOPE}."
+        )
+    if provenance.get("line_text_hash_scope") != RETRIEVAL_LINE_TEXT_HASH_SCOPE:
+        failures.append(
+            f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.provenance.line_text_hash_scope must be "
+            f"{RETRIEVAL_LINE_TEXT_HASH_SCOPE}."
+        )
+
+
 def _check_hetuvidya_contract(case_id: str, expected: dict[str, object], failures: list[str]) -> None:
     hetuvidya = expected.get("hetuvidya")
     if not isinstance(hetuvidya, dict):
@@ -517,6 +604,11 @@ def _check_retrieval_chunk_metadata(
     chunk_type: object,
     metadata: object,
     failures: list[str],
+    *,
+    source_file: str | None = None,
+    start_line: int | None = None,
+    end_line: int | None = None,
+    source_lines: list[str] | None = None,
 ) -> None:
     if not isinstance(metadata, dict):
         failures.append(f"{RETRIEVAL_CHUNKS_PATH} {case_id} metadata must be a mapping.")
@@ -540,6 +632,21 @@ def _check_retrieval_chunk_metadata(
         cbeta_id = metadata.get("cbeta_id")
         if isinstance(cbeta_id, str) and not re.fullmatch(r"T\d{2}n\d{4}", cbeta_id):
             failures.append(f"{RETRIEVAL_CHUNKS_PATH} {case_id} metadata.cbeta_id is not a CBETA id.")
+        if (
+            isinstance(source_file, str)
+            and isinstance(start_line, int)
+            and isinstance(end_line, int)
+            and isinstance(source_lines, list)
+        ):
+            _check_agama_passage_provenance(
+                chunk_id=case_id,
+                metadata=metadata,
+                source_file=source_file,
+                start_line=start_line,
+                end_line=end_line,
+                source_lines=source_lines,
+                failures=failures,
+            )
 
 
 def _check_answer_samples(
@@ -865,7 +972,16 @@ def _check_retrieval_chunks_yaml(root: Path, failures: list[str], warnings: list
             if not isinstance(value, str) or source_file not in value or f":{start_line}" not in value:
                 failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} {field} must include the local line anchor.")
 
-        _check_retrieval_chunk_metadata(chunk_id, chunk_type, item.get("metadata"), failures)
+        _check_retrieval_chunk_metadata(
+            chunk_id,
+            chunk_type,
+            item.get("metadata"),
+            failures,
+            source_file=source_file,
+            start_line=start_line,
+            end_line=end_line,
+            source_lines=lines,
+        )
 
     _check_retrieval_queries(root, data.get("queries"), chunk_ids, failures)
 
