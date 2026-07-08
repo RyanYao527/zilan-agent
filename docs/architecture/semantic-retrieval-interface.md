@@ -89,6 +89,7 @@ Required invariants:
 - `chunk_type` must be explicit.
 - `reasoning_roles` should use contract language where possible, such as `agama_evidence`, `hetuvidya`, `collected_topics`, `cognitive_analysis`, or `madhyamaka_prasanga`.
 - `source_hash` and `line_text_hash` are provenance fields for drift review; `source_hash` currently remains a legacy alias for the line-text hash generated from trimmed non-empty source lines.
+- Checked-in `agama_passage` chunks must keep `source_hash`, `line_text_hash`, `matched_lines`, and `metadata.provenance` aligned with the referenced source line range.
 
 ## Query Understanding Fields
 

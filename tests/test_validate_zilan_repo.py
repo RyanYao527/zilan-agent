@@ -224,6 +224,88 @@ queries:
     assert any("unknown expected chunks" in failure for failure in failures)
 
 
+def test_retrieval_agama_provenance_errors_are_reported(tmp_path: Path) -> None:
+    docs = tmp_path / "docs" / "architecture"
+    docs.mkdir(parents=True)
+    (docs / "semantic-retrieval-interface.md").write_text("# Semantic Retrieval\n", encoding="utf-8")
+    context = tmp_path / "context"
+    context.mkdir()
+    (context / "sample.md").write_text("line one\nline two\n", encoding="utf-8")
+    fixtures = tmp_path / "tests" / "fixtures" / "retrieval_chunks"
+    fixtures.mkdir(parents=True)
+    (fixtures / "semantic_chunks.yaml").write_text(
+        """version: 1
+source: docs/architecture/semantic-retrieval-interface.md
+purpose: Test retrieval chunks.
+chunks:
+  - chunk_id: agama-bad-provenance
+    chunk_type: agama_passage
+    source_file: context/sample.md
+    start_line: 1
+    end_line: 2
+    citation: "context/sample.md:1"
+    passage_citation: "context/sample.md:1-2"
+    text: "line one"
+    metadata:
+      collection: Sample Agama
+      cbeta_id: T02n0099
+      juan: 卷 1
+      topics:
+        - sample
+      reasoning_roles:
+        - agama_evidence
+      matched_lines:
+        - 3
+      source_hash: "sha256:bad"
+      line_text_hash: "sha256:bad"
+      provenance:
+        source_script: wrong.py
+        source_file: context/other.md
+        line_range:
+          start: 1
+          end: 1
+        matched_lines:
+          - 1
+        hash_algorithm: md5
+        line_text_hash: "sha256:bad"
+        source_hash_scope: wrong_scope
+        line_text_hash_scope: wrong_scope
+queries:
+  - id: SRQ-01
+    query: "sample query"
+    needs:
+      - agama_evidence
+    keywords:
+      classical:
+        - sample
+      modern:
+        - sample
+    expected_sources:
+      - context/sample.md
+    expected_chunk_ids:
+      - agama-bad-provenance
+""",
+        encoding="utf-8",
+    )
+    failures: list[str] = []
+    warnings: list[str] = []
+
+    _check_retrieval_chunks_yaml(tmp_path, failures, warnings, strict_yaml=True)
+
+    assert warnings == []
+    assert any("metadata.source_hash must match source range hash" in failure for failure in failures)
+    assert any("metadata.line_text_hash must match source range hash" in failure for failure in failures)
+    assert any("metadata.matched_lines must fall within the line range" in failure for failure in failures)
+    assert any("metadata.provenance.source_script" in failure for failure in failures)
+    assert any("metadata.provenance.source_file" in failure for failure in failures)
+    assert any("metadata.provenance.line_range" in failure for failure in failures)
+    assert any("metadata.provenance.matched_lines" in failure for failure in failures)
+    assert any("metadata.provenance.hash_algorithm" in failure for failure in failures)
+    assert any("metadata.provenance.line_text_hash" in failure for failure in failures)
+    assert any("metadata.provenance.source_hash_scope" in failure for failure in failures)
+    assert any("metadata.provenance.line_text_hash_scope" in failure for failure in failures)
+
+
 def test_portable_upgrade_doc_missing_current_fragments_is_reported(tmp_path: Path) -> None:
     (tmp_path / "AGENT_UPGRADE_PORTABLE.md").write_text(
         "# Old migration note\n\nThis file still describes only v2.3 setup.",

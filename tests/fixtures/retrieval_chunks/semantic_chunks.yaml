@@ -20,7 +20,22 @@ chunks:
         - 五蘊
       reasoning_roles:
         - agama_evidence
-
+      matched_lines:
+        - 147
+      source_hash: "sha256:fc7fcddb9c1c41ee8825df15c994be2ab6978575210fa8de8264774657e04e4c"
+      line_text_hash: "sha256:fc7fcddb9c1c41ee8825df15c994be2ab6978575210fa8de8264774657e04e4c"
+      provenance:
+        source_script: scripts/search_agama.py
+        source_file: context/agama/T0099-za-agama.md
+        line_range:
+          start: 147
+          end: 149
+        matched_lines:
+          - 147
+        hash_algorithm: sha256
+        line_text_hash: "sha256:fc7fcddb9c1c41ee8825df15c994be2ab6978575210fa8de8264774657e04e4c"
+        source_hash_scope: legacy_alias_for_line_text_hash
+        line_text_hash_scope: trimmed_non_empty_lines_joined_with_lf
   - chunk_id: agama:T01n0001:juan-1:line-881
     chunk_type: agama_passage
     source_file: context/agama/T0001-chang-agama.md
@@ -39,8 +54,22 @@ chunks:
         - 非我
       reasoning_roles:
         - agama_evidence
+      matched_lines:
+        - 881
       source_hash: "sha256:89372a4f6f93f7aa3cdb58d51ccc103a064636f7c5f3a6a00d4a85fecc13abcd"
-
+      line_text_hash: "sha256:89372a4f6f93f7aa3cdb58d51ccc103a064636f7c5f3a6a00d4a85fecc13abcd"
+      provenance:
+        source_script: scripts/search_agama.py
+        source_file: context/agama/T0001-chang-agama.md
+        line_range:
+          start: 881
+          end: 881
+        matched_lines:
+          - 881
+        hash_algorithm: sha256
+        line_text_hash: "sha256:89372a4f6f93f7aa3cdb58d51ccc103a064636f7c5f3a6a00d4a85fecc13abcd"
+        source_hash_scope: legacy_alias_for_line_text_hash
+        line_text_hash_scope: trimmed_non_empty_lines_joined_with_lf
   - chunk_id: agama:T01n0001:juan-3:line-1829
     chunk_type: agama_passage
     source_file: context/agama/T0001-chang-agama.md
@@ -59,8 +88,22 @@ chunks:
         - 陰界入
       reasoning_roles:
         - agama_evidence
+      matched_lines:
+        - 1829
       source_hash: "sha256:2215c02d0e8da74dfcdb2b2cd5931b22992cc739f552aa8e8a2a9398f12a2277"
-
+      line_text_hash: "sha256:2215c02d0e8da74dfcdb2b2cd5931b22992cc739f552aa8e8a2a9398f12a2277"
+      provenance:
+        source_script: scripts/search_agama.py
+        source_file: context/agama/T0001-chang-agama.md
+        line_range:
+          start: 1829
+          end: 1829
+        matched_lines:
+          - 1829
+        hash_algorithm: sha256
+        line_text_hash: "sha256:2215c02d0e8da74dfcdb2b2cd5931b22992cc739f552aa8e8a2a9398f12a2277"
+        source_hash_scope: legacy_alias_for_line_text_hash
+        line_text_hash_scope: trimmed_non_empty_lines_joined_with_lf
   - chunk_id: context:hetuvidya:trairupya
     chunk_type: context_topic
     source_file: context/因明推理引擎.md
