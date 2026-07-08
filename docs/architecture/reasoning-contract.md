@@ -99,6 +99,11 @@ Required structure:
 - `search_scope`: the expected search scope, such as representative search or exhaustive search
 - `collation_boundary`: whether publication-level claims require CBETA XML or parallel-text verification
 
+`scripts/agama_evidence_checker.py` consumes only checked-in `agama_evidence` fixtures and emits
+`agama-evidence-checker-output-v0`. The output makes citation requirements, representative-search scope, local
+`context/agama/` references, and collation boundaries explicit without running `search_agama.py`, calling providers,
+or grading whether a produced answer cited the right passage.
+
 ## Data File
 
 The initial fixture file is `tests/reasoning_cases.yaml`.
@@ -124,7 +129,7 @@ Each case must include:
 
 ## Validator Output Contract v0
 
-The local structured validators share a shallow top-level output envelope so downstream tools can consume them without knowing each validator's internal payload shape. This envelope is additive and preserves the existing family-specific payload keys such as `validations`, `analyses`, `critiques`, and `mappings`.
+The local structured validators share a shallow top-level output envelope so downstream tools can consume them without knowing each validator's internal payload shape. This envelope is additive and preserves the existing family-specific payload keys such as `validations`, `analyses`, `critiques`, `mappings`, and `evidence_reviews`.
 
 Common fields:
 

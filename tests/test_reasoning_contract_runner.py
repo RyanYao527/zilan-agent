@@ -61,6 +61,18 @@ NOT_APPLICABLE_COGNITIVE_ANALYSIS = {
     ],
 }
 
+NOT_APPLICABLE_AGAMA_EVIDENCE = {
+    "status": "not_applicable",
+    "validator": "agama_evidence_checker",
+    "contract_family": "agama_evidence",
+    "output_schema": "agama-evidence-checker-output-v0",
+    "source": "tests/reasoning_cases.yaml",
+    "case_ids": [],
+    "evidence_reviews": [],
+    "limitations": [
+        "No selected reasoning case with agama_evidence role was found for this query fixture.",
+    ],
+}
 CHAIN_STEP_ROLES = [
     "input_contact",
     "attention_orientation",
@@ -278,3 +290,30 @@ def test_reasoning_contract_runner_runs_cognitive_mapper_for_srq10() -> None:
     assert cognitive_validator["mappings"][0]["case_id"] == "ZR-11"
     chain_steps = cognitive_validator["mappings"][0]["cognitive_analysis"]["chain_steps"]
     assert [item["role"] for item in chain_steps] == CHAIN_STEP_ROLES
+
+def test_reasoning_contract_runner_runs_agama_evidence_checker_for_srq04() -> None:
+    result = build_reasoning_contract_run(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-04",
+        sample_id="srq04-agama-citation-boundary-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["role_coverage"]["coverage_status"] == "complete"
+    assert result["role_coverage"]["missing_needs"] == []
+    assert result["answer_review_status"] == "pass"
+    assert result["answer_contract_review"]["overall_status"] == "pass"
+    assert result["validators"]["hetuvidya"] == NOT_APPLICABLE_HETUVIDYA
+    assert result["validators"]["collected_topics"] == NOT_APPLICABLE_COLLECTED_TOPICS
+    assert result["validators"]["madhyamaka_prasanga"] == NOT_APPLICABLE_MADHYAMAKA
+    assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
+
+    agama_validator = result["validators"]["agama_evidence"]
+    assert agama_validator["status"] == "run"
+    assert agama_validator["validator"] == "agama_evidence_checker"
+    assert agama_validator["case_ids"] == ["ZR-05"]
+    review = agama_validator["evidence_reviews"][0]
+    assert review["case_id"] == "ZR-05"
+    assert review["agama_evidence"]["citation_required"]["status"] == "required"
+    assert review["agama_evidence"]["search_scope"]["scope"] == "representative_search"
+    assert review["agama_evidence"]["collation_boundary"]["status"] == "required"
