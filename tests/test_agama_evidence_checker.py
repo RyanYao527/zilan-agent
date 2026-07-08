@@ -11,6 +11,7 @@ from agama_evidence_checker import (
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "agama_evidence_checker.py"
+NEGATIVE_RETRIEVAL_FIXTURE = ROOT / "tests" / "fixtures" / "retrieval_chunks" / "agama_bad_anchor_chunks.yaml"
 
 
 def test_agama_evidence_checker_maps_zr05_citation_boundary() -> None:
@@ -83,6 +84,31 @@ def test_agama_evidence_checker_rejects_non_agama_case() -> None:
     else:
         raise AssertionError("non-Agama evidence case should fail")
 
+def test_agama_evidence_checker_flags_bad_local_anchor_fixture() -> None:
+    result = build_agama_evidence_check(
+        DEFAULT_CASES,
+        case_id="ZR-05",
+        retrieval_fixture_path=NEGATIVE_RETRIEVAL_FIXTURE,
+    )
+    review = result["evidence_reviews"][0]
+    local_evidence = review["agama_evidence"]["local_evidence"]
+
+    assert local_evidence["status"] == "fail"
+    assert local_evidence["failed_references"] == []
+    assert local_evidence["failed_passage_anchors"] == [
+        "agama:bad-line-range",
+        "agama:bad-cbeta-id",
+        "agama:missing-text-anchor",
+    ]
+    checks = {item["chunk_id"]: item for item in local_evidence["passage_anchor_checks"]}
+    assert checks["agama:bad-line-range"]["line_range_status"] == "fail"
+    assert checks["agama:bad-line-range"]["text_anchor_status"] == "fail"
+    assert checks["agama:bad-cbeta-id"]["cbeta_id_status"] == "fail"
+    assert checks["agama:bad-cbeta-id"]["line_range_status"] == "pass"
+    assert checks["agama:bad-cbeta-id"]["text_anchor_status"] == "pass"
+    assert checks["agama:missing-text-anchor"]["text_anchor_status"] == "fail"
+    assert checks["agama:missing-text-anchor"]["cbeta_id_status"] == "pass"
+    assert "local_evidence_anchors_verified" not in {item["code"] for item in review["diagnostics"]}
 
 def test_agama_evidence_checker_cli_json_output_is_machine_readable() -> None:
     result = subprocess.run(

@@ -1,0 +1,45 @@
+version: 1
+source: tests/test_agama_evidence_checker.py
+purpose: Negative Agama evidence anchor fixtures for agama_evidence_checker local evidence checks.
+chunks:
+  - chunk_id: agama:bad-line-range
+    chunk_type: agama_passage
+    source_file: context/agama/T0099-za-agama.md
+    start_line: 999999
+    end_line: 1000000
+    citation: "《雜阿含經》(T02n0099) 卷 1, context/agama/T0099-za-agama.md:999999-1000000"
+    passage_citation: "《雜阿含經》(T02n0099) 卷 1, context/agama/T0099-za-agama.md:999999-1000000"
+    text: "色無常，無常即苦，苦即非我"
+    metadata:
+      collection: 雜阿含經
+      cbeta_id: T02n0099
+      reasoning_roles:
+        - agama_evidence
+
+  - chunk_id: agama:bad-cbeta-id
+    chunk_type: agama_passage
+    source_file: context/agama/T0099-za-agama.md
+    start_line: 147
+    end_line: 149
+    citation: "《雜阿含經》(T99n9999) 卷 1, context/agama/T0099-za-agama.md:147-149"
+    passage_citation: "《雜阿含經》(T99n9999) 卷 1, context/agama/T0099-za-agama.md:147-149"
+    text: "色無常，無常即苦，苦即非我"
+    metadata:
+      collection: 雜阿含經
+      cbeta_id: T99n9999
+      reasoning_roles:
+        - agama_evidence
+
+  - chunk_id: agama:missing-text-anchor
+    chunk_type: agama_passage
+    source_file: context/agama/T0099-za-agama.md
+    start_line: 147
+    end_line: 149
+    citation: "《雜阿含經》(T02n0099) 卷 1, context/agama/T0099-za-agama.md:147-149"
+    passage_citation: "《雜阿含經》(T02n0099) 卷 1, context/agama/T0099-za-agama.md:147-149"
+    text: "This text is intentionally absent from the local Agama source line range."
+    metadata:
+      collection: 雜阿含經
+      cbeta_id: T02n0099
+      reasoning_roles:
+        - agama_evidence
