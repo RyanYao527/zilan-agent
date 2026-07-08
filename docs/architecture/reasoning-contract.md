@@ -99,10 +99,11 @@ Required structure:
 - `search_scope`: the expected search scope, such as representative search or exhaustive search
 - `collation_boundary`: whether publication-level claims require CBETA XML or parallel-text verification
 
-`scripts/agama_evidence_checker.py` consumes only checked-in `agama_evidence` fixtures and emits
-`agama-evidence-checker-output-v0`. The output makes citation requirements, representative-search scope, local
-`context/agama/` references, and collation boundaries explicit without running `search_agama.py`, calling providers,
-or grading whether a produced answer cited the right passage.
+`scripts/agama_evidence_checker.py` consumes checked-in `agama_evidence` fixtures plus the semantic retrieval fixture and emits
+`agama-evidence-checker-output-v0.1`. The output makes citation requirements, representative-search scope, local
+`context/agama/` references, and collation boundaries explicit. It also verifies that checked-in Agama passage chunks point to
+existing local Markdown files, matching CBETA IDs, valid line ranges, and fixture text anchors. It still does not run
+`search_agama.py`, perform CBETA XML collation, call providers, or grade whether a produced answer cited the right passage.
 
 ## Data File
 
