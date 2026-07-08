@@ -65,7 +65,7 @@ NOT_APPLICABLE_AGAMA_EVIDENCE = {
     "status": "not_applicable",
     "validator": "agama_evidence_checker",
     "contract_family": "agama_evidence",
-    "output_schema": "agama-evidence-checker-output-v0",
+    "output_schema": "agama-evidence-checker-output-v0.1",
     "source": "tests/reasoning_cases.yaml",
     "case_ids": [],
     "evidence_reviews": [],
@@ -317,3 +317,5 @@ def test_reasoning_contract_runner_runs_agama_evidence_checker_for_srq04() -> No
     assert review["agama_evidence"]["citation_required"]["status"] == "required"
     assert review["agama_evidence"]["search_scope"]["scope"] == "representative_search"
     assert review["agama_evidence"]["collation_boundary"]["status"] == "required"
+    assert review["agama_evidence"]["local_evidence"]["status"] == "pass"
+    assert review["agama_evidence"]["local_evidence"]["failed_passage_anchors"] == []

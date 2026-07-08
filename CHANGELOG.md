@@ -55,6 +55,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added a shared reasoning-validator output envelope so Hetuvidya, Collected Topics, Madhyamaka, cognitive-analysis, and runner validator outputs expose consistent `status`, `validator`, `contract_family`, `source`, `case_ids`, `count`, and `limitations` fields without changing provider or platform status.
 - Added a minimal `scripts/agama_evidence_checker.py` prototype that reads structured Agama evidence fixtures and emits deterministic citation, search-scope, local-reference, and collation-boundary checks without running search or changing platform status.
 - Integrated the Agama evidence checker into `scripts/reasoning_contract_runner.py` so `SRQ-04` / `ZR-05` exposes structured citation-boundary analysis under `validators.agama_evidence`.
+- Expanded `scripts/agama_evidence_checker.py` to `agama-evidence-checker-output-v0.1` with local evidence checks for checked-in semantic Agama chunks, local Markdown files, CBETA IDs, line ranges, and fixture text anchors without running search or changing platform status.
 
 ## [2.4.8] - 2026-06-17
 
