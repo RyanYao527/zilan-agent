@@ -204,6 +204,7 @@ The review helper reports:
 - `already_present`: generated candidates whose `chunk_id` already exists in the fixture
 - `range_matches`: generated candidates whose source file and line range already exist under a different ID
 - `new_candidates`: generated candidates that are not represented in the fixture
+- `provenance_drifts`: represented generated candidates whose checked-in chunk has different `source_hash`, `line_text_hash`, `matched_lines`, or provenance fields
 - `fixture_only_agama_chunks`: checked-in Agama chunks not produced by the current candidate command
 
 This keeps fixture refreshes explicit: a maintainer can inspect the report, then decide whether to copy any

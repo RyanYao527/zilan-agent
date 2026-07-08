@@ -77,6 +77,81 @@ def _summarize_chunk(chunk: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _metadata(chunk: dict[str, Any]) -> dict[str, Any]:
+    metadata = chunk.get("metadata")
+    return metadata if isinstance(metadata, dict) else {}
+
+
+def _provenance(chunk: dict[str, Any]) -> dict[str, Any]:
+    provenance = _metadata(chunk).get("provenance")
+    return provenance if isinstance(provenance, dict) else {}
+
+
+def _append_difference(
+    differences: list[dict[str, Any]],
+    *,
+    field: str,
+    candidate_value: Any,
+    fixture_value: Any,
+) -> None:
+    if candidate_value != fixture_value:
+        differences.append(
+            {
+                "field": field,
+                "candidate": candidate_value,
+                "fixture": fixture_value,
+            }
+        )
+
+
+def _provenance_drift(
+    candidate: dict[str, Any],
+    fixture_chunk: dict[str, Any],
+    *,
+    match_type: str,
+) -> dict[str, Any] | None:
+    candidate_metadata = _metadata(candidate)
+    fixture_metadata = _metadata(fixture_chunk)
+    candidate_provenance = _provenance(candidate)
+    fixture_provenance = _provenance(fixture_chunk)
+
+    differences: list[dict[str, Any]] = []
+    for field in ("source_hash", "line_text_hash", "matched_lines"):
+        _append_difference(
+            differences,
+            field=f"metadata.{field}",
+            candidate_value=candidate_metadata.get(field),
+            fixture_value=fixture_metadata.get(field),
+        )
+
+    for field in (
+        "source_script",
+        "source_file",
+        "line_range",
+        "matched_lines",
+        "hash_algorithm",
+        "line_text_hash",
+        "source_hash_scope",
+        "line_text_hash_scope",
+    ):
+        _append_difference(
+            differences,
+            field=f"metadata.provenance.{field}",
+            candidate_value=candidate_provenance.get(field),
+            fixture_value=fixture_provenance.get(field),
+        )
+
+    if not differences:
+        return None
+
+    return {
+        "match_type": match_type,
+        "candidate": _summarize_chunk(candidate),
+        "fixture": _summarize_chunk(fixture_chunk),
+        "differences": differences,
+    }
+
+
 def build_review(
     *,
     root: Path = ROOT,
@@ -90,9 +165,9 @@ def build_review(
 
     fixture_data = _load_fixture(fixture_path)
     fixture_chunks = fixture_data.get("chunks", [])
-    fixture_chunk_ids = {_chunk_id(chunk) for chunk in fixture_chunks}
+    fixture_by_id = {_chunk_id(chunk): chunk for chunk in fixture_chunks}
     fixture_ranges = {
-        chunk_range
+        chunk_range: chunk
         for chunk in fixture_chunks
         if (chunk_range := _chunk_range(chunk)) is not None
     }
@@ -109,13 +184,18 @@ def build_review(
     already_present: list[dict[str, Any]] = []
     range_matches: list[dict[str, Any]] = []
     new_candidates: list[dict[str, Any]] = []
+    provenance_drifts: list[dict[str, Any]] = []
     for candidate in candidates:
         candidate_id = _chunk_id(candidate)
         candidate_range = _chunk_range(candidate)
-        if candidate_id in fixture_chunk_ids:
+        if candidate_id in fixture_by_id:
             already_present.append(_summarize_chunk(candidate))
+            if drift := _provenance_drift(candidate, fixture_by_id[candidate_id], match_type="chunk_id"):
+                provenance_drifts.append(drift)
         elif candidate_range in fixture_ranges:
             range_matches.append(_summarize_chunk(candidate))
+            if drift := _provenance_drift(candidate, fixture_ranges[candidate_range], match_type="line_range"):
+                provenance_drifts.append(drift)
         else:
             new_candidates.append(candidate)
 
@@ -137,11 +217,13 @@ def build_review(
             "already_present": len(already_present),
             "range_matches": len(range_matches),
             "new_candidates": len(new_candidates),
+            "provenance_drifts": len(provenance_drifts),
             "fixture_only_agama_chunks": len(fixture_only_agama_chunks),
         },
         "already_present": already_present,
         "range_matches": range_matches,
         "new_candidates": new_candidates,
+        "provenance_drifts": provenance_drifts,
         "fixture_only_agama_chunks": fixture_only_agama_chunks,
         "limitations": list(LIMITATIONS),
     }
@@ -159,6 +241,7 @@ def _print_text(result: dict[str, Any]) -> None:
         f"already_present={summary['already_present']}, "
         f"range_matches={summary['range_matches']}, "
         f"new_candidates={summary['new_candidates']}, "
+        f"provenance_drifts={summary['provenance_drifts']}, "
         f"fixture_only_agama={summary['fixture_only_agama_chunks']}"
     )
     if result["new_candidates"]:
@@ -166,6 +249,14 @@ def _print_text(result: dict[str, Any]) -> None:
         for index, chunk in enumerate(result["new_candidates"], start=1):
             print(f"{index}. {chunk['chunk_id']}")
             print(f"   citation: {chunk['passage_citation']}")
+    if result["provenance_drifts"]:
+        print("provenance_drifts:")
+        for index, drift in enumerate(result["provenance_drifts"], start=1):
+            candidate_id = drift["candidate"]["chunk_id"]
+            fixture_id = drift["fixture"]["chunk_id"]
+            print(f"{index}. {candidate_id} vs {fixture_id} ({drift['match_type']})")
+            for difference in drift["differences"]:
+                print(f"   - {difference['field']}")
     print("limitations:")
     for item in result["limitations"]:
         print(f"- {item}")
