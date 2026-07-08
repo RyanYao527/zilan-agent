@@ -24,6 +24,15 @@ def test_candidate_builder_preserves_agama_citation_fields() -> None:
         assert chunk["metadata"]["reasoning_roles"] == ["agama_evidence"]
         assert chunk["metadata"]["matched_lines"]
         assert chunk["metadata"]["source_hash"].startswith("sha256:")
+        assert chunk["metadata"]["line_text_hash"] == chunk["metadata"]["source_hash"]
+        provenance = chunk["metadata"]["provenance"]
+        assert provenance["source_script"] == "scripts/search_agama.py"
+        assert provenance["source_file"] == chunk["source_file"]
+        assert provenance["line_range"] == {"start": chunk["start_line"], "end": chunk["end_line"]}
+        assert provenance["matched_lines"] == chunk["metadata"]["matched_lines"]
+        assert provenance["hash_algorithm"] == "sha256"
+        assert provenance["line_text_hash"] == chunk["metadata"]["line_text_hash"]
+        assert provenance["source_hash_scope"] == "legacy_alias_for_line_text_hash"
 
 
 def test_candidate_builder_deduplicates_passage_chunks() -> None:
@@ -34,6 +43,8 @@ def test_candidate_builder_deduplicates_passage_chunks() -> None:
     }
 
     assert len(keys) == len(result["chunks"])
+    for chunk in result["chunks"]:
+        assert chunk["metadata"]["provenance"]["matched_lines"] == chunk["metadata"]["matched_lines"]
 
 
 def test_candidate_builder_rejects_negative_limit() -> None:
@@ -60,3 +71,5 @@ def test_candidate_cli_json_output_is_machine_readable() -> None:
     assert len(data["chunks"]) == 1
     assert "citation" in data["chunks"][0]
     assert "passage_citation" in data["chunks"][0]
+    assert data["chunks"][0]["metadata"]["line_text_hash"].startswith("sha256:")
+    assert data["chunks"][0]["metadata"]["provenance"]["hash_algorithm"] == "sha256"

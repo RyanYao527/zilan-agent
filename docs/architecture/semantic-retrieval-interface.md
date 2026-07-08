@@ -66,6 +66,19 @@ metadata:
   reasoning_roles:
     - agama_evidence
   source_hash: "sha256:..."
+  line_text_hash: "sha256:..."
+  provenance:
+    source_script: "scripts/search_agama.py"
+    source_file: "context/agama/T0099-za-agama.md"
+    line_range:
+      start: 33
+      end: 37
+    matched_lines:
+      - 33
+    hash_algorithm: "sha256"
+    line_text_hash: "sha256:..."
+    source_hash_scope: "legacy_alias_for_line_text_hash"
+    line_text_hash_scope: "trimmed_non_empty_lines_joined_with_lf"
 ```
 
 Required invariants:
@@ -75,7 +88,7 @@ Required invariants:
 - `citation` or `passage_citation` must remain stable enough for prompt use.
 - `chunk_type` must be explicit.
 - `reasoning_roles` should use contract language where possible, such as `agama_evidence`, `hetuvidya`, `collected_topics`, `cognitive_analysis`, or `madhyamaka_prasanga`.
-- `source_hash` is a future strengthening field; fixture v0 validates line anchors and text presence first.
+- `source_hash` and `line_text_hash` are provenance fields for drift review; `source_hash` currently remains a legacy alias for the line-text hash generated from trimmed non-empty source lines.
 
 ## Query Understanding Fields
 
@@ -168,7 +181,7 @@ The generator:
 - reuses `search_agama.py` as the source of truth for Agama matches
 - deduplicates hits into passage-level `agama_passage` candidates
 - preserves `citation` and `passage_citation`
-- carries CBETA ID, local source file, line range, matched lines, topic metadata, and a source text hash
+- carries CBETA ID, local source file, line range, matched lines, topic metadata, `source_hash`, `line_text_hash`, and provenance metadata
 - emits JSON or YAML for review before any fixture is updated
 
 This is still not semantic ranking. It is a fixture-refresh aid that keeps candidate generation tied to the
