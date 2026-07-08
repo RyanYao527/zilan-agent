@@ -12,6 +12,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added fixture-only semantic retrieval chunks and repository validation for source-file existence, line-range sanity, local citation anchors, reasoning roles, and dry-run query chunk references.
 - Added a fixture-only semantic retrieval dry-run helper that returns expected chunks for query fixtures without embeddings, vector storage, reranking, or provider calls.
 - Added an Agama semantic fixture candidate generator that converts `search_agama.py` keyword-baseline hits into citation-preserving `agama_passage` chunk candidates.
+- Expanded `scripts/semantic_fixture_candidates.py` candidate metadata with explicit `line_text_hash` and provenance fields while preserving `source_hash` as a legacy line-text hash alias.
 - Added a semantic fixture review helper that compares generated Agama candidates with the checked-in fixture without auto-overwriting YAML.
 - Expanded `SRQ-01` semantic retrieval fixture coverage with reviewed `長阿含經` Agama chunks selected from the fixture review workflow.
 - Added a fixture-only semantic context-bundle dry run that assembles selected chunks into prompt-ready order.

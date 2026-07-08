@@ -13,6 +13,7 @@ from search_agama import DEFAULT_PATTERN, search_agama
 ROOT = Path(__file__).resolve().parents[1]
 MODE = "agama-fixture-candidates"
 SOURCE_SCRIPT = "scripts/search_agama.py"
+HASH_ALGORITHM = "sha256"
 LIMITATIONS = (
     "Candidate generation is keyword-baseline only; no embeddings, vector search, reranking, or provider calls.",
     "Review generated candidates before copying them into tests/fixtures/retrieval_chunks/semantic_chunks.yaml.",
@@ -54,8 +55,8 @@ def _passage_text(root: Path, rel_file: str, start_line: int, end_line: int) -> 
     return "\n".join(line.strip() for line in lines[start_line - 1 : end_line] if line.strip())
 
 
-def _source_hash(text: str) -> str:
-    return "sha256:" + hashlib.sha256(text.encode("utf-8")).hexdigest()
+def _text_hash(text: str) -> str:
+    return f"{HASH_ALGORITHM}:" + hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
 def build_candidate_set(
@@ -87,9 +88,11 @@ def build_candidate_set(
         existing = chunks_by_passage.get(key)
         if existing is not None:
             existing["metadata"]["matched_lines"].append(match.line)
+            existing["metadata"]["provenance"]["matched_lines"].append(match.line)
             continue
 
         text = _passage_text(root, match.file, match.passage_start_line, match.passage_end_line)
+        line_text_hash = _text_hash(text)
         chunk = {
             "chunk_id": (
                 f"agama:{match.cbeta_id}:{_juan_slug(match.juan)}:line-{match.passage_start_line}"
@@ -109,7 +112,21 @@ def build_candidate_set(
                 "topics": topic_values,
                 "reasoning_roles": ["agama_evidence"],
                 "matched_lines": [match.line],
-                "source_hash": _source_hash(text),
+                "source_hash": line_text_hash,
+                "line_text_hash": line_text_hash,
+                "provenance": {
+                    "source_script": SOURCE_SCRIPT,
+                    "source_file": match.file,
+                    "line_range": {
+                        "start": match.passage_start_line,
+                        "end": match.passage_end_line,
+                    },
+                    "matched_lines": [match.line],
+                    "hash_algorithm": HASH_ALGORITHM,
+                    "line_text_hash": line_text_hash,
+                    "source_hash_scope": "legacy_alias_for_line_text_hash",
+                    "line_text_hash_scope": "trimmed_non_empty_lines_joined_with_lf",
+                },
             },
         }
         chunks.append(chunk)
