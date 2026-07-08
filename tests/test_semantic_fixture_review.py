@@ -1,3 +1,4 @@
+import copy
 import json
 import subprocess
 import sys
@@ -58,6 +59,27 @@ def test_review_detects_range_match_with_different_chunk_id(tmp_path: Path) -> N
     assert result["range_matches"][0]["chunk_id"] == candidate["chunk_id"]
 
 
+def test_review_reports_provenance_drift_for_existing_candidate(tmp_path: Path) -> None:
+    candidate = build_candidate_set(root=ROOT, terms="\u975e\u6211", limit=1)["chunks"][0]
+    fixture_chunk = copy.deepcopy(candidate)
+    fixture_chunk["metadata"]["line_text_hash"] = "sha256:fixture-drift"
+    fixture_chunk["metadata"]["provenance"]["line_text_hash"] = "sha256:fixture-drift"
+    fixture_path = tmp_path / "semantic_chunks.yaml"
+    _write_fixture(fixture_path, [fixture_chunk])
+
+    result = build_review(root=ROOT, fixture_path=fixture_path, terms="\u975e\u6211", limit=1)
+
+    assert result["summary"]["already_present"] == 1
+    assert result["summary"]["provenance_drifts"] == 1
+    drift = result["provenance_drifts"][0]
+    assert drift["match_type"] == "chunk_id"
+    assert drift["candidate"]["chunk_id"] == candidate["chunk_id"]
+    assert drift["fixture"]["chunk_id"] == fixture_chunk["chunk_id"]
+    fields = {difference["field"] for difference in drift["differences"]}
+    assert "metadata.line_text_hash" in fields
+    assert "metadata.provenance.line_text_hash" in fields
+
+
 def test_review_missing_fixture_is_reported(tmp_path: Path) -> None:
     try:
         build_review(root=ROOT, fixture_path=tmp_path / "missing.yaml", terms="\u975e\u6211", limit=1)
@@ -81,4 +103,6 @@ def test_review_cli_json_output_is_machine_readable() -> None:
     assert data["mode"] == "semantic-fixture-review"
     assert "summary" in data
     assert "new_candidates" in data
+    assert "provenance_drifts" in data
+    assert "provenance_drifts" in data["summary"]
     assert data["limitations"]
