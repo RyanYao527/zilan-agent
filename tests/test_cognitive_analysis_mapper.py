@@ -18,9 +18,13 @@ def test_cognitive_analysis_mapper_returns_caregiving_case() -> None:
     mapping = result["mappings"][0]
     cognitive = mapping["cognitive_analysis"]
 
+    assert result["status"] == "run"
+    assert result["validator"] == "cognitive_analysis_mapper"
+    assert result["contract_family"] == "cognitive_analysis"
     assert result["mode"] == "cognitive-analysis-mapper-v0"
     assert result["output_schema"] == "cognitive-analysis-mapper-output-v0"
     assert result["source"] == "tests/reasoning_cases.yaml"
+    assert result["case_ids"] == ["ZR-11"]
     assert result["count"] == 1
     assert mapping["case_id"] == "ZR-11"
     assert mapping["source_regression_cases"] == ["ZC-01", "ZC-03"]

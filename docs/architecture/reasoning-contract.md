@@ -122,6 +122,25 @@ Each case must include:
 4. Use runtime review to compare real answers against these cases.
 5. Only after this contract stabilizes, design citation-preserving semantic chunks that can feed these structures.
 
+## Validator Output Contract v0
+
+The local structured validators share a shallow top-level output envelope so downstream tools can consume them without knowing each validator's internal payload shape. This envelope is additive and preserves the existing family-specific payload keys such as `validations`, `analyses`, `critiques`, and `mappings`.
+
+Common fields:
+
+- `status`: `run` or `not_applicable`
+- `validator`: stable local tool identifier, such as `hetuvidya_validator`
+- `contract_family`: reasoning contract family, such as `hetuvidya` or `madhyamaka_prasanga`
+- `mode`: validator runtime mode when the validator ran
+- `output_schema`: validator output schema identifier
+- `source`: fixture source path
+- `case_id`: requested case id for direct validator calls
+- `case_ids`: selected reasoning case ids represented in the payload
+- `count`: number of payload items when the validator ran
+- `limitations`: explicit prototype boundaries
+
+`not_applicable` validator entries intentionally keep the same `validator`, `contract_family`, `output_schema`, `source`, `case_ids`, payload key, and `limitations` fields. They omit `mode` and `count` because no validator execution occurred.
+
 ## Answer Contract v0.1
 
 `tests/fixtures/retrieval_chunks/semantic_chunks.yaml` may attach `answer_contracts` to semantic query fixtures.

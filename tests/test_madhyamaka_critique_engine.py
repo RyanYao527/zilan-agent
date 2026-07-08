@@ -15,9 +15,13 @@ SCRIPT = ROOT / "scripts" / "madhyamaka_critique_engine.py"
 def test_madhyamaka_critique_engine_maps_zr09_nihilism_boundary() -> None:
     result = build_madhyamaka_critique(case_id="ZR-09")
 
+    assert result["status"] == "run"
+    assert result["validator"] == "madhyamaka_critique_engine"
+    assert result["contract_family"] == "madhyamaka_prasanga"
     assert result["mode"] == "madhyamaka-critique-engine-v0"
     assert result["output_schema"] == "madhyamaka-critique-engine-output-v0"
     assert result["case_id"] == "ZR-09"
+    assert result["case_ids"] == ["ZR-09"]
     assert result["count"] == 1
 
     critique = result["critiques"][0]

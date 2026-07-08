@@ -11,6 +11,10 @@ SCRIPT = ROOT / "scripts" / "reasoning_contract_runner.py"
 
 NOT_APPLICABLE_HETUVIDYA = {
     "status": "not_applicable",
+    "validator": "hetuvidya_validator",
+    "contract_family": "hetuvidya",
+    "output_schema": "hetuvidya-validator-output-v0.1",
+    "source": "tests/reasoning_cases.yaml",
     "case_ids": [],
     "validations": [],
     "limitations": [
@@ -20,6 +24,10 @@ NOT_APPLICABLE_HETUVIDYA = {
 
 NOT_APPLICABLE_COLLECTED_TOPICS = {
     "status": "not_applicable",
+    "validator": "collected_topics_analyzer",
+    "contract_family": "collected_topics",
+    "output_schema": "collected-topics-analyzer-output-v0",
+    "source": "tests/reasoning_cases.yaml",
     "case_ids": [],
     "analyses": [],
     "limitations": [
@@ -29,6 +37,10 @@ NOT_APPLICABLE_COLLECTED_TOPICS = {
 
 NOT_APPLICABLE_MADHYAMAKA = {
     "status": "not_applicable",
+    "validator": "madhyamaka_critique_engine",
+    "contract_family": "madhyamaka_prasanga",
+    "output_schema": "madhyamaka-critique-engine-output-v0",
+    "source": "tests/reasoning_cases.yaml",
     "case_ids": [],
     "critiques": [],
     "limitations": [
@@ -38,6 +50,10 @@ NOT_APPLICABLE_MADHYAMAKA = {
 
 NOT_APPLICABLE_COGNITIVE_ANALYSIS = {
     "status": "not_applicable",
+    "validator": "cognitive_analysis_mapper",
+    "contract_family": "cognitive_analysis",
+    "output_schema": "cognitive-analysis-mapper-output-v0",
+    "source": "tests/reasoning_cases.yaml",
     "case_ids": [],
     "mappings": [],
     "limitations": [

@@ -6,8 +6,12 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from reasoning_validator_output import build_validator_output
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASES = ROOT / "tests" / "reasoning_cases.yaml"
+VALIDATOR = "madhyamaka_critique_engine"
+CONTRACT_FAMILY = "madhyamaka_prasanga"
 MODE = "madhyamaka-critique-engine-v0"
 OUTPUT_SCHEMA = "madhyamaka-critique-engine-output-v0"
 LIMITATIONS = (
@@ -236,15 +240,17 @@ def build_madhyamaka_critique(
 
     critiques = [_critique_case(case) for case in selected]
 
-    return {
-        "mode": MODE,
-        "output_schema": OUTPUT_SCHEMA,
-        "source": _display_path(cases_path),
-        "case_id": case_id,
-        "count": len(critiques),
-        "critiques": critiques,
-        "limitations": list(LIMITATIONS),
-    }
+    return build_validator_output(
+        validator=VALIDATOR,
+        contract_family=CONTRACT_FAMILY,
+        mode=MODE,
+        output_schema=OUTPUT_SCHEMA,
+        source=_display_path(cases_path),
+        case_id=case_id,
+        payload_key="critiques",
+        payload=critiques,
+        limitations=LIMITATIONS,
+    )
 
 
 def _render_text(result: dict[str, Any]) -> str:
