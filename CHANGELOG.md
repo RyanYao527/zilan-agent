@@ -53,6 +53,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added a minimal `scripts/madhyamaka_critique_engine.py` prototype that reads structured Madhyamaka prasaṅga fixtures and emits deterministic opponent-premise, accepted-commitment, contradiction, no-independent-thesis, critique-step, and diagnostic critiques without model calls or natural-language parsing.
 - Integrated the Madhyamaka critique engine into `scripts/reasoning_contract_runner.py` so Madhyamaka query fixtures such as `SRQ-08` / `ZR-09` expose structured prasaṅga critiques under `validators.madhyamaka_prasanga`.
 - Added a shared reasoning-validator output envelope so Hetuvidya, Collected Topics, Madhyamaka, cognitive-analysis, and runner validator outputs expose consistent `status`, `validator`, `contract_family`, `source`, `case_ids`, `count`, and `limitations` fields without changing provider or platform status.
+- Added a minimal `scripts/agama_evidence_checker.py` prototype that reads structured Agama evidence fixtures and emits deterministic citation, search-scope, local-reference, and collation-boundary checks without running search or changing platform status.
+- Integrated the Agama evidence checker into `scripts/reasoning_contract_runner.py` so `SRQ-04` / `ZR-05` exposes structured citation-boundary analysis under `validators.agama_evidence`.
 
 ## [2.4.8] - 2026-06-17
 

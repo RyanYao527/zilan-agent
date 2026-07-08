@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import agama_evidence_checker
 import cognitive_analysis_mapper
 import collected_topics_analyzer
 import hetuvidya_validator
@@ -23,7 +24,7 @@ OUTPUT_SCHEMA = "reasoning-contract-runner-output-v0"
 LIMITATIONS = (
     "Local fixture runner only; no answer generation, provider calls, embeddings, vector search, or reranking.",
     "Answer contracts are minimum explicitness checks and do not grade doctrinal correctness.",
-    "Hetuvidya, Collected Topics, Madhyamaka, and cognitive-analysis structured validators are wired "
+    "Hetuvidya, Collected Topics, Madhyamaka, cognitive-analysis, and Agama evidence structured validators are wired "
     "in v0; other families use retrieval, role coverage, and answer contracts.",
     "This runner does not change platform validation status.",
 )
@@ -281,6 +282,46 @@ def _build_madhyamaka_prasanga_validator(cases_path: Path, dry_run: dict[str, An
         limitations=limitations,
     )
 
+def _build_agama_evidence_validator(cases_path: Path, dry_run: dict[str, Any]) -> dict[str, Any]:
+    case_ids = _reasoning_case_ids_for_role(dry_run, "agama_evidence")
+    if not case_ids:
+        return build_not_applicable_validator_output(
+            validator=agama_evidence_checker.VALIDATOR,
+            contract_family=agama_evidence_checker.CONTRACT_FAMILY,
+            output_schema=agama_evidence_checker.OUTPUT_SCHEMA,
+            source=_display_path(cases_path),
+            payload_key="evidence_reviews",
+            limitation="No selected reasoning case with agama_evidence role was found for this query fixture.",
+        )
+
+    evidence_reviews: list[dict[str, Any]] = []
+    mode = ""
+    output_schema = ""
+    source = _display_path(cases_path)
+    limitations: list[str] = []
+
+    for case_id in case_ids:
+        result = agama_evidence_checker.build_agama_evidence_check(cases_path, case_id=case_id)
+        mode = result["mode"]
+        output_schema = result["output_schema"]
+        source = result["source"]
+        evidence_reviews.extend(result["evidence_reviews"])
+        for limitation in result["limitations"]:
+            if limitation not in limitations:
+                limitations.append(limitation)
+
+    return build_validator_output(
+        validator=agama_evidence_checker.VALIDATOR,
+        contract_family=agama_evidence_checker.CONTRACT_FAMILY,
+        mode=mode,
+        output_schema=output_schema,
+        source=source,
+        case_id=None,
+        payload_key="evidence_reviews",
+        payload=evidence_reviews,
+        limitations=limitations,
+    )
+
 def _overall_status(role_coverage: dict[str, Any], answer_review_status: str) -> str:
     if role_coverage.get("missing_needs"):
         return "fail"
@@ -320,6 +361,7 @@ def build_reasoning_contract_run(
         "collected_topics": _build_collected_topics_validator(cases_path, dry_run),
         "madhyamaka_prasanga": _build_madhyamaka_prasanga_validator(cases_path, dry_run),
         "cognitive_analysis": _build_cognitive_analysis_validator(cases_path, dry_run),
+        "agama_evidence": _build_agama_evidence_validator(cases_path, dry_run),
     }
     status = _overall_status(role_coverage, answer_review_status)
 
@@ -346,6 +388,7 @@ def _render_text(result: dict[str, Any]) -> str:
     collected_topics_status = result["validators"]["collected_topics"]["status"]
     madhyamaka_prasanga_status = result["validators"]["madhyamaka_prasanga"]["status"]
     cognitive_analysis_status = result["validators"]["cognitive_analysis"]["status"]
+    agama_evidence_status = result["validators"]["agama_evidence"]["status"]
     lines = [
         "# Reasoning Contract Runner",
         "",
@@ -358,6 +401,7 @@ def _render_text(result: dict[str, Any]) -> str:
         f"Collected Topics analyzer: {collected_topics_status}",
         f"Madhyamaka critique engine: {madhyamaka_prasanga_status}",
         f"Cognitive-analysis mapper: {cognitive_analysis_status}",
+        f"Agama evidence checker: {agama_evidence_status}",
         "",
         "Boundary: local fixture runner only; this is not runtime platform validation.",
         "",
@@ -419,6 +463,7 @@ def main() -> int:
         collected_topics_analyzer.CollectedTopicsAnalyzerError,
         madhyamaka_critique_engine.MadhyamakaCritiqueEngineError,
         cognitive_analysis_mapper.CognitiveAnalysisMapperError,
+        agama_evidence_checker.AgamaEvidenceCheckerError,
     ) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
