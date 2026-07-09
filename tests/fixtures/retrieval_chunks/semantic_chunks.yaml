@@ -104,6 +104,43 @@ chunks:
         line_text_hash: "sha256:2215c02d0e8da74dfcdb2b2cd5931b22992cc739f552aa8e8a2a9398f12a2277"
         source_hash_scope: legacy_alias_for_line_text_hash
         line_text_hash_scope: trimmed_non_empty_lines_joined_with_lf
+  - chunk_id: agama:T01n0001:juan-10:line-3997
+    chunk_type: agama_passage
+    source_file: context/agama/T0001-chang-agama.md
+    start_line: 3997
+    end_line: 3997
+    citation: "《長阿含經》(T01n0001) 卷 10, context/agama/T0001-chang-agama.md:3997"
+    passage_citation: "《長阿含經》(T01n0001) 卷 10, context/agama/T0001-chang-agama.md:3997"
+    text: "「阿難！彼見我者，言受是我，當語彼言：『如來說三受，樂受、苦受、不苦不樂受。當有樂受時，無有苦受、不苦不樂受；有苦受時，無有樂受、不苦不樂受；有不苦不樂受時，無有苦受、樂受。』所以然者？阿難！樂觸緣生樂受，若樂觸滅受亦滅。阿難！苦觸緣生苦受，若苦觸滅受亦滅；不苦不樂觸緣生不苦不樂受，若不苦不樂觸滅受亦滅。阿難！如兩木相攢則有火生，各置異處則無有火。此亦如是，因樂觸緣故生樂受，若樂觸滅受亦俱滅；因苦觸緣故生苦受，若苦觸滅受亦俱滅；因不苦不樂觸緣生不苦不樂受，若不苦不樂觸滅受亦俱滅。阿難！此三受有為無常，從因緣生，盡法、滅法，為朽壞法。彼非我有，我非彼有，當以正智如實觀之。阿難！彼見我者，以受為我，彼則為非。"
+    metadata:
+      collection: 長阿含經
+      cbeta_id: T01n0001
+      juan: 卷 10
+      section_marker:
+      topics:
+        - 无我
+        - 非我
+        - 五蕴
+        - 三受
+        - 缘生
+      reasoning_roles:
+        - agama_evidence
+      matched_lines:
+        - 3997
+      source_hash: "sha256:20ddc44c76009bfd6341d627e0772b4a17f67aa3f7aed2ff736b71c0bdf760d8"
+      line_text_hash: "sha256:20ddc44c76009bfd6341d627e0772b4a17f67aa3f7aed2ff736b71c0bdf760d8"
+      provenance:
+        source_script: scripts/search_agama.py
+        source_file: context/agama/T0001-chang-agama.md
+        line_range:
+          start: 3997
+          end: 3997
+        matched_lines:
+          - 3997
+        hash_algorithm: sha256
+        line_text_hash: "sha256:20ddc44c76009bfd6341d627e0772b4a17f67aa3f7aed2ff736b71c0bdf760d8"
+        source_hash_scope: legacy_alias_for_line_text_hash
+        line_text_hash_scope: trimmed_non_empty_lines_joined_with_lf
   - chunk_id: context:hetuvidya:trairupya
     chunk_type: context_topic
     source_file: context/因明推理引擎.md
@@ -1119,4 +1156,5 @@ queries:
       - agama:T02n0099:juan-1:line-147
       - agama:T01n0001:juan-1:line-881
       - agama:T01n0001:juan-3:line-1829
+      - agama:T01n0001:juan-10:line-3997
       - reasoning:ZR-05:agama-evidence

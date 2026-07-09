@@ -303,6 +303,7 @@ def test_dry_run_returns_agama_citation_boundary_fixture_for_srq04() -> None:
         "agama:T02n0099:juan-1:line-147",
         "agama:T01n0001:juan-1:line-881",
         "agama:T01n0001:juan-3:line-1829",
+        "agama:T01n0001:juan-10:line-3997",
         "reasoning:ZR-05:agama-evidence",
     ]
     assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
@@ -333,7 +334,7 @@ def test_dry_run_returns_agama_citation_boundary_fixture_for_srq04() -> None:
             "expected_status": "fail",
         },
     ]
-    assert result["chunks"][3]["text"] == "查四阿含中关于无我的经文，并说明检索范围与待校勘边界。"
+    assert result["chunks"][4]["text"] == "查四阿含中关于无我的经文，并说明检索范围与待校勘边界。"
 
 
 def test_dry_run_unknown_query_id_is_reported() -> None:

@@ -267,7 +267,7 @@ to the Madhyamaka prasaṅga method chunk plus the `ZR-09` reasoning case. It de
 mistake of reading emptiness as the cancellation of dependent arising, causality, or the two-truths boundary.
 
 `SRQ-04` is a narrow Agama citation-boundary fixture. It routes the question "查四阿含中关于无我的经文，并说明检索范围与待校勘边界。"
-to representative Agama evidence chunks plus the `ZR-05` Agama-evidence reasoning case. It deliberately checks CBETA/local
+to representative Agama evidence chunks plus the `ZR-05` Agama-evidence reasoning case. The checked-in Agama set now includes a reviewed `長阿含經` 卷 10 passage on the three feelings as conditioned, impermanent, and not-self. It deliberately checks CBETA/local
 anchors, search-scope language, representative-status language, and the collation boundary so an answer does not claim
 exhaustive search, skip collation, or present local fixture evidence as a publication-ready critical edition.
 
