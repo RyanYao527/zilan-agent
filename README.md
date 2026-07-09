@@ -48,7 +48,7 @@ cp zilan-agent/agents/zilan-claude-code.md ~/.claude/agents/zilan.md
 | `README.en.md` | 完整文档 · Full documentation (English) |
 | `CONTRIBUTING.md` / `CONTRIBUTING-en.md` | 贡献指南 · How to contribute |
 | `CHANGELOG.md` | 版本变更记录 · Release notes |
-| `LICENSE` | MIT 开源许可 · MIT license |
+| `LICENSE` / `THIRD_PARTY_NOTICES.md` | MIT for project-original code/docs; CBETA-derived Agama corpus follows CBETA terms |
 | `agents/zilan-claude-code.md` | Claude Code Agent 定义 · Claude Code Agent definition |
 | `agents/zilan-codex.md` | Codex sub-agent prompt · Codex sub-agent prompt |
 | `agents/openai.yaml` | 跨平台 Agent 配置 · Cross-platform Agent metadata |
@@ -87,6 +87,7 @@ cp zilan-agent/agents/zilan-claude-code.md ~/.claude/agents/zilan.md
 - **Current validation**: Codex is `tested` for ZC-01 through ZC-06 as of 2026-06-15; Claude Code is `tested` for ZC-01 through ZC-06 through UTF-8 stdin as of the 2026-06-18 post-contract full rerun; Volcengine OpenAI-Compatible is `tested` for ZC-01 through ZC-03 as of 2026-06-16; native OpenAI API remains `harness-ready`.
 - **Runtime boundary**: Codex, Claude Code, native OpenAI API, Volcengine OpenAI-Compatible, DeepSeek, GLM, and Qwen routes must not be described as tested unless the platform validation document says so.
 - **Scholarly collation**: local Agama Markdown is a searchable working corpus; publication-level work should verify against CBETA XML and parallel texts.
+- **Third-party data license boundary**: project-original code/docs are MIT; CBETA-derived Agama files and excerpts are governed by CBETA terms, not relicensed by this repository; see `THIRD_PARTY_NOTICES.md`.
 
 ---
 

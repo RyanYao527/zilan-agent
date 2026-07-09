@@ -185,6 +185,7 @@ Installation paths are documented in `docs/installation.md`. Runtime evidence an
 - **Provider routes**: Volcengine OpenAI-Compatible is recorded only as a compatible-provider partial `tested` route; DeepSeek, GLM, and Qwen remain `config-only`; see `docs/provider-routes.md`.
 - **Runtime boundary**: Codex, Claude Code, native OpenAI API, Volcengine OpenAI-Compatible, DeepSeek, GLM, and Qwen routes must not be described as tested unless the platform validation document says so.
 - **Scholarly collation**: the local Agama Markdown files are a searchable working corpus; publication-level citation should verify against CBETA XML and relevant parallel texts.
+- **Third-party data license boundary**: project-original code/docs are MIT; CBETA-derived Agama files and excerpts follow CBETA terms and are not relicensed by this repository; see `THIRD_PARTY_NOTICES.md`.
 
 ---
 
@@ -208,7 +209,7 @@ Installation paths are documented in `docs/installation.md`. Runtime evidence an
 
 ## Open Source License
 
-MIT License — see `LICENSE`
+Project-original code and documentation are licensed under the MIT License; see `LICENSE`. CBETA-derived Agama texts and excerpts are third-party material, are not relicensed by this repository, and must follow CBETA terms; see `THIRD_PARTY_NOTICES.md`.
 
 ---
 

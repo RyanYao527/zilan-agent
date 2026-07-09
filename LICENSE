@@ -1,3 +1,10 @@
+Repository License Scope
+
+This MIT License applies to project-original software, prompt definitions, documentation, tests, and validation scripts authored in this repository, except where a file or notice states otherwise.
+
+CBETA-derived scripture files and excerpts are third-party material and are not relicensed under the MIT License by this repository. See `THIRD_PARTY_NOTICES.md`.
+
+---
 MIT License
 
 Copyright (c) 2026 Zilan (孜澜)
