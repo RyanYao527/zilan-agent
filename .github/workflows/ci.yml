@@ -23,6 +23,9 @@ jobs:
       - name: Lint Python helpers
         run: python -m ruff check scripts tests
 
+      - name: Type-check Python helpers
+        run: python -m mypy
+
       - name: Validate repository invariants
         run: python scripts/validate_zilan_repo.py --check-generated --strict-yaml
 

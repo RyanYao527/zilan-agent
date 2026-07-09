@@ -4,6 +4,10 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+### Added
+
+- Added a minimal mypy type-check baseline for `scripts/`, including dev dependency, CI step, local command docs, and maintenance-roadmap guardrails.
+
 ## [2.5.0] - 2026-07-09
 
 ### Added

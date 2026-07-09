@@ -8,7 +8,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 
 | Area | Current state |
 |---|---|
-| CI | GitHub Actions runs repository invariants, generated Agama idempotency checks, pytest, ruff, and Agama search smoke tests. |
+| CI | GitHub Actions runs repository invariants, generated Agama idempotency checks, pytest, ruff, mypy, and Agama search smoke tests. |
 | Repository invariants | `scripts/validate_zilan_repo.py` checks required files, context files, YAML shape, regression inventory, platform status consistency, agent prompt contracts, and Agama search behavior. |
 | Regression inventory | `CODEX_REGRESSION_TESTS.md` is mirrored by `tests/regression_cases.yaml`; CI validates structure, resources, and case IDs. |
 | Reasoning contract | `docs/architecture/reasoning-contract.md` defines the v0 structured reasoning contract; `docs/architecture/reasoning-contract-review.md` maps current ZC evidence to `ZR-*` cases without claiming a new runtime pass; `docs/architecture/post-contract-runtime-review.md` records committed-evidence gaps against `SRQ-02` through `SRQ-04`; `tests/reasoning_cases.yaml` stores schema-validated seed fixtures. |
@@ -17,7 +17,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | Runtime evidence policy | `docs/validation-evidence.md` defines evidence levels, transcript redaction, and status-promotion rules. |
 | Runtime evidence excerpts | `docs/runtime-evidence/` stores small redacted command-output or transcript excerpts that support validation-log entries. |
 | Installation docs | `docs/installation.md` separates Codex, Claude Code, and OpenAI API operating paths. |
-| Clean install smoke | A 2026-06-15 clean clone from GitHub passed repository checks, pytest, ruff, OpenAI dry-run, and Agama search smoke tests when run sequentially. |
+| Clean install smoke | A 2026-06-15 clean clone from GitHub passed repository checks, pytest, ruff, OpenAI dry-run, and Agama search smoke tests when run sequentially. Current CI also includes a minimal mypy type-check baseline for `scripts/`. |
 | Mock Claude install | `scripts/mock_install_smoke.py` verifies the Claude Code skill/agent install layout in a temporary mock home without touching the real user profile. |
 | OpenAI API harness | `scripts/openai_api_harness.py` builds dry-run or live Responses API requests from `agents/openai.yaml` and regression cases; live native OpenAI runs require `OPENAI_API_KEY`. |
 | OpenAI-compatible harness | The same harness can target configurable OpenAI-compatible `chat-completions` endpoints such as Volcengine without upgrading native OpenAI API status; Volcengine ZC-01 through ZC-03 live validation is recorded as of 2026-06-16. |
@@ -35,7 +35,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 
 ## Operating Rules
 
-- Run `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, `python -m pytest`, and `python -m ruff check scripts tests` before merging prompt, context, script, or platform metadata changes.
+- Run `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, `python -m pytest`, `python -m ruff check scripts tests`, and `python -m mypy` before merging prompt, context, script, or platform metadata changes.
 - Run generated-file checks sequentially rather than in parallel with pytest; `--check-generated` may rebuild committed Agama Markdown during validation.
 - Keep platform claims conservative. Do not mark a route `tested` without dated validation evidence in `docs/platform-validation.md`.
 - Use local Agama Markdown as a searchable working corpus. Use `_source/` XML only for collation, source verification, or CBETA-specific checks.
