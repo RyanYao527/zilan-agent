@@ -57,6 +57,7 @@ def test_agama_evidence_checker_maps_zr05_citation_boundary() -> None:
         "agama:T02n0099:juan-1:line-147",
         "agama:T01n0001:juan-1:line-881",
         "agama:T01n0001:juan-3:line-1829",
+        "agama:T01n0001:juan-10:line-3997",
     ]
     assert {item["status"] for item in local_evidence["passage_anchor_checks"]} == {"pass"}
     assert {item["code"] for item in review["diagnostics"]} == {

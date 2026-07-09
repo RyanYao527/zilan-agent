@@ -16,6 +16,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added repository validation for checked-in Agama semantic chunk provenance hashes, matched lines, and source-script metadata.
 - Added a semantic fixture review helper that compares generated Agama candidates with the checked-in fixture without auto-overwriting YAML.
 - Expanded the semantic fixture review helper to report provenance/hash drift between generated Agama candidates and checked-in chunks without writing fixtures.
+- Expanded `SRQ-04` Agama evidence fixture coverage with a reviewed `長阿含經` 卷 10 three-feelings non-self passage selected from the fixture review workflow.
 - Expanded `SRQ-01` semantic retrieval fixture coverage with reviewed `長阿含經` Agama chunks selected from the fixture review workflow.
 - Added a fixture-only semantic context-bundle dry run that assembles selected chunks into prompt-ready order.
 - Added a fixture-only semantic role-coverage review that compares query `needs` with selected chunk `reasoning_roles`.
