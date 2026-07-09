@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from search_agama import iter_agama_markdown_files, search_agama, search_agama_passages
+from zilanlib.agama.search import iter_agama_markdown_files, search_agama, search_agama_passages
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "search_agama.py"

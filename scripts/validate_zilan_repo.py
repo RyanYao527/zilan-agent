@@ -7,7 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from search_agama import DEFAULT_FALSE_POSITIVE_PHRASES, search_agama
+from zilanlib.agama.search import DEFAULT_FALSE_POSITIVE_PHRASES, search_agama
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -65,6 +65,8 @@ REQUIRED_FILES = (
     "scripts/semantic_role_coverage.py",
     "scripts/validate_zilan_repo.py",
     "scripts/zilanlib/__init__.py",
+    "scripts/zilanlib/agama/__init__.py",
+    "scripts/zilanlib/agama/search.py",
     "scripts/zilanlib/yaml_io.py",
     "tests/regression_cases.yaml",
     "tests/reasoning_cases.yaml",

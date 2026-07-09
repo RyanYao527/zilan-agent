@@ -1,33 +1,23 @@
-from __future__ import annotations
+"""Agama corpus helper APIs."""
 
 from zilanlib.agama.search import (
-    AGAMA_DIR,
     DEFAULT_FALSE_POSITIVE_PHRASES,
     DEFAULT_PATTERN,
-    ROOT,
     AgamaMatch,
     AgamaPassage,
     is_false_positive,
     iter_agama_markdown_files,
-    main,
     search_agama,
     search_agama_passages,
 )
 
 __all__ = [
-    "AGAMA_DIR",
     "DEFAULT_FALSE_POSITIVE_PHRASES",
     "DEFAULT_PATTERN",
-    "ROOT",
     "AgamaMatch",
     "AgamaPassage",
     "is_false_positive",
     "iter_agama_markdown_files",
-    "main",
     "search_agama",
     "search_agama_passages",
 ]
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
