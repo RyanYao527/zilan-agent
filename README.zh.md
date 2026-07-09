@@ -189,6 +189,7 @@ GitHub Actions 会在 push 和 pull request 时自动运行同类检查。
 - **Provider 路线**：Volcengine OpenAI-Compatible 当前仅按兼容 provider 路线记录为部分 `tested`；DeepSeek、GLM、千问当前保持 `config-only`；详见 `docs/provider-routes.md`。
 - **运行边界**：Codex、Claude Code、原生 OpenAI API、Volcengine OpenAI-Compatible、DeepSeek、GLM、千问等路线，只有在平台验证文档中满足定义后，才可称为已测试。
 - **学术校勘**：本地阿含 Markdown 是可检索工作语料；面向发表或严肃引用时，应回校 CBETA XML，并视需要比对平行译本与巴利对应文本。
+- **第三方资料授权**：本项目原创代码/文档按 MIT 授权；CBETA 衍生阿含文本与摘录遵循 CBETA 条款，不由本仓库重新授予 MIT，详见 `THIRD_PARTY_NOTICES.md`。
 
 ---
 
@@ -212,7 +213,7 @@ GitHub Actions 会在 push 和 pull request 时自动运行同类检查。
 
 ## 开源许可
 
-MIT License — 详见 `LICENSE`
+本项目原创代码与文档按 MIT License 授权，详见 `LICENSE`。CBETA 衍生阿含文本与摘录属于第三方资料，不由本仓库重新授予 MIT，使用与再分发应遵循 CBETA 条款；详见 `THIRD_PARTY_NOTICES.md`。
 
 ---
 

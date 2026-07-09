@@ -39,6 +39,7 @@ REQUIRED_FILES = (
     "docs/architecture/reasoning-contract-review.md",
     "docs/architecture/semantic-retrieval-interface.md",
     "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
     "CONTRIBUTING.md",
     "CONTRIBUTING-en.md",
     "agents/openai.yaml",
@@ -135,6 +136,7 @@ INSTALLATION_DOC = "docs/installation.md"
 VALIDATION_EVIDENCE_DOC = "docs/validation-evidence.md"
 PROVIDER_ROUTES_DOC = "docs/provider-routes.md"
 CHANGELOG_DOC = "CHANGELOG.md"
+THIRD_PARTY_NOTICES_DOC = "THIRD_PARTY_NOTICES.md"
 PORTABLE_UPGRADE_DOC = "AGENT_UPGRADE_PORTABLE.md"
 VERSION_SOURCES = {
     "pyproject.toml": r'(?m)^version = "([^"]+)"$',
@@ -1193,6 +1195,32 @@ def _check_readme_platform_validation_links(root: Path, failures: list[str]) -> 
             failures.append(f"{rel_path} should mention agents/openai.yaml as platform metadata.")
 
 
+def _check_third_party_notices(root: Path, failures: list[str]) -> None:
+    notice_text = (root / THIRD_PARTY_NOTICES_DOC).read_text(encoding="utf-8")
+    required_notice_fragments = (
+        "CBETA XML-P5",
+        "https://github.com/cbeta-org/xml-p5",
+        "https://www.cbeta.org/copyright.php",
+        "context/agama/_source/",
+        "context/agama/T0099-za-agama.md",
+        "not relicensed under the MIT License",
+    )
+    for fragment in required_notice_fragments:
+        if fragment not in notice_text:
+            failures.append(f"{THIRD_PARTY_NOTICES_DOC} missing required fragment: {fragment}")
+
+    license_text = (root / "LICENSE").read_text(encoding="utf-8")
+    for fragment in ("Repository License Scope", "CBETA-derived", THIRD_PARTY_NOTICES_DOC):
+        if fragment not in license_text:
+            failures.append(f"LICENSE missing third-party scope fragment: {fragment}")
+
+    for rel_path in README_FILES:
+        text = (root / rel_path).read_text(encoding="utf-8")
+        if THIRD_PARTY_NOTICES_DOC not in text:
+            failures.append(f"{rel_path} should link to {THIRD_PARTY_NOTICES_DOC}.")
+        if "CBETA" not in text:
+            failures.append(f"{rel_path} should mention CBETA for Agama third-party material.")
+
 def _check_public_style_boundaries(root: Path, failures: list[str]) -> None:
     for rel_path in PUBLIC_STYLE_BOUNDARY_FILES:
         text = (root / rel_path).read_text(encoding="utf-8")
@@ -1384,6 +1412,7 @@ def run_checks(
     _check_retrieval_chunks_yaml(root, failures, warnings, strict_yaml)
     _check_agent_prompts(root, failures)
     _check_readme_platform_validation_links(root, failures)
+    _check_third_party_notices(root, failures)
     _check_public_style_boundaries(root, failures)
     _check_runtime_validation_log(root, failures)
     _check_runtime_evidence_docs(root, failures)
