@@ -179,7 +179,25 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │   ├── 南传观禅指南.md      # 三学→七清净→十六观智·日常实修
 │   └── 模因机器视角下的佛教结集与传播.md
 ├── scripts/
-│   └── build_agama_context.py
+│   ├── agama_evidence_checker.py      # 阿含证据边界 checker
+│   ├── build_agama_context.py         # CBETA XML-P5 → 阿含 Markdown
+│   ├── cognitive_analysis_mapper.py   # 心类学/观禅 fixture mapper
+│   ├── collected_topics_analyzer.py   # 摄类学 fixture analyzer
+│   ├── hetuvidya_validator.py         # 因明 fixture validator
+│   ├── madhyamaka_critique_engine.py  # 中观应成 fixture critique
+│   ├── mock_install_smoke.py          # Claude Code mock install smoke
+│   ├── openai_api_harness.py          # OpenAI / compatible-provider harness
+│   ├── reasoning_contract_runner.py   # fixture-only contract runner
+│   ├── reasoning_validator_output.py  # shared validator output envelope
+│   ├── search_agama.py                # 阿含 Markdown 检索
+│   ├── semantic_answer_boundary_review.py
+│   ├── semantic_answer_contract_review.py
+│   ├── semantic_context_bundle.py
+│   ├── semantic_fixture_candidates.py
+│   ├── semantic_fixture_review.py
+│   ├── semantic_retrieval_dry_run.py
+│   ├── semantic_role_coverage.py
+│   └── validate_zilan_repo.py         # 仓库 invariant 校验
 ├── agents/
 │   └── openai.yaml       # UI 元数据
 └── 沟通过程.md           # 实时记录沟通进化轨迹
