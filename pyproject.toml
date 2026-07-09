@@ -9,11 +9,12 @@ description = "Validation helpers and API harness for the Zilan Buddhist agent c
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
-dependencies = []
+dependencies = [
+  "PyYAML>=6.0",
+]
 
 [project.optional-dependencies]
 dev = [
-  "PyYAML>=6.0",
   "pytest>=7.4,<8.0",
   "ruff>=0.6",
 ]

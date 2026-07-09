@@ -178,7 +178,25 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │   ├── 南传观禅指南.md      # 3 trainings → 7 purifications → 16 insight knowledges
 │   └── 模因机器视角下的佛教结集与传播.md
 ├── scripts/
-│   └── build_agama_context.py
+│   ├── agama_evidence_checker.py      # Agama evidence-boundary checker
+│   ├── build_agama_context.py         # CBETA XML-P5 → Agama Markdown
+│   ├── cognitive_analysis_mapper.py   # cognitive/vipassana fixture mapper
+│   ├── collected_topics_analyzer.py   # Collected Topics fixture analyzer
+│   ├── hetuvidya_validator.py         # Hetuvidya fixture validator
+│   ├── madhyamaka_critique_engine.py  # Madhyamaka prasaṅga fixture critique
+│   ├── mock_install_smoke.py          # Claude Code mock install smoke
+│   ├── openai_api_harness.py          # OpenAI / compatible-provider harness
+│   ├── reasoning_contract_runner.py   # fixture-only contract runner
+│   ├── reasoning_validator_output.py  # shared validator output envelope
+│   ├── search_agama.py                # Agama Markdown search
+│   ├── semantic_answer_boundary_review.py
+│   ├── semantic_answer_contract_review.py
+│   ├── semantic_context_bundle.py
+│   ├── semantic_fixture_candidates.py
+│   ├── semantic_fixture_review.py
+│   ├── semantic_retrieval_dry_run.py
+│   ├── semantic_role_coverage.py
+│   └── validate_zilan_repo.py         # repository invariant checks
 ├── agents/
 │   └── openai.yaml
 └── 沟通过程.md           # Real-time evolution trail

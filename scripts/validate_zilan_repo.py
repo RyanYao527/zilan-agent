@@ -45,18 +45,25 @@ REQUIRED_FILES = (
     "agents/openai.yaml",
     "agents/zilan-claude-code.md",
     "agents/zilan-codex.md",
+    "scripts/agama_evidence_checker.py",
     "scripts/build_agama_context.py",
+    "scripts/cognitive_analysis_mapper.py",
+    "scripts/collected_topics_analyzer.py",
+    "scripts/hetuvidya_validator.py",
+    "scripts/madhyamaka_critique_engine.py",
+    "scripts/mock_install_smoke.py",
+    "scripts/openai_api_harness.py",
+    "scripts/reasoning_contract_runner.py",
+    "scripts/reasoning_validator_output.py",
     "scripts/search_agama.py",
-    "scripts/semantic_answer_contract_review.py",
     "scripts/semantic_answer_boundary_review.py",
+    "scripts/semantic_answer_contract_review.py",
     "scripts/semantic_context_bundle.py",
     "scripts/semantic_fixture_candidates.py",
     "scripts/semantic_fixture_review.py",
-    "scripts/semantic_role_coverage.py",
     "scripts/semantic_retrieval_dry_run.py",
-    "scripts/reasoning_contract_runner.py",
-    "scripts/openai_api_harness.py",
-    "scripts/mock_install_smoke.py",
+    "scripts/semantic_role_coverage.py",
+    "scripts/validate_zilan_repo.py",
     "tests/regression_cases.yaml",
     "tests/reasoning_cases.yaml",
     "tests/fixtures/retrieval_chunks/semantic_chunks.yaml",
@@ -1221,6 +1228,15 @@ def _check_third_party_notices(root: Path, failures: list[str]) -> None:
         if "CBETA" not in text:
             failures.append(f"{rel_path} should mention CBETA for Agama third-party material.")
 
+def _check_skill_script_inventory(root: Path, failures: list[str]) -> None:
+    script_paths = sorted(path.relative_to(root).as_posix() for path in (root / "scripts").glob("*.py"))
+    for rel_path in ("SKILL.md", "SKILL-en.md"):
+        text = (root / rel_path).read_text(encoding="utf-8")
+        for script_path in script_paths:
+            script_name = Path(script_path).name
+            if script_path not in text and script_name not in text:
+                failures.append(f"{rel_path} missing script inventory entry: {script_path}")
+
 def _check_public_style_boundaries(root: Path, failures: list[str]) -> None:
     for rel_path in PUBLIC_STYLE_BOUNDARY_FILES:
         text = (root / rel_path).read_text(encoding="utf-8")
@@ -1413,6 +1429,7 @@ def run_checks(
     _check_agent_prompts(root, failures)
     _check_readme_platform_validation_links(root, failures)
     _check_third_party_notices(root, failures)
+    _check_skill_script_inventory(root, failures)
     _check_public_style_boundaries(root, failures)
     _check_runtime_validation_log(root, failures)
     _check_runtime_evidence_docs(root, failures)
