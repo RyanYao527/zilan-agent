@@ -196,7 +196,10 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │   ├── semantic_fixture_review.py
 │   ├── semantic_retrieval_dry_run.py
 │   ├── semantic_role_coverage.py
-│   └── validate_zilan_repo.py         # repository invariant checks
+│   ├── validate_zilan_repo.py         # repository invariant checks
+│   └── zilanlib/                      # shared script helpers
+│       ├── __init__.py
+│       └── yaml_io.py
 ├── agents/
 │   └── openai.yaml
 └── 沟通过程.md           # Real-time evolution trail

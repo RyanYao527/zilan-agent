@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from reasoning_validator_output import build_validator_output
+from zilanlib.yaml_io import display_path, load_yaml_mapping
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASES = ROOT / "tests" / "reasoning_cases.yaml"
@@ -27,29 +28,19 @@ class AgamaEvidenceCheckerError(ValueError):
 
 
 def _display_path(path: Path) -> str:
-    try:
-        return path.resolve().relative_to(ROOT).as_posix()
-    except ValueError:
-        return path.as_posix()
+    return display_path(path, root=ROOT)
 
 
 def _load_yaml(path: Path) -> dict[str, Any]:
-    if not path.exists():
-        raise AgamaEvidenceCheckerError(f"YAML file not found: {_display_path(path)}")
-
-    try:
-        import yaml  # type: ignore[import-not-found]
-    except ModuleNotFoundError as exc:
-        raise AgamaEvidenceCheckerError("PyYAML is required to read reasoning cases.") from exc
-
-    try:
-        data = yaml.safe_load(path.read_text(encoding="utf-8"))
-    except Exception as exc:  # noqa: BLE001 - keep parser failures visible in CLI output.
-        raise AgamaEvidenceCheckerError(f"Failed to parse YAML {_display_path(path)}: {exc}") from exc
-
-    if not isinstance(data, dict):
-        raise AgamaEvidenceCheckerError(f"YAML file must be a mapping: {_display_path(path)}")
-    return data
+    return load_yaml_mapping(
+        path,
+        root=ROOT,
+        error_type=AgamaEvidenceCheckerError,
+        missing_message="PyYAML is required to read reasoning cases.",
+        missing_file_label="YAML file not found",
+        parse_label="Failed to parse YAML",
+        mapping_label="YAML file must be a mapping",
+    )
 
 
 def _case_list(data: dict[str, Any]) -> list[dict[str, Any]]:

@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from zilanlib.yaml_io import display_path, load_yaml_mapping
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FIXTURE = ROOT / "tests" / "fixtures" / "retrieval_chunks" / "semantic_chunks.yaml"
 MODE = "fixture-dry-run"
@@ -20,29 +22,19 @@ class FixtureError(ValueError):
 
 
 def _display_path(path: Path) -> str:
-    try:
-        return path.resolve().relative_to(ROOT).as_posix()
-    except ValueError:
-        return path.as_posix()
+    return display_path(path, root=ROOT)
 
 
 def _load_yaml(path: Path) -> dict[str, Any]:
-    if not path.exists():
-        raise FixtureError(f"Fixture not found: {_display_path(path)}")
-
-    try:
-        import yaml  # type: ignore[import-not-found]
-    except ModuleNotFoundError as exc:
-        raise FixtureError("PyYAML is required to read semantic retrieval fixtures.") from exc
-
-    try:
-        data = yaml.safe_load(path.read_text(encoding="utf-8"))
-    except Exception as exc:  # noqa: BLE001 - keep parser failures visible in CLI output.
-        raise FixtureError(f"Failed to parse fixture {_display_path(path)}: {exc}") from exc
-
-    if not isinstance(data, dict):
-        raise FixtureError(f"Fixture must be a mapping: {_display_path(path)}")
-    return data
+    return load_yaml_mapping(
+        path,
+        root=ROOT,
+        error_type=FixtureError,
+        missing_message="PyYAML is required to read semantic retrieval fixtures.",
+        missing_file_label="Fixture not found",
+        parse_label="Failed to parse fixture",
+        mapping_label="Fixture must be a mapping",
+    )
 
 
 def _mapping_list(data: dict[str, Any], field: str) -> list[dict[str, Any]]:

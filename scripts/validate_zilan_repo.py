@@ -64,6 +64,8 @@ REQUIRED_FILES = (
     "scripts/semantic_retrieval_dry_run.py",
     "scripts/semantic_role_coverage.py",
     "scripts/validate_zilan_repo.py",
+    "scripts/zilanlib/__init__.py",
+    "scripts/zilanlib/yaml_io.py",
     "tests/regression_cases.yaml",
     "tests/reasoning_cases.yaml",
     "tests/fixtures/retrieval_chunks/semantic_chunks.yaml",
@@ -1229,7 +1231,7 @@ def _check_third_party_notices(root: Path, failures: list[str]) -> None:
             failures.append(f"{rel_path} should mention CBETA for Agama third-party material.")
 
 def _check_skill_script_inventory(root: Path, failures: list[str]) -> None:
-    script_paths = sorted(path.relative_to(root).as_posix() for path in (root / "scripts").glob("*.py"))
+    script_paths = sorted(path.relative_to(root).as_posix() for path in (root / "scripts").rglob("*.py"))
     for rel_path in ("SKILL.md", "SKILL-en.md"):
         text = (root / rel_path).read_text(encoding="utf-8")
         for script_path in script_paths:

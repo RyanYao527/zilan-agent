@@ -197,7 +197,10 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │   ├── semantic_fixture_review.py
 │   ├── semantic_retrieval_dry_run.py
 │   ├── semantic_role_coverage.py
-│   └── validate_zilan_repo.py         # 仓库 invariant 校验
+│   ├── validate_zilan_repo.py         # 仓库 invariant 校验
+│   └── zilanlib/                      # shared script helpers
+│       ├── __init__.py
+│       └── yaml_io.py
 ├── agents/
 │   └── openai.yaml       # UI 元数据
 └── 沟通过程.md           # 实时记录沟通进化轨迹
