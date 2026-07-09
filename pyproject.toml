@@ -15,12 +15,33 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+  "mypy>=1.10,<2.0",
   "pytest>=7.4,<8.0",
   "ruff>=0.6",
 ]
 
 [tool.setuptools]
 py-modules = []
+
+[tool.mypy]
+python_version = "3.11"
+files = ["scripts"]
+ignore_missing_imports = true
+check_untyped_defs = false
+warn_unused_ignores = false
+no_implicit_optional = true
+disable_error_code = ["import-untyped"]
+
+# Baseline-only overrides for legacy dynamic scripts; tighten these in later focused PRs.
+[[tool.mypy.overrides]]
+module = [
+  "build_agama_context",
+  "mock_install_smoke",
+  "openai_api_harness",
+  "search_agama",
+  "validate_zilan_repo",
+]
+disable_error_code = ["assignment", "attr-defined", "operator", "union-attr"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

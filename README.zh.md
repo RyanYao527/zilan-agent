@@ -161,6 +161,8 @@ Codex 回归测试矩阵见：`CODEX_REGRESSION_TESTS.md`。
 ```bash
 python scripts/validate_zilan_repo.py --check-generated
 python -m pytest
+python -m ruff check scripts tests
+python -m mypy
 python scripts/openai_api_harness.py --case ZC-02 --json
 python scripts/mock_install_smoke.py
 python scripts/search_agama.py --terms "無我|非我|緣起" --limit 10
