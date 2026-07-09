@@ -4,6 +4,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+## [2.5.0] - 2026-07-09
+
 ### Added
 
 - Added PyYAML as a runtime dependency and expanded the public Skill script inventory with repository validation so listed scripts stay aligned with scripts/*.py.
