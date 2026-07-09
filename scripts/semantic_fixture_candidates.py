@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from search_agama import DEFAULT_PATTERN, search_agama
+from zilanlib.agama.search import DEFAULT_PATTERN, search_agama
 
 ROOT = Path(__file__).resolve().parents[1]
 MODE = "agama-fixture-candidates"

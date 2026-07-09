@@ -199,7 +199,10 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │   ├── validate_zilan_repo.py         # repository invariant checks
 │   └── zilanlib/                      # shared script helpers
 │       ├── __init__.py
-│       └── yaml_io.py
+│       ├── yaml_io.py
+│       └── agama/                     # Agama search library helpers
+│           ├── __init__.py
+│           └── search.py
 ├── agents/
 │   └── openai.yaml
 └── 沟通过程.md           # Real-time evolution trail

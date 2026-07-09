@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Extracted reusable Agama search APIs into `scripts/zilanlib/agama/search.py` while keeping `scripts/search_agama.py` as the stable CLI wrapper and compatibility surface.
 - Added `scripts/zilanlib/` shared helpers and moved repeated YAML mapping loading for fixture-based validators into `zilanlib.yaml_io`.
 - Added a minimal mypy type-check baseline for `scripts/`, including dev dependency, CI step, local command docs, and maintenance-roadmap guardrails.
 

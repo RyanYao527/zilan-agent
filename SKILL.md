@@ -200,7 +200,10 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │   ├── validate_zilan_repo.py         # 仓库 invariant 校验
 │   └── zilanlib/                      # shared script helpers
 │       ├── __init__.py
-│       └── yaml_io.py
+│       ├── yaml_io.py
+│       └── agama/                     # Agama search library helpers
+│           ├── __init__.py
+│           └── search.py
 ├── agents/
 │   └── openai.yaml       # UI 元数据
 └── 沟通过程.md           # 实时记录沟通进化轨迹
