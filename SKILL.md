@@ -201,11 +201,14 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │   └── zilanlib/                      # shared script helpers
 │       ├── __init__.py
 │       ├── yaml_io.py
-│       └── agama/                     # Agama search library helpers
+│       ├── agama/                     # Agama search library helpers
 │           ├── __init__.py
 │           ├── candidates.py
 │           ├── fixture_review.py
 │           └── search.py
+│       └── semantic/                    # Semantic retrieval library helpers
+│           ├── __init__.py
+│           └── context_bundle.py
 ├── agents/
 │   └── openai.yaml       # UI 元数据
 └── 沟通过程.md           # 实时记录沟通进化轨迹

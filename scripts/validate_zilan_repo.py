@@ -69,6 +69,8 @@ REQUIRED_FILES = (
     "scripts/zilanlib/agama/candidates.py",
     "scripts/zilanlib/agama/fixture_review.py",
     "scripts/zilanlib/agama/search.py",
+    "scripts/zilanlib/semantic/__init__.py",
+    "scripts/zilanlib/semantic/context_bundle.py",
     "scripts/zilanlib/yaml_io.py",
     "tests/regression_cases.yaml",
     "tests/reasoning_cases.yaml",
