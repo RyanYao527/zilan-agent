@@ -3,8 +3,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from semantic_answer_boundary_review import build_answer_boundary_review
 from semantic_retrieval_dry_run import DEFAULT_FIXTURE, FixtureError
+from zilanlib.semantic.answer_boundary_review import build_answer_boundary_review
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "semantic_answer_boundary_review.py"

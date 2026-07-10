@@ -70,6 +70,7 @@ REQUIRED_FILES = (
     "scripts/zilanlib/agama/fixture_review.py",
     "scripts/zilanlib/agama/search.py",
     "scripts/zilanlib/semantic/__init__.py",
+    "scripts/zilanlib/semantic/answer_boundary_review.py",
     "scripts/zilanlib/semantic/context_bundle.py",
     "scripts/zilanlib/semantic/role_coverage.py",
     "scripts/zilanlib/yaml_io.py",
