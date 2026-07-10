@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Extracted semantic fixture review comparison into `scripts/zilanlib/agama/fixture_review.py` while keeping `scripts/semantic_fixture_review.py` as the stable CLI wrapper.
 - Extracted Agama semantic fixture candidate construction into `scripts/zilanlib/agama/candidates.py` while keeping `scripts/semantic_fixture_candidates.py` as the stable CLI wrapper.
 - Extracted reusable Agama search APIs into `scripts/zilanlib/agama/search.py` while keeping `scripts/search_agama.py` as the stable CLI wrapper and compatibility surface.
 - Added `scripts/zilanlib/` shared helpers and moved repeated YAML mapping loading for fixture-based validators into `zilanlib.yaml_io`.
