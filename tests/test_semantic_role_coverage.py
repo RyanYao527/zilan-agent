@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 from semantic_retrieval_dry_run import DEFAULT_FIXTURE, FixtureError
-from semantic_role_coverage import build_role_coverage
+from zilanlib.semantic.role_coverage import build_role_coverage
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "semantic_role_coverage.py"

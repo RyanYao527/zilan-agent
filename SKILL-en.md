@@ -207,7 +207,8 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │           └── search.py
 │       └── semantic/                    # Semantic retrieval library helpers
 │           ├── __init__.py
-│           └── context_bundle.py
+│           ├── context_bundle.py
+│           └── role_coverage.py
 ├── agents/
 │   └── openai.yaml
 └── 沟通过程.md           # Real-time evolution trail
