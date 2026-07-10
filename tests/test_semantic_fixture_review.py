@@ -4,8 +4,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from semantic_fixture_candidates import build_candidate_set
 from semantic_fixture_review import ReviewError, build_review
+from zilanlib.agama.candidates import build_candidate_set
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "semantic_fixture_review.py"

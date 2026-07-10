@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from semantic_fixture_candidates import CandidateError, build_candidate_set
+from zilanlib.agama.candidates import CandidateError, build_candidate_set
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "semantic_fixture_candidates.py"

@@ -203,6 +203,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │       ├── yaml_io.py
 │       └── agama/                     # Agama search library helpers
 │           ├── __init__.py
+│           ├── candidates.py
 │           └── search.py
 ├── agents/
 │   └── openai.yaml       # UI 元数据
