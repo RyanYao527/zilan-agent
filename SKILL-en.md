@@ -208,6 +208,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │       └── semantic/                    # Semantic retrieval library helpers
 │           ├── __init__.py
 │           ├── answer_boundary_review.py
+│           ├── answer_contract_review.py
 │           ├── context_bundle.py
 │           └── role_coverage.py
 ├── agents/
