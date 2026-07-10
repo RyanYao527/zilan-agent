@@ -3,8 +3,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from semantic_context_bundle import build_context_bundle
 from semantic_retrieval_dry_run import DEFAULT_FIXTURE, FixtureError
+from zilanlib.semantic.context_bundle import build_context_bundle
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "semantic_context_bundle.py"

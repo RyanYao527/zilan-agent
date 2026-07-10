@@ -200,11 +200,14 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │   └── zilanlib/                      # shared script helpers
 │       ├── __init__.py
 │       ├── yaml_io.py
-│       └── agama/                     # Agama search library helpers
+│       ├── agama/                     # Agama search library helpers
 │           ├── __init__.py
 │           ├── candidates.py
 │           ├── fixture_review.py
 │           └── search.py
+│       └── semantic/                    # Semantic retrieval library helpers
+│           ├── __init__.py
+│           └── context_bundle.py
 ├── agents/
 │   └── openai.yaml
 └── 沟通过程.md           # Real-time evolution trail
