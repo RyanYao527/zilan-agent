@@ -66,6 +66,7 @@ REQUIRED_FILES = (
     "scripts/validate_zilan_repo.py",
     "scripts/zilanlib/__init__.py",
     "scripts/zilanlib/agama/__init__.py",
+    "scripts/zilanlib/agama/candidates.py",
     "scripts/zilanlib/agama/search.py",
     "scripts/zilanlib/yaml_io.py",
     "tests/regression_cases.yaml",

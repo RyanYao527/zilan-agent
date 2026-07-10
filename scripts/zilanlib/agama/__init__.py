@@ -1,5 +1,6 @@
 """Agama corpus helper APIs."""
 
+from zilanlib.agama.candidates import CandidateError, build_candidate_set
 from zilanlib.agama.search import (
     DEFAULT_FALSE_POSITIVE_PHRASES,
     DEFAULT_PATTERN,
@@ -16,6 +17,8 @@ __all__ = [
     "DEFAULT_PATTERN",
     "AgamaMatch",
     "AgamaPassage",
+    "CandidateError",
+    "build_candidate_set",
     "is_false_positive",
     "iter_agama_markdown_files",
     "search_agama",

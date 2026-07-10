@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from semantic_fixture_candidates import DEFAULT_PATTERN, ROOT, build_candidate_set
+from zilanlib.agama.candidates import DEFAULT_PATTERN, ROOT, build_candidate_set
 
 DEFAULT_FIXTURE = ROOT / "tests" / "fixtures" / "retrieval_chunks" / "semantic_chunks.yaml"
 MODE = "semantic-fixture-review"
