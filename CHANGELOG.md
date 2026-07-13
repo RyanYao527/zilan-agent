@@ -4,6 +4,10 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+### Added
+
+- Extracted a shared document-fragment validation helper into `scripts/zilanlib/text_checks.py` while preserving existing repository invariant error messages.
+
 ## [2.5.2] - 2026-07-13
 
 ### Added

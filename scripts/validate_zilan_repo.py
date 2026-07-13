@@ -13,6 +13,7 @@ from zilanlib.repository import (
     check_required_paths,
     check_version_consistency,
 )
+from zilanlib.text_checks import check_required_fragments
 from zilanlib.yaml_io import (
     is_non_empty_int_list,
     is_non_empty_string_list,
@@ -80,6 +81,7 @@ REQUIRED_FILES = (
     "scripts/validate_zilan_repo.py",
     "scripts/zilanlib/__init__.py",
     "scripts/zilanlib/repository.py",
+    "scripts/zilanlib/text_checks.py",
     "scripts/zilanlib/agama/__init__.py",
     "scripts/zilanlib/reasoning/__init__.py",
     "scripts/zilanlib/reasoning/agama_evidence_checker.py",
@@ -1070,9 +1072,7 @@ def _check_reasoning_cases_yaml(root: Path, failures: list[str], warnings: list[
 def _check_agent_prompts(root: Path, failures: list[str]) -> None:
     for rel_path, required_fragments in AGENT_PROMPT_REQUIRED_FRAGMENTS.items():
         text = (root / rel_path).read_text(encoding="utf-8")
-        for fragment in required_fragments:
-            if fragment not in text:
-                failures.append(f"{rel_path} missing required fragment: {fragment}")
+        check_required_fragments(text, required_fragments, failures, rel_path=rel_path)
 
 
 def _get_validation_mapping(data: object, failures: list[str]) -> dict[str, object]:
@@ -1196,14 +1196,16 @@ def _check_third_party_notices(root: Path, failures: list[str]) -> None:
         "context/agama/T0099-za-agama.md",
         "not relicensed under the MIT License",
     )
-    for fragment in required_notice_fragments:
-        if fragment not in notice_text:
-            failures.append(f"{THIRD_PARTY_NOTICES_DOC} missing required fragment: {fragment}")
+    check_required_fragments(notice_text, required_notice_fragments, failures, rel_path=THIRD_PARTY_NOTICES_DOC)
 
     license_text = (root / "LICENSE").read_text(encoding="utf-8")
-    for fragment in ("Repository License Scope", "CBETA-derived", THIRD_PARTY_NOTICES_DOC):
-        if fragment not in license_text:
-            failures.append(f"LICENSE missing third-party scope fragment: {fragment}")
+    check_required_fragments(
+        license_text,
+        ("Repository License Scope", "CBETA-derived", THIRD_PARTY_NOTICES_DOC),
+        failures,
+        rel_path="LICENSE",
+        message="missing third-party scope fragment",
+    )
 
     for rel_path in README_FILES:
         text = (root / rel_path).read_text(encoding="utf-8")
@@ -1240,9 +1242,7 @@ def _check_runtime_validation_log(root: Path, failures: list[str]) -> None:
         "docs/platform-validation.md",
         "Transcript status",
     )
-    for fragment in required_fragments:
-        if fragment not in text:
-            failures.append(f"{RUNTIME_VALIDATION_LOG_DOC} missing required fragment: {fragment}")
+    check_required_fragments(text, required_fragments, failures, rel_path=RUNTIME_VALIDATION_LOG_DOC)
     for case in REGRESSION_CASES:
         if case not in text:
             failures.append(f"{RUNTIME_VALIDATION_LOG_DOC} missing regression case: {case}")
@@ -1258,37 +1258,49 @@ def _check_runtime_evidence_docs(root: Path, failures: list[str]) -> None:
     mock_install_text = (root / RUNTIME_EVIDENCE_MOCK_INSTALL_DOC).read_text(encoding="utf-8")
     template_text = (root / RUNTIME_EVIDENCE_TEMPLATE_DOC).read_text(encoding="utf-8")
 
-    for fragment in (
-        "Runtime Evidence Excerpts",
-        "Do not use this directory for",
-        "docs/validation-evidence.md",
-    ):
-        if fragment not in index_text:
-            failures.append(f"{RUNTIME_EVIDENCE_INDEX_DOC} missing required fragment: {fragment}")
+    check_required_fragments(
+        index_text,
+        (
+            "Runtime Evidence Excerpts",
+            "Do not use this directory for",
+            "docs/validation-evidence.md",
+        ),
+        failures,
+        rel_path=RUNTIME_EVIDENCE_INDEX_DOC,
+    )
 
-    for fragment in (
-        "2026-06-15 Clean Install Smoke Evidence",
-        "zilan-agent validation passed.",
-        "mode: dry-run",
-        "Found 5 matches",
-        "No secrets",
-    ):
-        if fragment not in clean_install_text:
-            failures.append(f"{RUNTIME_EVIDENCE_CLEAN_INSTALL_DOC} missing required fragment: {fragment}")
+    check_required_fragments(
+        clean_install_text,
+        (
+            "2026-06-15 Clean Install Smoke Evidence",
+            "zilan-agent validation passed.",
+            "mode: dry-run",
+            "Found 5 matches",
+            "No secrets",
+        ),
+        failures,
+        rel_path=RUNTIME_EVIDENCE_CLEAN_INSTALL_DOC,
+    )
 
-    for fragment in (
-        "2026-06-15 Mock Claude Install Smoke Evidence",
-        "mode: mock-claude-install",
-        "skill:scripts/search_agama.py: pass",
-        "agent:matches-source: pass",
-        "Found 1 matches",
-    ):
-        if fragment not in mock_install_text:
-            failures.append(f"{RUNTIME_EVIDENCE_MOCK_INSTALL_DOC} missing required fragment: {fragment}")
+    check_required_fragments(
+        mock_install_text,
+        (
+            "2026-06-15 Mock Claude Install Smoke Evidence",
+            "mode: mock-claude-install",
+            "skill:scripts/search_agama.py: pass",
+            "agent:matches-source: pass",
+            "Found 1 matches",
+        ),
+        failures,
+        rel_path=RUNTIME_EVIDENCE_MOCK_INSTALL_DOC,
+    )
 
-    for fragment in ("Redaction note", "Output Excerpts", "Limitations"):
-        if fragment not in template_text:
-            failures.append(f"{RUNTIME_EVIDENCE_TEMPLATE_DOC} missing required fragment: {fragment}")
+    check_required_fragments(
+        template_text,
+        ("Redaction note", "Output Excerpts", "Limitations"),
+        failures,
+        rel_path=RUNTIME_EVIDENCE_TEMPLATE_DOC,
+    )
 
 
 def _check_portable_upgrade_doc(root: Path, failures: list[str]) -> None:
@@ -1302,9 +1314,7 @@ def _check_portable_upgrade_doc(root: Path, failures: list[str]) -> None:
         "DeepSeek Compatibility Caveat",
         "Do not infer platform support from this file alone",
     )
-    for fragment in required_fragments:
-        if fragment not in text:
-            failures.append(f"{PORTABLE_UPGRADE_DOC} missing required fragment: {fragment}")
+    check_required_fragments(text, required_fragments, failures, rel_path=PORTABLE_UPGRADE_DOC)
 
 
 def _check_yaml(root: Path, failures: list[str], warnings: list[str], strict_yaml: bool) -> None:
