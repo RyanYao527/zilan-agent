@@ -212,6 +212,45 @@ def test_dry_run_returns_collected_topics_total_part_fixture_for_srq07() -> None
     assert result["chunks"][1]["text"] == "被批评者"
 
 
+def test_dry_run_returns_collected_topics_definition_scope_fixture_for_srq11() -> None:
+    result = build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-11")
+
+    assert result["query"] == "用摄类学检查定义：瓶的性相是能盛水者。这个定义成立吗？"
+    assert result["needs"] == ["collected_topics"]
+    assert result["non_chunk_needs"] == []
+    assert result["expected_chunk_ids"] == [
+        "context:collected-topics:definition-scope",
+        "reasoning:ZR-12:collected-topics-definition-scope",
+    ]
+    assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
+    assert result["answer_contracts"]["collected_topics_definition_scope_error"]["required_terms"] == [
+        "摄类学",
+        "性相",
+        "所表",
+        "能盛水者",
+        "瓶",
+        "湖",
+        "性相过宽",
+        "唯在所表上成立",
+        "违②",
+        "不成立",
+    ]
+    assert result["answer_contract_samples"] == [
+        {
+            "id": "srq11-collected-topics-definition-scope-pass",
+            "file": "tests/fixtures/answers/srq11-collected-topics-definition-scope-pass.md",
+            "expected_status": "pass",
+        },
+        {
+            "id": "srq11-collected-topics-definition-scope-fail",
+            "file": "tests/fixtures/answers/srq11-collected-topics-definition-scope-fail.md",
+            "expected_status": "fail",
+        },
+    ]
+    assert result["chunks"][0]["text"] == "性相与所表 —— 类型定义系统"
+    assert result["chunks"][1]["text"] == "用摄类学检查定义：瓶的性相是能盛水者。这个定义成立吗？"
+
+
 def test_dry_run_returns_madhyamaka_prasanga_fixture_for_srq03() -> None:
     result = build_dry_run(DEFAULT_FIXTURE, query_id="SRQ-03")
 

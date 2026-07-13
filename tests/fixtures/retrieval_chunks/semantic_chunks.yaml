@@ -251,6 +251,22 @@ chunks:
       reasoning_roles:
         - collected_topics
 
+  - chunk_id: context:collected-topics:definition-scope
+    chunk_type: context_topic
+    source_file: context/摄类学工具箱.md
+    start_line: 27
+    end_line: 71
+    citation: "context/摄类学工具箱.md:27-71"
+    passage_citation: "context/摄类学工具箱.md:27-71"
+    text: "性相与所表 —— 类型定义系统"
+    metadata:
+      topics:
+        - 性相
+        - 所表
+        - 性相过宽
+      reasoning_roles:
+        - collected_topics
+
   - chunk_id: context:madhyamaka:prasanga-method
     chunk_type: context_topic
     source_file: context/中观应成精要.md
@@ -331,6 +347,23 @@ chunks:
       reasoning_roles:
         - collected_topics
         - cognitive_analysis
+
+  - chunk_id: reasoning:ZR-12:collected-topics-definition-scope
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 401
+    end_line: 427
+    citation: "tests/reasoning_cases.yaml:401-427"
+    passage_citation: "tests/reasoning_cases.yaml:401-427"
+    text: "用摄类学检查定义：瓶的性相是能盛水者。这个定义成立吗？"
+    metadata:
+      topics:
+        - 性相
+        - 所表
+        - 性相过宽
+      reasoning_case_id: ZR-12
+      reasoning_roles:
+        - collected_topics
 
   - chunk_id: context:cognitive-analysis:five-universal-chain
     chunk_type: context_topic
@@ -778,6 +811,71 @@ queries:
     expected_chunk_ids:
       - context:collected-topics:total-part
       - argument:work-feedback:non-pervasive
+
+  - id: SRQ-11
+    query: "用摄类学检查定义：瓶的性相是能盛水者。这个定义成立吗？"
+    needs:
+      - collected_topics
+    answer_contracts:
+      collected_topics_definition_scope_error:
+        description: "Answer must identify a too-broad defining mark and preserve the defining-mark / definiendum boundary."
+        required_terms:
+          - 摄类学
+          - 性相
+          - 所表
+          - 能盛水者
+          - 瓶
+          - 湖
+          - 性相过宽
+          - 唯在所表上成立
+          - 违②
+          - 不成立
+        required_slots:
+          - label: definition_decomposition
+            terms:
+              - 名相
+              - 性相
+              - 所表
+          - label: scope_check
+            terms:
+              - 性相过宽
+              - 能盛水者
+              - 湖
+          - label: definiendum_boundary
+            terms:
+              - 唯在所表上成立
+              - 违②
+          - label: error_classification
+            terms:
+              - 错误类型
+              - 不成立
+        forbidden_terms:
+          - 能盛水者就是瓶
+          - 性相成立
+          - 不需要反例
+          - 湖也是瓶
+    answer_contract_samples:
+      - id: srq11-collected-topics-definition-scope-pass
+        file: tests/fixtures/answers/srq11-collected-topics-definition-scope-pass.md
+        expected_status: pass
+      - id: srq11-collected-topics-definition-scope-fail
+        file: tests/fixtures/answers/srq11-collected-topics-definition-scope-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 性相
+        - 所表
+        - 性相过宽
+      modern:
+        - 能盛水者
+        - 瓶
+        - 湖
+    expected_sources:
+      - context/摄类学工具箱.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:collected-topics:definition-scope
+      - reasoning:ZR-12:collected-topics-definition-scope
 
   - id: SRQ-09
     query: "收到批评后，我如何区分事实、受、想心所和后续反应？"

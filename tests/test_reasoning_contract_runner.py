@@ -241,6 +241,30 @@ def test_reasoning_contract_runner_runs_collected_topics_analyzer_for_srq07() ->
         "total_part_distinction": "required",
     }
 
+def test_reasoning_contract_runner_runs_collected_topics_analyzer_for_srq11() -> None:
+    result = build_reasoning_contract_run(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-11",
+        sample_id="srq11-collected-topics-definition-scope-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["role_coverage"]["coverage_status"] == "complete"
+    assert result["validators"]["collected_topics"]["status"] == "run"
+    assert result["validators"]["collected_topics"]["case_ids"] == ["ZR-12"]
+    analysis = result["validators"]["collected_topics"]["analyses"][0]
+    assert analysis["case_id"] == "ZR-12"
+    relation_checks = {
+        item["id"]: item["status"] for item in analysis["collected_topics"]["relation_checks"]
+    }
+    assert relation_checks == {
+        "definition_scope": "fail",
+        "definiendum_boundary": "required",
+    }
+    assert result["validators"]["hetuvidya"] == NOT_APPLICABLE_HETUVIDYA
+    assert result["validators"]["madhyamaka_prasanga"] == NOT_APPLICABLE_MADHYAMAKA
+    assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
+
 
 def test_reasoning_contract_runner_runs_cognitive_mapper_for_srq09() -> None:
     result = build_reasoning_contract_run(
