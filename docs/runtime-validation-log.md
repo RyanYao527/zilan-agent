@@ -1,6 +1,6 @@
 # Runtime Validation Log
 
-> Last updated: 2026-07-06
+> Last updated: 2026-07-13
 
 This log records manual runtime validation evidence for zilan-agent. It complements CI and repository invariant checks; it does not replace `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, pytest, ruff, or platform status maintenance in `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -639,6 +639,34 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - It does not validate native OpenAI API or any OpenAI-compatible provider route.
 - The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
 - `--dangerously-skip-permissions` was used only to keep local noninteractive Claude Code validation from stopping at file-read approval prompts.
+
+## 2026-07-13 Claude Code SRQ-11 Collected Topics Definition-Scope Spot Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.204`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `4d276f1` (`Add Collected Topics definition-scope fixture (#100)`) |
+| Branch | `srq11-runtime-spot-review` |
+| Prompt set | One direct `SRQ-11` definition-scope prompt |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console/stdin before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact evidence committed at `docs/runtime-evidence/2026-07-13-claude-code-srq-11-spot-review.md`; raw JSON and extracted answer Markdown kept local only under `C:\tmp\zilan-srq11-spot-review-20260713` |
+| Repository checks | `python scripts\reasoning_contract_runner.py --query-id SRQ-11 --answer-file C:\tmp\zilan-srq11-spot-review-20260713\SRQ-11.answer.md --json` pass; full repository checks run before PR handoff |
+| Overall result | `pass`: the direct answer passes the `SRQ-11` Collected Topics definition-scope answer contract; no platform status change |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---:|---|
+| `SRQ-11.answer.md` | `SRQ-11` / `collected_topics_definition_scope_error` | `pass` | Required terms and slots all present, including `摄类学`, `性相`, `所表`, `能盛水者`, `瓶`, `湖`, `性相过宽`, `唯在所表上成立`, `违②`, `错误类型`, and `不成立`; no forbidden terms present. |
+
+### Known Limits
+
+- This is a target-contract spot review, not a full ZC-01 through ZC-06 platform rerun.
+- It does not validate native OpenAI API or any OpenAI-compatible provider route.
+- The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
+- This evidence does not change platform validation status.
 
 ## Next Validation Entries
 
