@@ -6,6 +6,13 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Updated the maintenance roadmap coverage baseline from 72% to 75% after adding `scripts/build_agama_context.py` smoke coverage.
+- Added fixture-safe unit coverage for `scripts/build_agama_context.py` metadata extraction, text normalization, index writing, and temp-source main flow.
+
+### Fixed
+
+- Fixed `scripts/build_agama_context.py` TEI `choice` handling so `corr` elements without child nodes are preserved and `choice` tail text is not duplicated.
+
 ## [2.5.3] - 2026-07-13
 
 ### Added
