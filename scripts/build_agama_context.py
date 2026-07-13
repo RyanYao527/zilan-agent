@@ -92,7 +92,9 @@ def append_text(elem: ET.Element, out: list[str]) -> None:
     if name in {"anchor", "mulu"}:
         return
     if name == "choice":
-        preferred = elem.find("tei:corr", NS) or elem.find("tei:reg", NS)
+        preferred = elem.find("tei:corr", NS)
+        if preferred is None:
+            preferred = elem.find("tei:reg", NS)
         if preferred is not None:
             if preferred.text:
                 out.append(preferred.text)
@@ -102,8 +104,6 @@ def append_text(elem: ET.Element, out: list[str]) -> None:
                     out.append(child.tail)
         elif elem.text:
             out.append(elem.text)
-        if elem.tail:
-            out.append(elem.tail)
         return
 
     if name in BLOCK_TAGS:
