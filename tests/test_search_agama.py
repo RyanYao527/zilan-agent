@@ -32,7 +32,13 @@ def test_search_returns_auditable_markdown_locations() -> None:
     assert all(f"{match.file}:{match.passage_start_line}" in match.passage_citation for match in matches)
     marked_matches = search_agama("當觀色無常", root=ROOT, limit=1)
     assert marked_matches[0].section_marker == "（一）"
+    assert marked_matches[0].section_title is None
     assert "（一）" in marked_matches[0].citation
+
+    titled_matches = search_agama("過去九十一劫", root=ROOT, limit=1)
+    assert titled_matches[0].section_marker == "（一）"
+    assert titled_matches[0].section_title == "第一分初大本經第一"
+    assert "（一）第一分初大本經第一" in titled_matches[0].citation
 
 
 def test_search_filters_known_false_positive_phrases() -> None:
@@ -74,7 +80,13 @@ def test_search_can_aggregate_by_passage() -> None:
 
     marked_passages = search_agama_passages("當觀色無常", root=ROOT, limit=1)
     assert marked_passages[0].section_marker == "（一）"
+    assert marked_passages[0].section_title is None
     assert "（一）" in marked_passages[0].citation
+
+    titled_passages = search_agama_passages("過去九十一劫", root=ROOT, limit=1)
+    assert titled_passages[0].section_marker == "（一）"
+    assert titled_passages[0].section_title == "第一分初大本經第一"
+    assert "（一）第一分初大本經第一" in titled_passages[0].citation
 
 
 def test_search_json_cli_output_is_machine_readable() -> None:
@@ -96,6 +108,7 @@ def test_search_json_cli_output_is_machine_readable() -> None:
         "cbeta_id",
         "juan",
         "section_marker",
+        "section_title",
         "citation",
         "passage_citation",
         "text",

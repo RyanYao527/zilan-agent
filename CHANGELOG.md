@@ -6,6 +6,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added `section_title` metadata to Agama search results and semantic fixture candidates so title-bearing section markers such as `（一）第一分初大本經第一` are preserved in citations when available.
+- Updated the maintenance roadmap coverage baseline from 75% to 76% after adding citation-title coverage for Agama search and candidate generation.
 - Updated the maintenance roadmap coverage baseline from 72% to 75% after adding `scripts/build_agama_context.py` smoke coverage.
 - Added fixture-safe unit coverage for `scripts/build_agama_context.py` metadata extraction, text normalization, index writing, and temp-source main flow.
 

@@ -97,6 +97,7 @@ def build_candidate_set(
                 "cbeta_id": match.cbeta_id,
                 "juan": match.juan,
                 "section_marker": match.section_marker,
+                "section_title": match.section_title,
                 "topics": topic_values,
                 "reasoning_roles": ["agama_evidence"],
                 "matched_lines": [match.line],

@@ -21,6 +21,7 @@ def test_candidate_builder_preserves_agama_citation_fields() -> None:
         assert f"{chunk['source_file']}:{chunk['start_line']}" in chunk["passage_citation"]
         assert chunk["source_file"] in chunk["citation"]
         assert chunk["text"]
+        assert "section_title" in chunk["metadata"]
         assert chunk["metadata"]["reasoning_roles"] == ["agama_evidence"]
         assert chunk["metadata"]["matched_lines"]
         assert chunk["metadata"]["source_hash"].startswith("sha256:")
@@ -34,6 +35,14 @@ def test_candidate_builder_preserves_agama_citation_fields() -> None:
         assert provenance["line_text_hash"] == chunk["metadata"]["line_text_hash"]
         assert provenance["source_hash_scope"] == "legacy_alias_for_line_text_hash"
 
+
+def test_candidate_builder_preserves_section_titles_when_available() -> None:
+    result = build_candidate_set(root=ROOT, terms="過去九十一劫", limit=1)
+    chunk = result["chunks"][0]
+
+    assert chunk["metadata"]["section_marker"] == "（一）"
+    assert chunk["metadata"]["section_title"] == "第一分初大本經第一"
+    assert "（一）第一分初大本經第一" in chunk["citation"]
 
 def test_candidate_builder_deduplicates_passage_chunks() -> None:
     result = build_candidate_set(root=ROOT, terms="\u7121\u5e38|\u975e\u6211", limit=5)

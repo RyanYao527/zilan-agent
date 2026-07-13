@@ -31,6 +31,7 @@ class AgamaMatch:
     cbeta_id: str
     juan: str | None
     section_marker: str | None
+    section_title: str | None
     passage_start_line: int
     passage_end_line: int
     citation: str
@@ -47,6 +48,7 @@ class AgamaPassage:
     cbeta_id: str
     juan: str | None
     section_marker: str | None
+    section_title: str | None
     start_line: int
     end_line: int
     matched_lines: list[int]
@@ -81,16 +83,19 @@ def _line_juan_map(lines: list[str]) -> dict[int, str | None]:
     return result
 
 
-def _line_section_marker_map(lines: list[str]) -> dict[int, str | None]:
-    current: str | None = None
-    result: dict[int, str | None] = {}
+def _line_section_map(lines: list[str]) -> dict[int, tuple[str | None, str | None]]:
+    current_marker: str | None = None
+    current_title: str | None = None
+    result: dict[int, tuple[str | None, str | None]] = {}
     for idx, line in enumerate(lines, start=1):
         if re.match(r"^##\s+卷\s+\S+\s*$", line):
-            current = None
-        marker = re.match(r"^(（[^）]{1,16}）)\s*$", line)
+            current_marker = None
+            current_title = None
+        marker = re.match(r"^(（[^）]{1,16}）)\s*(\S.*)?$", line)
         if marker:
-            current = marker.group(1)
-        result[idx] = current
+            current_marker = marker.group(1)
+            current_title = marker.group(2).strip() if marker.group(2) else None
+        result[idx] = (current_marker, current_title)
     return result
 
 
@@ -118,13 +123,21 @@ def _format_citation(
     cbeta_id: str,
     juan: str | None,
     section_marker: str | None,
+    section_title: str | None,
     file: str,
     start_line: int,
     end_line: int,
 ) -> str:
     line_ref = f"{file}:{start_line}" if start_line == end_line else f"{file}:{start_line}-{end_line}"
     juan_ref = juan or "卷未标注"
-    section_ref = f", {section_marker}" if section_marker else ""
+    section_label = ""
+    if section_marker and section_title:
+        section_label = f"{section_marker}{section_title}"
+    elif section_marker:
+        section_label = section_marker
+    elif section_title:
+        section_label = section_title
+    section_ref = f", {section_label}" if section_label else ""
     return f"《{sutra_name}》({cbeta_id}) {juan_ref}{section_ref}, {line_ref}"
 
 
@@ -167,7 +180,7 @@ def search_agama(
         lines = path.read_text(encoding="utf-8").splitlines()
         sutra_name, cbeta_id = _agama_metadata(lines, path)
         juan_by_line = _line_juan_map(lines)
-        section_by_line = _line_section_marker_map(lines)
+        section_by_line = _line_section_map(lines)
         rel_file = path.relative_to(root).as_posix()
         for idx, line in enumerate(lines, start=1):
             if not regex.search(line):
@@ -177,6 +190,7 @@ def search_agama(
 
             passage_start, passage_end = _paragraph_bounds(lines, idx)
             before, after = _context(lines, idx, idx, context_lines)
+            section_marker, section_title = section_by_line.get(idx, (None, None))
             matches.append(
                 AgamaMatch(
                     file=rel_file,
@@ -184,14 +198,16 @@ def search_agama(
                     sutra_name=sutra_name,
                     cbeta_id=cbeta_id,
                     juan=juan_by_line.get(idx),
-                    section_marker=section_by_line.get(idx),
+                    section_marker=section_marker,
+                    section_title=section_title,
                     passage_start_line=passage_start,
                     passage_end_line=passage_end,
                     citation=_format_citation(
                         sutra_name=sutra_name,
                         cbeta_id=cbeta_id,
                         juan=juan_by_line.get(idx),
-                        section_marker=section_by_line.get(idx),
+                        section_marker=section_marker,
+                        section_title=section_title,
                         file=rel_file,
                         start_line=idx,
                         end_line=idx,
@@ -200,7 +216,8 @@ def search_agama(
                         sutra_name=sutra_name,
                         cbeta_id=cbeta_id,
                         juan=juan_by_line.get(idx),
-                        section_marker=section_by_line.get(idx),
+                        section_marker=section_marker,
+                        section_title=section_title,
                         file=rel_file,
                         start_line=passage_start,
                         end_line=passage_end,
@@ -251,6 +268,7 @@ def search_agama_passages(
                 cbeta_id=passage_matches[0].cbeta_id,
                 juan=passage_matches[0].juan,
                 section_marker=passage_matches[0].section_marker,
+                section_title=passage_matches[0].section_title,
                 start_line=start_line,
                 end_line=end_line,
                 matched_lines=[match.line for match in passage_matches],
@@ -259,6 +277,7 @@ def search_agama_passages(
                     cbeta_id=passage_matches[0].cbeta_id,
                     juan=passage_matches[0].juan,
                     section_marker=passage_matches[0].section_marker,
+                    section_title=passage_matches[0].section_title,
                     file=file,
                     start_line=start_line,
                     end_line=end_line,
