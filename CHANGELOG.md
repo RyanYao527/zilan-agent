@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added `pytest-cov` as a development dependency and enabled an all-scripts coverage report without a fail-under gate; the initial local baseline is 61% and is tracked in the maintenance roadmap.
 - Added co-maintainer invitation sections to the root, Chinese, and English READMEs, plus co-maintainer role expectations in both contributing guides.
 - Added `CODE_OF_CONDUCT.md` based on Contributor Covenant 2.1 and linked it from README and contributing guides.
 - Added GitHub issue templates for bug reports and feature requests so contributors can report platform, validation, documentation, and reasoning-contract work through structured forms.
