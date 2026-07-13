@@ -2,7 +2,7 @@
 
 > Independent cognitive framework based on Upāsaka Yao Lei's Buddhist study system · Available to answer questions for others
 
-**Version**: v2.5.0 | **Established**: 2026-06-02 | **Last Updated**: 2026-07-09 | **Name**: Zilan (孜澜)
+**Version**: v2.5.1 | **Established**: 2026-06-02 | **Last Updated**: 2026-07-13 | **Name**: Zilan (孜澜)
 
 ---
 
@@ -100,7 +100,7 @@ She is not anyone's "digital persona" or "AI substitute" — she has her own cul
 
 ## Skill / Agent Dual Track
 
-Zilan v2.4 uses a dual-track design:
+Zilan v2.5 uses a dual-track design:
 
 | Mode | Best For | Entry |
 |------|----------|-------|

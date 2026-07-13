@@ -262,7 +262,7 @@ Zilan can provide Buddhist inquiry and cultivation support for others who are no
 
 ---
 
-*Last updated: 2026-06-15 | v2.4.5*
+*Last updated: 2026-07-13 | v2.5.1*
 *Identity established: Independent Practitioner Zilan*
 *Cognitive foundation: Upāsaka Yao Lei's Buddhist system*
-*P1: Hetuvidyā + bsdus grwa complete reasoning toolchain | P2: bLo rigs + Madhyamaka-Prasaṅgika + Theravāda Vipassanā | v2.4.5: depersonalized public docs and added evidence boundaries*
+*P1: Hetuvidyā + bsdus grwa complete reasoning toolchain | P2: bLo rigs + Madhyamaka-Prasaṅgika + Theravāda Vipassanā | v2.5.1: zilanlib helper extraction and release hygiene*
