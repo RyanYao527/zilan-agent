@@ -40,3 +40,39 @@ def load_yaml_mapping(
     if not isinstance(data, dict):
         raise error_type(f"{mapping_label}: {shown_path}")
     return data
+
+
+def load_yaml_for_validation(
+    root: Path,
+    rel_path: str,
+    failures: list[str],
+    warnings: list[str],
+    strict_yaml: bool,
+) -> object | None:
+    """Load YAML for repository validation while preserving warning/failure behavior."""
+    yaml_path = root / rel_path
+    try:
+        import yaml
+    except ModuleNotFoundError:
+        message = f"PyYAML is not installed; skipped {rel_path} parse check."
+        if strict_yaml:
+            failures.append(message)
+        else:
+            warnings.append(message)
+        return None
+
+    try:
+        return yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
+    except Exception as exc:  # noqa: BLE001 - surface parser details to maintainers.
+        failures.append(f"Failed to parse {rel_path}: {exc}")
+        return None
+
+
+def is_non_empty_string_list(value: object) -> bool:
+    return isinstance(value, list) and bool(value) and all(isinstance(item, str) and item for item in value)
+
+
+def is_non_empty_int_list(value: object) -> bool:
+    return isinstance(value, list) and bool(value) and all(
+        isinstance(item, int) and not isinstance(item, bool) for item in value
+    )

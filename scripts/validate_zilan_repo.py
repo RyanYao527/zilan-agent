@@ -8,9 +8,17 @@ import sys
 from pathlib import Path
 
 from zilanlib.agama.search import DEFAULT_FALSE_POSITIVE_PHRASES, search_agama
+from zilanlib.yaml_io import (
+    is_non_empty_int_list,
+    is_non_empty_string_list,
+    load_yaml_for_validation,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
+_load_yaml = load_yaml_for_validation
+_is_non_empty_string_list = is_non_empty_string_list
+_is_non_empty_int_list = is_non_empty_int_list
 REQUIRED_FILES = (
     "README.md",
     "README.zh.md",
@@ -354,25 +362,6 @@ def _check_regression_matrix(root: Path, failures: list[str]) -> None:
             failures.append(f"Missing regression case in CODEX_REGRESSION_TESTS.md: {case}")
 
 
-def _load_yaml(root: Path, rel_path: str, failures: list[str], warnings: list[str], strict_yaml: bool) -> object | None:
-    yaml_path = root / rel_path
-    try:
-        import yaml  # type: ignore[import-not-found]
-    except ModuleNotFoundError:
-        message = f"PyYAML is not installed; skipped {rel_path} parse check."
-        if strict_yaml:
-            failures.append(message)
-        else:
-            warnings.append(message)
-        return None
-
-    try:
-        return yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
-    except Exception as exc:  # noqa: BLE001 - surface parser details to maintainers.
-        failures.append(f"Failed to parse {rel_path}: {exc}")
-        return None
-
-
 def _check_regression_cases_yaml(root: Path, failures: list[str], warnings: list[str], strict_yaml: bool) -> None:
     data = _load_yaml(root, REGRESSION_CASES_PATH, failures, warnings, strict_yaml)
     if data is None:
@@ -437,16 +426,6 @@ def _check_regression_cases_yaml(root: Path, failures: list[str], warnings: list
             f"{REGRESSION_CASES_PATH} case ids do not match CODEX matrix: "
             f"expected {sorted(expected_ids)}, got {sorted(seen_ids)}"
         )
-
-
-def _is_non_empty_string_list(value: object) -> bool:
-    return isinstance(value, list) and bool(value) and all(isinstance(item, str) and item for item in value)
-
-
-def _is_non_empty_int_list(value: object) -> bool:
-    return isinstance(value, list) and bool(value) and all(
-        isinstance(item, int) and not isinstance(item, bool) for item in value
-    )
 
 
 def _retrieval_line_text_hash(source_lines: list[str], start_line: int, end_line: int) -> str:
