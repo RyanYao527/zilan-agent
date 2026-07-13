@@ -4,6 +4,10 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+### Added
+
+- Added SRQ-11 / ZR-12 as a fixture-only Collected Topics definition-scope case for the too-broad defining mark 瓶的性相是能盛水者, covering 性相, 所表, 性相过宽, 唯在所表上成立, and checked-in pass/fail answer-contract samples.
+
 ## [2.5.1] - 2026-07-13
 
 ### Added

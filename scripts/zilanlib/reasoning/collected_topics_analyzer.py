@@ -28,6 +28,16 @@ RELATION_DEFINITIONS = {
         "role": "total_part_boundary_check",
         "description": "Check whether a local part-case is being confused with a whole-category claim.",
     },
+    "definition_scope": {
+        "name": "definition scope",
+        "role": "definition_extension_check",
+        "description": "Check whether the proposed definition is coextensive with the definiendum.",
+    },
+    "definiendum_boundary": {
+        "name": "definiendum boundary",
+        "role": "definition_definiendum_boundary_check",
+        "description": "Check whether the defining mark appears only on the definiendum.",
+    },
     "tetralemma": {
         "name": "tetralemma",
         "role": "fourfold_relation_check",
@@ -61,6 +71,20 @@ DIAGNOSTIC_MESSAGES = {
             "code": "total_part_boundary_required",
             "severity": "info",
             "message": "The fixture requires explicit total/part distinction language.",
+        },
+    },
+    "definition_scope": {
+        "fail": {
+            "code": "definition_too_broad",
+            "severity": "error",
+            "message": "The fixture marks the proposed definition as too broad for the definiendum.",
+        },
+    },
+    "definiendum_boundary": {
+        "required": {
+            "code": "definiendum_boundary_required",
+            "severity": "info",
+            "message": "The fixture requires explicit defining-mark and definiendum boundary language.",
         },
     },
     "tetralemma": {

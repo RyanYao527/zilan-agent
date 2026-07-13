@@ -397,3 +397,31 @@ cases:
           - 慧
           - 无瞋
           - 不害
+
+  - id: ZR-12
+    title: 性相过宽样例
+    source_regression_cases:
+      - ZC-03
+    contracts:
+      - collected_topics
+    prompt: "用摄类学检查定义：瓶的性相是能盛水者。这个定义成立吗？"
+    reference_files:
+      - context/摄类学工具箱.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 名相
+        - 性相
+        - 所表
+        - 性相三要素
+        - 反例
+        - 错误类型
+      collected_topics:
+        concepts:
+          - 瓶
+          - 能盛水者
+          - 湖
+        relation_checks:
+          definition_scope: fail
+          definiendum_boundary: required
+        error_type: 性相过宽

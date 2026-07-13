@@ -348,6 +348,45 @@ def test_answer_contract_review_fails_for_collected_topics_total_part_negative_s
     ]
 
 
+def test_answer_contract_review_passes_for_collected_topics_definition_scope_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-11",
+        sample_id="srq11-collected-topics-definition-scope-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["expected_status"] == "pass"
+    assert result["expected_status_match"] is True
+    assert result["reviews"][0]["contract_id"] == "collected_topics_definition_scope_error"
+    assert result["reviews"][0]["missing_required_terms"] == []
+    assert result["reviews"][0]["missing_required_slots"] == []
+    assert result["reviews"][0]["present_forbidden_terms"] == []
+
+
+def test_answer_contract_review_fails_for_collected_topics_definition_scope_negative_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-11",
+        sample_id="srq11-collected-topics-definition-scope-fail",
+    )
+
+    assert result["overall_status"] == "fail"
+    assert result["expected_status"] == "fail"
+    assert result["expected_status_match"] is True
+    assert "性相过宽" in result["reviews"][0]["missing_required_terms"]
+    assert "唯在所表上成立" in result["reviews"][0]["missing_required_terms"]
+    assert result["reviews"][0]["present_forbidden_terms"] == [
+        "能盛水者就是瓶",
+        "性相成立",
+        "不需要反例",
+    ]
+    assert result["reviews"][0]["missing_required_slots"] == [
+        "definiendum_boundary",
+        "error_classification",
+    ]
+
+
 def test_answer_contract_review_passes_for_cognitive_practice_boundary_sample() -> None:
     result = build_answer_contract_review(
         DEFAULT_FIXTURE,

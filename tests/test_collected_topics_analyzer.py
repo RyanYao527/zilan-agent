@@ -45,11 +45,40 @@ def test_collected_topics_analyzer_maps_zr02_total_part_error() -> None:
     }
 
 
+def test_collected_topics_analyzer_maps_zr12_definition_too_broad() -> None:
+    result = build_collected_topics_analysis(case_id="ZR-12")
+
+    assert result["status"] == "run"
+    assert result["case_id"] == "ZR-12"
+    assert result["case_ids"] == ["ZR-12"]
+
+    analysis = result["analyses"][0]
+    assert analysis["case_id"] == "ZR-12"
+    assert [concept["term"] for concept in analysis["collected_topics"]["concepts"]] == [
+        "瓶",
+        "能盛水者",
+        "湖",
+    ]
+    relation_checks = {
+        item["id"]: item["status"] for item in analysis["collected_topics"]["relation_checks"]
+    }
+    assert relation_checks == {
+        "definition_scope": "fail",
+        "definiendum_boundary": "required",
+    }
+    assert analysis["collected_topics"]["error_type"] == "性相过宽"
+    assert {item["code"] for item in analysis["diagnostics"]} == {
+        "definition_too_broad",
+        "definiendum_boundary_required",
+        "boundary_statement_required",
+    }
+
+
 def test_collected_topics_analyzer_defaults_to_collected_topics_cases() -> None:
     result = build_collected_topics_analysis()
 
-    assert [item["case_id"] for item in result["analyses"]] == ["ZR-02", "ZR-06"]
-    assert result["count"] == 2
+    assert [item["case_id"] for item in result["analyses"]] == ["ZR-02", "ZR-06", "ZR-12"]
+    assert result["count"] == 3
 
 
 def test_collected_topics_analyzer_rejects_non_collected_topics_case() -> None:
