@@ -8,6 +8,11 @@ import sys
 from pathlib import Path
 
 from zilanlib.agama.search import DEFAULT_FALSE_POSITIVE_PHRASES, search_agama
+from zilanlib.repository import (
+    check_regression_matrix,
+    check_required_paths,
+    check_version_consistency,
+)
 from zilanlib.yaml_io import (
     is_non_empty_int_list,
     is_non_empty_string_list,
@@ -74,6 +79,7 @@ REQUIRED_FILES = (
     "scripts/semantic_role_coverage.py",
     "scripts/validate_zilan_repo.py",
     "scripts/zilanlib/__init__.py",
+    "scripts/zilanlib/repository.py",
     "scripts/zilanlib/agama/__init__.py",
     "scripts/zilanlib/reasoning/__init__.py",
     "scripts/zilanlib/reasoning/agama_evidence_checker.py",
@@ -329,37 +335,15 @@ def _hash_file(path: Path) -> str:
 
 
 def _check_paths(root: Path, failures: list[str]) -> None:
-    for rel_path in REQUIRED_FILES + REQUIRED_CONTEXT_FILES:
-        if not (root / rel_path).exists():
-            failures.append(f"Missing required path: {rel_path}")
-
-
-def _extract_version(root: Path, rel_path: str, pattern: str, failures: list[str]) -> str | None:
-    text = (root / rel_path).read_text(encoding="utf-8")
-    match = re.search(pattern, text)
-    if not match:
-        failures.append(f"{rel_path} missing project version pattern.")
-        return None
-    return match.group(1)
+    check_required_paths(root, REQUIRED_FILES, REQUIRED_CONTEXT_FILES, failures)
 
 
 def _check_version_consistency(root: Path, failures: list[str]) -> None:
-    versions: dict[str, str] = {}
-    for rel_path, pattern in VERSION_SOURCES.items():
-        version = _extract_version(root, rel_path, pattern, failures)
-        if version is not None:
-            versions[rel_path] = version
-
-    if len(set(versions.values())) > 1:
-        details = ", ".join(f"{rel_path}={version}" for rel_path, version in sorted(versions.items()))
-        failures.append(f"Project version mismatch: {details}")
+    check_version_consistency(root, VERSION_SOURCES, failures)
 
 
 def _check_regression_matrix(root: Path, failures: list[str]) -> None:
-    text = (root / "CODEX_REGRESSION_TESTS.md").read_text(encoding="utf-8")
-    for case in REGRESSION_CASES:
-        if case not in text:
-            failures.append(f"Missing regression case in CODEX_REGRESSION_TESTS.md: {case}")
+    check_regression_matrix(root, "CODEX_REGRESSION_TESTS.md", REGRESSION_CASES, failures)
 
 
 def _check_regression_cases_yaml(root: Path, failures: list[str], warnings: list[str], strict_yaml: bool) -> None:

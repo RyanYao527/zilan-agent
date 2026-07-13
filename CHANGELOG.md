@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Extracted repository path/version/regression-matrix helpers into `scripts/zilanlib/repository.py` while keeping `validate_zilan_repo.py` wrapper names stable.
 - Extracted repository YAML loading/list-shape helpers into `scripts/zilanlib/yaml_io.py` while keeping `validate_zilan_repo.py` behavior and private helper aliases stable.
 - Added `pytest-cov` as a development dependency and enabled an all-scripts coverage report without a fail-under gate; the initial local baseline is 61% and is tracked in the maintenance roadmap.
 - Added co-maintainer invitation sections to the root, Chinese, and English READMEs, plus co-maintainer role expectations in both contributing guides.
