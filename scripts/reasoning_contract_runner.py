@@ -6,11 +6,11 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import agama_evidence_checker
 import cognitive_analysis_mapper
 import collected_topics_analyzer
 import hetuvidya_validator
 import madhyamaka_critique_engine
+from zilanlib.reasoning.agama_evidence_checker import AgamaEvidenceCheckerError
 from zilanlib.reasoning.contract_runner import build_reasoning_contract_run
 from zilanlib.semantic.retrieval_dry_run import DEFAULT_FIXTURE, FixtureError
 
@@ -96,7 +96,7 @@ def main() -> int:
         collected_topics_analyzer.CollectedTopicsAnalyzerError,
         madhyamaka_critique_engine.MadhyamakaCritiqueEngineError,
         cognitive_analysis_mapper.CognitiveAnalysisMapperError,
-        agama_evidence_checker.AgamaEvidenceCheckerError,
+        AgamaEvidenceCheckerError,
     ) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2

@@ -3,13 +3,13 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-import agama_evidence_checker
 from reasoning_validator_output import (
     build_not_applicable_validator_output,
     build_validator_output,
 )
 
 from zilanlib.reasoning import (
+    agama_evidence_checker,
     cognitive_analysis_mapper,
     collected_topics_analyzer,
     hetuvidya_validator,
