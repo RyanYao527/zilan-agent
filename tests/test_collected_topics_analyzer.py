@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from collected_topics_analyzer import (
+from zilanlib.reasoning.collected_topics_analyzer import (
     CollectedTopicsAnalyzerError,
     build_collected_topics_analysis,
 )
