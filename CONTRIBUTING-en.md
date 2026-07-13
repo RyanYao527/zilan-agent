@@ -34,6 +34,17 @@ python scripts/search_agama.py --terms "無我|非我|緣起" --limit 10
 
 `validate_zilan_repo.py` checks required files, the Codex regression matrix, key Agent prompt fragments, Agama search smoke tests, and optionally verifies that Markdown generated from CBETA XML is stable.
 
+## Becoming a Co-Maintainer
+
+A co-maintainer role is not just a title; it means taking sustained responsibility for a reviewable area of work. The most useful areas right now are:
+
+- Documentation review and Chinese / English consistency checks
+- Runtime validation for Claude Code, Codex, OpenAI API, or OpenAI-compatible providers
+- Scholarly collation of Agama citations against CBETA XML sources and boundary notes
+- Review of reasoning-contract fixtures, answer-contract samples, and runtime evidence
+
+If you would like to become a regular collaborator, please open an issue first and describe the scope you want to help with, your expected cadence, and the validation environment you can run. Changes that affect platform status, output contracts, Agama corpus files, or core prompts should still go through small PRs, full repository checks, and explicit evidence records.
+
 ## Knowledge Co-Building
 
 This skill is a living learning system. Core knowledge is maintained in:

@@ -19,6 +19,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | Architecture overview | `ARCHITECTURE.md` provides the contributor-facing architecture entrypoint for the Skill/Agent dual track, `zilanlib` CLI-wrapper pattern, fixture-only validators, platform-status boundaries, and local validation workflow. |
 | Contribution intake | `.github/ISSUE_TEMPLATE/` provides structured bug-report and feature-request templates for platform, validation, documentation, CI, and reasoning-contract work. |
 | Community conduct | `CODE_OF_CONDUCT.md` adopts Contributor Covenant 2.1 with maintainer contact via GitHub `@RyanYao527`, and `CONTRIBUTING.md` / `CONTRIBUTING-en.md` link to it. |
+| Co-maintainer path | `README.md`, `README.zh.md`, `README.en.md`, `CONTRIBUTING.md`, and `CONTRIBUTING-en.md` now invite regular collaborators and define reviewable co-maintainer work areas such as documentation, runtime validation, Agama collation, and reasoning-contract review. |
 | Installation docs | `docs/installation.md` separates Codex, Claude Code, and OpenAI API operating paths. |
 | Clean install smoke | A 2026-06-15 clean clone from GitHub passed repository checks, pytest, ruff, OpenAI dry-run, and Agama search smoke tests when run sequentially. Current CI also includes a minimal mypy type-check baseline for `scripts/`. |
 | Mock Claude install | `scripts/mock_install_smoke.py` verifies the Claude Code skill/agent install layout in a temporary mock home without touching the real user profile. |

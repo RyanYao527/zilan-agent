@@ -209,6 +209,24 @@ Installation paths are documented in `docs/installation.md`. Runtime evidence an
 
 ---
 
+## Seeking Co-Maintainers
+
+zilan-agent is currently maintained by one person. Regular contributors or co-maintainers are welcome, especially if you are:
+
+- a Buddhist practitioner or student interested in the intersection of Dharma and AI
+- a software engineer who cares about LLM reliability, output contracts, and validation evidence
+- comfortable reviewing Chinese and English documentation
+
+If you would like to help maintain or contribute regularly, please open an issue first so scope, expectations, and review boundaries can be discussed publicly.
+
+Areas where help is most useful:
+
+- Documentation review and translation consistency
+- Platform validation on new Claude Code / Codex / provider releases
+- Scholarly collation of Agama corpus references against CBETA XML sources
+- Reasoning-contract fixture review for Hetuvidya, Collected Topics, Madhyamaka, and cognitive-analysis cases
+
+---
 ## Open Source License
 
 Project-original code and documentation are licensed under the MIT License; see `LICENSE`. CBETA-derived Agama texts and excerpts are third-party material, are not relicensed by this repository, and must follow CBETA terms; see `THIRD_PARTY_NOTICES.md`.

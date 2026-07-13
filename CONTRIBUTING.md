@@ -34,6 +34,17 @@ python scripts/search_agama.py --terms "無我|非我|緣起" --limit 10
 
 `validate_zilan_repo.py` 会检查必要文件、Codex 回归矩阵、Agent prompt 关键片段、阿含检索 smoke test，并可验证 CBETA XML 生成的 Markdown 是否稳定。
 
+## 成为协作维护者
+
+协作维护者不是名义身份，而是持续承担一类可复查工作的角色。当前最适合的协作方向包括：
+
+- 文档审阅与中英文一致性检查
+- Claude Code、Codex、OpenAI API 或 OpenAI-compatible provider 的运行验证
+- 阿含语料引用的 CBETA XML 回校与边界标注
+- reasoning-contract fixture、answer-contract sample 和 runtime evidence 的复核
+
+如果你希望成为长期协作者，请先提交 Issue，说明你希望负责的范围、可投入的频率，以及你能运行的验证环境。涉及平台状态、输出合约、阿含语料或核心 prompt 的变更，仍需通过小 PR、完整仓库检查和明确证据记录。
+
 ## 知识共建说明
 
 本 skill 是活的学习系统，会随修学进展持续更新。核心知识沉淀在：
