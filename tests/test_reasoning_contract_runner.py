@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 from reasoning_contract_runner import build_reasoning_contract_run
-from semantic_retrieval_dry_run import DEFAULT_FIXTURE, FixtureError
+from zilanlib.semantic.retrieval_dry_run import DEFAULT_FIXTURE, FixtureError
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "reasoning_contract_runner.py"

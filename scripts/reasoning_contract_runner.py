@@ -16,7 +16,7 @@ from reasoning_validator_output import (
     build_validator_output,
 )
 from semantic_answer_contract_review import build_answer_contract_review
-from semantic_retrieval_dry_run import DEFAULT_FIXTURE, ROOT, FixtureError, build_dry_run
+from zilanlib.semantic.retrieval_dry_run import DEFAULT_FIXTURE, ROOT, FixtureError, build_dry_run
 from zilanlib.semantic.role_coverage import build_role_coverage
 
 MODE = "reasoning-contract-runner-v0"

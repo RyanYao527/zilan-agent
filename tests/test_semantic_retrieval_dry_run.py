@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from semantic_retrieval_dry_run import DEFAULT_FIXTURE, FixtureError, build_dry_run
+from zilanlib.semantic.retrieval_dry_run import DEFAULT_FIXTURE, FixtureError, build_dry_run
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "semantic_retrieval_dry_run.py"
