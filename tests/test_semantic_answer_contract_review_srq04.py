@@ -1,5 +1,5 @@
-from semantic_retrieval_dry_run import DEFAULT_FIXTURE
 from zilanlib.semantic.answer_contract_review import build_answer_contract_review
+from zilanlib.semantic.retrieval_dry_run import DEFAULT_FIXTURE
 
 
 def test_answer_contract_review_passes_for_agama_citation_boundary_sample() -> None:

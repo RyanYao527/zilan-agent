@@ -211,6 +211,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │           ├── answer_boundary_review.py
 │           ├── answer_contract_review.py
 │           ├── context_bundle.py
+│           ├── retrieval_dry_run.py
 │           └── role_coverage.py
 ├── agents/
 │   └── openai.yaml       # UI 元数据

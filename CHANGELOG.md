@@ -10,6 +10,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Extracted semantic role-coverage review into `scripts/zilanlib/semantic/role_coverage.py` while keeping `scripts/semantic_role_coverage.py` as the stable CLI wrapper.
 - Extracted semantic answer-boundary review into `scripts/zilanlib/semantic/answer_boundary_review.py` while keeping `scripts/semantic_answer_boundary_review.py` as the stable CLI wrapper.
 - Extracted semantic answer-contract review into `scripts/zilanlib/semantic/answer_contract_review.py` while keeping `scripts/semantic_answer_contract_review.py` as the stable CLI wrapper.
+- Extracted semantic retrieval dry-run construction into `scripts/zilanlib/semantic/retrieval_dry_run.py` while keeping `scripts/semantic_retrieval_dry_run.py` as the stable CLI wrapper.
 
 - Extracted semantic fixture review comparison into `scripts/zilanlib/agama/fixture_review.py` while keeping `scripts/semantic_fixture_review.py` as the stable CLI wrapper.
 - Extracted Agama semantic fixture candidate construction into `scripts/zilanlib/agama/candidates.py` while keeping `scripts/semantic_fixture_candidates.py` as the stable CLI wrapper.

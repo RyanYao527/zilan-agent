@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from semantic_retrieval_dry_run import DEFAULT_FIXTURE, build_dry_run
+from zilanlib.semantic.retrieval_dry_run import DEFAULT_FIXTURE, build_dry_run
 
 MODE = "semantic-context-bundle"
 LIMITATIONS = (

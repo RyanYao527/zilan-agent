@@ -73,6 +73,7 @@ REQUIRED_FILES = (
     "scripts/zilanlib/semantic/answer_boundary_review.py",
     "scripts/zilanlib/semantic/answer_contract_review.py",
     "scripts/zilanlib/semantic/context_bundle.py",
+    "scripts/zilanlib/semantic/retrieval_dry_run.py",
     "scripts/zilanlib/semantic/role_coverage.py",
     "scripts/zilanlib/yaml_io.py",
     "tests/regression_cases.yaml",
