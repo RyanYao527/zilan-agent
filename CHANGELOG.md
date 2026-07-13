@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added ARCHITECTURE.md as a concise contributor-facing architecture entrypoint covering the Skill/Agent dual track, fixture-only validators, zilanlib, platform validation boundaries, and local validation workflow.
 - Added Claude Code SRQ-11 runtime spot-review evidence showing the current answer passes the Collected Topics definition-scope answer contract for the too-broad defining mark `瓶的性相是能盛水者`; no platform status change.
 - Added SRQ-11 / ZR-12 as a fixture-only Collected Topics definition-scope case for the too-broad defining mark 瓶的性相是能盛水者, covering 性相, 所表, 性相过宽, 唯在所表上成立, and checked-in pass/fail answer-contract samples.
 

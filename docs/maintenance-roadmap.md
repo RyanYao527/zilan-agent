@@ -16,6 +16,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | Runtime validation | `docs/runtime-validation-log.md` records manual runtime validation sessions and transcript availability, including the 2026-06-18 Claude Code post-contract target review, Agama contract fix review for `SRQ-04` / `ZC-05`, Madhyamaka contract fix review for broad `ZC-05`, post-contract full `ZC-01` through `ZC-06` rerun, and 2026-07-13 `SRQ-11` Collected Topics definition-scope spot review. |
 | Runtime evidence policy | `docs/validation-evidence.md` defines evidence levels, transcript redaction, and status-promotion rules. |
 | Runtime evidence excerpts | `docs/runtime-evidence/` stores small redacted command-output or transcript excerpts that support validation-log entries. |
+| Architecture overview | `ARCHITECTURE.md` provides the contributor-facing architecture entrypoint for the Skill/Agent dual track, `zilanlib` CLI-wrapper pattern, fixture-only validators, platform-status boundaries, and local validation workflow. |
 | Installation docs | `docs/installation.md` separates Codex, Claude Code, and OpenAI API operating paths. |
 | Clean install smoke | A 2026-06-15 clean clone from GitHub passed repository checks, pytest, ruff, OpenAI dry-run, and Agama search smoke tests when run sequentially. Current CI also includes a minimal mypy type-check baseline for `scripts/`. |
 | Mock Claude install | `scripts/mock_install_smoke.py` verifies the Claude Code skill/agent install layout in a temporary mock home without touching the real user profile. |
