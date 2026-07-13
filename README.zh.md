@@ -213,6 +213,24 @@ GitHub Actions 会在 push 和 pull request 时自动运行同类检查。
 
 ---
 
+## 寻找协作维护者
+
+zilan-agent 目前主要由一人维护。欢迎稳定贡献者或协作维护者参与，尤其欢迎具备以下背景的人：
+
+- 对佛法与 AI 交叉方向感兴趣的佛学学习者或修行者
+- 关注 LLM 可靠性、输出合约和验证证据的软件工程师
+- 能够审阅中文和英文文档的协作者
+
+如果你希望长期参与维护或定期贡献，请先提交 Issue，公开讨论协作范围、角色预期和评审边界。
+
+当前最需要协助的方向：
+
+- 文档审阅与中英文一致性
+- Claude Code / Codex / provider 新版本的平台验证
+- 阿含语料引用与 CBETA XML 来源的学术校勘
+- 因明、摄类学、中观、心类学等 reasoning-contract fixture 评审
+
+---
 ## 开源许可
 
 本项目原创代码与文档按 MIT License 授权，详见 `LICENSE`。CBETA 衍生阿含文本与摘录属于第三方资料，不由本仓库重新授予 MIT，使用与再分发应遵循 CBETA 条款；详见 `THIRD_PARTY_NOTICES.md`。
