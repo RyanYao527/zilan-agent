@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from hetuvidya_validator import DEFAULT_CASES, HetuvidyaValidatorError, build_hetuvidya_validation
+from zilanlib.reasoning.hetuvidya_validator import DEFAULT_CASES, HetuvidyaValidatorError, build_hetuvidya_validation
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "hetuvidya_validator.py"
