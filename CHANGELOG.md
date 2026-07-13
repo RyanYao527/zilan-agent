@@ -4,6 +4,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+## [2.5.2] - 2026-07-13
+
 ### Added
 
 - Extracted repository path/version/regression-matrix helpers into `scripts/zilanlib/repository.py` while keeping `validate_zilan_repo.py` wrapper names stable.

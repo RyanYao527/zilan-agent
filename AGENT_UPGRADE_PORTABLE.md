@@ -2,7 +2,7 @@
 
 > Current document version: v2.0
 > Last updated: 2026-07-13
-> Current project baseline: zilan-agent v2.5.1
+> Current project baseline: zilan-agent v2.5.2
 
 This document records how Zilan evolved from a passive skill-style knowledge bundle into a dual-track Skill / Agent framework. It is historical and architectural context, not the source of truth for platform validation.
 
