@@ -17,6 +17,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Extracted Madhyamaka critique engine construction into `scripts/zilanlib/reasoning/madhyamaka_critique_engine.py` while keeping `scripts/madhyamaka_critique_engine.py` as the stable CLI wrapper.
 - Extracted cognitive-analysis mapper construction into `scripts/zilanlib/reasoning/cognitive_analysis_mapper.py` while keeping `scripts/cognitive_analysis_mapper.py` as the stable CLI wrapper.
 - Extracted Agama evidence checker construction into `scripts/zilanlib/reasoning/agama_evidence_checker.py` while keeping `scripts/agama_evidence_checker.py` as the stable CLI wrapper.
+- Extracted the shared reasoning-validator output envelope into `scripts/zilanlib/reasoning/validator_output.py` while keeping `scripts/reasoning_validator_output.py` as the compatibility shim.
 
 - Extracted semantic fixture review comparison into `scripts/zilanlib/agama/fixture_review.py` while keeping `scripts/semantic_fixture_review.py` as the stable CLI wrapper.
 - Extracted Agama semantic fixture candidate construction into `scripts/zilanlib/agama/candidates.py` while keeping `scripts/semantic_fixture_candidates.py` as the stable CLI wrapper.

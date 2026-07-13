@@ -1,4 +1,5 @@
-﻿from reasoning_validator_output import (
+import reasoning_validator_output as compatibility_output
+from zilanlib.reasoning.validator_output import (
     build_not_applicable_validator_output,
     build_validator_output,
     case_ids_from_items,
@@ -62,3 +63,8 @@ def test_build_not_applicable_validator_output_uses_same_common_fields() -> None
         "critiques": [],
         "limitations": ["No selected Madhyamaka case."],
     }
+
+def test_root_compatibility_shim_exports_shared_functions() -> None:
+    assert compatibility_output.case_ids_from_items is case_ids_from_items
+    assert compatibility_output.build_validator_output is build_validator_output
+    assert compatibility_output.build_not_applicable_validator_output is build_not_applicable_validator_output

@@ -3,8 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from reasoning_validator_output import build_validator_output
-
+from zilanlib.reasoning.validator_output import build_validator_output
 from zilanlib.yaml_io import display_path, load_yaml_mapping
 
 ROOT = Path(__file__).resolve().parents[3]
