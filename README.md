@@ -49,6 +49,7 @@ cp zilan-agent/agents/zilan-claude-code.md ~/.claude/agents/zilan.md
 | `CONTRIBUTING.md` / `CONTRIBUTING-en.md` | 贡献指南 · How to contribute |
 | `CHANGELOG.md` | 版本变更记录 · Release notes |
 | `ARCHITECTURE.md` | 架构入口与设计决策 · Architecture overview and design decisions |
+| `CODE_OF_CONDUCT.md` | 社区行为准则 · Community code of conduct |
 | `LICENSE` / `THIRD_PARTY_NOTICES.md` | MIT for project-original code/docs; CBETA-derived Agama corpus follows CBETA terms |
 | `agents/zilan-claude-code.md` | Claude Code Agent 定义 · Claude Code Agent definition |
 | `agents/zilan-codex.md` | Codex sub-agent prompt · Codex sub-agent prompt |
