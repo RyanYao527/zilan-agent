@@ -208,6 +208,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │           └── search.py
 │       ├── reasoning/                   # Reasoning contract library helpers
 │           ├── __init__.py
+│           ├── cognitive_analysis_mapper.py
 │           ├── collected_topics_analyzer.py
 │           ├── contract_runner.py
 │           ├── hetuvidya_validator.py
