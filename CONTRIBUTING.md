@@ -2,6 +2,8 @@
 
 感谢对孜澜 skill 的关注。
 
+本项目遵循 [Contributor Covenant](CODE_OF_CONDUCT.md) 行为准则。参与讨论、提交 Issue 或 Pull Request 时，请遵守该准则。
+
 ## 如何贡献
 
 ### 方式一：提交 Issue

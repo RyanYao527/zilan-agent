@@ -2,6 +2,8 @@
 
 Thank you for your interest in contributing to Zilan Agent.
 
+This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md). Please follow it when participating in discussions, opening issues, or submitting pull requests.
+
 ## How to Contribute
 
 ### Option 1: Submit an Issue
