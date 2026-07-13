@@ -4,13 +4,17 @@ from pathlib import Path
 from typing import Any
 
 import agama_evidence_checker
-import cognitive_analysis_mapper
 from reasoning_validator_output import (
     build_not_applicable_validator_output,
     build_validator_output,
 )
 
-from zilanlib.reasoning import collected_topics_analyzer, hetuvidya_validator, madhyamaka_critique_engine
+from zilanlib.reasoning import (
+    cognitive_analysis_mapper,
+    collected_topics_analyzer,
+    hetuvidya_validator,
+    madhyamaka_critique_engine,
+)
 from zilanlib.semantic.answer_contract_review import build_answer_contract_review
 from zilanlib.semantic.retrieval_dry_run import DEFAULT_FIXTURE, ROOT, FixtureError, build_dry_run
 from zilanlib.semantic.role_coverage import build_role_coverage

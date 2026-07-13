@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from cognitive_analysis_mapper import (
+from zilanlib.reasoning.cognitive_analysis_mapper import (
     DEFAULT_CASES,
     CognitiveAnalysisMapperError,
     build_cognitive_analysis_mapping,
