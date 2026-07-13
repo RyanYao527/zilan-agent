@@ -78,6 +78,40 @@ def test_semantic_root_cli_wrappers_run_json_in_process(
     assert data["mode"] == expected_mode
     assert data["query_id"] == expected_query_id
 
+@pytest.mark.parametrize(
+    ("module_name", "args", "expected_mode", "required_key"),
+    [
+        (
+            "semantic_fixture_candidates",
+            ["--terms", "\u975e\u6211", "--limit", "1", "--json"],
+            "agama-fixture-candidates",
+            "chunks",
+        ),
+        (
+            "semantic_fixture_review",
+            ["--terms", "\u975e\u6211", "--limit", "1", "--json"],
+            "semantic-fixture-review",
+            "summary",
+        ),
+    ],
+)
+def test_agama_fixture_root_cli_wrappers_run_json_in_process(
+    module_name: str,
+    args: list[str],
+    expected_mode: str,
+    required_key: str,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    module = importlib.import_module(module_name)
+    monkeypatch.setattr(sys, "argv", [f"{module_name}.py", *args])
+
+    assert module.main() == 0
+    captured = capsys.readouterr()
+    data = json.loads(captured.out)
+
+    assert data["mode"] == expected_mode
+    assert required_key in data
 
 @pytest.mark.parametrize(
     ("module_name", "args", "expected_mode", "expected_case_ids"),

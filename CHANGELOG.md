@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added in-process Agama semantic fixture CLI wrapper smoke tests for candidate generation and fixture review helpers.
 - Added in-process reasoning CLI wrapper smoke tests for fixture validators, the reasoning contract runner, and the validator-output compatibility shim.
 - Added in-process root CLI wrapper smoke tests for semantic helper scripts and the Agama compatibility wrapper so pytest-cov tracks wrapper coverage.
 - Extracted a shared document-fragment validation helper into `scripts/zilanlib/text_checks.py` while preserving existing repository invariant error messages.
