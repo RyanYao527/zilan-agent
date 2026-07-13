@@ -38,6 +38,7 @@ REQUIRED_FILES = (
     "docs/architecture/reasoning-contract.md",
     "docs/architecture/reasoning-contract-review.md",
     "docs/architecture/semantic-retrieval-interface.md",
+    "docs/architecture/zilanlib-extraction-cleanup-review.md",
     "LICENSE",
     "THIRD_PARTY_NOTICES.md",
     "CONTRIBUTING.md",

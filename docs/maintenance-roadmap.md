@@ -1,6 +1,6 @@
 # Maintenance Roadmap
 
-> Last updated: 2026-07-02
+> Last updated: 2026-07-13
 
 This roadmap records engineering maintenance state and next priorities for zilan-agent. It is not platform validation evidence. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -11,7 +11,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | CI | GitHub Actions runs repository invariants, generated Agama idempotency checks, pytest, ruff, mypy, and Agama search smoke tests. |
 | Repository invariants | `scripts/validate_zilan_repo.py` checks required files, context files, YAML shape, regression inventory, platform status consistency, agent prompt contracts, and Agama search behavior. |
 | Regression inventory | `CODEX_REGRESSION_TESTS.md` is mirrored by `tests/regression_cases.yaml`; CI validates structure, resources, and case IDs. |
-| Reasoning contract | `docs/architecture/reasoning-contract.md` defines the v0 structured reasoning contract; `docs/architecture/reasoning-contract-review.md` maps current ZC evidence to `ZR-*` cases without claiming a new runtime pass; `docs/architecture/post-contract-runtime-review.md` records committed-evidence gaps against `SRQ-02` through `SRQ-04`; `tests/reasoning_cases.yaml` stores schema-validated seed fixtures. |
+| Reasoning contract | `docs/architecture/reasoning-contract.md` defines the v0 structured reasoning contract; `docs/architecture/reasoning-contract-review.md` maps current ZC evidence to `ZR-*` cases without claiming a new runtime pass; `docs/architecture/post-contract-runtime-review.md` records committed-evidence gaps against `SRQ-02` through `SRQ-04`; `docs/architecture/zilanlib-extraction-cleanup-review.md` closes the current `zilanlib` extraction sweep and identifies release hygiene as the next highest-ROI maintenance step; `tests/reasoning_cases.yaml` stores schema-validated seed fixtures. |
 | Platform status | `agents/openai.yaml` is the machine-readable source; `docs/platform-validation.md` is the human-readable validation record. Codex is `tested`; Claude Code is `tested` as of the 2026-06-18 post-contract full rerun when Windows PowerShell stdin is forced to UTF-8. |
 | Runtime validation | `docs/runtime-validation-log.md` records manual runtime validation sessions and transcript availability, including the 2026-06-18 Claude Code post-contract target review, Agama contract fix review for `SRQ-04` / `ZC-05`, Madhyamaka contract fix review for broad `ZC-05`, and post-contract full `ZC-01` through `ZC-06` rerun. |
 | Runtime evidence policy | `docs/validation-evidence.md` defines evidence levels, transcript redaction, and status-promotion rules. |
@@ -59,6 +59,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | P2 | Scholarly collation | Add a stricter collation path from Markdown hits back to CBETA XML-P5 and relevant parallels. | Publication-level work has a documented verification route. |
 | P2 | Installation docs | Keep install paths and activation expectations current after platform changes. | New users can install the skill or agent without reading implementation history. |
 | P2 | Release hygiene | Keep `CHANGELOG.md` updated for user-visible changes. | Changes can be summarized for users without reading merged PRs. |
+| P2 | zilanlib cleanup | Treat the current `zilanlib` extraction sweep as complete unless a concrete maintenance pain appears in provider harnesses, repository validation, or corpus generation. | Root scripts remain stable CLIs, reusable semantic/reasoning/Agama helpers live under `scripts/zilanlib/`, and further extraction has an explicit need. |
 
 ## Manual Validation Checklist
 
