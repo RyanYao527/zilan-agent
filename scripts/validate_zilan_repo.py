@@ -66,6 +66,8 @@ REQUIRED_FILES = (
     "scripts/validate_zilan_repo.py",
     "scripts/zilanlib/__init__.py",
     "scripts/zilanlib/agama/__init__.py",
+    "scripts/zilanlib/reasoning/__init__.py",
+    "scripts/zilanlib/reasoning/contract_runner.py",
     "scripts/zilanlib/agama/candidates.py",
     "scripts/zilanlib/agama/fixture_review.py",
     "scripts/zilanlib/agama/search.py",
