@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added a `zilanlib` extraction cleanup review that classifies root scripts, closes the current helper-extraction sweep, and identifies release hygiene as the next highest-ROI maintenance step.
 - Extracted semantic context-bundle construction into `scripts/zilanlib/semantic/context_bundle.py` while keeping `scripts/semantic_context_bundle.py` as the stable CLI wrapper.
 - Extracted semantic role-coverage review into `scripts/zilanlib/semantic/role_coverage.py` while keeping `scripts/semantic_role_coverage.py` as the stable CLI wrapper.
 - Extracted semantic answer-boundary review into `scripts/zilanlib/semantic/answer_boundary_review.py` while keeping `scripts/semantic_answer_boundary_review.py` as the stable CLI wrapper.
