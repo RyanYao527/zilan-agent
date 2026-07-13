@@ -13,6 +13,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Extracted semantic retrieval dry-run construction into `scripts/zilanlib/semantic/retrieval_dry_run.py` while keeping `scripts/semantic_retrieval_dry_run.py` as the stable CLI wrapper.
 - Extracted reasoning contract runner construction into `scripts/zilanlib/reasoning/contract_runner.py` while keeping `scripts/reasoning_contract_runner.py` as the stable CLI wrapper.
 - Extracted Hetuvidya validator construction into `scripts/zilanlib/reasoning/hetuvidya_validator.py` while keeping `scripts/hetuvidya_validator.py` as the stable CLI wrapper.
+- Extracted Collected Topics analyzer construction into `scripts/zilanlib/reasoning/collected_topics_analyzer.py` while keeping `scripts/collected_topics_analyzer.py` as the stable CLI wrapper.
 
 - Extracted semantic fixture review comparison into `scripts/zilanlib/agama/fixture_review.py` while keeping `scripts/semantic_fixture_review.py` as the stable CLI wrapper.
 - Extracted Agama semantic fixture candidate construction into `scripts/zilanlib/agama/candidates.py` while keeping `scripts/semantic_fixture_candidates.py` as the stable CLI wrapper.
