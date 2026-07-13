@@ -70,6 +70,7 @@ REQUIRED_FILES = (
     "scripts/zilanlib/reasoning/collected_topics_analyzer.py",
     "scripts/zilanlib/reasoning/contract_runner.py",
     "scripts/zilanlib/reasoning/hetuvidya_validator.py",
+    "scripts/zilanlib/reasoning/madhyamaka_critique_engine.py",
     "scripts/zilanlib/agama/candidates.py",
     "scripts/zilanlib/agama/fixture_review.py",
     "scripts/zilanlib/agama/search.py",

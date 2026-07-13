@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from madhyamaka_critique_engine import (
+from zilanlib.reasoning.madhyamaka_critique_engine import (
     MadhyamakaCritiqueEngineError,
     build_madhyamaka_critique,
 )
