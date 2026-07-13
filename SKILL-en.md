@@ -200,6 +200,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │   └── zilanlib/                      # shared script helpers
 │       ├── __init__.py
 │       ├── yaml_io.py
+│       ├── repository.py
 │       ├── agama/                     # Agama search library helpers
 │           ├── __init__.py
 │           ├── candidates.py
