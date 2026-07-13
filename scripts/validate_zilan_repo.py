@@ -67,6 +67,7 @@ REQUIRED_FILES = (
     "scripts/zilanlib/__init__.py",
     "scripts/zilanlib/agama/__init__.py",
     "scripts/zilanlib/reasoning/__init__.py",
+    "scripts/zilanlib/reasoning/agama_evidence_checker.py",
     "scripts/zilanlib/reasoning/cognitive_analysis_mapper.py",
     "scripts/zilanlib/reasoning/collected_topics_analyzer.py",
     "scripts/zilanlib/reasoning/contract_runner.py",

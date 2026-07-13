@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from agama_evidence_checker import (
+from zilanlib.reasoning.agama_evidence_checker import (
     DEFAULT_CASES,
     AgamaEvidenceCheckerError,
     build_agama_evidence_check,
