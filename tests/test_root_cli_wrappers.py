@@ -16,6 +16,15 @@ def test_search_agama_root_wrapper_reexports_library_api() -> None:
     assert wrapper.AgamaPassage is library.AgamaPassage
 
 
+def test_reasoning_validator_output_root_wrapper_reexports_library_api() -> None:
+    import reasoning_validator_output as wrapper
+    from zilanlib.reasoning import validator_output as library
+
+    assert wrapper.build_validator_output is library.build_validator_output
+    assert wrapper.build_not_applicable_validator_output is library.build_not_applicable_validator_output
+    assert wrapper.case_ids_from_items is library.case_ids_from_items
+
+
 @pytest.mark.parametrize(
     ("module_name", "args", "expected_mode", "expected_query_id"),
     [
@@ -68,3 +77,85 @@ def test_semantic_root_cli_wrappers_run_json_in_process(
 
     assert data["mode"] == expected_mode
     assert data["query_id"] == expected_query_id
+
+
+@pytest.mark.parametrize(
+    ("module_name", "args", "expected_mode", "expected_case_ids"),
+    [
+        (
+            "hetuvidya_validator",
+            ["--case-id", "ZR-07", "--json"],
+            "hetuvidya-validator-v0",
+            ["ZR-07"],
+        ),
+        (
+            "collected_topics_analyzer",
+            ["--case-id", "ZR-02", "--json"],
+            "collected-topics-analyzer-v0",
+            ["ZR-02"],
+        ),
+        (
+            "madhyamaka_critique_engine",
+            ["--case-id", "ZR-09", "--json"],
+            "madhyamaka-critique-engine-v0",
+            ["ZR-09"],
+        ),
+        (
+            "cognitive_analysis_mapper",
+            ["--case-id", "ZR-10", "--json"],
+            "cognitive-analysis-mapper-v0",
+            ["ZR-10"],
+        ),
+        (
+            "agama_evidence_checker",
+            ["--case-id", "ZR-05", "--json"],
+            "agama-evidence-checker-v0.1",
+            ["ZR-05"],
+        ),
+    ],
+)
+def test_reasoning_root_cli_wrappers_run_json_in_process(
+    module_name: str,
+    args: list[str],
+    expected_mode: str,
+    expected_case_ids: list[str],
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    module = importlib.import_module(module_name)
+    monkeypatch.setattr(sys, "argv", [f"{module_name}.py", *args])
+
+    assert module.main() == 0
+    captured = capsys.readouterr()
+    data = json.loads(captured.out)
+
+    assert data["mode"] == expected_mode
+    assert data["case_ids"] == expected_case_ids
+
+
+def test_reasoning_contract_runner_root_cli_wrapper_runs_json_in_process(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    import reasoning_contract_runner
+
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "reasoning_contract_runner.py",
+            "--query-id",
+            "SRQ-05",
+            "--sample-id",
+            "srq05-hetuvidya-non-pervasive-pass",
+            "--json",
+        ],
+    )
+
+    assert reasoning_contract_runner.main() == 0
+    captured = capsys.readouterr()
+    data = json.loads(captured.out)
+
+    assert data["mode"] == "reasoning-contract-runner-v0"
+    assert data["query_id"] == "SRQ-05"
+    assert data["validators"]["hetuvidya"]["case_ids"] == ["ZR-07"]
