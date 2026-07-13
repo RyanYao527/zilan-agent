@@ -209,7 +209,8 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │           ├── __init__.py
 │           ├── collected_topics_analyzer.py
 │           ├── contract_runner.py
-│           └── hetuvidya_validator.py
+│           ├── hetuvidya_validator.py
+│           └── madhyamaka_critique_engine.py
 │       └── semantic/                    # Semantic retrieval library helpers
 │           ├── __init__.py
 │           ├── answer_boundary_review.py
