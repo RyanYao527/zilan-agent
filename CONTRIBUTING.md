@@ -58,4 +58,4 @@ python scripts/search_agama.py --terms "無我|非我|緣起" --limit 10
 
 ---
 
-*寻遍十方谁是我，波心圆月本无澜*
+*诸行无常，诸法无我，涅槃寂静。*
