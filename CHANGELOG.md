@@ -18,6 +18,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Fixed
 
+- Tightened broad `ZC-04` / `ZC-05` agent prompt contracts so main responses preserve `SRQ-04` Agama citation-boundary slots and `SRQ-08` Madhyamaka nihilism-boundary slots even for summaries or file-output tasks.
 - Tightened Agama evidence prompt wording so agents avoid reusing shallow collation-overclaim trigger phrases even in negated boundary statements; preferred wording now uses `未作校勘定案，不能作为定本使用`.
 - Fixed `scripts/build_agama_context.py` TEI `choice` handling so `corr` elements without child nodes are preserved and `choice` tail text is not duplicated.
 
