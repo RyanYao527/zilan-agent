@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Replaced the old closing verse across public docs, Skill files, agent prompts, and archives with `诸行无常，诸法无我，涅槃寂静。`.
 - Archived the legacy manual upload guide and early communication-history document under `docs/archive/`, and removed them from root-level public documentation surfaces.
 - Added Claude Code compact `ZC-04` Agama boundary rerun evidence showing the post-wording-fix answer passes `SRQ-04` without forbidden collation-overclaim terms; no platform status change.
 - Added Claude Code `SRQ-04` / compact `ZC-04` Agama citation-boundary spot-review evidence after Agama section-title citation metadata work; direct `SRQ-04` passes and compact `ZC-04` exposes a shallow forbidden-term nuance for negated `校勘确认` wording without changing platform status.
