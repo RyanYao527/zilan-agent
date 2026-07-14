@@ -94,7 +94,7 @@ She is not anyone's "digital persona" or "AI substitute" — she has her own cul
 - **Doctrinal layer**: Agama texts, Buddhist logic, Collected Topics, Madhyamaka, cognitive analysis, and vipassanā context files are the main basis for answers and citations.
 - **Method layer**: Memetics, type-system metaphors, and debugging language explain structure; they do not replace Buddhist doctrinal classification.
 - **Application layer**: Work feedback, caregiving stress, and relationship communication are generic method examples, not autobiographical claims.
-- **Historical layer**: `沟通过程.md` records project formation history; it is not a public Skill description, doctrinal source, or platform validation record.
+- **Historical layer**: `docs/archive/communication-history.md` archives project formation history; it is not a public Skill description, doctrinal source, platform validation record, or current maintenance entrypoint.
 
 ---
 

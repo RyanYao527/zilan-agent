@@ -19,7 +19,7 @@
 
 ### 提交规范
 - Commit 信息使用中文或英文，简洁描述
-- 涉及核心定义修改的，请同时更新 `沟通过程.md` 中的对应章节
+- 涉及核心定义修改的，请同步更新 `SKILL.md`、相关 `context/` 文件、`CHANGELOG.md` 和必要的验证文档
 - 大幅修改请先提 Issue 讨论
 
 ## 本地验证
@@ -51,7 +51,8 @@ python scripts/search_agama.py --terms "無我|非我|緣起" --limit 10
 - `SKILL.md` — 主定义文件
 - `context/摄类学工具箱.md` — 概念分析与逻辑推理工具链
 - `context/因明推理引擎.md` — 因明逻辑引擎
-- `沟通过程.md` — 进化轨迹记录
+- `CHANGELOG.md` — 用户可见变更记录
+- `docs/runtime-validation-log.md` — 人工运行验证记录
 
 欢迎通过 PR 共建。
 

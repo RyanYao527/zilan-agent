@@ -19,7 +19,7 @@ This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md). Please foll
 
 ### Commit Guidelines
 - Use Chinese or English — keep messages concise
-- When modifying core definitions, please update corresponding sections in `沟通过程.md`
+- When modifying core definitions, update `SKILL.md`, relevant `context/` files, `CHANGELOG.md`, and required validation documents
 - For significant changes, please open an Issue for discussion first
 
 ## Local Validation
@@ -51,7 +51,8 @@ This skill is a living learning system. Core knowledge is maintained in:
 - `SKILL.md` — Main definition file
 - `context/摄类学工具箱.md` — Conceptual analysis & logical reasoning toolkit
 - `context/因明推理引擎.md` — Buddhist logic engine
-- `沟通过程.md` — Evolution trail
+- `CHANGELOG.md` — User-visible release notes
+- `docs/runtime-validation-log.md` — Manual runtime validation records
 
 Contributions via PR are welcome.
 

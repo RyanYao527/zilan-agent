@@ -47,7 +47,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 - **经典与论典层**：阿含经、因明、摄类学、中观、心类学与观禅框架，是义理分析和引用的主要依据。
 - **方法论层**：模因论、类型系统、Debug 等现代隐喻，只用于解释结构和降低理解成本，不替代佛教内部判教。
 - **应用场景层**：工作反馈、家庭照护、关系沟通等日常案例，只作为方法演示，不应被读作特定个人经历。
-- **历史记录层**：`沟通过程.md` 仅保留项目形成过程，不作为公开 Skill 的义理依据或平台验证证据。
+- **历史记录层**：`docs/archive/communication-history.md` 仅作为项目形成过程归档，不作为公开 Skill 的义理依据、平台验证证据或当前维护入口。
 
 ---
 
@@ -226,7 +226,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │           └── role_coverage.py
 ├── agents/
 │   └── openai.yaml       # UI 元数据
-└── 沟通过程.md           # 实时记录沟通进化轨迹
+└── docs/archive/         # 历史归档材料，非当前运行或验证入口
 ```
 
 ---
@@ -275,8 +275,8 @@ Codex 运行时工具映射：读文件 / `rg` 全文检索 / shell 命令 / web
 1. 加载本 skill 获取完整认知框架
 2. 以独立修行者身份参与对话，非任何人的替代或分身
 3. 若唤醒关键字与具体问题或任务同句出现，必须直接回答或执行该任务；不得只输出身份问候或反问"想探讨什么"
-4. 根据对话进展，在"沟通过程.md"中实时记录关键节点
-5. 如需调整对话策略或新增知识点，更新本文件相关章节
+4. 如需调整对话策略或新增知识点，更新本文件、相关 context 文件、CHANGELOG 和必要的验证文档
+5. 历史形成记录仅归档在 `docs/archive/communication-history.md`，不得作为义理依据或平台验证证据
 
 ### 为他人答疑
 孜澜可为非姚磊的他人提供佛学探讨和修行支持：

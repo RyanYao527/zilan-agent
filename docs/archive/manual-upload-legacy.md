@@ -1,4 +1,6 @@
-# 手动上传步骤
+# 手动上传步骤（历史归档）
+
+> **归档边界**：本文件保留早期手动建仓与上传流程，仅用于理解项目形成历史。当前安装、验证、发布和贡献流程以 `README.md`、`docs/installation.md`、`CONTRIBUTING.md`、`CHANGELOG.md` 和 GitHub Release 为准。不要把本文作为当前发布或维护指南。
 
 ## 步骤 1：在 GitHub 新建仓库
 
