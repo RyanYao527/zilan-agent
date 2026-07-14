@@ -1,6 +1,6 @@
 # Maintenance Roadmap
 
-> Last updated: 2026-07-13
+> Last updated: 2026-07-14
 
 This roadmap records engineering maintenance state and next priorities for zilan-agent. It is not platform validation evidence. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -13,7 +13,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | Regression inventory | `CODEX_REGRESSION_TESTS.md` is mirrored by `tests/regression_cases.yaml`; CI validates structure, resources, and case IDs. |
 | Reasoning contract | `docs/architecture/reasoning-contract.md` defines the v0 structured reasoning contract; `docs/architecture/reasoning-contract-review.md` maps current ZC evidence to `ZR-*` cases without claiming a new runtime pass; `docs/architecture/post-contract-runtime-review.md` records committed-evidence gaps against `SRQ-02` through `SRQ-04`; `docs/architecture/zilanlib-extraction-cleanup-review.md` closes the current `zilanlib` extraction sweep and identifies release hygiene as the next highest-ROI maintenance step; `tests/reasoning_cases.yaml` stores schema-validated seed fixtures. |
 | Platform status | `agents/openai.yaml` is the machine-readable source; `docs/platform-validation.md` is the human-readable validation record. Codex is `tested`; Claude Code is `tested` as of the 2026-06-18 post-contract full rerun when Windows PowerShell stdin is forced to UTF-8. |
-| Runtime validation | `docs/runtime-validation-log.md` records manual runtime validation sessions and transcript availability, including the 2026-06-18 Claude Code post-contract target review, Agama contract fix review for `SRQ-04` / `ZC-05`, Madhyamaka contract fix review for broad `ZC-05`, post-contract full `ZC-01` through `ZC-06` rerun, and 2026-07-13 `SRQ-11` Collected Topics definition-scope spot review. |
+| Runtime validation | `docs/runtime-validation-log.md` records manual runtime validation sessions and transcript availability, including the 2026-06-18 Claude Code post-contract target review, Agama contract fix review for `SRQ-04` / `ZC-05`, Madhyamaka contract fix review for broad `ZC-05`, post-contract full `ZC-01` through `ZC-06` rerun, 2026-07-13 `SRQ-11` Collected Topics definition-scope spot review, and 2026-07-14 `SRQ-04` / compact `ZC-04` Agama citation-boundary spot review. |
 | Runtime evidence policy | `docs/validation-evidence.md` defines evidence levels, transcript redaction, and status-promotion rules. |
 | Runtime evidence excerpts | `docs/runtime-evidence/` stores small redacted command-output or transcript excerpts that support validation-log entries. |
 | Architecture overview | `ARCHITECTURE.md` provides the contributor-facing architecture entrypoint for the Skill/Agent dual track, `zilanlib` CLI-wrapper pattern, fixture-only validators, platform-status boundaries, and local validation workflow. |
@@ -59,7 +59,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | P1 | Volcengine compatible route | Expand the 2026-06-16 ZC-01 through ZC-03 live pass to ZC-04 through ZC-06 only if broader provider-route confidence is needed. | Volcengine evidence remains separated from native OpenAI API validation, with provider/model details and limitations recorded. |
 | P1 | Provider routes | Add native dry-run/live harnesses for DeepSeek, GLM, and Qwen, or record a concrete blocked state. | Each route has a dated tested or blocked entry with provider/model details and failure modes. |
 | P1 | Reasoning quality | Preserve the 2026-06-18 Madhyamaka prasaṅga output contract after future prompt changes. | Broad `ZC-05` continues to satisfy the `SRQ-03` contract without changing platform status. |
-| P1 | Semantic retrieval | Preserve the 2026-06-18 Agama evidence output contract after future prompt changes. | `SRQ-04` and broad `ZC-05` continue to satisfy the `SRQ-04` contract without adding new retrieval infrastructure. |
+| P1 | Semantic retrieval | Preserve the Agama evidence output contract after future prompt changes, including the 2026-07-14 finding that negated collation-overclaim terms can still trigger shallow forbidden-term failure. | Direct `SRQ-04` continues to satisfy the `SRQ-04` contract; broad or compact ZC-style answers either satisfy the same contract or record a precise prompt/contract follow-up without changing platform status. |
 | P1 | Agama citations | Extract or preserve finer-grained sutra or section markers when present in the Markdown. | Search output can cite representative passages beyond file, line, and fascicle where the source supports it. |
 | P2 | Scholarly collation | Add a stricter collation path from Markdown hits back to CBETA XML-P5 and relevant parallels. | Publication-level work has a documented verification route. |
 | P2 | Installation docs | Keep install paths and activation expectations current after platform changes. | New users can install the skill or agent without reading implementation history. |

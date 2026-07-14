@@ -1,6 +1,6 @@
 # Runtime Validation Log
 
-> Last updated: 2026-07-13
+> Last updated: 2026-07-14
 
 This log records manual runtime validation evidence for zilan-agent. It complements CI and repository invariant checks; it does not replace `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, pytest, ruff, or platform status maintenance in `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -667,6 +667,36 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - It does not validate native OpenAI API or any OpenAI-compatible provider route.
 - The answer-contract helper remains a minimum explicitness check rather than a doctrinal judge.
 - This evidence does not change platform validation status.
+
+## 2026-07-14 Claude Code SRQ-04 / ZC-04 Agama Citation Boundary Spot Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.204`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `512a333` (`Preserve Agama section titles in citations (#117)`) |
+| Branch | `srq04-agama-runtime-spot-review` |
+| Prompt set | One direct `SRQ-04` prompt, one exact `ZC-04` prompt attempt, and one compact `ZC-04`-style Agama-search prompt |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console/stdin before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact evidence committed at `docs/runtime-evidence/2026-07-14-claude-code-srq-04-zc-04-agama-boundary-spot-review.md`; raw JSON and extracted answer Markdown kept local only under `C:\tmp\zilan-srq04-zc04-spot-review-20260714` |
+| Repository checks | `python scripts\semantic_answer_contract_review.py --query-id SRQ-04 --answer-file C:\tmp\zilan-srq04-zc04-spot-review-20260714\SRQ-04.answer.md --json` pass; same review for `ZC-04-compact.answer.md` fail only on forbidden term `校勘确认`; full repository checks run before PR handoff |
+| Overall result | `target-partial`: direct `SRQ-04` passes; compact `ZC-04`-style answer covers citation-boundary slots but exposes a shallow forbidden-term/negation nuance; no platform status change |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---:|---|
+| `SRQ-04.answer.md` | `SRQ-04` / `agama_citation_boundary` | `pass` | Preserves search scope, representative status, `CBETA`, `T02n0099`, local `context/agama/` anchors, local line numbers, title-bearing paragraph labels where available, and `待校勘` / publication-level boundary language. |
+| Exact `ZC-04` prompt | `ZC-04` runtime attempt | `blocked` | Timed out after 304 seconds and produced no saved answer file. |
+| `ZC-04-compact.answer.md` | `SRQ-04` / `agama_citation_boundary` | `fail` | Required terms and slots are present, including local line anchors and section markers/titles. Mechanical review fails because the negated boundary phrase `不构成校勘确认` contains forbidden term `校勘确认`. |
+
+### Known Limits
+
+- This is a target-contract spot review, not a full ZC-01 through ZC-06 platform rerun.
+- The exact broad `ZC-04` prompt needs a separate long-running or bounded-output rerun if exact-case performance is the target.
+- The answer-contract helper is a minimum explicitness check and does not understand negation scope, so `不构成校勘确认` is mechanically flagged even though it is a boundary statement rather than a collation overclaim.
+- This evidence does not validate native OpenAI API or any OpenAI-compatible provider route.
 
 ## Next Validation Entries
 
