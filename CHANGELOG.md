@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added Claude Code post-prompt `ZC-01` through `ZC-06` rerun evidence after root-document archival and closing Dharma-seal wording changes; all invocations succeeded, while broad `ZC-04`/`SRQ-04` and `ZC-05`/`SRQ-08` contract gaps remain follow-up work without platform status change.
 - Replaced the old closing verse across public docs, Skill files, agent prompts, and archives with `诸行无常，诸法无我，涅槃寂静。`.
 - Archived the legacy manual upload guide and early communication-history document under `docs/archive/`, and removed them from root-level public documentation surfaces.
 - Added Claude Code compact `ZC-04` Agama boundary rerun evidence showing the post-wording-fix answer passes `SRQ-04` without forbidden collation-overclaim terms; no platform status change.
