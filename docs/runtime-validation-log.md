@@ -698,6 +698,34 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - The answer-contract helper is a minimum explicitness check and does not understand negation scope, so `不构成校勘确认` is mechanically flagged even though it is a boundary statement rather than a collation overclaim.
 - This evidence does not validate native OpenAI API or any OpenAI-compatible provider route.
 
+## 2026-07-14 Claude Code Compact ZC-04 Agama Boundary Rerun
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.204`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `25bdb5d` (`Tighten Agama collation boundary wording (#119)`) |
+| Branch | `zc04-agama-boundary-rerun` |
+| Prompt set | One compact `ZC-04`-style Agama-search prompt after prompt wording hardening |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console/stdin before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact evidence committed at `docs/runtime-evidence/2026-07-14-claude-code-zc-04-agama-boundary-rerun.md`; raw JSON and extracted answer Markdown kept local only under `C:\tmp\zilan-zc04-boundary-rerun-20260714` |
+| Repository checks | `python scripts\semantic_answer_contract_review.py --query-id SRQ-04 --answer-file C:\tmp\zilan-zc04-boundary-rerun-20260714\ZC-04-compact-rerun.answer.md --json` pass; full repository checks run before PR handoff |
+| Overall result | `target-pass`: compact `ZC-04` now passes the `SRQ-04` Agama citation-boundary contract after the prompt wording fix; no platform status change |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---:|---|
+| `ZC-04-compact-rerun.answer.md` | `SRQ-04` / `agama_citation_boundary` | `pass` | Preserves search scope, representative status, `CBETA`, `T02n0099`, local `context/agama/` anchors, local line numbers, title-bearing paragraph labels where available, and `待校勘` / publication-level boundary language. No forbidden collation-overclaim terms were present. |
+
+### Known Limits
+
+- This is a compact target-contract rerun, not a full ZC-01 through ZC-06 platform rerun.
+- It validates the current Claude Code CLI route with repository prompt loaded through UTF-8 stdin; it does not validate native OpenAI API or any OpenAI-compatible provider route.
+- The answer-contract helper is a minimum explicitness check and does not grade doctrinal correctness or retrieval completeness.
+- This evidence does not change platform validation status.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:

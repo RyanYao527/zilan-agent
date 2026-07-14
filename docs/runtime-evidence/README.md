@@ -39,6 +39,7 @@ Examples:
 - `2026-06-18-claude-code-post-contract-full-rerun.md`
 - `2026-06-18-claude-code-post-contract-target-review.md`
 - `2026-07-14-claude-code-srq-04-zc-04-agama-boundary-spot-review.md`
+- `2026-07-14-claude-code-zc-04-agama-boundary-rerun.md`
 - `2026-06-XX-openai-api-zc-02-live.md`
 - `2026-06-XX-claude-code-zc-04-excerpt.md`
 

@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added Claude Code compact `ZC-04` Agama boundary rerun evidence showing the post-wording-fix answer passes `SRQ-04` without forbidden collation-overclaim terms; no platform status change.
 - Added Claude Code `SRQ-04` / compact `ZC-04` Agama citation-boundary spot-review evidence after Agama section-title citation metadata work; direct `SRQ-04` passes and compact `ZC-04` exposes a shallow forbidden-term nuance for negated `校勘确认` wording without changing platform status.
 - Added `section_title` metadata to Agama search results and semantic fixture candidates so title-bearing section markers such as `（一）第一分初大本經第一` are preserved in citations when available.
 - Updated the maintenance roadmap coverage baseline from 75% to 76% after adding citation-title coverage for Agama search and candidate generation.
