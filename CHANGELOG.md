@@ -14,6 +14,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Fixed
 
+- Tightened Agama evidence prompt wording so agents avoid reusing shallow collation-overclaim trigger phrases even in negated boundary statements; preferred wording now uses `未作校勘定案，不能作为定本使用`.
 - Fixed `scripts/build_agama_context.py` TEI `choice` handling so `corr` elements without child nodes are preserved and `choice` tail text is not duplicated.
 
 ## [2.5.3] - 2026-07-13
