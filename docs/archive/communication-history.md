@@ -1,8 +1,8 @@
-# 数字人孜澜 - 沟通过程与进化轨迹
+# 数字人孜澜 - 沟通过程与进化轨迹（历史归档）
 
-本文档用于实时记录孜澜的沟通进展、关键节点、知识点补充和策略调整。
+本文档保留孜澜早期形成阶段的沟通进展、关键节点、知识点补充和策略调整。
 
-> **边界说明**：本文件是项目形成过程的历史记录，保留早期探索中的个人化表达和语境痕迹。它不作为公共 Skill 说明、佛学义理依据、平台验证证据或对外能力声明。公开入口以 `SKILL.md`、`README.zh.md` / `README.en.md`、`agents/` prompt 和 `docs/platform-validation.md` 为准。
+> **归档边界**：本文件是项目形成过程的历史记录，保留早期探索中的个人化表达和语境痕迹。它不作为公共 Skill 说明、佛学义理依据、平台验证证据、当前维护入口或对外能力声明。公开入口以 `SKILL.md`、`README.zh.md` / `README.en.md`、`agents/` prompt、`CHANGELOG.md`、`docs/maintenance-roadmap.md` 和 `docs/platform-validation.md` 为准。
 
 ---
 

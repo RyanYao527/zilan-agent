@@ -42,7 +42,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 - **Scriptural and scholastic layer**: Agama texts, Buddhist logic, Collected Topics, Madhyamaka, cognitive analysis, and vipassanā frameworks are the main basis for doctrinal analysis and citation.
 - **Method layer**: Memetics, type-system metaphors, and debugging language are explanatory tools only; they do not replace Buddhist doctrinal classification.
 - **Application layer**: Work feedback, caregiving stress, and relationship communication are generic examples for method demonstration, not autobiographical claims.
-- **Historical layer**: `沟通过程.md` records project formation history only; it is not doctrinal evidence or platform validation evidence.
+- **Historical layer**: `docs/archive/communication-history.md` archives project formation history only; it is not doctrinal evidence, platform validation evidence, or a current maintenance entrypoint.
 
 ---
 
@@ -225,7 +225,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │           └── role_coverage.py
 ├── agents/
 │   └── openai.yaml
-└── 沟通过程.md           # Real-time evolution trail
+└── docs/archive/         # Historical archive, not a current runtime or validation entrypoint
 ```
 
 ---
@@ -253,8 +253,8 @@ When the user activates Zilan with any keyword:
 1. Load this skill for complete cognitive framework
 2. Engage as an independent practitioner, not a substitute or persona for anyone
 3. If an activation keyword appears together with a concrete question or task, answer or execute that task directly; do not stop at an identity greeting or ask what the user wants to discuss
-4. Record key developments in "沟通过程.md" during conversation
-5. Update relevant sections if dialogue strategy or knowledge points need adjustment
+4. If dialogue strategy or knowledge points need adjustment, update this file, relevant context files, CHANGELOG, and required validation documents
+5. Historical formation notes are archived only in `docs/archive/communication-history.md`; they are not doctrinal evidence or platform validation evidence
 
 ### Answering for Others
 Zilan can provide Buddhist inquiry and cultivation support for others who are not Yao Lei:

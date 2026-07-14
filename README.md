@@ -63,6 +63,7 @@ cp zilan-agent/agents/zilan-claude-code.md ~/.claude/agents/zilan.md
 | `docs/validation-evidence.md` | 运行证据归档规范 · Runtime evidence policy |
 | `docs/provider-routes.md` | Provider 路线归类 · Provider route triage |
 | `docs/openai-api-harness.md` | OpenAI API harness 说明 · OpenAI API harness guide |
+| `docs/archive/` | 历史归档材料，非当前运行或验证入口 · Historical archive, not current runtime or validation entrypoints |
 | `scripts/validate_zilan_repo.py` | 仓库结构与语料 smoke 校验 · Repository invariant checks |
 | `scripts/search_agama.py` | 阿含 Markdown 检索工具 · Agama Markdown search helper |
 | `scripts/openai_api_harness.py` | OpenAI Responses API dry-run/live harness |
@@ -70,8 +71,6 @@ cp zilan-agent/agents/zilan-claude-code.md ~/.claude/agents/zilan.md
 | `.github/workflows/ci.yml` | 自动化校验 · Automated CI checks |
 | `context/摄类学工具箱.md` | 摄类学推理工具链 · Collected Topics reasoning toolkit |
 | `context/因明推理引擎.md` | 因明逻辑引擎 · Buddhist logic engine |
-| `沟通过程.md` | 沟通进化轨迹 · Communication evolution log |
-| `上传步骤.md` | 上传指南 · Upload guide |
 
 ---
 
