@@ -726,6 +726,39 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - The answer-contract helper is a minimum explicitness check and does not grade doctrinal correctness or retrieval completeness.
 - This evidence does not change platform validation status.
 
+## 2026-07-14 Claude Code Post-Prompt ZC-01 To ZC-06 Rerun
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.204`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `b78732a` (`docs: update closing dharma seal (#122)`) |
+| Branch | `claude-post-prompt-rerun-evidence` |
+| Prompt set | `ZC-01` through `ZC-06` from `tests/regression_cases.yaml`, rerun after root-document archival and closing Dharma-seal wording changes |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console/stdin before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact evidence committed at `docs/runtime-evidence/2026-07-14-claude-code-post-prompt-zc-01-zc-06-rerun.md`; raw JSON and extracted answer Markdown kept local only under `C:\tmp\zilan-claude-post-prompt-rerun-20260714`; `ZC-06` generated `C:\Users\rori9\Desktop\阿含无我观法门研究报告.md` outside the repository |
+| Repository checks | Contract spot checks run for `ZC-03`/`SRQ-09`, `ZC-04`/`SRQ-04`, `ZC-05`/`SRQ-03`, `ZC-05`/`SRQ-08`, and generated `ZC-06` report/`SRQ-04`; full repository checks run before PR handoff |
+| Overall result | `partial`: all six Claude Code invocations returned `success`, while strict answer-contract review still exposes `ZC-04`/`SRQ-04` and `ZC-05`/`SRQ-08` explicitness gaps; no platform status change |
+
+### Case Results
+
+| Case | Runtime result | Contract result | Notes |
+|---|---|---|---|
+| `ZC-01` | `success` | not run | Lightweight work-feedback support response; no file output. |
+| `ZC-02` | `success` | not run | Explains `因三相` with expected Hetuvidya terminology. |
+| `ZC-03` | `success` | `SRQ-09` pass | Cross-domain Collected Topics / cognitive-analysis answer preserves cognitive-chain and practice-boundary slots. |
+| `ZC-04` | `success` | `SRQ-04` fail | Main answer is a compact summary; it misses explicit `T02n0099`, `context/agama/`, `检索范围`, and `代表性` terms, plus `search_scope` and `evidence_status` slots. |
+| `ZC-05` | `success` | `SRQ-03` pass; `SRQ-08` fail | Prasaṅga boundary is present; nihilism-boundary explicitness is incomplete because `断灭`, `二谛`, `不成立`, and the `nihilism_error` slot are missing. |
+| `ZC-06` | `success` | generated report `SRQ-04` pass | Main answer reports file creation; generated report at `C:\Users\rori9\Desktop\阿含无我观法门研究报告.md` satisfies `SRQ-04`. |
+
+### Known Limits
+
+- This rerun validates Claude Code execution and records answer-contract gaps; it does not upgrade or downgrade platform status.
+- Raw Claude JSON and full extracted answers are summarized, not committed.
+- The generated `ZC-06` report remains outside the repository and is summarized only.
+- Follow-up work should make broad `ZC-04` and `ZC-05` answers preserve the same explicit boundary slots already proven by compact target reviews.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:
