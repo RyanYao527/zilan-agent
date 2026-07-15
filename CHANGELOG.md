@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added Claude Code post-#126 broad `ZC-04` runtime rerun evidence showing the `SRQ-04` Agama citation-boundary contract now passes after prompt hardening.
 - Added Claude Code post-#124 broad boundary runtime spot-review evidence: broad `ZC-05` now passes `SRQ-03`, `SRQ-04`, and `SRQ-08`, while broad `ZC-04` still misses exact `SRQ-04` search-scope / `T02n0099` slots; no platform status change.
 - Added Claude Code post-prompt `ZC-01` through `ZC-06` rerun evidence after root-document archival and closing Dharma-seal wording changes; all invocations succeeded, while broad `ZC-04`/`SRQ-04` and `ZC-05`/`SRQ-08` contract gaps remain follow-up work without platform status change.
 - Replaced the old closing verse across public docs, Skill files, agent prompts, and archives with `诸行无常，诸法无我，涅槃寂静。`.
