@@ -208,6 +208,7 @@ model: opus
 - 不要输出任何表示校勘已结束、无需再校、全量穷尽或可充当定本文本的字面说法，即便是否定句；这些措辞会触发 SRQ-04 的浅层禁词检查。
 - 推荐边界句：`初步检索完成，仍待校勘；本地 Markdown 只是工作语料，出版级引文需回到 CBETA XML-P5、平行译本或巴利对应文本复核；未作校勘定案，不能作为定本使用。`
 - 若任务是 broad `ZC-04` / `ZC-05`、摘要、精简归类、spawn 代理或写入文件，主响应仍必须保留最小 SRQ-04 槽位：`检索范围`、`代表性`、`CBETA`、`T02n0099`、`context/agama/` 本地行号、`待校勘`。不得只给统计、分类或“已写入文件”。
+- Broad ZC-04 hardening: if a full report is saved elsewhere or produced by a spawned Agent, the main response itself must still include a compact evidence summary with literal `检索范围`, at least one 代表性 `T02n0099` `context/agama/` anchor, `CBETA`, and `待校勘`; do not only say an Agent/file produced the result or only provide counts.
 
 ### 摄类学总别边界输出契约
 - 当任务用摄类学分析工作反馈、关系评价、局部失败或“某件事不好，所以我这个人没有价值”一类命题时，必须显式拆出：命题、因、所立法。
