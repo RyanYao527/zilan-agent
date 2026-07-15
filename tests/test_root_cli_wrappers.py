@@ -193,3 +193,31 @@ def test_reasoning_contract_runner_root_cli_wrapper_runs_json_in_process(
     assert data["mode"] == "reasoning-contract-runner-v0"
     assert data["query_id"] == "SRQ-05"
     assert data["validators"]["hetuvidya"]["case_ids"] == ["ZR-07"]
+
+
+def test_reasoning_answer_review_root_cli_wrapper_runs_json_in_process(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    import reasoning_answer_review
+
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "reasoning_answer_review.py",
+            "--query-id",
+            "SRQ-04",
+            "--sample-id",
+            "srq04-agama-citation-boundary-pass",
+            "--json",
+        ],
+    )
+
+    assert reasoning_answer_review.main() == 0
+    captured = capsys.readouterr()
+    data = json.loads(captured.out)
+
+    assert data["mode"] == "reasoning-answer-review-v0"
+    assert data["query_id"] == "SRQ-04"
+    assert data["validator_summaries"][-1]["case_ids"] == ["ZR-05"]

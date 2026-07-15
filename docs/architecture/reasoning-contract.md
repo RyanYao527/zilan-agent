@@ -54,6 +54,11 @@ answer-contract review, and Hetuvidya structured validator into one fixture-only
 `review_needed` statuses are contract-review statuses only; they do not generate answers, call providers, grade doctrine,
 or change platform validation status.
 
+`scripts/reasoning_answer_review.py` is a thinner manual-review wrapper over the runner. It returns compact JSON and
+Markdown focused on a provided answer source (`--answer-text`, `--answer-file`, or checked-in `--sample-id`), including
+missing answer-contract terms and slots, role-coverage gaps, selected validator families, and prototype limitations.
+It does not call providers, generate answers, alter prompts, or promote platform validation status.
+
 ### `collected_topics`
 
 Use for concept, category, pervasion, tetralemma, and debate-protocol analysis.
