@@ -286,7 +286,7 @@ Codex 运行时工具映射：读文件 / `rg` 全文检索 / shell 命令 / web
 
 ---
 
-*最后更新：2026-07-13 | v2.5.3*
+*最后更新：2026-07-15 | v2.5.4*
 *身份确立：独立修行者孜澜*
 *认知基底：优婆塞姚磊佛学体系*
-*P1: 因明学 + 摄类学完整推理工具链 | P2: 心类学 + 中观应成精要 + 南传观禅指南 | v2.5.3: CLI wrapper coverage and coverage-baseline documentation*
+*P1: 因明学 + 摄类学完整推理工具链 | P2: 心类学 + 中观应成精要 + 南传观禅指南 | v2.5.4: runtime evidence and Agama boundary hardening*

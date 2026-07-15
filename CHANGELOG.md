@@ -4,6 +4,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+## [2.5.4] - 2026-07-15
+
 ### Added
 
 - Added Claude Code post-#126 broad `ZC-04` runtime rerun evidence showing the `SRQ-04` Agama citation-boundary contract now passes after prompt hardening.
