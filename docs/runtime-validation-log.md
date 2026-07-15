@@ -759,6 +759,36 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - The generated `ZC-06` report remains outside the repository and is summarized only.
 - Follow-up work should make broad `ZC-04` and `ZC-05` answers preserve the same explicit boundary slots already proven by compact target reviews.
 
+## 2026-07-14 Claude Code Broad Boundary Postfix Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.204`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `c6b686c` (`Harden broad boundary prompt slots (#124)`) |
+| Branch | `post-broad-boundary-runtime-review` |
+| Prompt set | Broad `ZC-04` and `ZC-05` runtime spot review after #124 prompt hardening |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console/stdin before piping Chinese prompts into `claude -p` |
+| Transcript status | Compact evidence committed at `docs/runtime-evidence/2026-07-14-claude-code-broad-boundary-postfix-review.md`; raw JSON and extracted answer Markdown kept local only under `C:\tmp\zilan-claude-broad-boundary-postfix-20260714` |
+| Repository checks | Contract spot checks run for `ZC-04`/`SRQ-04`, `ZC-05`/`SRQ-04`, `ZC-05`/`SRQ-03`, and `ZC-05`/`SRQ-08`; full repository checks run before PR handoff |
+| Overall result | `partial`: broad `ZC-05` now passes `SRQ-03`, `SRQ-04`, and `SRQ-08`; broad `ZC-04` still fails `SRQ-04` on missing `检索范围`, `T02n0099`, and `search_scope`; no platform status change |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---:|---|
+| `ZC-04.answer.md` | `SRQ-04` / `agama_citation_boundary` | `fail` | Missing `检索范围`, `T02n0099`, and `search_scope`; no forbidden collation-overclaim terms. |
+| `ZC-05.answer.md` | `SRQ-04` / `agama_citation_boundary` | `pass` | Required Agama citation-boundary terms and slots are present. |
+| `ZC-05.answer.md` | `SRQ-03` / `madhyamaka_prasanga_boundary` | `pass` | `SRQ-03` forbidden terms were narrowed from bare `断灭` to `断灭的结论` so boundary-word use does not conflict with `SRQ-08`. |
+| `ZC-05.answer.md` | `SRQ-08` / `madhyamaka_nihilism_boundary` | `pass` | Required nihilism-boundary terms and slots are present. |
+
+### Known Limits
+
+- This is a targeted runtime spot review, not a full platform rerun.
+- Broad `ZC-04` still needs a follow-up if direct Agama summary answers must always preserve the exact `SRQ-04` slots.
+- This evidence does not change platform validation status.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:

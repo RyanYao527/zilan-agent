@@ -273,7 +273,7 @@ def test_dry_run_returns_madhyamaka_prasanga_fixture_for_srq03() -> None:
     assert result["answer_contracts"]["madhyamaka_prasanga_boundary"]["forbidden_terms"] == [
         "我方建立自宗",
         "证明诸法绝对不存在",
-        "断灭",
+        "断灭的结论",
     ]
     assert result["answer_contract_samples"] == [
         {
