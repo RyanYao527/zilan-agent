@@ -1106,7 +1106,7 @@ queries:
         forbidden_terms:
           - 我方建立自宗
           - 证明诸法绝对不存在
-          - 断灭
+          - 断灭的结论
     answer_contract_samples:
       - id: srq03-madhyamaka-prasanga-pass
         file: tests/fixtures/answers/srq03-madhyamaka-prasanga-pass.md

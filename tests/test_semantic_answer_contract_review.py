@@ -185,7 +185,7 @@ def test_answer_contract_review_fails_for_madhyamaka_prasanga_negative_sample() 
     assert result["reviews"][0]["present_forbidden_terms"] == [
         "我方建立自宗",
         "证明诸法绝对不存在",
-        "断灭",
+        "断灭的结论",
     ]
 
 

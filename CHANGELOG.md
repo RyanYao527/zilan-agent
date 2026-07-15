@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added Claude Code post-#124 broad boundary runtime spot-review evidence: broad `ZC-05` now passes `SRQ-03`, `SRQ-04`, and `SRQ-08`, while broad `ZC-04` still misses exact `SRQ-04` search-scope / `T02n0099` slots; no platform status change.
 - Added Claude Code post-prompt `ZC-01` through `ZC-06` rerun evidence after root-document archival and closing Dharma-seal wording changes; all invocations succeeded, while broad `ZC-04`/`SRQ-04` and `ZC-05`/`SRQ-08` contract gaps remain follow-up work without platform status change.
 - Replaced the old closing verse across public docs, Skill files, agent prompts, and archives with `诸行无常，诸法无我，涅槃寂静。`.
 - Archived the legacy manual upload guide and early communication-history document under `docs/archive/`, and removed them from root-level public documentation surfaces.
@@ -18,6 +19,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Fixed
 
+- Narrowed the `SRQ-03` Madhyamaka forbidden term from bare `断灭` to the nihilistic phrase `断灭的结论`, avoiding conflict with `SRQ-08` boundary wording that must mention `断灭` explicitly.
 - Tightened broad `ZC-04` / `ZC-05` agent prompt contracts so main responses preserve `SRQ-04` Agama citation-boundary slots and `SRQ-08` Madhyamaka nihilism-boundary slots even for summaries or file-output tasks.
 - Tightened Agama evidence prompt wording so agents avoid reusing shallow collation-overclaim trigger phrases even in negated boundary statements; preferred wording now uses `未作校勘定案，不能作为定本使用`.
 - Fixed `scripts/build_agama_context.py` TEI `choice` handling so `corr` elements without child nodes are preserved and `choice` tail text is not duplicated.
