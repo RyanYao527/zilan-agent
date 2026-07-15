@@ -789,6 +789,31 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - Broad `ZC-04` still needs a follow-up if direct Agama summary answers must always preserve the exact `SRQ-04` slots.
 - This evidence does not change platform validation status.
 
+## 2026-07-14 Claude Code ZC-04 Post-#126 Agama Slot Rerun
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.204`; CLI model usage reported `deepseek-v4-pro[1m]` under the user's local configuration |
+| Repository base | `43b408a` (`Harden broad ZC-04 Agama slots (#126)`) |
+| Branch | `broad-zc04-agama-slot-rerun` |
+| Prompt set | Broad `ZC-04` `四阿含` `无我` survey prompt |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console/stdin with prompt read from a UTF-8 file |
+| Transcript status | Compact evidence committed at `docs/runtime-evidence/2026-07-14-claude-code-zc-04-post-126-agama-slot-rerun.md`; raw JSON and extracted answer Markdown kept local only under `C:\tmp\zilan-claude-zc04-post126-20260714` |
+| Repository checks | `SRQ-04` answer-contract review passed; full repository checks run before PR handoff |
+| Overall result | `pass`: broad `ZC-04` now preserves `检索范围`, `T02n0099`, `CBETA`, `context/agama/`, `代表性`, and `待校勘` in the main response; no platform status change |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---:|---|
+| `ZC-04.answer.md` | `SRQ-04` / `agama_citation_boundary` | `pass` | Required terms and slots are present; no forbidden collation-overclaim terms are present. |
+
+### Known Limits
+
+- This is a targeted runtime spot review, not a full platform rerun.
+- The answer-contract helper is a minimum explicitness check and does not grade retrieval completeness or publication-level collation.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:

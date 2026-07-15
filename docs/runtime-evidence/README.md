@@ -42,6 +42,7 @@ Examples:
 - `2026-07-14-claude-code-zc-04-agama-boundary-rerun.md`
 - `2026-07-14-claude-code-post-prompt-zc-01-zc-06-rerun.md`
 - `2026-07-14-claude-code-broad-boundary-postfix-review.md`
+- `2026-07-14-claude-code-zc-04-post-126-agama-slot-rerun.md`
 - `2026-06-XX-openai-api-zc-02-live.md`
 - `2026-06-XX-claude-code-zc-04-excerpt.md`
 
