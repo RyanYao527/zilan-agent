@@ -1,6 +1,6 @@
 # Runtime Validation Evidence Policy
 
-> Last updated: 2026-06-15
+> Last updated: 2026-07-17
 
 This policy defines what counts as validation evidence for Zilan platform routes and how to record it without leaking secrets or overclaiming support.
 
@@ -78,6 +78,14 @@ Transcript-backed evidence is strongest when it includes:
 - any failed first attempts that affected the final fix
 
 Do not commit full transcripts by default. Prefer small, redacted excerpts that explain the behavioral claim being made.
+
+## Answer Excerpt Capture
+
+When a runtime session is reviewed against an answer contract, commit a standalone answer excerpt file when safe. Use a filename such as `YYYY-MM-DD-route-case-answer.md` and keep only the answer text needed to support the contract claim, plus minimal runtime metadata.
+
+For batch review workflows, `answer_file` inputs must point to standalone answer excerpt files or checked-in answer samples. A summary-only evidence file must not be used as answer_file input because it may contain human review notes, contract results, or follow-up analysis rather than the model answer itself.
+
+If only a summary can be committed, record the contract result in the summary and mark the transcript status as summary-only. Do not treat that summary as mechanically reviewable answer text.
 
 ## Evidence Directory
 

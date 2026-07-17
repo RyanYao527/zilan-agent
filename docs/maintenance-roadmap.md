@@ -1,6 +1,6 @@
 # Maintenance Roadmap
 
-> Last updated: 2026-07-14
+> Last updated: 2026-07-17
 
 This roadmap records engineering maintenance state and next priorities for zilan-agent. It is not platform validation evidence. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -15,7 +15,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | Platform status | `agents/openai.yaml` is the machine-readable source; `docs/platform-validation.md` is the human-readable validation record. Codex is `tested`; Claude Code is `tested` as of the 2026-06-18 post-contract full rerun when Windows PowerShell stdin is forced to UTF-8. |
 | Runtime validation | `docs/runtime-validation-log.md` records manual runtime validation sessions and transcript availability, including the 2026-06-18 Claude Code post-contract target review, Agama contract fix review for `SRQ-04` / `ZC-05`, Madhyamaka contract fix review for broad `ZC-05`, post-contract full `ZC-01` through `ZC-06` rerun, 2026-07-13 `SRQ-11` Collected Topics definition-scope spot review, 2026-07-14 `SRQ-04` / compact `ZC-04` Agama citation-boundary spot review, the 2026-07-14 compact `ZC-04` boundary rerun after prompt wording hardening, the 2026-07-14 post-prompt Claude Code `ZC-01` through `ZC-06` rerun, and the 2026-07-14 post-#124 broad boundary spot review showing broad `ZC-05` now passes `SRQ-03`, `SRQ-04`, and `SRQ-08`, and the 2026-07-14 post-#126 broad `ZC-04` rerun showing `SRQ-04` now passes. |
 | Runtime evidence policy | `docs/validation-evidence.md` defines evidence levels, transcript redaction, and status-promotion rules. |
-| Runtime evidence excerpts | `docs/runtime-evidence/` stores small redacted command-output or transcript excerpts that support validation-log entries. |
+| Runtime evidence excerpts | `docs/runtime-evidence/` stores small redacted command-output or transcript excerpts that support validation-log entries. Contract-reviewable runtime answers should use standalone `*-answer.md` excerpts; summary-only evidence must not be used as `answer_file` input for batch or contract review. |
 | Architecture overview | `ARCHITECTURE.md` provides the contributor-facing architecture entrypoint for the Skill/Agent dual track, `zilanlib` CLI-wrapper pattern, fixture-only validators, platform-status boundaries, and local validation workflow. |
 | Coverage baseline | `pytest-cov` is available in dev dependencies and `python -m pytest` reports all-scripts coverage without a fail-under gate. The current 2026-07-13 local baseline is 76% after root CLI wrapper, `scripts/build_agama_context.py` smoke coverage, and Agama citation-title metadata coverage; remaining legacy top-level text-render/error branches are tracked as low-coverage follow-up areas while `zilanlib` modules are mostly covered. |
 | Contribution intake | `.github/ISSUE_TEMPLATE/` provides structured bug-report and feature-request templates for platform, validation, documentation, CI, and reasoning-contract work. |

@@ -10,6 +10,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added `scripts/reasoning_answer_review_batch.py` and `scripts/zilanlib/reasoning/answer_review_batch.py` to run compact answer reviews from a YAML batch manifest for transcript/excerpt review workflows without provider calls.
 - Added a 2026-07-17 reasoning answer review batch manifest and evidence excerpt for committed `SRQ-04`, `SRQ-08`, `SRQ-09`, and `SRQ-11` pass samples; no provider calls or platform-status changes.
 - Added a 2026-07-17 runtime answer excerpt batch manifest and evidence excerpt for committed Claude Code `SRQ-02`, `SRQ-03`, `SRQ-04`, `SRQ-05`, and broad `ZC-05` answer excerpts; no provider calls or platform-status changes.
+- Added a runtime evidence capture policy for standalone contract-reviewable `*-answer.md` excerpts, with repository validation guarding against using summary-only evidence as `answer_file` input.
 
 ## [2.5.4] - 2026-07-15
 
