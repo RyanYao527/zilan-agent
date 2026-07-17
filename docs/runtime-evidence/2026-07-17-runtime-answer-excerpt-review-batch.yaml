@@ -1,0 +1,20 @@
+version: 1
+reviews:
+  - id: 2026-06-18-srq-02-hetuvidya-error
+    query_id: SRQ-02
+    answer_file: docs/runtime-evidence/2026-06-18-claude-code-post-contract-srq-02-answer.md
+  - id: 2026-06-18-srq-03-prasanga-boundary
+    query_id: SRQ-03
+    answer_file: docs/runtime-evidence/2026-06-18-claude-code-post-contract-srq-03-answer.md
+  - id: 2026-06-18-srq-04-agama-boundary-fixed
+    query_id: SRQ-04
+    answer_file: docs/runtime-evidence/2026-06-18-claude-code-agama-contract-fix-srq-04-answer.md
+  - id: 2026-06-18-zc-05-agama-boundary-fixed
+    query_id: SRQ-04
+    answer_file: docs/runtime-evidence/2026-06-18-claude-code-agama-contract-fix-zc-05-answer.md
+  - id: 2026-06-18-zc-05-prasanga-boundary-fixed
+    query_id: SRQ-03
+    answer_file: docs/runtime-evidence/2026-06-18-claude-code-madhyamaka-contract-fix-zc-05-answer.md
+  - id: 2026-06-20-srq-05-hetuvidya-non-pervasive
+    query_id: SRQ-05
+    answer_file: docs/runtime-evidence/2026-06-20-claude-code-srq-05-spot-review-answer.md
