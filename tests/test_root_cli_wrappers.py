@@ -1,6 +1,7 @@
 import importlib
 import json
 import sys
+from pathlib import Path
 
 import pytest
 
@@ -221,3 +222,41 @@ def test_reasoning_answer_review_root_cli_wrapper_runs_json_in_process(
     assert data["mode"] == "reasoning-answer-review-v0"
     assert data["query_id"] == "SRQ-04"
     assert data["validator_summaries"][-1]["case_ids"] == ["ZR-05"]
+
+def test_reasoning_answer_review_batch_root_cli_wrapper_runs_json_in_process(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    import reasoning_answer_review_batch
+
+    batch_path = tmp_path / "answer-review-batch.yaml"
+    batch_path.write_text(
+        """
+version: 1
+reviews:
+  - id: agama-pass
+    query_id: SRQ-04
+    sample_id: srq04-agama-citation-boundary-pass
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "reasoning_answer_review_batch.py",
+            "--batch",
+            str(batch_path),
+            "--json",
+        ],
+    )
+
+    assert reasoning_answer_review_batch.main() == 0
+    captured = capsys.readouterr()
+    data = json.loads(captured.out)
+
+    assert data["mode"] == "reasoning-answer-review-batch-v0"
+    assert data["overall_status"] == "pass"
+    assert data["reviews"][0]["id"] == "agama-pass"
