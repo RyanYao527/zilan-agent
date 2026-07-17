@@ -339,6 +339,8 @@ def test_runtime_evidence_docs_missing_required_fragments_are_reported(tmp_path:
     assert any("Runtime Evidence Excerpts" in failure for failure in failures)
     assert any("mode: dry-run" in failure for failure in failures)
     assert any("Redaction note" in failure for failure in failures)
+    assert any("standalone answer excerpt" in failure for failure in failures)
+    assert any("summary-only evidence must not be used as answer_file input" in failure for failure in failures)
 
 
 def test_public_style_boundary_private_fragment_is_reported(tmp_path: Path, monkeypatch) -> None:

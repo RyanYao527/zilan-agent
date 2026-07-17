@@ -1,6 +1,6 @@
 # Runtime Evidence Excerpts
 
-> Last updated: 2026-07-14
+> Last updated: 2026-07-17
 
 This directory stores small, redacted validation excerpts that support entries in `docs/runtime-validation-log.md`.
 
@@ -8,6 +8,7 @@ Use this directory for:
 
 - command-output excerpts from clean install or CI-adjacent smoke tests
 - short transcript excerpts that demonstrate a specific platform behavior
+- standalone answer excerpt files for contract-reviewable runtime answers
 - redacted live-provider response summaries
 - generated report file summaries when the full report is too large or private
 
@@ -17,6 +18,20 @@ Do not use this directory for:
 - raw provider payloads with private request IDs or account identifiers
 - large unredacted transcripts
 - private user content unrelated to a validation case
+- summary-only evidence as `answer_file` input for batch or contract review
+
+## Answer Excerpt Capture
+
+Use a standalone answer excerpt when the committed file is intended to be reviewed with `--answer-file` or included in `scripts/reasoning_answer_review_batch.py`. The excerpt should contain the model answer text needed for the contract claim, not the human-written validation summary.
+
+A summary-only evidence must not be used as answer_file input. Summary files can cite contract results, list missing terms, or explain limitations, but they are not mechanically equivalent to the original answer. If raw transcripts stay local, either commit a compact standalone answer excerpt or mark the evidence as summary-only.
+
+Prefer names such as:
+
+```text
+YYYY-MM-DD-route-case-answer.md
+YYYY-MM-DD-route-scenario-case-answer.md
+```
 
 ## Naming
 
@@ -56,6 +71,7 @@ Each evidence excerpt should include:
 - command or prompt set
 - redaction note
 - compact output excerpts
+- standalone answer excerpt status when the file is intended for `answer_file` review
 - limitations
 - link back to the relevant `docs/runtime-validation-log.md` entry
 

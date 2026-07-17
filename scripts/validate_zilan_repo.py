@@ -1279,6 +1279,8 @@ def _check_runtime_evidence_docs(root: Path, failures: list[str]) -> None:
         (
             "Runtime Evidence Excerpts",
             "Do not use this directory for",
+            "standalone answer excerpt",
+            "summary-only evidence must not be used as answer_file input",
             "docs/validation-evidence.md",
         ),
         failures,
@@ -1313,7 +1315,7 @@ def _check_runtime_evidence_docs(root: Path, failures: list[str]) -> None:
 
     check_required_fragments(
         template_text,
-        ("Redaction note", "Output Excerpts", "Limitations"),
+        ("Redaction note", "Output Excerpts", "Standalone Answer Excerpts", "Limitations"),
         failures,
         rel_path=RUNTIME_EVIDENCE_TEMPLATE_DOC,
     )
