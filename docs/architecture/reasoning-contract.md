@@ -59,6 +59,11 @@ Markdown focused on a provided answer source (`--answer-text`, `--answer-file`, 
 missing answer-contract terms and slots, role-coverage gaps, selected validator families, and prototype limitations.
 It does not call providers, generate answers, alter prompts, or promote platform validation status.
 
+`scripts/reasoning_answer_review_batch.py` reads a small YAML manifest (`version: 1`, `reviews: [...]`) and runs the same
+compact answer review for each listed `query_id` / answer source pair. This is intended for transcript or answer-excerpt
+review batches; it only summarizes local contract-review statuses and still does not grade doctrine or validate a
+platform route.
+
 ### `collected_topics`
 
 Use for concept, category, pervasion, tetralemma, and debate-protocol analysis.
