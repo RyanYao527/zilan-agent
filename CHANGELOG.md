@@ -8,6 +8,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 - Added `scripts/reasoning_answer_review.py` and `scripts/zilanlib/reasoning/answer_review.py` as a compact, fixture-only answer review layer over the reasoning contract runner, preserving stable local CLI behavior without provider calls or platform-status changes.
 - Added `scripts/reasoning_answer_review_batch.py` and `scripts/zilanlib/reasoning/answer_review_batch.py` to run compact answer reviews from a YAML batch manifest for transcript/excerpt review workflows without provider calls.
+- Added a 2026-07-17 reasoning answer review batch manifest and evidence excerpt for committed `SRQ-04`, `SRQ-08`, `SRQ-09`, and `SRQ-11` pass samples; no provider calls or platform-status changes.
 
 ## [2.5.4] - 2026-07-15
 

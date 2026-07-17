@@ -1,0 +1,14 @@
+version: 1
+reviews:
+  - id: srq04-agama-citation-boundary-pass
+    query_id: SRQ-04
+    sample_id: srq04-agama-citation-boundary-pass
+  - id: srq08-madhyamaka-nihilism-boundary-pass
+    query_id: SRQ-08
+    sample_id: srq08-madhyamaka-nihilism-boundary-pass
+  - id: srq09-cognitive-practice-boundary-pass
+    query_id: SRQ-09
+    sample_id: srq09-cognitive-practice-boundary-pass
+  - id: srq11-collected-topics-definition-scope-pass
+    query_id: SRQ-11
+    sample_id: srq11-collected-topics-definition-scope-pass
