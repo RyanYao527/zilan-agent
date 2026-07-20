@@ -4,6 +4,8 @@
 
 This directory stores small, redacted validation excerpts that support entries in `docs/runtime-validation-log.md`.
 
+Use [`index.md`](index.md) to find evidence by class, case ID, contract ID, and whether a file is safe to pass as `--answer-file`.
+
 Use this directory for:
 
 - command-output excerpts from clean install or CI-adjacent smoke tests

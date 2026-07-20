@@ -13,6 +13,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added a runtime evidence capture policy for standalone contract-reviewable `*-answer.md` excerpts, with repository validation guarding against using summary-only evidence as `answer_file` input.
 - Added 2026-07-14 standalone Claude Code `ZC-03`, post-#126 `ZC-04`, post-#124 `ZC-05`, and redacted `ZC-06` main-answer excerpts, plus a 2026-07-20 batch review showing the contract-reviewable excerpts pass `SRQ-09`, `SRQ-04`, `SRQ-03`, and `SRQ-08`; no provider calls or platform-status changes.
 - Added 2026-07-14 standalone compact `SRQ-04` / `ZC-04` Agama answer excerpts plus a 2026-07-20 progression batch showing the direct `SRQ-04` pass, the pre-#119 compact `ZC-04` shallow-contract fail, and the post-#119 compact `ZC-04` pass; no provider calls or platform-status changes.
+- Added `docs/runtime-evidence/index.md` to classify summary evidence, standalone answer excerpts, batch manifests, batch reports, provider smoke evidence, and `answer_file`-safe review inputs without changing platform status.
 
 ## [2.5.4] - 2026-07-15
 
