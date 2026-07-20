@@ -82,6 +82,12 @@ python scripts\semantic_answer_contract_review.py --query-id SRQ-04 --answer-fil
 | `SRQ-04.answer.md` | `SRQ-04` / `agama_citation_boundary` | `pass` | Required terms and slots all present, including search scope, `CBETA`, `T02n0099`, local `context/agama/` anchors, representative-status language, and `待校勘`; no forbidden terms present. Manual excerpt review also confirms title-bearing `長阿含經` citations preserve paragraph titles where available. |
 | `ZC-04-compact.answer.md` | `SRQ-04` / `agama_citation_boundary` | `fail` | Required terms and slots all present, including CBETA/local anchors, representative-status language, local line anchors, section markers or titles, and collation boundary language. Mechanical review fails only because the negated boundary phrase `不构成校勘确认` contains forbidden term `校勘确认`. |
 
+## Standalone Answer Excerpts
+
+| Case | Answer excerpt | Reviewed against | Result |
+|---|---|---|---|
+| `SRQ-04` | `docs/runtime-evidence/2026-07-14-claude-code-srq-04-agama-boundary-spot-answer.md` | `SRQ-04` | `pass` in `docs/runtime-evidence/2026-07-20-compact-zc-04-answer-excerpt-progression-batch.md` |
+| compact `ZC-04` before wording fix | `docs/runtime-evidence/2026-07-14-claude-code-zc-04-compact-spot-answer.md` | `SRQ-04` | `fail` in `docs/runtime-evidence/2026-07-20-compact-zc-04-answer-excerpt-progression-batch.md` |
 ## Findings
 
 - Direct `SRQ-04` remains stable after Agama `section_title` citation metadata work.

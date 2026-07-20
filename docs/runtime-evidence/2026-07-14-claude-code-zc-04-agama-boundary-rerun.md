@@ -59,6 +59,11 @@ python scripts\semantic_answer_contract_review.py --query-id SRQ-04 --answer-fil
 |---|---|---:|---|
 | `ZC-04-compact-rerun.answer.md` | `SRQ-04` / `agama_citation_boundary` | `pass` | Required terms and slots are present, including search scope, representative-status language, `CBETA`, `T02n0099`, local `context/agama/` anchors, local line numbers, paragraph markers/titles, `待校勘`, and publication-level boundary language. No forbidden terms were present. |
 
+## Standalone Answer Excerpt
+
+| Case | Answer excerpt | Reviewed against | Result |
+|---|---|---|---|
+| compact `ZC-04` after wording fix | `docs/runtime-evidence/2026-07-14-claude-code-zc-04-compact-boundary-rerun-answer.md` | `SRQ-04` | `pass` in `docs/runtime-evidence/2026-07-20-compact-zc-04-answer-excerpt-progression-batch.md` |
 ## Findings
 
 - The compact `ZC-04` rerun now passes the `SRQ-04` answer contract after the prompt wording change in #119.
