@@ -50,6 +50,12 @@ The first combined two-case command hit its total timeout after `ZC-04` complete
 | `ZC-05.answer.md` | `SRQ-03` / `madhyamaka_prasanga_boundary` | `pass` | Passed after `SRQ-03` forbidden terms were narrowed from bare `断灭` to the nihilistic phrase `断灭的结论`; this avoids conflict with the `SRQ-08` requirement to mention `断灭` as a boundary term. |
 | `ZC-05.answer.md` | `SRQ-08` / `madhyamaka_nihilism_boundary` | `pass` | Required `只破自性有`, `断灭`, `二谛`, and `不成立` slots are present; no forbidden nihilism phrases are present. |
 
+## Standalone Answer Excerpts
+
+| Case | Answer excerpt | Reviewed against | Result |
+|---|---|---|---|
+| `ZC-05` | `docs/runtime-evidence/2026-07-14-claude-code-zc-05-broad-boundary-postfix-answer.md` | `SRQ-04`, `SRQ-03`, `SRQ-08` | `pass` in `docs/runtime-evidence/2026-07-20-latest-zc-answer-excerpt-review-batch.md` |
+
 ## Output Excerpts
 
 ```text

@@ -39,6 +39,12 @@ Prompt: broad `ZC-04` `四阿含` `无我` survey and preliminary classification
 |---|---|---:|---|
 | `ZC-04.answer.md` | `SRQ-04` / `agama_citation_boundary` | `pass` | `search_scope`=pass, `citation_anchor`=pass, `evidence_status`=pass, `collation_boundary`=pass |
 
+## Standalone Answer Excerpt
+
+| Case | Answer excerpt | Reviewed against | Result |
+|---|---|---|---|
+| `ZC-04` | `docs/runtime-evidence/2026-07-14-claude-code-zc-04-post-126-answer.md` | `SRQ-04` | `pass` in `docs/runtime-evidence/2026-07-20-latest-zc-answer-excerpt-review-batch.md` |
+
 ## Answer Excerpts
 
 ```text
