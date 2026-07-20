@@ -1,0 +1,11 @@
+version: 1
+reviews:
+  - id: 2026-07-14-srq-04-agama-boundary-spot
+    query_id: SRQ-04
+    answer_file: docs/runtime-evidence/2026-07-14-claude-code-srq-04-agama-boundary-spot-answer.md
+  - id: 2026-07-14-zc-04-compact-spot-before-boundary-wording-fix
+    query_id: SRQ-04
+    answer_file: docs/runtime-evidence/2026-07-14-claude-code-zc-04-compact-spot-answer.md
+  - id: 2026-07-14-zc-04-compact-rerun-after-boundary-wording-fix
+    query_id: SRQ-04
+    answer_file: docs/runtime-evidence/2026-07-14-claude-code-zc-04-compact-boundary-rerun-answer.md
