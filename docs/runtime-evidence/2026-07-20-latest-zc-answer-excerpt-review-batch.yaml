@@ -1,0 +1,17 @@
+version: 1
+reviews:
+  - id: 2026-07-14-zc-03-post-prompt-cognitive-boundary
+    query_id: SRQ-09
+    answer_file: docs/runtime-evidence/2026-07-14-claude-code-zc-03-post-prompt-answer.md
+  - id: 2026-07-14-zc-04-post-126-agama-boundary
+    query_id: SRQ-04
+    answer_file: docs/runtime-evidence/2026-07-14-claude-code-zc-04-post-126-answer.md
+  - id: 2026-07-14-zc-05-broad-postfix-agama-boundary
+    query_id: SRQ-04
+    answer_file: docs/runtime-evidence/2026-07-14-claude-code-zc-05-broad-boundary-postfix-answer.md
+  - id: 2026-07-14-zc-05-broad-postfix-prasanga-boundary
+    query_id: SRQ-03
+    answer_file: docs/runtime-evidence/2026-07-14-claude-code-zc-05-broad-boundary-postfix-answer.md
+  - id: 2026-07-14-zc-05-broad-postfix-nihilism-boundary
+    query_id: SRQ-08
+    answer_file: docs/runtime-evidence/2026-07-14-claude-code-zc-05-broad-boundary-postfix-answer.md

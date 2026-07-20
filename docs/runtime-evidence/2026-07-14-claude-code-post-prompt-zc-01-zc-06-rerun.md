@@ -58,6 +58,12 @@ Prompt set:
 | `ZC-05.answer.md` | `SRQ-08` / `madhyamaka_nihilism_boundary` | `fail` | Missing required terms `断灭`, `二谛`, and `不成立`; missing `nihilism_error` slot. |
 | `阿含无我观法门研究报告.md` | `SRQ-04` / `agama_citation_boundary` | `pass` | Generated report includes `CBETA`, `T02n0099`, local `context/agama/` anchors, search scope, representative-status language, and collation boundary terms. |
 
+## Standalone Answer Excerpts
+
+| Case | Answer excerpt | Reviewed against | Result |
+|---|---|---|---|
+| `ZC-03` | `docs/runtime-evidence/2026-07-14-claude-code-zc-03-post-prompt-answer.md` | `SRQ-09` | `pass` in `docs/runtime-evidence/2026-07-20-latest-zc-answer-excerpt-review-batch.md` |
+| `ZC-06` main response | `docs/runtime-evidence/2026-07-14-claude-code-zc-06-post-prompt-main-answer.md` | Not batch-reviewed | File-completion notice only; generated report remains outside the repository |
 ## Output Excerpts
 
 ```text

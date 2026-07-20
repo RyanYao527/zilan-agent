@@ -1,6 +1,6 @@
 # Runtime Evidence Excerpts
 
-> Last updated: 2026-07-17
+> Last updated: 2026-07-20
 
 This directory stores small, redacted validation excerpts that support entries in `docs/runtime-validation-log.md`.
 
