@@ -1,6 +1,6 @@
 # Maintenance Roadmap
 
-> Last updated: 2026-07-17
+> Last updated: 2026-07-21
 
 This roadmap records engineering maintenance state and next priorities for zilan-agent. It is not platform validation evidence. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
