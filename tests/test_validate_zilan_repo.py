@@ -343,6 +343,143 @@ def test_runtime_evidence_docs_missing_required_fragments_are_reported(tmp_path:
     assert any("summary-only evidence must not be used as answer_file input" in failure for failure in failures)
 
 
+def test_runtime_evidence_index_missing_referenced_files_are_reported(tmp_path: Path) -> None:
+    evidence_dir = tmp_path / "docs" / "runtime-evidence"
+    evidence_dir.mkdir(parents=True)
+    (evidence_dir / "README.md").write_text(
+        """# Runtime Evidence Excerpts
+
+Do not use this directory for:
+
+- standalone answer excerpt
+- summary-only evidence must not be used as answer_file input
+- docs/validation-evidence.md
+""",
+        encoding="utf-8",
+    )
+    (evidence_dir / "index.md").write_text(
+        """# Runtime Evidence Index
+
+| Answer excerpt | Runtime source | Reviewed as | Batch/report | Status |
+|---|---|---|---|---|
+| `missing-answer.md` | test source | `SRQ-04` | test batch | pass |
+""",
+        encoding="utf-8",
+    )
+    (evidence_dir / "evidence-template.md").write_text(
+        "Redaction note\nOutput Excerpts\nStandalone Answer Excerpts\nLimitations\n",
+        encoding="utf-8",
+    )
+    (evidence_dir / "2026-06-15-clean-install-smoke.md").write_text(
+        (
+            "2026-06-15 Clean Install Smoke Evidence\n"
+            "zilan-agent validation passed.\n"
+            "mode: dry-run\n"
+            "Found 5 matches\n"
+            "No secrets\n"
+        ),
+        encoding="utf-8",
+    )
+    (evidence_dir / "2026-06-15-mock-claude-install-smoke.md").write_text(
+        (
+            "2026-06-15 Mock Claude Install Smoke Evidence\n"
+            "mode: mock-claude-install\n"
+            "skill:scripts/search_agama.py: pass\n"
+            "agent:matches-source: pass\n"
+            "Found 1 matches\n"
+        ),
+        encoding="utf-8",
+    )
+    failures: list[str] = []
+
+    _check_runtime_evidence_docs(tmp_path, failures)
+
+    assert any(
+        "docs/runtime-evidence/index.md references missing runtime evidence file: missing-answer.md"
+        in failure
+        for failure in failures
+    )
+
+
+def test_runtime_evidence_batch_manifest_rejects_summary_only_answer_file(tmp_path: Path) -> None:
+    evidence_dir = tmp_path / "docs" / "runtime-evidence"
+    evidence_dir.mkdir(parents=True)
+    (evidence_dir / "README.md").write_text(
+        """# Runtime Evidence Excerpts
+
+Do not use this directory for:
+
+- standalone answer excerpt
+- summary-only evidence must not be used as answer_file input
+- docs/validation-evidence.md
+""",
+        encoding="utf-8",
+    )
+    (evidence_dir / "index.md").write_text(
+        """# Runtime Evidence Index
+
+## Summary-Only Runtime Evidence
+
+| Evidence summary | Scope | Answer excerpt status |
+|---|---|---|
+| `summary-only.md` | test summary | summary-only |
+
+## Provider And Smoke Evidence
+
+| Evidence file | Scope |
+|---|---|
+| `smoke.md` | smoke summary |
+""",
+        encoding="utf-8",
+    )
+    (evidence_dir / "summary-only.md").write_text("# Summary only\n", encoding="utf-8")
+    (evidence_dir / "smoke.md").write_text("# Smoke\n", encoding="utf-8")
+    (evidence_dir / "2026-07-20-bad-batch.yaml").write_text(
+        """version: 1
+reviews:
+  - id: bad-summary-only-answer-file
+    query_id: SRQ-04
+    answer_file: docs/runtime-evidence/summary-only.md
+""",
+        encoding="utf-8",
+    )
+    (evidence_dir / "evidence-template.md").write_text(
+        "Redaction note\nOutput Excerpts\nStandalone Answer Excerpts\nLimitations\n",
+        encoding="utf-8",
+    )
+    (evidence_dir / "2026-06-15-clean-install-smoke.md").write_text(
+        (
+            "2026-06-15 Clean Install Smoke Evidence\n"
+            "zilan-agent validation passed.\n"
+            "mode: dry-run\n"
+            "Found 5 matches\n"
+            "No secrets\n"
+        ),
+        encoding="utf-8",
+    )
+    (evidence_dir / "2026-06-15-mock-claude-install-smoke.md").write_text(
+        (
+            "2026-06-15 Mock Claude Install Smoke Evidence\n"
+            "mode: mock-claude-install\n"
+            "skill:scripts/search_agama.py: pass\n"
+            "agent:matches-source: pass\n"
+            "Found 1 matches\n"
+        ),
+        encoding="utf-8",
+    )
+    failures: list[str] = []
+
+    _check_runtime_evidence_docs(tmp_path, failures)
+
+    assert any(
+        (
+            "docs/runtime-evidence/2026-07-20-bad-batch.yaml review "
+            "bad-summary-only-answer-file uses summary-only evidence as answer_file"
+        )
+        in failure
+        for failure in failures
+    )
+
 def test_public_style_boundary_private_fragment_is_reported(tmp_path: Path, monkeypatch) -> None:
     (tmp_path / "SKILL.md").write_text("认知带宽受限", encoding="utf-8")
     monkeypatch.setattr(validate_zilan_repo, "PUBLIC_STYLE_BOUNDARY_FILES", ("SKILL.md",))
