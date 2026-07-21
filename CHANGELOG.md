@@ -4,6 +4,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+## [2.5.5] - 2026-07-21
+
 ### Added
 
 - Added repository validation for `docs/runtime-evidence/index.md` references and runtime answer-review batch `answer_file` safety so stale evidence links and summary-only answer inputs are caught before merge.
