@@ -204,6 +204,9 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │       ├── yaml_io.py
 │       ├── repository.py
 │       ├── text_checks.py
+│       ├── validation/                # repository validation helpers
+│           ├── __init__.py
+│           └── runtime_evidence.py
 │       ├── agama/                     # Agama search library helpers
 │           ├── __init__.py
 │           ├── candidates.py

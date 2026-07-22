@@ -29,6 +29,11 @@ def test_repository_invariants_pass_with_strict_yaml() -> None:
     assert warnings == []
 
 
+def test_runtime_evidence_validator_module_exports_public_function() -> None:
+    from zilanlib.validation.runtime_evidence import validate_runtime_evidence
+
+    assert callable(validate_runtime_evidence)
+
 def test_platform_validation_doc_status_mismatch_is_reported(tmp_path: Path) -> None:
     docs = tmp_path / "docs"
     docs.mkdir()
