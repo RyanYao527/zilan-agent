@@ -8,6 +8,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 - Extracted runtime-evidence repository validation into `scripts/zilanlib/validation/runtime_evidence.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
 - Reused `zilanlib.yaml_io.load_yaml_mapping()` in the OpenAI API harness while preserving dry-run request behavior and adding private-loader YAML error coverage.
+- Replaced duplicated reasoning contract runner not-applicable test constants with a behavior-preserving factory helper.
 
 
 ## [2.5.5] - 2026-07-21

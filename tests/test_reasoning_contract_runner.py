@@ -9,70 +9,62 @@ from zilanlib.semantic.retrieval_dry_run import DEFAULT_FIXTURE, FixtureError
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "reasoning_contract_runner.py"
 
-NOT_APPLICABLE_HETUVIDYA = {
-    "status": "not_applicable",
-    "validator": "hetuvidya_validator",
-    "contract_family": "hetuvidya",
-    "output_schema": "hetuvidya-validator-output-v0.1",
-    "source": "tests/reasoning_cases.yaml",
-    "case_ids": [],
-    "validations": [],
-    "limitations": [
-        "No selected reasoning case with hetuvidya role was found for this query fixture.",
-    ],
-}
 
-NOT_APPLICABLE_COLLECTED_TOPICS = {
-    "status": "not_applicable",
-    "validator": "collected_topics_analyzer",
-    "contract_family": "collected_topics",
-    "output_schema": "collected-topics-analyzer-output-v0",
-    "source": "tests/reasoning_cases.yaml",
-    "case_ids": [],
-    "analyses": [],
-    "limitations": [
-        "No selected reasoning case with collected_topics role was found for this query fixture.",
-    ],
-}
+def not_applicable_validator(
+    *,
+    validator: str,
+    contract_family: str,
+    output_schema: str,
+    payload_key: str,
+) -> dict[str, object]:
+    return {
+        "status": "not_applicable",
+        "validator": validator,
+        "contract_family": contract_family,
+        "output_schema": output_schema,
+        "source": "tests/reasoning_cases.yaml",
+        "case_ids": [],
+        payload_key: [],
+        "limitations": [
+            f"No selected reasoning case with {contract_family} role was found for this query fixture.",
+        ],
+    }
 
-NOT_APPLICABLE_MADHYAMAKA = {
-    "status": "not_applicable",
-    "validator": "madhyamaka_critique_engine",
-    "contract_family": "madhyamaka_prasanga",
-    "output_schema": "madhyamaka-critique-engine-output-v0",
-    "source": "tests/reasoning_cases.yaml",
-    "case_ids": [],
-    "critiques": [],
-    "limitations": [
-        "No selected reasoning case with madhyamaka_prasanga role was found for this query fixture.",
-    ],
-}
 
-NOT_APPLICABLE_COGNITIVE_ANALYSIS = {
-    "status": "not_applicable",
-    "validator": "cognitive_analysis_mapper",
-    "contract_family": "cognitive_analysis",
-    "output_schema": "cognitive-analysis-mapper-output-v0",
-    "source": "tests/reasoning_cases.yaml",
-    "case_ids": [],
-    "mappings": [],
-    "limitations": [
-        "No selected reasoning case with cognitive_analysis role was found for this query fixture.",
-    ],
-}
+NOT_APPLICABLE_HETUVIDYA = not_applicable_validator(
+    validator="hetuvidya_validator",
+    contract_family="hetuvidya",
+    output_schema="hetuvidya-validator-output-v0.1",
+    payload_key="validations",
+)
 
-NOT_APPLICABLE_AGAMA_EVIDENCE = {
-    "status": "not_applicable",
-    "validator": "agama_evidence_checker",
-    "contract_family": "agama_evidence",
-    "output_schema": "agama-evidence-checker-output-v0.1",
-    "source": "tests/reasoning_cases.yaml",
-    "case_ids": [],
-    "evidence_reviews": [],
-    "limitations": [
-        "No selected reasoning case with agama_evidence role was found for this query fixture.",
-    ],
-}
+NOT_APPLICABLE_COLLECTED_TOPICS = not_applicable_validator(
+    validator="collected_topics_analyzer",
+    contract_family="collected_topics",
+    output_schema="collected-topics-analyzer-output-v0",
+    payload_key="analyses",
+)
+
+NOT_APPLICABLE_MADHYAMAKA = not_applicable_validator(
+    validator="madhyamaka_critique_engine",
+    contract_family="madhyamaka_prasanga",
+    output_schema="madhyamaka-critique-engine-output-v0",
+    payload_key="critiques",
+)
+
+NOT_APPLICABLE_COGNITIVE_ANALYSIS = not_applicable_validator(
+    validator="cognitive_analysis_mapper",
+    contract_family="cognitive_analysis",
+    output_schema="cognitive-analysis-mapper-output-v0",
+    payload_key="mappings",
+)
+
+NOT_APPLICABLE_AGAMA_EVIDENCE = not_applicable_validator(
+    validator="agama_evidence_checker",
+    contract_family="agama_evidence",
+    output_schema="agama-evidence-checker-output-v0.1",
+    payload_key="evidence_reviews",
+)
 CHAIN_STEP_ROLES = [
     "input_contact",
     "attention_orientation",
