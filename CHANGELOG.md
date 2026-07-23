@@ -10,6 +10,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Reused `zilanlib.yaml_io.load_yaml_mapping()` in the OpenAI API harness while preserving dry-run request behavior and adding private-loader YAML error coverage.
 - Replaced duplicated reasoning contract runner not-applicable test constants with a behavior-preserving factory helper.
 - Scoped pytest coverage reporting to `scripts/zilanlib`, with a 2026-07-23 local baseline of 87%, while keeping root CLI wrapper tests in the suite.
+- Marked `zilanlib` as a typed package and added package discovery, package-data, project URLs, and classifier metadata.
 
 
 ## [2.5.5] - 2026-07-21

@@ -1,5 +1,8 @@
 [build-system]
-requires = ["setuptools>=69"]
+requires = [
+  "setuptools>=69",
+  "wheel>=0.42",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -12,6 +15,24 @@ license = { file = "LICENSE" }
 dependencies = [
   "PyYAML>=6.0",
 ]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Religion",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Religion",
+  "Topic :: Software Development :: Testing",
+  "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/RyanYao527/zilan-agent"
+Repository = "https://github.com/RyanYao527/zilan-agent"
+Issues = "https://github.com/RyanYao527/zilan-agent/issues"
+Changelog = "https://github.com/RyanYao527/zilan-agent/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 dev = [
@@ -23,6 +44,13 @@ dev = [
 
 [tool.setuptools]
 py-modules = []
+
+[tool.setuptools.packages.find]
+where = ["scripts"]
+include = ["zilanlib*"]
+
+[tool.setuptools.package-data]
+zilanlib = ["py.typed"]
 
 [tool.mypy]
 python_version = "3.11"
