@@ -140,7 +140,7 @@ GENERATED_AGAMA_FILES = (
     "context/agama/T0125-ekottarika-agama.md",
 )
 
-REGRESSION_CASES = ("ZC-01", "ZC-02", "ZC-03", "ZC-04", "ZC-05", "ZC-06")
+REGRESSION_CASES = runtime_evidence_validation.REGRESSION_CASES
 REGRESSION_CASES_PATH = "tests/regression_cases.yaml"
 REASONING_CASES_PATH = "tests/reasoning_cases.yaml"
 RETRIEVAL_CHUNKS_PATH = "tests/fixtures/retrieval_chunks/semantic_chunks.yaml"
@@ -178,13 +178,12 @@ HIGH_RISK_PUBLIC_FRAGMENTS = (
     "带娃",
 )
 PLATFORM_VALIDATION_DOC = "docs/platform-validation.md"
-RUNTIME_VALIDATION_LOG_DOC = "docs/runtime-validation-log.md"
-RUNTIME_EVIDENCE_INDEX_DOC = "docs/runtime-evidence/README.md"
-RUNTIME_EVIDENCE_NAV_INDEX_DOC = "docs/runtime-evidence/index.md"
-RUNTIME_EVIDENCE_TEMPLATE_DOC = "docs/runtime-evidence/evidence-template.md"
-RUNTIME_EVIDENCE_CLEAN_INSTALL_DOC = "docs/runtime-evidence/2026-06-15-clean-install-smoke.md"
-RUNTIME_EVIDENCE_MOCK_INSTALL_DOC = "docs/runtime-evidence/2026-06-15-mock-claude-install-smoke.md"
-RUNTIME_EVIDENCE_FILE_REF_RE = re.compile(r"`([^`]+(?:\.md|\.yaml))`")
+RUNTIME_VALIDATION_LOG_DOC = runtime_evidence_validation.RUNTIME_VALIDATION_LOG_DOC
+RUNTIME_EVIDENCE_INDEX_DOC = runtime_evidence_validation.RUNTIME_EVIDENCE_INDEX_DOC
+RUNTIME_EVIDENCE_NAV_INDEX_DOC = runtime_evidence_validation.RUNTIME_EVIDENCE_NAV_INDEX_DOC
+RUNTIME_EVIDENCE_TEMPLATE_DOC = runtime_evidence_validation.RUNTIME_EVIDENCE_TEMPLATE_DOC
+RUNTIME_EVIDENCE_CLEAN_INSTALL_DOC = runtime_evidence_validation.RUNTIME_EVIDENCE_CLEAN_INSTALL_DOC
+RUNTIME_EVIDENCE_MOCK_INSTALL_DOC = runtime_evidence_validation.RUNTIME_EVIDENCE_MOCK_INSTALL_DOC
 MAINTENANCE_ROADMAP_DOC = "docs/maintenance-roadmap.md"
 INSTALLATION_DOC = "docs/installation.md"
 VALIDATION_EVIDENCE_DOC = "docs/validation-evidence.md"

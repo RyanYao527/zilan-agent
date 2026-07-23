@@ -52,8 +52,8 @@
 - Test: existing `tests/test_validate_zilan_repo.py`
 
 **Interfaces:**
-- Consumes: `root: Path`, `failures: list[str]`, `warnings: list[str]`, and existing constants from `validate_zilan_repo.py`.
-- Produces: `validate_runtime_evidence(root: Path, failures: list[str], warnings: list[str], strict_yaml: bool) -> None`.
+- Consumes: `root: Path`, `failures: list[str]`, runtime-evidence constants defined in `scripts/zilanlib/validation/runtime_evidence.py`, and `zilanlib.yaml_io.load_yaml_for_validation()` for batch-manifest parsing.
+- Produces: `validate_runtime_evidence(root: Path, failures: list[str]) -> None`.
 
 - [ ] **Step 1: Identify the runtime-evidence functions**
 
@@ -103,12 +103,7 @@
   from pathlib import Path
 
 
-  def validate_runtime_evidence(
-      root: Path,
-      failures: list[str],
-      warnings: list[str],
-      strict_yaml: bool,
-  ) -> None:
+  def validate_runtime_evidence(root: Path, failures: list[str]) -> None:
       raise NotImplementedError("runtime evidence validation has not been extracted yet")
   ```
 
@@ -145,7 +140,7 @@
 - Test: `tests/test_openai_api_harness.py`
 
 **Interfaces:**
-- Consumes: `zilanlib.yaml_io.load_yaml_mapping(path: Path, *, label: str | None = None) -> dict[str, Any]`.
+- Consumes: `zilanlib.yaml_io.load_yaml_mapping(path: Path, *, root: Path, error_type: type[ValueError], missing_message: str, missing_file_label: str, parse_label: str, mapping_label: str) -> dict[str, Any]`.
 - Produces: no public API change.
 
 - [ ] **Step 1: Write a regression test for mapping enforcement**
@@ -179,7 +174,15 @@
 
   ```python
   def _load_yaml(path: Path) -> dict[str, Any]:
-      return load_yaml_mapping(path, label=str(path))
+      return load_yaml_mapping(
+          path,
+          root=ROOT,
+          error_type=ValueError,
+          missing_message="PyYAML is required to parse YAML files.",
+          missing_file_label="Missing YAML file",
+          parse_label="Failed to parse YAML file",
+          mapping_label="YAML file must contain a mapping",
+      )
   ```
 
 - [ ] **Step 3: Run harness tests**
