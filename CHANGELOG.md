@@ -4,6 +4,11 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+### Changed
+
+- Extracted runtime-evidence repository validation into `scripts/zilanlib/validation/runtime_evidence.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
+
+
 ## [2.5.5] - 2026-07-21
 
 ### Added
