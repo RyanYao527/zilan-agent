@@ -10,7 +10,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-import yaml
+from zilanlib.yaml_io import load_yaml_mapping
 
 ROOT = Path(__file__).resolve().parents[1]
 OPENAI_DEFAULT_BASE_URL = "https://api.openai.com/v1"
@@ -46,10 +46,15 @@ class HarnessResult:
 
 
 def _load_yaml(path: Path) -> dict[str, Any]:
-    data = yaml.safe_load(path.read_text(encoding="utf-8"))
-    if not isinstance(data, dict):
-        raise ValueError(f"{path} must contain a YAML mapping.")
-    return data
+    return load_yaml_mapping(
+        path,
+        root=ROOT,
+        error_type=ValueError,
+        missing_message="PyYAML is required to parse YAML files.",
+        missing_file_label="Missing YAML file",
+        parse_label="Failed to parse YAML file",
+        mapping_label="YAML file must contain a YAML mapping",
+    )
 
 
 def _load_regression_case(root: Path, case_id: str) -> HarnessCase:
@@ -382,7 +387,7 @@ def main() -> int:
             api_key_env=args.api_key_env,
             live=args.live,
         )
-    except (OSError, RuntimeError, ValueError, yaml.YAMLError) as exc:
+    except (OSError, RuntimeError, ValueError) as exc:
         print(f"openai-api-harness failed: {exc}", file=sys.stderr)
         return 1
 

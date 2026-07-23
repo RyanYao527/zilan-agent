@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import openai_api_harness
+import pytest
 from openai_api_harness import OPENAI_RESPONSES_URL, build_request, run_harness
 from openai_api_harness import _load_regression_case as load_regression_case
 
@@ -17,6 +19,21 @@ def test_openai_harness_builds_responses_api_request() -> None:
     assert "context/因明推理引擎.md" in request["input"][0]["content"][0]["text"]
     assert request["reasoning"]["effort"] == "low"
 
+
+def test_openai_harness_wraps_invalid_yaml_parse_errors(tmp_path: Path) -> None:
+    path = tmp_path / "bad.yaml"
+    path.write_text("models: [unterminated\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="Failed to parse YAML file"):
+        openai_api_harness._load_yaml(path)
+
+
+def test_openai_harness_rejects_non_mapping_yaml(tmp_path: Path) -> None:
+    path = tmp_path / "bad.yaml"
+    path.write_text("- not\n- mapping\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="must contain a YAML mapping"):
+        openai_api_harness._load_yaml(path)
 
 def test_openai_harness_builds_chat_completions_request() -> None:
     case = load_regression_case(ROOT, "ZC-02")
