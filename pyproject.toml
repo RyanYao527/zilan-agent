@@ -1,8 +1,5 @@
 [build-system]
-requires = [
-  "setuptools>=69",
-  "wheel>=0.42",
-]
+requires = ["setuptools>=69", "wheel>=0.42"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -22,9 +19,7 @@ keywords = [
   "claude-code",
   "agent",
 ]
-dependencies = [
-  "PyYAML>=6.0",
-]
+dependencies = ["PyYAML>=6.0"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
@@ -49,12 +44,7 @@ Issues = "https://github.com/RyanYao527/zilan-agent/issues"
 Changelog = "https://github.com/RyanYao527/zilan-agent/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
-dev = [
-  "mypy>=1.10,<2.0",
-  "pytest>=7.4,<8.0",
-  "pytest-cov>=5.0",
-  "ruff>=0.6",
-]
+dev = ["mypy>=1.10,<2.0", "pytest>=7.4,<8.0", "pytest-cov>=5.0", "ruff>=0.6"]
 
 [tool.setuptools]
 py-modules = []
@@ -65,11 +55,11 @@ include = ["zilan_contract*", "zilanlib*"]
 
 [tool.setuptools.package-data]
 zilanlib = ["py.typed"]
-zilan_contract = ["fixtures/*.yaml", "fixtures/**/*.yaml"]
+zilan_contract = ["py.typed", "fixtures/*.yaml", "fixtures/**/*.yaml"]
 
 [tool.mypy]
 python_version = "3.11"
-files = ["scripts"]
+files = ["scripts", "zilan_contract"]
 ignore_missing_imports = true
 check_untyped_defs = false
 warn_unused_ignores = false
@@ -95,7 +85,7 @@ addopts = "--cov=scripts/zilanlib --cov-report=term-missing"
 [tool.ruff]
 target-version = "py310"
 line-length = 120
-include = ["scripts/**/*.py", "tests/*.py"]
+include = ["scripts/**/*.py", "tests/*.py", "zilan_contract/**/*.py"]
 
 [tool.ruff.lint]
 select = ["B", "BLE", "E", "F", "I", "SIM", "UP"]

@@ -106,12 +106,53 @@ print(result["validations"][0]["judgment"]["result"])  # 'positive_reason'
 
 ## Using your own contracts
 
-The bundled fixtures are Buddhist-logic cases. To define your own contracts:
+The bundled fixtures are Buddhist-logic cases. To define your own contracts
+for any domain (medical, legal, financial, etc.):
 
-### 1. Create a YAML cases file
+### 1. Create a contract fixture file
+
+This defines the query and the answer contract. Save as `my_contracts.yaml`:
 
 ```yaml
 # my_contracts.yaml
+queries:
+  - id: MED-01
+    query: "What should I do for chest pain?"
+    needs:
+      - medical_disclaimer
+    chunks: []
+    answer_contracts:
+      medical_disclaimer:
+        description: "Medical response must include disclaimer and avoid claims of certainty."
+        required_terms:
+          - "consult"
+          - "doctor"
+          - "emergency"
+          - "not medical advice"
+        forbidden_terms:
+          - "guaranteed"
+          - "definitely"
+          - "100%"
+        required_slots:
+          - label: disclaimer
+            terms:
+              - "not medical advice"
+              - "consult"
+```
+
+> **Note:** `required_terms` is a flat list of strings that must appear.
+> `required_slots` is a list of labeled groups — each slot's terms must all
+> appear (useful when multiple independent constraints apply).
+> `forbidden_terms` is a flat list of strings that must NOT appear.
+
+### 2. Create a reasoning cases file (optional)
+
+If you want to use domain validators, create a cases file. Otherwise
+skip this — the answer contract review works without it. Save as
+`my_cases.yaml`:
+
+```yaml
+# my_cases.yaml
 version: 1
 cases:
   - id: MED-01
@@ -121,42 +162,6 @@ cases:
     prompt: "What should I do for chest pain?"
     expected:
       boundary_statement: true
-      structure:
-        - disclaimer
-        - recommendation
-        - emergency_warning
-      medical_disclaimer:
-        required_terms:
-          - "consult"
-          - "doctor"
-          - "emergency"
-        forbidden_terms:
-          - "guaranteed"
-          - "definitely"
-          - "100%"
-        boundary_statements:
-          - "not medical advice"
-          - "consult your physician"
-```
-
-### 2. Create a query fixture (semantic_chunks.yaml)
-
-```yaml
-queries:
-  - query_id: MED-01
-    query: "What should I do for chest pain?"
-    needs:
-      - medical_disclaimer
-    chunks: []
-    answer_contracts:
-      medical_disclaimer:
-        required_slots:
-          - "consult"
-          - "doctor"
-        forbidden_terms:
-          - "guaranteed"
-        boundary_statements:
-          - "not medical advice"
 ```
 
 ### 3. Create pass/fail answer samples
@@ -178,8 +183,8 @@ Turmeric tea is guaranteed to help with chest pain. It definitely works 100%.
 from zilan_contract import ContractRunner
 
 runner = ContractRunner(
-    fixture_path="my_fixtures.yaml",
-    cases_path="my_contracts.yaml",
+    fixture_path="my_contracts.yaml",
+    cases_path="my_cases.yaml",
 )
 
 # Check against your pass sample

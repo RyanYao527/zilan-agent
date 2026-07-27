@@ -16,17 +16,17 @@ def test_zilanlib_package_metadata_is_declared() -> None:
     expected_snippets = [
         '"wheel>=0.42"',
         '"Typing :: Typed"',
-        '[project.urls]',
+        "[project.urls]",
         'Homepage = "https://github.com/RyanYao527/zilan-agent"',
         'Repository = "https://github.com/RyanYao527/zilan-agent"',
         'Issues = "https://github.com/RyanYao527/zilan-agent/issues"',
         'Changelog = "https://github.com/RyanYao527/zilan-agent/blob/main/CHANGELOG.md"',
-        '[tool.setuptools.packages.find]',
+        "[tool.setuptools.packages.find]",
         'where = [".", "scripts"]',
         'include = ["zilan_contract*", "zilanlib*"]',
-        '[tool.setuptools.package-data]',
+        "[tool.setuptools.package-data]",
         'zilanlib = ["py.typed"]',
-        'zilan_contract = ["fixtures/*.yaml", "fixtures/**/*.yaml"]',
+        'zilan_contract = ["py.typed", "fixtures/*.yaml", "fixtures/**/*.yaml"]',
     ]
     for snippet in expected_snippets:
         assert snippet in pyproject

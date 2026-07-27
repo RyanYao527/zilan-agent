@@ -40,7 +40,7 @@ __all__ = [
 
 _FIXTURE_DIR = Path(__file__).resolve().parent / "fixtures"
 _CASES_FILE = _FIXTURE_DIR / "reasoning_cases.yaml"
-_SEMANTIC_FIXTURE = _FIXTURE_DIR / "semantic_chunks.yaml"
+_SEMANTIC_FIXTURE = _FIXTURE_DIR / "retrieval_chunks" / "semantic_chunks.yaml"
 
 # Fallback to project layout during development
 _PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -60,10 +60,7 @@ def get_fixture_path(name: str = "semantic_chunks.yaml") -> Path:
         dev_path = _DEV_FIXTURES / "retrieval_chunks" / "semantic_chunks.yaml"
         if dev_path.exists():
             return dev_path
-        raise FileNotFoundError(
-            f"Fixture '{name}' not found. "
-            f"Tried: {_SEMANTIC_FIXTURE}, {dev_path}"
-        )
+        raise FileNotFoundError(f"Fixture '{name}' not found. Tried: {_SEMANTIC_FIXTURE}, {dev_path}")
 
     dev_path = _DEV_FIXTURES / name
     if dev_path.exists():
@@ -73,9 +70,7 @@ def get_fixture_path(name: str = "semantic_chunks.yaml") -> Path:
     if bundled.exists():
         return bundled
 
-    raise FileNotFoundError(
-        f"Fixture '{name}' not found. Tried: {bundled}, {dev_path}"
-    )
+    raise FileNotFoundError(f"Fixture '{name}' not found. Tried: {bundled}, {dev_path}")
 
 
 def get_cases_path() -> Path:
@@ -84,9 +79,7 @@ def get_cases_path() -> Path:
         return _CASES_FILE
     if _DEV_CASES.exists():
         return _DEV_CASES
-    raise FileNotFoundError(
-        f"Reasoning cases not found. Tried: {_CASES_FILE}, {_DEV_CASES}"
-    )
+    raise FileNotFoundError(f"Reasoning cases not found. Tried: {_CASES_FILE}, {_DEV_CASES}")
 
 
 class ContractRunner:
@@ -175,11 +168,7 @@ class ContractResult:
         self.query: str | None = raw.get("query")
 
     def __repr__(self) -> str:
-        return (
-            f"ContractResult("
-            f"overall={self.overall_status!r}, "
-            f"review={self.answer_review_status!r})"
-        )
+        return f"ContractResult(overall={self.overall_status!r}, review={self.answer_review_status!r})"
 
     def passed(self) -> bool:
         """True if the contract check passed."""
@@ -187,11 +176,7 @@ class ContractResult:
 
     def failed_validators(self) -> list[str]:
         """Names of validators that did not pass."""
-        return [
-            name
-            for name, v in self.validators.items()
-            if v.get("status") not in ("pass", "not_applicable")
-        ]
+        return [name for name, v in self.validators.items() if v.get("status") not in ("pass", "not_applicable")]
 
 
 class HetuvidyaValidator:

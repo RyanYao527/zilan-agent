@@ -132,7 +132,7 @@ The validator (`scripts/zilanlib/reasoning/hetuvidya_validator.py`) reads this, 
 }
 ```
 
-If the fixture declares `paksa_dharmata: fail`, the validator returns `status: "invalid"` with a diagnostic pointing to the specific check that failed. No model call. No embedding. No API key. The validator is ~170 lines of Python, and it runs in milliseconds.
+If the fixture declares `paksa_dharmata: fail`, the validator returns `status: "invalid"` with a diagnostic pointing to the specific check that failed. No model call. No embedding. No API key. Each validator is ~200–250 lines of Python (the Agama evidence checker is ~430 lines; the logic validators average ~240), and they run in milliseconds.
 
 The same pattern powers all five validators:
 
@@ -250,7 +250,7 @@ python scripts/reasoning_contract_runner.py \
   --json                            # see a contract check in action
 ```
 
-Contributors welcome — especially if you want to port the output-contract pattern to medical, legal, or financial domains. The validator code is ~170 lines per engine, and the contract YAML format is straightforward. If you have domain expertise in a field where LLMs must not drift, you can write the contracts and I'll help with the validators.
+Contributors welcome — especially if you want to port the output-contract pattern to medical, legal, or financial domains. The validator code averages ~240 lines per engine (the logic validators range from 211–256 lines; the Agama evidence checker is 430 lines), and the contract YAML format is straightforward. If you have domain expertise in a field where LLMs must not drift, you can write the contracts and I'll help with the validators.
 
 ---
 
