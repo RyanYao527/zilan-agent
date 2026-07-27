@@ -11,7 +11,7 @@
 ## 🌐 Choose your language · 选择语言
 
 | | 语言 | Language | 入口 Entry |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 🇨🇳 | **中文** | Chinese | **[`README.zh.md`](README.zh.md)** |
 | 🇺🇸 | **English** | English | **[`README.en.md`](README.en.md)** |
 
@@ -38,10 +38,62 @@ cp zilan-agent/agents/zilan-claude-code.md ~/.claude/agents/zilan.md
 
 ---
 
+## 🏗️ For Engineers · 面向开发者
+
+> **This is not just a Buddhist skill — it's a production-grade LLM reliability engineering demo.**
+>
+> 这不仅仅是一个佛学 skill——它是一个**面向 LLM 可靠性工程的生产级演示项目**。
+
+### The hard problem · 要解决的问题
+
+LLMs in specialized domains drift: they drop critical terms, overclaim certainty, or blur safety boundaries. Most projects respond with "better prompts + human review." zilan-agent takes a different approach.
+
+专业领域中的 LLM 输出容易漂移：遗漏关键术语、夸大确定性、模糊安全边界。大多数项目的应对是「调 prompt + 人工复核」。zilan-agent 走了一条不同的路。
+
+### The approach · 解决思路
+
+| Layer 层 | What it does 作用 |
+| --- | --- |
+| **Output contracts** 输出契约 | Structured specification of required terms, forbidden phrases, and boundary statements that every LLM response must satisfy. 结构化的规范：定义每个 LLM 回答必须包含的词槽、禁区词汇和边界声明。 |
+| **Deterministic validators** 确定性验证器 | 5 pure-Python validators that check contract compliance without calling any model or API — no LLM-as-judge, no embeddings, no vectors. 5 个纯 Python 验证器，在不调用任何模型或 API 的情况下检查契约合规性。 |
+| **Answer-contract review** 答案契约审查 | Pass/fail fixture samples let you regression-test prompt changes against expected output structure. 通过 pass/fail 样本夹具，对 prompt 变更进行回归测试。 |
+
+### The numbers · 工程指标
+
+```text
+172 tests    ·    86% code coverage (zilanlib)
+mypy: 0 errors across 48 source files
+ruff:  0 issues (B/BLE/E/F/I/SIM/UP rules)
+CI:    lint → type-check → test → smoke-test on every push
+```
+
+### See it in action · 一分钟验证
+
+```bash
+# Run a reasoning-contract check — deterministic, no API call
+python scripts/reasoning_contract_runner.py \
+  --query-id SRQ-04 \
+  --sample-id srq04-agama-citation-boundary-pass \
+  --json
+
+# Check if an LLM answer respects the Agama citation contract:
+# - Must include 检索范围, CBETA ID, context/agama/ anchor
+# - Must carry 待校勘 boundary statement
+# - Must not claim exhaustive or publication-grade collation
+```
+
+### Why this generalizes · 泛化价值
+
+The output-contract + deterministic-validator pattern works for **any domain where LLMs must not drop critical terms**: medical disclaimers, legal boundaries, compliance checklists, financial risk warnings. zilan-agent is a complete, tested, CI-guarded reference implementation — built in a deliberately challenging domain (Buddhist logic) to prove the pattern holds under complexity.
+
+输出契约 + 确定性验证器模式适用于**任何 LLM 不能遗漏关键术语的领域**：医疗免责声明、法律边界、合规清单、金融风险警告。zilan-agent 提供了一个完整、有测试覆盖、CI 守护的参考实现——刻意选择了一个高复杂度领域（佛学逻辑）来证明模式的有效性。
+
+---
+
 ## 📦 What's inside · 仓库内容
 
 | 文件 File | 用途 Purpose |
-|---|---|
+| --- | --- |
 | `SKILL.md` | 完整 skill 定义(中文) · Full skill definition (Chinese) |
 | `SKILL-en.md` | 完整 skill 定义(英文) · Full skill definition (English) |
 | `README.zh.md` | 完整文档 · Full documentation (Chinese) |
@@ -136,6 +188,7 @@ Areas where help is most useful:
 - Reasoning-contract fixture review for Hetuvidya, Collected Topics, Madhyamaka, and cognitive-analysis cases
 
 ---
+
 ## 🔑 唤醒关键字 · Activation keywords
 
 **主关键字 Primary**: `孜澜` · `Zilan`
