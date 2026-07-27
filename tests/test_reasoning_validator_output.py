@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import reasoning_validator_output as compatibility_output
 from zilanlib.reasoning.validator_output import (
     build_not_applicable_validator_output,
