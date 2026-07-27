@@ -14,6 +14,7 @@ from zilanlib.repository import (
     check_version_consistency,
 )
 from zilanlib.text_checks import check_required_fragments
+from zilanlib.validation import platform as platform_validation
 from zilanlib.validation import runtime_evidence as runtime_evidence_validation
 from zilanlib.yaml_io import (
     is_non_empty_int_list,
@@ -87,6 +88,7 @@ REQUIRED_FILES = (
     "scripts/zilanlib/repository.py",
     "scripts/zilanlib/text_checks.py",
     "scripts/zilanlib/validation/__init__.py",
+    "scripts/zilanlib/validation/platform.py",
     "scripts/zilanlib/validation/runtime_evidence.py",
     "scripts/zilanlib/agama/__init__.py",
     "scripts/zilanlib/reasoning/__init__.py",
@@ -177,7 +179,7 @@ HIGH_RISK_PUBLIC_FRAGMENTS = (
     "被领导质疑",
     "带娃",
 )
-PLATFORM_VALIDATION_DOC = "docs/platform-validation.md"
+PLATFORM_VALIDATION_DOC = platform_validation.PLATFORM_VALIDATION_DOC
 RUNTIME_VALIDATION_LOG_DOC = runtime_evidence_validation.RUNTIME_VALIDATION_LOG_DOC
 RUNTIME_EVIDENCE_INDEX_DOC = runtime_evidence_validation.RUNTIME_EVIDENCE_INDEX_DOC
 RUNTIME_EVIDENCE_NAV_INDEX_DOC = runtime_evidence_validation.RUNTIME_EVIDENCE_NAV_INDEX_DOC
@@ -198,14 +200,7 @@ VERSION_SOURCES = {
     "CHANGELOG.md": r"(?m)^## \[([0-9]+\.[0-9]+\.[0-9]+)\] - ",
     "AGENT_UPGRADE_PORTABLE.md": r"Current project baseline: zilan-agent v([0-9]+\.[0-9]+\.[0-9]+)",
 }
-ALLOWED_VALIDATION_STATUSES = (
-    "tested",
-    "definition-versioned",
-    "harness-ready",
-    "metadata-only",
-    "config-only",
-    "blocked",
-)
+ALLOWED_VALIDATION_STATUSES = platform_validation.ALLOWED_VALIDATION_STATUSES
 ALLOWED_REASONING_CONTRACTS = (
     "agama_evidence",
     "cognitive_analysis",
@@ -229,15 +224,7 @@ RETRIEVAL_HASH_ALGORITHM = "sha256"
 RETRIEVAL_SOURCE_SCRIPT = "scripts/search_agama.py"
 RETRIEVAL_SOURCE_HASH_SCOPE = "legacy_alias_for_line_text_hash"
 RETRIEVAL_LINE_TEXT_HASH_SCOPE = "trimmed_non_empty_lines_joined_with_lf"
-PLATFORM_VALIDATION_LABELS = {
-    "codex": "Codex",
-    "claude_code": "Claude Code",
-    "openai_api": "OpenAI API",
-    "volcengine_openai_compatible": "Volcengine OpenAI-Compatible",
-    "deepseek": "DeepSeek",
-    "glm": "GLM",
-    "qwen": "Qwen",
-}
+PLATFORM_VALIDATION_LABELS = platform_validation.PLATFORM_VALIDATION_LABELS
 AGENT_PROMPT_REQUIRED_FRAGMENTS = {
     "agents/zilan-codex.md": (
         "runtime: codex-sub-agent",
@@ -1096,115 +1083,12 @@ def _check_agent_prompts(root: Path, failures: list[str]) -> None:
         check_required_fragments(text, required_fragments, failures, rel_path=rel_path)
 
 
-def _get_validation_mapping(data: object, failures: list[str]) -> dict[str, object]:
-    if not isinstance(data, dict):
-        failures.append("agents/openai.yaml must be a mapping.")
-        return {}
-
-    validation = data.get("validation")
-    if not isinstance(validation, dict):
-        failures.append("agents/openai.yaml missing validation mapping.")
-        return {}
-    return validation
-
-
-def _check_agent_validation_entries(validation: dict[str, object], failures: list[str]) -> None:
-    expected_keys = set(PLATFORM_VALIDATION_LABELS)
-    actual_keys = set(validation)
-    for provider in sorted(expected_keys - actual_keys):
-        failures.append(f"agents/openai.yaml missing validation entry: {provider}")
-    for provider in sorted(actual_keys - expected_keys):
-        failures.append(f"agents/openai.yaml has undocumented validation entry: {provider}")
-
-    for provider in PLATFORM_VALIDATION_LABELS:
-        entry = validation.get(provider)
-        if not isinstance(entry, dict):
-            failures.append(f"agents/openai.yaml validation.{provider} must be a mapping.")
-            continue
-
-        status = entry.get("status")
-        if status not in ALLOWED_VALIDATION_STATUSES:
-            failures.append(
-                f"agents/openai.yaml validation.{provider}.status must be one of "
-                f"{', '.join(ALLOWED_VALIDATION_STATUSES)}."
-            )
-        if not isinstance(entry.get("scope"), str) or not entry["scope"]:
-            failures.append(f"agents/openai.yaml validation.{provider}.scope must be a non-empty string.")
-        if status == "tested" and (not isinstance(entry.get("date"), str) or not entry["date"]):
-            failures.append(f"agents/openai.yaml validation.{provider}.date is required when status is tested.")
-
-
-def _parse_markdown_table_rows(text: str) -> dict[str, list[str]]:
-    rows: dict[str, list[str]] = {}
-    for line in text.splitlines():
-        stripped = line.strip()
-        if not stripped.startswith("|") or set(stripped.replace("|", "").strip()) <= {"-", ":"}:
-            continue
-        cells = [cell.strip() for cell in stripped.strip("|").split("|")]
-        if len(cells) >= 2:
-            rows[cells[0]] = cells
-    return rows
-
-
-def _check_platform_validation_doc(root: Path, validation: dict[str, object], failures: list[str]) -> None:
-    doc_text = (root / PLATFORM_VALIDATION_DOC).read_text(encoding="utf-8")
-    rows = _parse_markdown_table_rows(doc_text)
-
-    for status in ALLOWED_VALIDATION_STATUSES:
-        if f"| `{status}` |" not in doc_text:
-            failures.append(f"{PLATFORM_VALIDATION_DOC} missing status definition: {status}")
-
-    for provider, label in PLATFORM_VALIDATION_LABELS.items():
-        entry = validation.get(provider)
-        if not isinstance(entry, dict):
-            continue
-
-        status = entry.get("status")
-        if not isinstance(status, str):
-            continue
-
-        row = rows.get(label)
-        if row is None:
-            failures.append(f"{PLATFORM_VALIDATION_DOC} missing platform row: {label}")
-            continue
-        if len(row) < 3:
-            failures.append(f"{PLATFORM_VALIDATION_DOC} platform row is incomplete: {label}")
-            continue
-        if row[1] != f"`{status}`":
-            failures.append(
-                f"{PLATFORM_VALIDATION_DOC} status mismatch for {label}: "
-                f"expected `{status}` from agents/openai.yaml, got {row[1]}."
-            )
-
-        date = entry.get("date")
-        if status == "tested" and isinstance(date, str) and row[2] != date:
-            failures.append(
-                f"{PLATFORM_VALIDATION_DOC} validation date mismatch for {label}: "
-                f"expected {date} from agents/openai.yaml, got {row[2]}."
-            )
-
-
-def _check_readme_platform_validation_links(root: Path, failures: list[str]) -> None:
-    for rel_path in README_FILES:
-        text = (root / rel_path).read_text(encoding="utf-8")
-        if PLATFORM_VALIDATION_DOC not in text:
-            failures.append(f"{rel_path} should link to {PLATFORM_VALIDATION_DOC}.")
-        if RUNTIME_VALIDATION_LOG_DOC not in text:
-            failures.append(f"{rel_path} should link to {RUNTIME_VALIDATION_LOG_DOC}.")
-        if "docs/runtime-evidence/" not in text:
-            failures.append(f"{rel_path} should link to docs/runtime-evidence/.")
-        if MAINTENANCE_ROADMAP_DOC not in text:
-            failures.append(f"{rel_path} should link to {MAINTENANCE_ROADMAP_DOC}.")
-        if INSTALLATION_DOC not in text:
-            failures.append(f"{rel_path} should link to {INSTALLATION_DOC}.")
-        if VALIDATION_EVIDENCE_DOC not in text:
-            failures.append(f"{rel_path} should link to {VALIDATION_EVIDENCE_DOC}.")
-        if PROVIDER_ROUTES_DOC not in text:
-            failures.append(f"{rel_path} should link to {PROVIDER_ROUTES_DOC}.")
-        if CHANGELOG_DOC not in text:
-            failures.append(f"{rel_path} should link to {CHANGELOG_DOC}.")
-        if "agents/openai.yaml" not in text:
-            failures.append(f"{rel_path} should mention agents/openai.yaml as platform metadata.")
+_get_validation_mapping = platform_validation.get_validation_mapping
+_check_agent_validation_entries = platform_validation.check_agent_validation_entries
+_parse_markdown_table_rows = platform_validation.parse_markdown_table_rows
+_check_platform_validation_doc = platform_validation.check_platform_validation_doc
+_check_readme_platform_validation_links = platform_validation.check_readme_platform_validation_links
+validate_platform_metadata = platform_validation.validate_platform_metadata
 
 
 def _check_third_party_notices(root: Path, failures: list[str]) -> None:
@@ -1278,16 +1162,10 @@ def _check_portable_upgrade_doc(root: Path, failures: list[str]) -> None:
 
 
 def _check_yaml(root: Path, failures: list[str], warnings: list[str], strict_yaml: bool) -> None:
-    data = _load_yaml(root, "agents/openai.yaml", failures, warnings, strict_yaml)
-    if data is None:
-        return
-
-    validation = _get_validation_mapping(data, failures)
+    validation = validate_platform_metadata(root, failures, warnings, strict_yaml)
     if not validation:
         return
 
-    _check_agent_validation_entries(validation, failures)
-    _check_platform_validation_doc(root, validation, failures)
     codex_validation = validation.get("codex")
     if not isinstance(codex_validation, dict) or codex_validation.get("status") != "tested":
         failures.append("agents/openai.yaml should mark validation.codex.status as tested.")

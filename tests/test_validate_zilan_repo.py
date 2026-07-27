@@ -36,6 +36,13 @@ def test_runtime_evidence_validator_module_exports_public_function() -> None:
 
     assert callable(validate_runtime_evidence)
 
+
+def test_platform_validator_module_exports_public_function() -> None:
+    from zilanlib.validation.platform import validate_platform_metadata
+
+    assert callable(validate_platform_metadata)
+
+
 def test_platform_validation_doc_status_mismatch_is_reported(tmp_path: Path) -> None:
     docs = tmp_path / "docs"
     docs.mkdir()
