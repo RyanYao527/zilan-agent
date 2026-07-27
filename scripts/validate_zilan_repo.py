@@ -14,6 +14,7 @@ from zilanlib.repository import (
     check_version_consistency,
 )
 from zilanlib.text_checks import check_required_fragments
+from zilanlib.validation import agent_prompts as agent_prompt_validation
 from zilanlib.validation import platform as platform_validation
 from zilanlib.validation import runtime_evidence as runtime_evidence_validation
 from zilanlib.yaml_io import (
@@ -88,6 +89,7 @@ REQUIRED_FILES = (
     "scripts/zilanlib/repository.py",
     "scripts/zilanlib/text_checks.py",
     "scripts/zilanlib/validation/__init__.py",
+    "scripts/zilanlib/validation/agent_prompts.py",
     "scripts/zilanlib/validation/platform.py",
     "scripts/zilanlib/validation/runtime_evidence.py",
     "scripts/zilanlib/agama/__init__.py",
@@ -225,119 +227,7 @@ RETRIEVAL_SOURCE_SCRIPT = "scripts/search_agama.py"
 RETRIEVAL_SOURCE_HASH_SCOPE = "legacy_alias_for_line_text_hash"
 RETRIEVAL_LINE_TEXT_HASH_SCOPE = "trimmed_non_empty_lines_joined_with_lf"
 PLATFORM_VALIDATION_LABELS = platform_validation.PLATFORM_VALIDATION_LABELS
-AGENT_PROMPT_REQUIRED_FRAGMENTS = {
-    "agents/zilan-codex.md": (
-        "runtime: codex-sub-agent",
-        "首轮任务执行优先级",
-        "激活与任务合并规则",
-        "禁止只输出身份问候",
-        "不要把文件写入作为主要交付方式",
-        "Codex 阿含检索规范",
-        "引用阿含经时必须注明",
-        "阿含证据输出契约",
-        "检索范围",
-        "代表性",
-        "待校勘",
-        "未作校勘定案",
-        "context/agama/",
-        "雜阿含經",
-        "主响应仍必须保留最小 SRQ-04 槽位",
-        "不得只给统计",
-        "full report is saved elsewhere",
-        "摄类学总别边界输出契约",
-        "总与别",
-        "局部别法",
-        "整体总法",
-        "总别混淆",
-        "不周遍",
-        "心类学与观禅实修边界输出契约",
-        "颠倒知",
-        "犹豫识",
-        "比量",
-        "无瞋",
-        "行舍",
-        "名色分别",
-        "缘摄受",
-        "三相印证",
-        "非心理治疗",
-        "善知识指导",
-        "中观应成输出契约",
-        "对方承许",
-        "自性有",
-        "归谬",
-        "缘起",
-        "矛盾",
-        "不立自宗",
-        "只破自性有",
-        "断灭",
-        "二谛",
-        "不成立",
-        "主响应的中观段",
-        "不是虚无主义",
-        "边界与限制",
-        "search_agama.py --terms",
-        "search_agama.py --json",
-        "citation",
-        "passage_citation",
-        "T02n0099",
-        "context/agama/T0099-za-agama.md:",
-    ),
-    "agents/zilan-claude-code.md": (
-        "输出硬约束",
-        "首轮任务执行优先级",
-        "激活与任务合并规则",
-        "非交互运行护栏",
-        "禁止只输出身份问候",
-        "不要用 `Write` 作为主要交付方式",
-        "引用阿含经时必须注明",
-        "阿含证据输出契约",
-        "检索范围",
-        "代表性",
-        "待校勘",
-        "未作校勘定案",
-        "context/agama/",
-        "雜阿含經",
-        "主响应仍必须保留最小 SRQ-04 槽位",
-        "不得只给统计",
-        "full report is saved elsewhere",
-        "摄类学总别边界输出契约",
-        "总与别",
-        "局部别法",
-        "整体总法",
-        "总别混淆",
-        "不周遍",
-        "心类学与观禅实修边界输出契约",
-        "颠倒知",
-        "犹豫识",
-        "比量",
-        "无瞋",
-        "行舍",
-        "名色分别",
-        "缘摄受",
-        "三相印证",
-        "非心理治疗",
-        "善知识指导",
-        "中观应成输出契约",
-        "对方承许",
-        "自性有",
-        "归谬",
-        "缘起",
-        "矛盾",
-        "不立自宗",
-        "只破自性有",
-        "断灭",
-        "二谛",
-        "不成立",
-        "主响应的中观段",
-        "不是虚无主义",
-        "search_agama.py",
-        "search_agama.py --json",
-        "citation",
-        "passage_citation",
-        "T02n0099",
-        "context/agama/T0099-za-agama.md:",
-    ),
-}
+AGENT_PROMPT_REQUIRED_FRAGMENTS = agent_prompt_validation.AGENT_PROMPT_REQUIRED_FRAGMENTS
 
 
 def _hash_file(path: Path) -> str:
@@ -1077,10 +967,8 @@ def _check_reasoning_cases_yaml(root: Path, failures: list[str], warnings: list[
             _check_agama_evidence_contract(case_id, expected, failures)
 
 
-def _check_agent_prompts(root: Path, failures: list[str]) -> None:
-    for rel_path, required_fragments in AGENT_PROMPT_REQUIRED_FRAGMENTS.items():
-        text = (root / rel_path).read_text(encoding="utf-8")
-        check_required_fragments(text, required_fragments, failures, rel_path=rel_path)
+_check_agent_prompts = agent_prompt_validation.validate_agent_prompts
+validate_agent_prompts = agent_prompt_validation.validate_agent_prompts
 
 
 _get_validation_mapping = platform_validation.get_validation_mapping

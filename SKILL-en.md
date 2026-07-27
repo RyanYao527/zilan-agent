@@ -183,6 +183,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │   ├── cognitive_analysis_mapper.py   # cognitive/vipassana fixture mapper
 │   ├── collected_topics_analyzer.py   # Collected Topics fixture analyzer
 │   ├── hetuvidya_validator.py         # Hetuvidya fixture validator
+│   ├── hf_upload_dataset.py           # Hugging Face Dataset upload helper
 │   ├── madhyamaka_critique_engine.py  # Madhyamaka prasaṅga fixture critique
 │   ├── mock_install_smoke.py          # Claude Code mock install smoke
 │   ├── openai_api_harness.py          # OpenAI / compatible-provider harness
@@ -206,6 +207,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │       ├── text_checks.py
 │       ├── validation/                # repository validation helpers
 │           ├── __init__.py
+│           ├── agent_prompts.py
 │           ├── platform.py
 │           └── runtime_evidence.py
 │       ├── agama/                     # Agama search library helpers
