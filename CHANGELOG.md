@@ -6,6 +6,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Changed
 
+- Updated public Skill script inventories for `scripts/hf_upload_dataset.py` after the Hugging Face dataset helper landed on `main`.
+- Extracted agent prompt contract checks into `scripts/zilanlib/validation/agent_prompts.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
 - Extracted platform metadata and platform-validation document checks into `scripts/zilanlib/validation/platform.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
 - Standardized `from __future__ import annotations` across scripts and tests, with a repository convention test guarding future Python files.
 - Extracted runtime-evidence repository validation into `scripts/zilanlib/validation/runtime_evidence.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.

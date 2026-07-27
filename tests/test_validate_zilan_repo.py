@@ -43,6 +43,12 @@ def test_platform_validator_module_exports_public_function() -> None:
     assert callable(validate_platform_metadata)
 
 
+def test_agent_prompt_validator_module_exports_public_function() -> None:
+    from zilanlib.validation.agent_prompts import validate_agent_prompts
+
+    assert callable(validate_agent_prompts)
+
+
 def test_platform_validation_doc_status_mismatch_is_reported(tmp_path: Path) -> None:
     docs = tmp_path / "docs"
     docs.mkdir()

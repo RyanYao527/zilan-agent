@@ -197,6 +197,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │   ├── cognitive_analysis_mapper.py   # 心类学/观禅 fixture mapper
 │   ├── collected_topics_analyzer.py   # 摄类学 fixture analyzer
 │   ├── hetuvidya_validator.py         # 因明 fixture validator
+│   ├── hf_upload_dataset.py           # Hugging Face Dataset 上传辅助脚本
 │   ├── madhyamaka_critique_engine.py  # 中观应成 fixture critique
 │   ├── mock_install_smoke.py          # Claude Code mock install smoke
 │   ├── openai_api_harness.py          # OpenAI / compatible-provider harness
@@ -223,6 +224,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │       ├── text_checks.py
 │       ├── validation/                # repository validation helpers
 │           ├── __init__.py
+│           ├── agent_prompts.py
 │           ├── platform.py
 │           └── runtime_evidence.py
 │       ├── agama/                     # Agama search library helpers
