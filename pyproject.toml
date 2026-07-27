@@ -8,10 +8,20 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "zilan-agent"
 version = "2.5.5"
-description = "Validation helpers and API harness for the Zilan Buddhist agent corpus."
+description = "Deterministic output-contract validators for LLM responses + Buddhist philosophy Agent/Skill framework."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
+keywords = [
+  "llm",
+  "prompt-engineering",
+  "output-validation",
+  "deterministic-testing",
+  "contract-testing",
+  "buddhism",
+  "claude-code",
+  "agent",
+]
 dependencies = [
   "PyYAML>=6.0",
 ]
@@ -19,11 +29,15 @@ classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
   "Intended Audience :: Religion",
+  "Intended Audience :: Science/Research",
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Topic :: Religion",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Software Development :: Quality Assurance",
   "Topic :: Software Development :: Testing",
   "Typing :: Typed",
 ]
@@ -46,11 +60,12 @@ dev = [
 py-modules = []
 
 [tool.setuptools.packages.find]
-where = ["scripts"]
-include = ["zilanlib*"]
+where = [".", "scripts"]
+include = ["zilan_contract*", "zilanlib*"]
 
 [tool.setuptools.package-data]
 zilanlib = ["py.typed"]
+zilan_contract = ["fixtures/*.yaml", "fixtures/**/*.yaml"]
 
 [tool.mypy]
 python_version = "3.11"

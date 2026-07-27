@@ -47,8 +47,8 @@ echo -e "$ python scripts/reasoning_contract_runner.py \\"
 echo -e "    --query-id SRQ-04 --sample-id srq04-agama-citation-boundary-pass --json"
 fast_pause
 python scripts/reasoning_contract_runner.py \
-  --query-id SRQ-04 --sample-id srq04-agama-citation-boundary-pass --json 2>&1 | \
-  python -c "
+	--query-id SRQ-04 --sample-id srq04-agama-citation-boundary-pass --json 2>&1 |
+	python -c "
 import sys, json
 d = json.load(sys.stdin)
 print(f\"  overall_status:  {d['overall_status']}\")
@@ -65,8 +65,8 @@ echo -e "$ python scripts/reasoning_contract_runner.py \\"
 echo -e "    --query-id SRQ-04 --sample-id srq04-agama-citation-boundary-fail --json"
 fast_pause
 python scripts/reasoning_contract_runner.py \
-  --query-id SRQ-04 --sample-id srq04-agama-citation-boundary-fail --json 2>&1 | \
-  python -c "
+	--query-id SRQ-04 --sample-id srq04-agama-citation-boundary-fail --json 2>&1 |
+	python -c "
 import sys, json
 d = json.load(sys.stdin)
 print(f\"  overall_status:  {d['overall_status']}\")

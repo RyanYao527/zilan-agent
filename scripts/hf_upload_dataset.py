@@ -160,13 +160,15 @@ def _build_agama_dataset() -> list[dict[str, Any]]:
         for i, passage in enumerate(passages):
             if len(passage) < 20:
                 continue
-            rows.append({
-                "text": passage,
-                "sutra_name_cn": meta["sutra_name_cn"],
-                "cbeta_id": meta["cbeta_id"],
-                "file_name": file_name,
-                "passage_index": i,
-            })
+            rows.append(
+                {
+                    "text": passage,
+                    "sutra_name_cn": meta["sutra_name_cn"],
+                    "cbeta_id": meta["cbeta_id"],
+                    "file_name": file_name,
+                    "passage_index": i,
+                }
+            )
     return rows
 
 
@@ -180,11 +182,13 @@ def _build_kb_dataset() -> list[dict[str, Any]]:
 
         text = file_path.read_text(encoding="utf-8")
         print(f"  {file_name}: {len(text)} chars")
-        rows.append({
-            "text": text,
-            "domain": domain,
-            "file_name": file_name,
-        })
+        rows.append(
+            {
+                "text": text,
+                "domain": domain,
+                "file_name": file_name,
+            }
+        )
     return rows
 
 
@@ -198,10 +202,12 @@ def _upload_dataset(repo_id: str, agama_rows: list[dict[str, Any]], kb_rows: lis
     agama_ds = Dataset.from_list(agama_rows)
     kb_ds = Dataset.from_list(kb_rows)
 
-    dataset_dict = DatasetDict({
-        "agama": agama_ds,
-        "knowledge_base": kb_ds,
-    })
+    dataset_dict = DatasetDict(
+        {
+            "agama": agama_ds,
+            "knowledge_base": kb_ds,
+        }
+    )
 
     # Write README card
     readme_path = ROOT / "docs" / "hf-dataset-card.md"

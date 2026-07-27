@@ -1,0 +1,1258 @@
+version: 1
+source: docs/architecture/semantic-retrieval-interface.md
+purpose: Fixture-only semantic retrieval chunks for citation-preserving validation.
+chunks:
+  - chunk_id: agama:T02n0099:juan-1:line-147
+    chunk_type: agama_passage
+    source_file: context/agama/T0099-za-agama.md
+    start_line: 147
+    end_line: 149
+    citation: "《雜阿含經》(T02n0099) 卷 1, context/agama/T0099-za-agama.md:147"
+    passage_citation: "《雜阿含經》(T02n0099) 卷 1, context/agama/T0099-za-agama.md:147-149"
+    text: "色無常，無常即苦，苦即非我"
+    metadata:
+      collection: 雜阿含經
+      cbeta_id: T02n0099
+      juan: 卷 1
+      section_marker:
+      topics:
+        - 無我
+        - 五蘊
+      reasoning_roles:
+        - agama_evidence
+      matched_lines:
+        - 147
+      source_hash: "sha256:fc7fcddb9c1c41ee8825df15c994be2ab6978575210fa8de8264774657e04e4c"
+      line_text_hash: "sha256:fc7fcddb9c1c41ee8825df15c994be2ab6978575210fa8de8264774657e04e4c"
+      provenance:
+        source_script: scripts/search_agama.py
+        source_file: context/agama/T0099-za-agama.md
+        line_range:
+          start: 147
+          end: 149
+        matched_lines:
+          - 147
+        hash_algorithm: sha256
+        line_text_hash: "sha256:fc7fcddb9c1c41ee8825df15c994be2ab6978575210fa8de8264774657e04e4c"
+        source_hash_scope: legacy_alias_for_line_text_hash
+        line_text_hash_scope: trimmed_non_empty_lines_joined_with_lf
+  - chunk_id: agama:T01n0001:juan-1:line-881
+    chunk_type: agama_passage
+    source_file: context/agama/T0001-chang-agama.md
+    start_line: 881
+    end_line: 881
+    citation: "《長阿含經》(T01n0001) 卷 1, context/agama/T0001-chang-agama.md:881"
+    passage_citation: "《長阿含經》(T01n0001) 卷 1, context/agama/T0001-chang-agama.md:881"
+    text: "若學決定法，知諸法無我；"
+    metadata:
+      collection: 長阿含經
+      cbeta_id: T01n0001
+      juan: 卷 1
+      section_marker:
+      topics:
+        - 無我
+        - 非我
+      reasoning_roles:
+        - agama_evidence
+      matched_lines:
+        - 881
+      source_hash: "sha256:89372a4f6f93f7aa3cdb58d51ccc103a064636f7c5f3a6a00d4a85fecc13abcd"
+      line_text_hash: "sha256:89372a4f6f93f7aa3cdb58d51ccc103a064636f7c5f3a6a00d4a85fecc13abcd"
+      provenance:
+        source_script: scripts/search_agama.py
+        source_file: context/agama/T0001-chang-agama.md
+        line_range:
+          start: 881
+          end: 881
+        matched_lines:
+          - 881
+        hash_algorithm: sha256
+        line_text_hash: "sha256:89372a4f6f93f7aa3cdb58d51ccc103a064636f7c5f3a6a00d4a85fecc13abcd"
+        source_hash_scope: legacy_alias_for_line_text_hash
+        line_text_hash_scope: trimmed_non_empty_lines_joined_with_lf
+  - chunk_id: agama:T01n0001:juan-3:line-1829
+    chunk_type: agama_passage
+    source_file: context/agama/T0001-chang-agama.md
+    start_line: 1829
+    end_line: 1829
+    citation: "《長阿含經》(T01n0001) 卷 3, context/agama/T0001-chang-agama.md:1829"
+    passage_citation: "《長阿含經》(T01n0001) 卷 3, context/agama/T0001-chang-agama.md:1829"
+    text: "陰、界、入無我，乃名第一供。」"
+    metadata:
+      collection: 長阿含經
+      cbeta_id: T01n0001
+      juan: 卷 3
+      section_marker:
+      topics:
+        - 無我
+        - 陰界入
+      reasoning_roles:
+        - agama_evidence
+      matched_lines:
+        - 1829
+      source_hash: "sha256:2215c02d0e8da74dfcdb2b2cd5931b22992cc739f552aa8e8a2a9398f12a2277"
+      line_text_hash: "sha256:2215c02d0e8da74dfcdb2b2cd5931b22992cc739f552aa8e8a2a9398f12a2277"
+      provenance:
+        source_script: scripts/search_agama.py
+        source_file: context/agama/T0001-chang-agama.md
+        line_range:
+          start: 1829
+          end: 1829
+        matched_lines:
+          - 1829
+        hash_algorithm: sha256
+        line_text_hash: "sha256:2215c02d0e8da74dfcdb2b2cd5931b22992cc739f552aa8e8a2a9398f12a2277"
+        source_hash_scope: legacy_alias_for_line_text_hash
+        line_text_hash_scope: trimmed_non_empty_lines_joined_with_lf
+  - chunk_id: agama:T01n0001:juan-10:line-3997
+    chunk_type: agama_passage
+    source_file: context/agama/T0001-chang-agama.md
+    start_line: 3997
+    end_line: 3997
+    citation: "《長阿含經》(T01n0001) 卷 10, context/agama/T0001-chang-agama.md:3997"
+    passage_citation: "《長阿含經》(T01n0001) 卷 10, context/agama/T0001-chang-agama.md:3997"
+    text: "「阿難！彼見我者，言受是我，當語彼言：『如來說三受，樂受、苦受、不苦不樂受。當有樂受時，無有苦受、不苦不樂受；有苦受時，無有樂受、不苦不樂受；有不苦不樂受時，無有苦受、樂受。』所以然者？阿難！樂觸緣生樂受，若樂觸滅受亦滅。阿難！苦觸緣生苦受，若苦觸滅受亦滅；不苦不樂觸緣生不苦不樂受，若不苦不樂觸滅受亦滅。阿難！如兩木相攢則有火生，各置異處則無有火。此亦如是，因樂觸緣故生樂受，若樂觸滅受亦俱滅；因苦觸緣故生苦受，若苦觸滅受亦俱滅；因不苦不樂觸緣生不苦不樂受，若不苦不樂觸滅受亦俱滅。阿難！此三受有為無常，從因緣生，盡法、滅法，為朽壞法。彼非我有，我非彼有，當以正智如實觀之。阿難！彼見我者，以受為我，彼則為非。"
+    metadata:
+      collection: 長阿含經
+      cbeta_id: T01n0001
+      juan: 卷 10
+      section_marker:
+      topics:
+        - 无我
+        - 非我
+        - 五蕴
+        - 三受
+        - 缘生
+      reasoning_roles:
+        - agama_evidence
+      matched_lines:
+        - 3997
+      source_hash: "sha256:20ddc44c76009bfd6341d627e0772b4a17f67aa3f7aed2ff736b71c0bdf760d8"
+      line_text_hash: "sha256:20ddc44c76009bfd6341d627e0772b4a17f67aa3f7aed2ff736b71c0bdf760d8"
+      provenance:
+        source_script: scripts/search_agama.py
+        source_file: context/agama/T0001-chang-agama.md
+        line_range:
+          start: 3997
+          end: 3997
+        matched_lines:
+          - 3997
+        hash_algorithm: sha256
+        line_text_hash: "sha256:20ddc44c76009bfd6341d627e0772b4a17f67aa3f7aed2ff736b71c0bdf760d8"
+        source_hash_scope: legacy_alias_for_line_text_hash
+        line_text_hash_scope: trimmed_non_empty_lines_joined_with_lf
+  - chunk_id: context:hetuvidya:trairupya
+    chunk_type: context_topic
+    source_file: context/因明推理引擎.md
+    start_line: 19
+    end_line: 32
+    citation: "context/因明推理引擎.md:19-32"
+    passage_citation: "context/因明推理引擎.md:19-32"
+    text: "因三相 —— 推理正确性验证器"
+    metadata:
+      topics:
+        - 因三相
+        - 正因
+      reasoning_roles:
+        - hetuvidya
+
+  - chunk_id: reasoning:ZR-01:hetuvidya
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 5
+    end_line: 33
+    citation: "tests/reasoning_cases.yaml:5-33"
+    passage_citation: "tests/reasoning_cases.yaml:5-33"
+    text: "声，应是无常，以所作性故"
+    metadata:
+      topics:
+        - 因三相
+        - 声无常
+      reasoning_roles:
+        - hetuvidya
+
+  - chunk_id: reasoning:ZR-03:hetuvidya-error
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 81
+    end_line: 108
+    citation: "tests/reasoning_cases.yaml:81-108"
+    passage_citation: "tests/reasoning_cases.yaml:81-108"
+    text: "检验论式：声，应是可见，以是色形故。"
+    metadata:
+      topics:
+        - 因不成
+        - 因三相
+        - 声可见
+      reasoning_roles:
+        - hetuvidya
+
+  - chunk_id: reasoning:ZR-07:hetuvidya-non-pervasive
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 247
+    end_line: 247
+    citation: "tests/reasoning_cases.yaml:247"
+    passage_citation: "tests/reasoning_cases.yaml:247"
+    text: "检验论式：声，应是无常，以是所知故。"
+    metadata:
+      topics:
+        - 不周遍
+        - 因三相
+        - 声无常
+      reasoning_roles:
+        - hetuvidya
+
+  - chunk_id: reasoning:ZR-08:hetuvidya-indeterminate
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 276
+    end_line: 276
+    citation: "tests/reasoning_cases.yaml:276"
+    passage_citation: "tests/reasoning_cases.yaml:276"
+    text: "检验论式：声，应是常，以是所知故。"
+    metadata:
+      topics:
+        - 不定因
+        - 因三相
+        - 声常
+      reasoning_roles:
+        - hetuvidya
+
+  - chunk_id: context:collected-topics:prasanga-runtime
+    chunk_type: context_topic
+    source_file: context/摄类学工具箱.md
+    start_line: 300
+    end_line: 352
+    citation: "context/摄类学工具箱.md:300-352"
+    passage_citation: "context/摄类学工具箱.md:300-352"
+    text: "应成论式 = ⟨ 有法, 应成法, 因 ⟩"
+    metadata:
+      topics:
+        - 应成论式
+        - 周遍校验
+        - 不周遍
+      reasoning_roles:
+        - collected_topics
+
+  - chunk_id: context:collected-topics:total-part
+    chunk_type: context_topic
+    source_file: context/摄类学工具箱.md
+    start_line: 84
+    end_line: 130
+    citation: "context/摄类学工具箱.md:84-130"
+    passage_citation: "context/摄类学工具箱.md:84-130"
+    text: "总与别 —— 继承/子类关系"
+    metadata:
+      topics:
+        - 总与别
+        - 别法
+        - 总法
+      reasoning_roles:
+        - collected_topics
+
+  - chunk_id: context:collected-topics:definition-scope
+    chunk_type: context_topic
+    source_file: context/摄类学工具箱.md
+    start_line: 27
+    end_line: 71
+    citation: "context/摄类学工具箱.md:27-71"
+    passage_citation: "context/摄类学工具箱.md:27-71"
+    text: "性相与所表 —— 类型定义系统"
+    metadata:
+      topics:
+        - 性相
+        - 所表
+        - 性相过宽
+      reasoning_roles:
+        - collected_topics
+
+  - chunk_id: context:madhyamaka:prasanga-method
+    chunk_type: context_topic
+    source_file: context/中观应成精要.md
+    start_line: 83
+    end_line: 126
+    citation: "context/中观应成精要.md:83-126"
+    passage_citation: "context/中观应成精要.md:83-126"
+    text: "只归谬：有自性 → 非缘起 → 与事实矛盾 → 故有自性不成立。"
+    metadata:
+      topics:
+        - 应成派
+        - 归谬
+        - 无自性
+      reasoning_roles:
+        - madhyamaka_prasanga
+
+  - chunk_id: reasoning:ZR-04:madhyamaka-prasanga
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 109
+    end_line: 136
+    citation: "tests/reasoning_cases.yaml:109-136"
+    passage_citation: "tests/reasoning_cases.yaml:109-136"
+    text: "若有人承许诸法自性有，如何用应成法指出矛盾？"
+    metadata:
+      topics:
+        - 应成法
+        - 归谬
+        - 诸法自性有
+      reasoning_roles:
+        - madhyamaka_prasanga
+
+  - chunk_id: reasoning:ZR-09:madhyamaka-nihilism-boundary
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 300
+    end_line: 326
+    citation: "tests/reasoning_cases.yaml:300-326"
+    passage_citation: "tests/reasoning_cases.yaml:300-326"
+    text: "既然诸法无自性，是否可以推出因果也不存在？"
+    metadata:
+      topics:
+        - 中观
+        - 断灭误读
+        - 缘起因果
+      reasoning_roles:
+        - madhyamaka_prasanga
+
+  - chunk_id: reasoning:ZR-05:agama-evidence
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 138
+    end_line: 166
+    citation: "tests/reasoning_cases.yaml:138-166"
+    passage_citation: "tests/reasoning_cases.yaml:138-166"
+    text: "查四阿含中关于无我的经文，并说明检索范围与待校勘边界。"
+    metadata:
+      topics:
+        - 阿含证据
+        - CBETA
+        - 待校勘
+      reasoning_roles:
+        - agama_evidence
+
+  - chunk_id: argument:work-feedback:non-pervasive
+    chunk_type: argument_unit
+    source_file: tests/reasoning_cases.yaml
+    start_line: 35
+    end_line: 63
+    citation: "tests/reasoning_cases.yaml:35-63"
+    passage_citation: "tests/reasoning_cases.yaml:35-63"
+    text: "被批评者"
+    metadata:
+      topics:
+        - 不周遍
+        - 工作反馈
+      reasoning_case_id: ZR-02
+      reasoning_roles:
+        - collected_topics
+        - cognitive_analysis
+
+  - chunk_id: reasoning:ZR-12:collected-topics-definition-scope
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 401
+    end_line: 427
+    citation: "tests/reasoning_cases.yaml:401-427"
+    passage_citation: "tests/reasoning_cases.yaml:401-427"
+    text: "用摄类学检查定义：瓶的性相是能盛水者。这个定义成立吗？"
+    metadata:
+      topics:
+        - 性相
+        - 所表
+        - 性相过宽
+      reasoning_case_id: ZR-12
+      reasoning_roles:
+        - collected_topics
+
+  - chunk_id: context:cognitive-analysis:five-universal-chain
+    chunk_type: context_topic
+    source_file: context/心类学认知分析.md
+    start_line: 95
+    end_line: 109
+    citation: "context/心类学认知分析.md:95-109"
+    passage_citation: "context/心类学认知分析.md:95-109"
+    text: |-
+      | **触** | 根·境·识三者和合 | `connect()` — 建立感知连接 |
+      | **作意** | 令心朝向所缘 | `focus()` — 注意力分配 |
+      | **受** | 领纳苦·乐·舍 | `eval()` — 情感标记 |
+      | **想** | 取相安立名言 | `classify()` — 特征提取+命名 |
+      | **思** | 令心造作、发动业 | `exec()` — 意志执行 |
+    metadata:
+      topics:
+        - 五遍行
+        - 触
+        - 作意
+        - 受
+        - 想
+        - 思
+      reasoning_roles:
+        - cognitive_analysis
+
+  - chunk_id: context:cognitive-analysis:cognitive-quality
+    chunk_type: context_topic
+    source_file: context/心类学认知分析.md
+    start_line: 172
+    end_line: 228
+    citation: "context/心类学认知分析.md:172-228"
+    passage_citation: "context/心类学认知分析.md:172-228"
+    text: |-
+      "被批评 = 工作无价值"
+        → 这是什么类型的认知？
+        → 不是现量（不是直接感知到的客观事实）
+        → 不是正比量（没有正因：被批评 ⊆ 工作无价值？→ 不周遍）
+        → 是颠倒知（将"一个人的单次评价"等同于"客观价值"——遍计所执性）
+    metadata:
+      topics:
+        - 量与非量
+        - 颠倒知
+        - 犹豫识
+        - 比量
+      reasoning_roles:
+        - cognitive_analysis
+
+  - chunk_id: context:vipassana:work-feedback-debug
+    chunk_type: context_topic
+    source_file: context/南传观禅指南.md
+    start_line: 246
+    end_line: 266
+    citation: "context/南传观禅指南.md:246-266"
+    passage_citation: "context/南传观禅指南.md:246-266"
+    text: |-
+      ① 名色分别（第一智）：
+         "对方的批评或修正意见" = 声波（色法）
+         "我的紧张" = 身体感受（色法）
+         "知道被批评了" = 意识（名法）
+         "觉得被否定了" = 想心所的归类动作（名法）
+         → 这些都是名色法，没有"我"在其中。
+
+      ② 缘摄受（第二智）：
+         声波（缘）→ 耳识（识）→ 苦受（受）→ 归类为"否定"（想）→ 瞋生起（心所）
+         → 没有"我"在推动这条链，是自动运行的。
+
+      ③ 三相印证（第三智）：
+         "这种难受的感觉，会永远持续吗？" → 不，它正在变化。
+         "我能控制它不出现吗？" → 不——控制本身就是妄想。
+         → 它是无常的、被生灭逼迫的（苦）、不可控的（无我）。
+    metadata:
+      topics:
+        - 观禅 Debug
+        - 名色分别
+        - 缘摄受
+        - 三相印证
+      reasoning_roles:
+        - cognitive_analysis
+
+  - chunk_id: reasoning:ZR-10:cognitive-practice-boundary
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 328
+    end_line: 362
+    citation: "tests/reasoning_cases.yaml:328-362"
+    passage_citation: "tests/reasoning_cases.yaml:328-362"
+    text: "收到批评后，我如何区分事实、受、想心所和后续反应？"
+    metadata:
+      topics:
+        - 心类学
+        - 观禅边界
+        - 工作反馈
+      reasoning_roles:
+        - cognitive_analysis
+
+  - chunk_id: context:cognitive-analysis:caregiving-pressure
+    chunk_type: context_topic
+    source_file: context/心类学认知分析.md
+    start_line: 297
+    end_line: 318
+    citation: "context/心类学认知分析.md:297-318"
+    passage_citation: "context/心类学认知分析.md:297-318"
+    text: |-
+      触发序列：
+        触（听到声音或遇到照护压力） → 作意 → 受（苦受）
+        → 想（"对方在故意为难我"） → 思 → 瞋/忿/恼
+
+      心所链：
+        触 → 受(苦) → 想(错误归因："故意") → 思 → 瞋 → 忿 → 恼
+    metadata:
+      topics:
+        - 家庭照护
+        - 错误归因
+        - 瞋
+        - 忿
+        - 恼
+      reasoning_roles:
+        - cognitive_analysis
+
+  - chunk_id: context:vipassana:caregiving-pressure-debug
+    chunk_type: context_topic
+    source_file: context/南传观禅指南.md
+    start_line: 272
+    end_line: 296
+    citation: "context/南传观禅指南.md:272-296"
+    passage_citation: "context/南传观禅指南.md:272-296"
+    text: |-
+      ① 名色分别（第一智）：
+         外界声音或照护压力 = 声波/触境等色法
+         身体紧绷、心跳加速 = 色法
+         愤怒 = 瞋心所（名法）
+         "对方在故意为难我" = 想心所的错误归因（名法）
+         → 关键在于：区分"事实"（名色法的生灭）与"叙事"（想心所的二次加工）
+    metadata:
+      topics:
+        - 家庭照护
+        - 名色分别
+        - 缘摄受
+        - 三相印证
+      reasoning_roles:
+        - cognitive_analysis
+
+  - chunk_id: reasoning:ZR-11:cognitive-caregiving-boundary
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 363
+    end_line: 399
+    citation: "tests/reasoning_cases.yaml:363-399"
+    passage_citation: "tests/reasoning_cases.yaml:363-399"
+    text: "家庭照护压力下，我觉得对方在故意为难我，如何用心类学和观禅拆解？"
+    metadata:
+      topics:
+        - 心类学
+        - 家庭照护
+        - 瞋心所
+        - 观禅边界
+      reasoning_roles:
+        - cognitive_analysis
+
+queries:
+  - id: SRQ-01
+    query: "用应成论式分析诸法无我"
+    needs:
+      - agama_evidence
+      - collected_topics
+      - hetuvidya
+      - madhyamaka_prasanga
+      - practice_boundary
+    non_chunk_needs:
+      - practice_boundary
+    answer_boundary_contracts:
+      practice_boundary:
+        description: "Answer must mark practice guidance and realization claims as bounded."
+        required_terms:
+          - 边界
+          - 不等于修证
+        forbidden_terms:
+          - 保证证悟
+          - 已证空性
+    answer_boundary_samples:
+      - id: srq01-practice-boundary-pass
+        file: tests/fixtures/answers/srq01-practice-boundary-pass.md
+        expected_status: pass
+      - id: srq01-practice-boundary-fail
+        file: tests/fixtures/answers/srq01-practice-boundary-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 無我
+        - 非我
+        - 五陰
+      modern:
+        - 无我
+        - 应成论式
+    expected_sources:
+      - context/agama/
+      - context/摄类学工具箱.md
+      - context/因明推理引擎.md
+      - context/中观应成精要.md
+    expected_chunk_ids:
+      - agama:T02n0099:juan-1:line-147
+      - agama:T01n0001:juan-1:line-881
+      - agama:T01n0001:juan-3:line-1829
+      - context:hetuvidya:trairupya
+      - reasoning:ZR-01:hetuvidya
+      - context:collected-topics:prasanga-runtime
+      - context:madhyamaka:prasanga-method
+
+  - id: SRQ-02
+    query: "检验论式：声，应是可见，以是色形故。"
+    needs:
+      - hetuvidya
+    answer_contracts:
+      hetuvidya_error_detection:
+        description: "Answer must identify the unestablished reason and failed first trairupya check."
+        required_terms:
+          - 因不成
+          - 遍是宗法性
+          - 色形
+          - 声
+          - 不成立
+        required_slots:
+          - label: argument_decomposition
+            terms:
+              - 论式
+              - 有法
+              - 所立法
+          - label: trairupya_check
+            terms:
+              - 第一相
+              - 三相检查
+              - 遍是宗法性
+          - label: error_classification
+            terms:
+              - 因不成
+              - 错误类型
+              - 不成立
+        forbidden_terms:
+          - 因三相完全满足
+          - 正因成立
+    answer_contract_samples:
+      - id: srq02-hetuvidya-error-pass
+        file: tests/fixtures/answers/srq02-hetuvidya-error-pass.md
+        expected_status: pass
+      - id: srq02-hetuvidya-error-fail
+        file: tests/fixtures/answers/srq02-hetuvidya-error-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 因不成
+        - 遍是宗法性
+        - 因三相
+      modern:
+        - 声可见
+        - 色形
+    expected_sources:
+      - context/因明推理引擎.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:hetuvidya:trairupya
+      - reasoning:ZR-03:hetuvidya-error
+
+  - id: SRQ-05
+    query: "检验论式：声，应是无常，以是所知故。"
+    needs:
+      - hetuvidya
+    answer_contracts:
+      hetuvidya_non_pervasive_detection:
+        description: "Answer must identify that the reason is established on the subject but not pervaded by the predicate."
+        required_terms:
+          - 不周遍
+          - 遍是宗法性
+          - 异品遍无性
+          - 所知
+          - 常法
+          - 不成立
+        required_slots:
+          - label: argument_decomposition
+            terms:
+              - 论式
+              - 有法
+              - 所立法
+          - label: subject_check
+            terms:
+              - 第一相
+              - 遍是宗法性
+          - label: pervasion_failure
+            terms:
+              - 不周遍
+              - 异品遍无性
+              - 第三相
+          - label: counterexample
+            terms:
+              - 常法
+              - 异品
+        forbidden_terms:
+          - 因三相完全满足
+          - 正因成立
+          - 第一相不成立
+    answer_contract_samples:
+      - id: srq05-hetuvidya-non-pervasive-pass
+        file: tests/fixtures/answers/srq05-hetuvidya-non-pervasive-pass.md
+        expected_status: pass
+      - id: srq05-hetuvidya-non-pervasive-fail
+        file: tests/fixtures/answers/srq05-hetuvidya-non-pervasive-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 不周遍
+        - 异品遍无性
+        - 因三相
+      modern:
+        - 声无常
+        - 所知
+    expected_sources:
+      - context/因明推理引擎.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:hetuvidya:trairupya
+      - reasoning:ZR-07:hetuvidya-non-pervasive
+
+  - id: SRQ-06
+    query: "检验论式：声，应是常，以是所知故。"
+    needs:
+      - hetuvidya
+    answer_contracts:
+      hetuvidya_indeterminate_detection:
+        description: "Answer must identify that the reason occurs in both same-side and opposite-side cases, making it indeterminate."
+        required_terms:
+          - 不定因
+          - 遍是宗法性
+          - 同品定有性
+          - 异品遍无性
+          - 所知
+          - 常法
+          - 无常法
+          - 不能决定
+        required_slots:
+          - label: argument_decomposition
+            terms:
+              - 论式
+              - 有法
+              - 所立法
+          - label: subject_check
+            terms:
+              - 第一相
+              - 遍是宗法性
+          - label: both_sides_presence
+            terms:
+              - 同品
+              - 异品
+              - 所知
+          - label: error_classification
+            terms:
+              - 不定因
+              - 不能决定
+        forbidden_terms:
+          - 因三相完全满足
+          - 正因成立
+          - 相违因
+    answer_contract_samples:
+      - id: srq06-hetuvidya-indeterminate-pass
+        file: tests/fixtures/answers/srq06-hetuvidya-indeterminate-pass.md
+        expected_status: pass
+      - id: srq06-hetuvidya-indeterminate-fail
+        file: tests/fixtures/answers/srq06-hetuvidya-indeterminate-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 不定因
+        - 同品定有性
+        - 异品遍无性
+      modern:
+        - 声常
+        - 所知
+    expected_sources:
+      - context/因明推理引擎.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:hetuvidya:trairupya
+      - reasoning:ZR-08:hetuvidya-indeterminate
+
+  - id: SRQ-07
+    query: "用摄类学检验命题：这份报告有三处问题，所以我这个人没有价值。"
+    needs:
+      - collected_topics
+    answer_contracts:
+      collected_topics_total_part_error:
+        description: "Answer must identify the total/part confusion and failed pervasion from local report issues to whole-person value denial."
+        required_terms:
+          - 摄类学
+          - 总与别
+          - 别法
+          - 总法
+          - 局部别法
+          - 整体总法
+          - 总别混淆
+          - 不周遍
+          - 报告
+          - 我这个人
+          - 不成立
+        required_slots:
+          - label: proposition_decomposition
+            terms:
+              - 命题
+              - 因
+              - 所立法
+          - label: total_part_distinction
+            terms:
+              - 总别
+              - 别法
+              - 总法
+              - 局部别法
+              - 整体总法
+          - label: pervasion_check
+            terms:
+              - 周遍
+              - 不周遍
+          - label: error_classification
+            terms:
+              - 错误类型
+              - 不成立
+        forbidden_terms:
+          - 所以我没有价值
+          - 可以直接推出
+          - 不需区分总别
+    answer_contract_samples:
+      - id: srq07-collected-topics-total-part-pass
+        file: tests/fixtures/answers/srq07-collected-topics-total-part-pass.md
+        expected_status: pass
+      - id: srq07-collected-topics-total-part-fail
+        file: tests/fixtures/answers/srq07-collected-topics-total-part-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 总与别
+        - 不周遍
+        - 周遍
+      modern:
+        - 报告
+        - 我这个人
+    expected_sources:
+      - context/摄类学工具箱.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:collected-topics:total-part
+      - argument:work-feedback:non-pervasive
+
+  - id: SRQ-11
+    query: "用摄类学检查定义：瓶的性相是能盛水者。这个定义成立吗？"
+    needs:
+      - collected_topics
+    answer_contracts:
+      collected_topics_definition_scope_error:
+        description: "Answer must identify a too-broad defining mark and preserve the defining-mark / definiendum boundary."
+        required_terms:
+          - 摄类学
+          - 性相
+          - 所表
+          - 能盛水者
+          - 瓶
+          - 湖
+          - 性相过宽
+          - 唯在所表上成立
+          - 违②
+          - 不成立
+        required_slots:
+          - label: definition_decomposition
+            terms:
+              - 名相
+              - 性相
+              - 所表
+          - label: scope_check
+            terms:
+              - 性相过宽
+              - 能盛水者
+              - 湖
+          - label: definiendum_boundary
+            terms:
+              - 唯在所表上成立
+              - 违②
+          - label: error_classification
+            terms:
+              - 错误类型
+              - 不成立
+        forbidden_terms:
+          - 能盛水者就是瓶
+          - 性相成立
+          - 不需要反例
+          - 湖也是瓶
+    answer_contract_samples:
+      - id: srq11-collected-topics-definition-scope-pass
+        file: tests/fixtures/answers/srq11-collected-topics-definition-scope-pass.md
+        expected_status: pass
+      - id: srq11-collected-topics-definition-scope-fail
+        file: tests/fixtures/answers/srq11-collected-topics-definition-scope-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 性相
+        - 所表
+        - 性相过宽
+      modern:
+        - 能盛水者
+        - 瓶
+        - 湖
+    expected_sources:
+      - context/摄类学工具箱.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:collected-topics:definition-scope
+      - reasoning:ZR-12:collected-topics-definition-scope
+
+  - id: SRQ-09
+    query: "收到批评后，我如何区分事实、受、想心所和后续反应？"
+    needs:
+      - cognitive_analysis
+      - practice_boundary
+    non_chunk_needs:
+      - practice_boundary
+    answer_contracts:
+      cognitive_practice_boundary:
+        description: "Answer must map work-feedback distress through Buddhist cognitive-analysis while preserving practice and clinical boundaries."
+        required_terms:
+          - 心类学
+          - 触
+          - 作意
+          - 受
+          - 想
+          - 思
+          - 颠倒知
+          - 念
+          - 慧
+          - 无瞋
+          - 行舍
+          - 名色分别
+          - 缘摄受
+          - 三相印证
+          - 边界
+          - 非心理治疗
+          - 善知识指导
+        required_slots:
+          - label: cognitive_chain
+            terms:
+              - 触
+              - 作意
+              - 受
+              - 想
+              - 思
+          - label: cognitive_quality
+            terms:
+              - 颠倒知
+              - 犹豫识
+              - 比量
+          - label: corrective_factors
+            terms:
+              - 念
+              - 慧
+              - 无瞋
+              - 行舍
+          - label: vipassana_mapping
+            terms:
+              - 名色分别
+              - 缘摄受
+              - 三相印证
+          - label: practice_boundary
+            terms:
+              - 边界
+              - 非心理治疗
+              - 善知识指导
+        forbidden_terms:
+          - 保证疗愈
+          - 等同心理治疗
+          - 已证观智
+          - 无需善知识
+          - 临床建议
+    answer_contract_samples:
+      - id: srq09-cognitive-practice-boundary-pass
+        file: tests/fixtures/answers/srq09-cognitive-practice-boundary-pass.md
+        expected_status: pass
+      - id: srq09-cognitive-practice-boundary-fail
+        file: tests/fixtures/answers/srq09-cognitive-practice-boundary-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 触
+        - 作意
+        - 受
+        - 想
+        - 思
+      modern:
+        - 批评
+        - 事实
+        - 后续反应
+    expected_sources:
+      - context/心类学认知分析.md
+      - context/南传观禅指南.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:cognitive-analysis:five-universal-chain
+      - context:cognitive-analysis:cognitive-quality
+      - context:vipassana:work-feedback-debug
+      - reasoning:ZR-10:cognitive-practice-boundary
+
+  - id: SRQ-10
+    query: "家庭照护压力下，我觉得对方在故意为难我，如何用心类学和观禅拆解？"
+    needs:
+      - cognitive_analysis
+      - practice_boundary
+    non_chunk_needs:
+      - practice_boundary
+    answer_contracts:
+      cognitive_caregiving_boundary:
+        description: "Answer must map caregiving-pressure anger through Buddhist cognitive-analysis while preserving practice and support boundaries."
+        required_terms:
+          - 心类学
+          - 家庭照护
+          - 触
+          - 作意
+          - 受
+          - 想
+          - 思
+          - 错误归因
+          - 故意为难
+          - 动机推断
+          - 瞋
+          - 忿
+          - 恼
+          - 念
+          - 慧
+          - 无瞋
+          - 不害
+          - 名色分别
+          - 缘摄受
+          - 三相印证
+          - 边界
+          - 非心理治疗
+          - 善知识指导
+        required_slots:
+          - label: cognitive_chain
+            terms:
+              - 触
+              - 作意
+              - 受
+              - 想
+              - 思
+          - label: attribution_error
+            terms:
+              - 错误归因
+              - 故意为难
+              - 动机推断
+          - label: affliction_chain
+            terms:
+              - 瞋
+              - 忿
+              - 恼
+          - label: corrective_factors
+            terms:
+              - 念
+              - 慧
+              - 无瞋
+              - 不害
+          - label: vipassana_mapping
+            terms:
+              - 名色分别
+              - 缘摄受
+              - 三相印证
+          - label: practice_boundary
+            terms:
+              - 边界
+              - 非心理治疗
+              - 善知识指导
+        forbidden_terms:
+          - 对方一定故意
+          - 直接压下愤怒
+          - 保证疗愈
+          - 等同心理治疗
+          - 已证观智
+          - 无需善知识
+          - 临床建议
+    answer_contract_samples:
+      - id: srq10-cognitive-caregiving-boundary-pass
+        file: tests/fixtures/answers/srq10-cognitive-caregiving-boundary-pass.md
+        expected_status: pass
+      - id: srq10-cognitive-caregiving-boundary-fail
+        file: tests/fixtures/answers/srq10-cognitive-caregiving-boundary-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 瞋
+        - 忿
+        - 恼
+        - 无瞋
+        - 不害
+      modern:
+        - 家庭照护
+        - 故意为难
+        - 失控感
+    expected_sources:
+      - context/心类学认知分析.md
+      - context/南传观禅指南.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:cognitive-analysis:five-universal-chain
+      - context:cognitive-analysis:caregiving-pressure
+      - context:vipassana:caregiving-pressure-debug
+      - reasoning:ZR-11:cognitive-caregiving-boundary
+
+  - id: SRQ-03
+    query: "若有人承许诸法自性有，如何用应成法指出矛盾？"
+    needs:
+      - madhyamaka_prasanga
+    answer_contracts:
+      madhyamaka_prasanga_boundary:
+        description: "Answer must run a prasaṅga from the opponent premise while preserving the no-independent-thesis boundary."
+        required_terms:
+          - 对方承许
+          - 归谬
+          - 自性有
+          - 缘起
+          - 矛盾
+          - 不立自宗
+        required_slots:
+          - label: opponent_premise
+            terms:
+              - 对方承许
+              - 承许
+          - label: prasanga_move
+            terms:
+              - 归谬
+              - 推出
+          - label: contradiction
+            terms:
+              - 矛盾
+              - 相违
+          - label: thesis_boundary
+            terms:
+              - 不立自宗
+              - 边界
+        forbidden_terms:
+          - 我方建立自宗
+          - 证明诸法绝对不存在
+          - 断灭的结论
+    answer_contract_samples:
+      - id: srq03-madhyamaka-prasanga-pass
+        file: tests/fixtures/answers/srq03-madhyamaka-prasanga-pass.md
+        expected_status: pass
+      - id: srq03-madhyamaka-prasanga-fail
+        file: tests/fixtures/answers/srq03-madhyamaka-prasanga-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 应成法
+        - 自性有
+        - 归谬
+      modern:
+        - 矛盾
+        - 不立自宗
+    expected_sources:
+      - context/中观应成精要.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:madhyamaka:prasanga-method
+      - reasoning:ZR-04:madhyamaka-prasanga
+
+  - id: SRQ-08
+    query: "既然诸法无自性，是否可以推出因果也不存在？"
+    needs:
+      - madhyamaka_prasanga
+    answer_contracts:
+      madhyamaka_nihilism_boundary:
+        description: "Answer must reject the nihilistic reading that emptiness cancels dependent arising or causality."
+        required_terms:
+          - 中观
+          - 无自性
+          - 只破自性有
+          - 缘起
+          - 因果
+          - 断灭
+          - 二谛
+          - 不成立
+        required_slots:
+          - label: proposition_decomposition
+            terms:
+              - 命题
+              - 前提
+              - 结论
+          - label: emptiness_boundary
+            terms:
+              - 无自性
+              - 只破自性有
+          - label: dependent_arising_check
+            terms:
+              - 缘起
+              - 因果
+          - label: nihilism_error
+            terms:
+              - 断灭
+              - 不成立
+          - label: two_truths_boundary
+            terms:
+              - 二谛
+              - 世俗
+        forbidden_terms:
+          - 空性等于什么都没有
+          - 因果已经被取消
+          - 可以直接推出断灭
+          - 无需二谛
+    answer_contract_samples:
+      - id: srq08-madhyamaka-nihilism-boundary-pass
+        file: tests/fixtures/answers/srq08-madhyamaka-nihilism-boundary-pass.md
+        expected_status: pass
+      - id: srq08-madhyamaka-nihilism-boundary-fail
+        file: tests/fixtures/answers/srq08-madhyamaka-nihilism-boundary-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 中观
+        - 无自性
+        - 缘起
+      modern:
+        - 因果
+        - 断灭
+    expected_sources:
+      - context/中观应成精要.md
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - context:madhyamaka:prasanga-method
+      - reasoning:ZR-09:madhyamaka-nihilism-boundary
+
+  - id: SRQ-04
+    query: "查四阿含中关于无我的经文，并说明检索范围与待校勘边界。"
+    needs:
+      - agama_evidence
+    answer_contracts:
+      agama_citation_boundary:
+        description: "Answer must cite Agama evidence with CBETA/local anchors and mark search/collation boundaries."
+        required_terms:
+          - CBETA
+          - T02n0099
+          - context/agama/
+          - 检索范围
+          - 代表性
+          - 待校勘
+        required_slots:
+          - label: search_scope
+            terms:
+              - 检索范围
+              - 本次只基于
+          - label: citation_anchor
+            terms:
+              - CBETA
+              - T02n0099
+              - context/agama/
+          - label: evidence_status
+            terms:
+              - 代表性
+              - 初步证据
+          - label: collation_boundary
+            terms:
+              - 待校勘
+              - 出版级
+        forbidden_terms:
+          - 已穷尽
+          - 无需校勘
+          - 可作为定本
+          - 校勘完成
+          - 校勘确认
+    answer_contract_samples:
+      - id: srq04-agama-citation-boundary-pass
+        file: tests/fixtures/answers/srq04-agama-citation-boundary-pass.md
+        expected_status: pass
+      - id: srq04-agama-citation-boundary-fail
+        file: tests/fixtures/answers/srq04-agama-citation-boundary-fail.md
+        expected_status: fail
+    keywords:
+      classical:
+        - 無我
+        - 非我
+        - 五陰
+      modern:
+        - CBETA
+        - 待校勘
+    expected_sources:
+      - context/agama/
+      - tests/reasoning_cases.yaml
+    expected_chunk_ids:
+      - agama:T02n0099:juan-1:line-147
+      - agama:T01n0001:juan-1:line-881
+      - agama:T01n0001:juan-3:line-1829
+      - agama:T01n0001:juan-10:line-3997
+      - reasoning:ZR-05:agama-evidence

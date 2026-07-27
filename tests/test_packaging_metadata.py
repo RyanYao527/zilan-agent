@@ -22,10 +22,11 @@ def test_zilanlib_package_metadata_is_declared() -> None:
         'Issues = "https://github.com/RyanYao527/zilan-agent/issues"',
         'Changelog = "https://github.com/RyanYao527/zilan-agent/blob/main/CHANGELOG.md"',
         '[tool.setuptools.packages.find]',
-        'where = ["scripts"]',
-        'include = ["zilanlib*"]',
+        'where = [".", "scripts"]',
+        'include = ["zilan_contract*", "zilanlib*"]',
         '[tool.setuptools.package-data]',
         'zilanlib = ["py.typed"]',
+        'zilan_contract = ["fixtures/*.yaml", "fixtures/**/*.yaml"]',
     ]
     for snippet in expected_snippets:
         assert snippet in pyproject

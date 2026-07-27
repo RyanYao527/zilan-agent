@@ -1,0 +1,222 @@
+"""
+zilan-contract: Deterministic output-contract validators for LLM responses.
+
+A lightweight Python library that checks LLM outputs against structured
+contracts — required terms, forbidden phrases, and boundary statements —
+without calling any model or API.
+
+Quick start::
+
+    from zilan_contract import ContractRunner
+
+    runner = ContractRunner()
+    result = runner.check(
+        query_id="SRQ-04",
+        sample_id="srq04-agama-citation-boundary-pass",
+    )
+    print(result.overall_status)  # 'pass'
+
+See docs/zilan-contract-quickstart.md for the full guide.
+"""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+# Ensure the bundled zilanlib is importable in both dev and installed modes.
+_scripts_dir = Path(__file__).resolve().parents[1] / "scripts"
+if _scripts_dir.is_dir() and str(_scripts_dir) not in sys.path:
+    sys.path.insert(0, str(_scripts_dir))
+
+__version__ = "2.5.5"
+__all__ = [
+    "ContractRunner",
+    "HetuvidyaValidator",
+    "get_fixture_path",
+    "get_cases_path",
+    "__version__",
+]
+
+_FIXTURE_DIR = Path(__file__).resolve().parent / "fixtures"
+_CASES_FILE = _FIXTURE_DIR / "reasoning_cases.yaml"
+_SEMANTIC_FIXTURE = _FIXTURE_DIR / "semantic_chunks.yaml"
+
+# Fallback to project layout during development
+_PROJECT_ROOT = Path(__file__).resolve().parents[1]
+_DEV_FIXTURES = _PROJECT_ROOT / "tests" / "fixtures"
+_DEV_CASES = _PROJECT_ROOT / "tests" / "reasoning_cases.yaml"
+
+
+def get_fixture_path(name: str = "semantic_chunks.yaml") -> Path:
+    """Return the path to a bundled fixture file.
+
+    Resolves fixtures whether installed as a pip package or running
+    from the zilan-agent repository root in development mode.
+    """
+    if name == "semantic_chunks.yaml":
+        if _SEMANTIC_FIXTURE.exists():
+            return _SEMANTIC_FIXTURE
+        dev_path = _DEV_FIXTURES / "retrieval_chunks" / "semantic_chunks.yaml"
+        if dev_path.exists():
+            return dev_path
+        raise FileNotFoundError(
+            f"Fixture '{name}' not found. "
+            f"Tried: {_SEMANTIC_FIXTURE}, {dev_path}"
+        )
+
+    dev_path = _DEV_FIXTURES / name
+    if dev_path.exists():
+        return dev_path
+
+    bundled = _FIXTURE_DIR / name
+    if bundled.exists():
+        return bundled
+
+    raise FileNotFoundError(
+        f"Fixture '{name}' not found. Tried: {bundled}, {dev_path}"
+    )
+
+
+def get_cases_path() -> Path:
+    """Return the path to reasoning_cases.yaml."""
+    if _CASES_FILE.exists():
+        return _CASES_FILE
+    if _DEV_CASES.exists():
+        return _DEV_CASES
+    raise FileNotFoundError(
+        f"Reasoning cases not found. Tried: {_CASES_FILE}, {_DEV_CASES}"
+    )
+
+
+class ContractRunner:
+    """Run output-contract checks against an LLM response.
+
+    This is the main entry point. It wraps the reasoning contract runner
+    with automatic fixture resolution.
+
+    Usage::
+
+        runner = ContractRunner()
+        result = runner.check(
+            query_id="SRQ-04",
+            sample_id="srq04-agama-citation-boundary-pass",
+        )
+
+    Parameters
+    ----------
+    fixture_path:
+        Override the default semantic fixture path.
+    cases_path:
+        Override the default reasoning cases path.
+    """
+
+    def __init__(
+        self,
+        fixture_path: Path | None = None,
+        cases_path: Path | None = None,
+    ):
+        self._fixture_path = fixture_path or get_fixture_path()
+        self._cases_path = cases_path or get_cases_path()
+
+    def check(
+        self,
+        *,
+        query_id: str | None = None,
+        query: str | None = None,
+        limit: int | None = None,
+        answer_text: str | None = None,
+        answer_file: Path | None = None,
+        sample_id: str | None = None,
+    ) -> ContractResult:
+        """Run contract checks and return a structured result.
+
+        Provide exactly one of *answer_text*, *answer_file*, or *sample_id*.
+        """
+        from zilanlib.reasoning.contract_runner import (
+            build_reasoning_contract_run,
+        )
+
+        raw = build_reasoning_contract_run(
+            fixture_path=self._fixture_path,
+            cases_path=self._cases_path,
+            query_id=query_id,
+            query=query,
+            limit=limit,
+            answer_text=answer_text,
+            answer_file=answer_file,
+            sample_id=sample_id,
+        )
+        return ContractResult(raw)
+
+
+class ContractResult:
+    """Structured result from a contract check.
+
+    Attributes
+    ----------
+    overall_status:
+        'pass', 'fail', or 'review_needed'.
+    answer_review_status:
+        Result of the surface-level answer contract review.
+    validators:
+        Dict of domain validators (hetuvidya, collected_topics, etc.)
+        each containing status and details.
+    raw:
+        The full JSON-compatible dict from the underlying runner.
+    """
+
+    def __init__(self, raw: dict):
+        self.raw = raw
+        self.overall_status: str = raw.get("overall_status", "unknown")
+        self.answer_review_status: str = raw.get("answer_review_status", "unknown")
+        self.validators: dict = raw.get("validators", {})
+        self.query_id: str | None = raw.get("query_id")
+        self.query: str | None = raw.get("query")
+
+    def __repr__(self) -> str:
+        return (
+            f"ContractResult("
+            f"overall={self.overall_status!r}, "
+            f"review={self.answer_review_status!r})"
+        )
+
+    def passed(self) -> bool:
+        """True if the contract check passed."""
+        return self.overall_status == "pass"
+
+    def failed_validators(self) -> list[str]:
+        """Names of validators that did not pass."""
+        return [
+            name
+            for name, v in self.validators.items()
+            if v.get("status") not in ("pass", "not_applicable")
+        ]
+
+
+class HetuvidyaValidator:
+    """Standalone Hetuvidya (Buddhist logic) validator.
+
+    Checks whether a structured argument satisfies the three marks
+    (因三相) of Buddhist logic, deterministically, from YAML fixtures.
+
+    Usage::
+
+        v = HetuvidyaValidator()
+        result = v.validate(case_id="ZR-01")
+        print(result["status"])  # 'pass'
+    """
+
+    def __init__(self, cases_path: Path | None = None):
+        self._cases_path = cases_path or get_cases_path()
+
+    def validate(self, *, case_id: str | None = None) -> dict:
+        """Run Hetuvidya validation and return a structured result dict."""
+        from zilanlib.reasoning.hetuvidya_validator import (
+            build_hetuvidya_validation,
+        )
+
+        return build_hetuvidya_validation(
+            self._cases_path,
+            case_id=case_id,
+        )

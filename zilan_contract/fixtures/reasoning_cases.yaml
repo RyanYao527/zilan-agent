@@ -1,0 +1,427 @@
+version: 1
+source: docs/architecture/reasoning-contract.md
+purpose: Machine-readable seed cases for Zilan reasoning-contract validation.
+cases:
+  - id: ZR-01
+    title: 因三相正因样例
+    source_regression_cases:
+      - ZC-02
+    contracts:
+      - hetuvidya
+    prompt: "孜澜，什么是因三相？请用“声，应是无常，以所作性故”说明。"
+    reference_files:
+      - context/因明推理引擎.md
+      - context/摄类学工具箱.md
+    expected:
+      boundary_statement: false
+      structure:
+        - 有法
+        - 所立法
+        - 因
+        - 遍是宗法性
+        - 同品定有性
+        - 异品遍无性
+        - 结论
+      hetuvidya:
+        subject: 声
+        predicate: 无常
+        reason: 所作性
+        result: positive_reason
+        checks:
+          paksa_dharmata: pass
+          sapaksa_sattva: pass
+          vipaksa_asattva: pass
+
+  - id: ZR-02
+    title: 工作反馈不周遍样例
+    source_regression_cases:
+      - ZC-01
+      - ZC-03
+    contracts:
+      - collected_topics
+      - cognitive_analysis
+    prompt: "用摄类学和心类学解释“收到批评后我很受挫”的认知过程。"
+    reference_files:
+      - context/摄类学工具箱.md
+      - context/心类学认知分析.md
+      - context/南传观禅指南.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 事实层
+        - 解释层
+        - 周遍检查
+        - 心识链路
+        - 可行动项
+      collected_topics:
+        concepts:
+          - 被批评者
+          - 无价值者
+        relation_checks:
+          pervasion: fail
+          total_part_distinction: required
+        error_type: 不周遍
+      cognitive_analysis:
+        chain:
+          - 触
+          - 作意
+          - 受
+          - 想
+          - 思
+        afflictions:
+          - 瞋
+          - 慢
+          - 染污疑
+        corrective_factors:
+          - 念
+          - 慧
+          - 无瞋
+          - 行舍
+
+  - id: ZR-03
+    title: 因不成样例
+    source_regression_cases:
+      - ZC-02
+    contracts:
+      - hetuvidya
+    prompt: "检验论式：声，应是可见，以是色形故。"
+    reference_files:
+      - context/因明推理引擎.md
+      - context/摄类学工具箱.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 有法
+        - 所立法
+        - 因
+        - 第一相校验
+        - 错误类型
+      hetuvidya:
+        subject: 声
+        predicate: 可见
+        reason: 色形
+        result: reason_unestablished
+        checks:
+          paksa_dharmata: fail
+          sapaksa_sattva: not_applicable
+          vipaksa_asattva: not_applicable
+
+  - id: ZR-04
+    title: 中观应成归谬样例
+    source_regression_cases:
+      - ZC-05
+    contracts:
+      - madhyamaka_prasanga
+    prompt: "若有人承许诸法自性有，如何用应成法指出矛盾？"
+    reference_files:
+      - context/中观应成精要.md
+      - context/摄类学工具箱.md
+      - context/因明推理引擎.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 对方承许
+        - 所用前提
+        - 推出矛盾
+        - 不立自宗
+        - 边界
+      madhyamaka_prasanga:
+        opponent_premise: 诸法自性有
+        accepted_commitments:
+          - 自性有者应不依因缘而成立
+          - 诸有为法依因缘而生
+        contradiction:
+          - 自性有与缘起相违
+          - 若不依因缘则不能解释生灭与作用
+        no_independent_thesis: true
+
+  - id: ZR-05
+    title: 阿含证据边界样例
+    source_regression_cases:
+      - ZC-04
+      - ZC-06
+    contracts:
+      - agama_evidence
+    prompt: "查四阿含中关于无我的经文，并说明检索范围与待校勘边界。"
+    reference_files:
+      - agents/zilan-codex.md
+      - context/agama/agama-index.md
+      - context/agama/T0001-chang-agama.md
+      - context/agama/T0026-zhong-agama.md
+      - context/agama/T0099-za-agama.md
+      - context/agama/T0125-ekottarika-agama.md
+      - scripts/search_agama.py
+    expected:
+      boundary_statement: true
+      structure:
+        - 检索词
+        - 命中分布
+        - 代表经文
+        - CBETA编号
+        - 本地行号
+        - 待校勘事项
+      agama_evidence:
+        citation_required: true
+        search_scope: representative_search
+        collation_boundary: true
+
+  - id: ZR-06
+    title: 跨域无我分析样例
+    source_regression_cases:
+      - ZC-05
+    contracts:
+      - collected_topics
+      - hetuvidya
+      - madhyamaka_prasanga
+      - cognitive_analysis
+      - agama_evidence
+    prompt: "用应成论式分析诸法无我，并串联阿含、摄类学、因明和观禅。"
+    reference_files:
+      - agents/zilan-codex.md
+      - context/agama/agama-index.md
+      - context/摄类学工具箱.md
+      - context/因明推理引擎.md
+      - context/中观应成精要.md
+      - context/南传观禅指南.md
+      - context/心类学认知分析.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 阿含证据
+        - 应成论式
+        - 因明校验
+        - 摄类学关系
+        - 观禅应用
+        - 边界
+      collected_topics:
+        concepts:
+          - 五蕴
+          - 我
+          - 我所
+        relation_checks:
+          tetralemma: required
+          pervasion: required
+        error_type: 实体我执待破
+      hetuvidya:
+        subject: 五蕴中常一自在之我
+        predicate: 不可得
+        reason: 可得相具足而不可得
+        result: boundary_only
+        checks:
+          paksa_dharmata: boundary
+          sapaksa_sattva: boundary
+          vipaksa_asattva: boundary
+      madhyamaka_prasanga:
+        opponent_premise: 五蕴中有常一自在之我
+        accepted_commitments:
+          - 若我是常一自在者，应能主宰五蕴
+          - 五蕴表现为无常、苦、非自主
+        contradiction:
+          - 常一自在与五蕴无常不自主相违
+        no_independent_thesis: true
+      cognitive_analysis:
+        chain:
+          - 触
+          - 作意
+          - 受
+          - 想
+          - 思
+        afflictions:
+          - 无明
+          - 染污见
+        corrective_factors:
+          - 念
+          - 慧
+          - 无痴
+      agama_evidence:
+        citation_required: true
+        search_scope: representative_search
+        collation_boundary: true
+
+  - id: ZR-07
+    title: 不周遍样例
+    source_regression_cases:
+      - ZC-02
+    contracts:
+      - hetuvidya
+    prompt: "检验论式：声，应是无常，以是所知故。"
+    reference_files:
+      - context/因明推理引擎.md
+      - context/摄类学工具箱.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 有法
+        - 所立法
+        - 因
+        - 第一相校验
+        - 第三相校验
+        - 错误类型
+      hetuvidya:
+        subject: 声
+        predicate: 无常
+        reason: 所知
+        result: non_pervasive
+        checks:
+          paksa_dharmata: pass
+          sapaksa_sattva: pass
+          vipaksa_asattva: fail
+
+  - id: ZR-08
+    title: 不定因样例
+    source_regression_cases:
+      - ZC-02
+    contracts:
+      - hetuvidya
+    prompt: "检验论式：声，应是常，以是所知故。"
+    reference_files:
+      - context/因明推理引擎.md
+      - context/摄类学工具箱.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 有法
+        - 所立法
+        - 因
+        - 第一相校验
+        - 同品校验
+        - 异品校验
+        - 错误类型
+      hetuvidya:
+        subject: 声
+        predicate: 常
+        reason: 所知
+        result: inconclusive_or_contradictory
+        checks:
+          paksa_dharmata: pass
+          sapaksa_sattva: pass
+          vipaksa_asattva: fail
+
+  - id: ZR-09
+    title: 中观断灭误读样例
+    source_regression_cases:
+      - ZC-05
+    contracts:
+      - madhyamaka_prasanga
+    prompt: "既然诸法无自性，是否可以推出因果也不存在？"
+    reference_files:
+      - context/中观应成精要.md
+      - context/摄类学工具箱.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 命题拆解
+        - 无自性边界
+        - 缘起与因果
+        - 断灭误读
+        - 二谛边界
+      madhyamaka_prasanga:
+        opponent_premise: 无自性等于什么都没有
+        accepted_commitments:
+          - 若完全不存在，则不能解释缘起显现与因果作用
+          - 中观只破自性有，不破世俗缘起安立
+        contradiction:
+          - 承许缘起而否定因果作用自相矛盾
+          - 将空性理解为断灭会落入中观所破边
+        no_independent_thesis: true
+
+  - id: ZR-10
+    title: 心类学与观禅边界样例
+    source_regression_cases:
+      - ZC-01
+      - ZC-03
+    contracts:
+      - cognitive_analysis
+    prompt: "收到批评后，我如何区分事实、受、想心所和后续反应？"
+    reference_files:
+      - context/心类学认知分析.md
+      - context/南传观禅指南.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 事实层
+        - 五遍行链路
+        - 认知质量判定
+        - 对治心所
+        - 实修边界
+      cognitive_analysis:
+        chain:
+          - 触
+          - 作意
+          - 受
+          - 想
+          - 思
+        afflictions:
+          - 瞋
+          - 慢
+          - 染污疑
+        corrective_factors:
+          - 念
+          - 慧
+          - 无瞋
+          - 行舍
+  - id: ZR-11
+    title: 家庭照护压力下的瞋心归因样例
+    source_regression_cases:
+      - ZC-01
+      - ZC-03
+    contracts:
+      - cognitive_analysis
+    prompt: "家庭照护压力下，我觉得对方在故意为难我，如何用心类学和观禅拆解？"
+    reference_files:
+      - context/心类学认知分析.md
+      - context/南传观禅指南.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 触发事实
+        - 五遍行链路
+        - 错误归因
+        - 瞋心所链
+        - 对治心所
+        - 观禅映射
+        - 实修边界
+      cognitive_analysis:
+        chain:
+          - 触
+          - 作意
+          - 受
+          - 想
+          - 思
+        afflictions:
+          - 瞋
+          - 忿
+          - 恼
+        corrective_factors:
+          - 念
+          - 慧
+          - 无瞋
+          - 不害
+
+  - id: ZR-12
+    title: 性相过宽样例
+    source_regression_cases:
+      - ZC-03
+    contracts:
+      - collected_topics
+    prompt: "用摄类学检查定义：瓶的性相是能盛水者。这个定义成立吗？"
+    reference_files:
+      - context/摄类学工具箱.md
+    expected:
+      boundary_statement: true
+      structure:
+        - 名相
+        - 性相
+        - 所表
+        - 性相三要素
+        - 反例
+        - 错误类型
+      collected_topics:
+        concepts:
+          - 瓶
+          - 能盛水者
+          - 湖
+        relation_checks:
+          definition_scope: fail
+          definiendum_boundary: required
+        error_type: 性相过宽
