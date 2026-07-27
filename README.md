@@ -98,7 +98,7 @@ The output-contract + deterministic-validator pattern works for **any domain whe
 | `SKILL-en.md` | 完整 skill 定义(英文) · Full skill definition (English) |
 | `README.zh.md` | 完整文档 · Full documentation (Chinese) |
 | `README.en.md` | 完整文档 · Full documentation (English) |
-| `CONTRIBUTING.md` / `CONTRIBUTING-en.md` | 贡献指南 · How to contribute |
+| `CONTRIBUTING.md` / `CONTRIBUTING-en.md` | 贡献指南(含四级贡献者阶梯) · How to contribute (with 4-tier contributor ladder) |
 | `CHANGELOG.md` | 版本变更记录 · Release notes |
 | `ARCHITECTURE.md` | 架构入口与设计决策 · Architecture overview and design decisions |
 | `CODE_OF_CONDUCT.md` | 社区行为准则 · Community code of conduct |
@@ -115,11 +115,18 @@ The output-contract + deterministic-validator pattern works for **any domain whe
 | `docs/validation-evidence.md` | 运行证据归档规范 · Runtime evidence policy |
 | `docs/provider-routes.md` | Provider 路线归类 · Provider route triage |
 | `docs/openai-api-harness.md` | OpenAI API harness 说明 · OpenAI API harness guide |
-| `docs/archive/` | 历史归档材料，非当前运行或验证入口 · Historical archive, not current runtime or validation entrypoints |
+| `docs/article-output-contracts.md` | 输出契约技术文章 · Output Contracts technical article |
+| `docs/zilan-contract-quickstart.md` | zilan_contract 快速上手 · zilan_contract quickstart |
+| `docs/awesome-list-pr-entries.md` | Awesome-list PR 条目 · Awesome-list PR entries |
+| `docs/codex-manual-tasks.md` | Codex 手动操作清单 · Codex manual task checklist |
+| `docs/archive/` | 历史归档材料 · Historical archive |
+| `zilan_contract/` | 独立 pip 包 (ContractRunner + 验证器) · Standalone pip package |
 | `scripts/validate_zilan_repo.py` | 仓库结构与语料 smoke 校验 · Repository invariant checks |
 | `scripts/search_agama.py` | 阿含 Markdown 检索工具 · Agama Markdown search helper |
 | `scripts/openai_api_harness.py` | OpenAI Responses API dry-run/live harness |
+| `scripts/hf_upload_dataset.py` | HuggingFace Dataset 上传 · HF dataset upload |
 | `scripts/mock_install_smoke.py` | Claude Code mock install smoke test |
+| `scripts/demo.sh` / `scripts/demo.tape` | CLI 演示录制 · CLI demo recording |
 | `.github/workflows/ci.yml` | 自动化校验 · Automated CI checks |
 | `context/摄类学工具箱.md` | 摄类学推理工具链 · Collected Topics reasoning toolkit |
 | `context/因明推理引擎.md` | 因明逻辑引擎 · Buddhist logic engine |

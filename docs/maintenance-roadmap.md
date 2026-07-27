@@ -1,13 +1,13 @@
 # Maintenance Roadmap
 
-> Last updated: 2026-07-22
+> Last updated: 2026-07-27
 
 This roadmap records engineering maintenance state and next priorities for zilan-agent. It is not platform validation evidence. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
 ## Current Baseline
 
 | Area | Current state |
-|---|---|
+| --- | --- |
 | CI | GitHub Actions runs repository invariants, generated Agama idempotency checks, pytest, ruff, mypy, and Agama search smoke tests. |
 | Repository invariants | `scripts/validate_zilan_repo.py` checks required files, context files, YAML shape, regression inventory, platform status consistency, agent prompt contracts, runtime-evidence index references, runtime answer-review batch `answer_file` safety, and Agama search behavior; shared YAML/list-shape helpers live in `scripts/zilanlib/yaml_io.py`; repository path/version helpers live in `scripts/zilanlib/repository.py`; document-fragment checks use `scripts/zilanlib/text_checks.py`; agent prompt contract helpers live in `scripts/zilanlib/validation/agent_prompts.py`; platform metadata validation helpers live in `scripts/zilanlib/validation/platform.py`; runtime-evidence validation helpers live in `scripts/zilanlib/validation/runtime_evidence.py`. |
 | Regression inventory | `CODEX_REGRESSION_TESTS.md` is mirrored by `tests/regression_cases.yaml`; CI validates structure, resources, and case IDs. |
@@ -20,6 +20,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | Coverage baseline | `pytest-cov` is available in dev dependencies and `python -m pytest` reports `scripts/zilanlib` coverage without a fail-under gate. The current 2026-07-23 local zilanlib-only baseline is 87%; root CLI wrappers remain exercised by tests but no longer dominate the reported coverage surface. |
 | Contribution intake | `.github/ISSUE_TEMPLATE/` provides structured bug-report and feature-request templates for platform, validation, documentation, CI, and reasoning-contract work. |
 | Community conduct | `CODE_OF_CONDUCT.md` adopts Contributor Covenant 2.1 with maintainer contact via GitHub `@RyanYao527`, and `CONTRIBUTING.md` / `CONTRIBUTING-en.md` link to it. |
+| Community deliverables | `docs/article-output-contracts.md` is an LLM-engineering-facing article pitching the output-contract pattern; `docs/zilan-contract-quickstart.md` is a standalone quickstart for the `zilan_contract` pip package; `docs/awesome-list-pr-entries.md` provides pre-written PR entries for four curated awesome lists; `docs/codex-manual-tasks.md` is a checklist for recording demos, uploading HF datasets, submitting awesome-list PRs, and publishing the article. |
 | Co-maintainer path | `README.md`, `README.zh.md`, `README.en.md`, `CONTRIBUTING.md`, and `CONTRIBUTING-en.md` now invite regular collaborators and define reviewable co-maintainer work areas such as documentation, runtime validation, Agama collation, and reasoning-contract review. |
 | Installation docs | `docs/installation.md` separates Codex, Claude Code, and OpenAI API operating paths. |
 | Clean install smoke | A 2026-06-15 clean clone from GitHub passed repository checks, pytest, ruff, OpenAI dry-run, and Agama search smoke tests when run sequentially. Current CI also includes a minimal mypy type-check baseline for `scripts/`. |
@@ -52,7 +53,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 ## Near-Term Priorities
 
 | Priority | Track | Work | Done when |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | P0 | Runtime validation | Re-run ZC-01 through ZC-06 after prompt or routing changes and append to `docs/runtime-validation-log.md`. | A dated manual validation note records prompts, observed behavior, failures, transcript status, and checks run. Latest Claude Code full rerun is recorded for 2026-07-14 after root-document and closing-wording changes, with broad-answer contract gaps tracked as follow-up. |
 | P1 | Validation evidence | Replace summarized baselines with transcript-backed Codex and Claude Code sessions where practical. | Runtime results are auditable without relying on chat history. |
 | P1 | Claude Code route | Keep the UTF-8 stdin validation protocol visible and rerun exact ZC prompts after prompt, tool, or install-path changes. | Claude Code remains `tested` only while dated evidence documents the exact prompts, encoding setup, known limits, and repository checks. |
