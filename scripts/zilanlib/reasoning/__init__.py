@@ -1,4 +1,6 @@
 """Reasoning contract helper APIs."""
+from __future__ import annotations
+
 from zilanlib.reasoning.agama_evidence_checker import build_agama_evidence_check
 from zilanlib.reasoning.answer_review import build_reasoning_answer_review
 from zilanlib.reasoning.answer_review_batch import build_reasoning_answer_review_batch

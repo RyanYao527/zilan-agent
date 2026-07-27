@@ -1,4 +1,5 @@
 """Agama corpus helper APIs."""
+from __future__ import annotations
 
 from zilanlib.agama.candidates import CandidateError, build_candidate_set
 from zilanlib.agama.fixture_review import ReviewError, build_review

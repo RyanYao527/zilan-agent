@@ -1,4 +1,5 @@
 """Semantic retrieval fixture helper APIs."""
+from __future__ import annotations
 
 from zilanlib.semantic.answer_boundary_review import build_answer_boundary_review
 from zilanlib.semantic.answer_contract_review import build_answer_contract_review
