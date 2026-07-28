@@ -76,12 +76,29 @@ def test_installed_contract_runner_quickstart_sample_and_inline_answer_work(tmp_
                 query_id="SRQ-04",
                 answer_text=answer_text,
             )
+            def local_evidence_boundary(result):
+                review = result.raw["validators"]["agama_evidence"]["evidence_reviews"][0]
+                local_evidence = review["agama_evidence"]["local_evidence"]
+                return {
+                    "status": local_evidence["status"],
+                    "source_root": local_evidence["source_root"],
+                    "diagnostic_codes": sorted(item["code"] for item in review["diagnostics"]),
+                }
+
+            sample_boundary = local_evidence_boundary(sample_result)
+            inline_boundary = local_evidence_boundary(inline_result)
             print(json.dumps({
                 "sample_status": sample_result.overall_status,
                 "sample_review_status": sample_result.answer_review_status,
                 "sample_file": sample_result.raw["answer_contract_review"]["answer_source"]["file"],
+                "sample_local_evidence_status": sample_boundary["status"],
+                "sample_local_evidence_source_root": sample_boundary["source_root"],
+                "sample_local_evidence_diagnostics": sample_boundary["diagnostic_codes"],
                 "inline_status": inline_result.overall_status,
                 "inline_review_status": inline_result.answer_review_status,
+                "inline_local_evidence_status": inline_boundary["status"],
+                "inline_local_evidence_source_root": inline_boundary["source_root"],
+                "inline_local_evidence_diagnostics": inline_boundary["diagnostic_codes"],
             }, ensure_ascii=False))
             """
         ),
@@ -91,6 +108,24 @@ def test_installed_contract_runner_quickstart_sample_and_inline_answer_work(tmp_
         "sample_status": "pass",
         "sample_review_status": "pass",
         "sample_file": "tests/fixtures/answers/srq04-agama-citation-boundary-pass.md",
+        "sample_local_evidence_status": "not_applicable",
+        "sample_local_evidence_source_root": None,
+        "sample_local_evidence_diagnostics": [
+            "boundary_statement_required",
+            "citation_anchor_required",
+            "collation_boundary_required",
+            "local_evidence_anchors_not_available",
+            "representative_search_scope",
+        ],
         "inline_status": "pass",
         "inline_review_status": "pass",
+        "inline_local_evidence_status": "not_applicable",
+        "inline_local_evidence_source_root": None,
+        "inline_local_evidence_diagnostics": [
+            "boundary_statement_required",
+            "citation_anchor_required",
+            "collation_boundary_required",
+            "local_evidence_anchors_not_available",
+            "representative_search_scope",
+        ],
     }
