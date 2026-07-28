@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any
 
 from zilanlib.semantic.retrieval_dry_run import DEFAULT_FIXTURE, ROOT, FixtureError, build_dry_run
+from zilanlib.semantic.sample_paths import resolve_answer_sample_path
 
 MODE = "semantic-answer-boundary-review"
 LIMITATIONS = (
@@ -90,6 +91,7 @@ def build_answer_boundary_review(
 
     dry_run = build_dry_run(fixture_path, query_id=query_id, query=query)
     resolved_answer_text, answer_source = _resolve_answer_source(
+        fixture_path,
         dry_run,
         answer_text=answer_text,
         answer_file=answer_file,
@@ -145,6 +147,7 @@ def build_answer_boundary_review(
 
 
 def _resolve_answer_source(
+    fixture_path: Path,
     dry_run: dict[str, Any],
     *,
     answer_text: str | None,
@@ -173,13 +176,13 @@ def _resolve_answer_source(
         rel_file = sample.get("file")
         if not isinstance(rel_file, str) or not rel_file:
             raise FixtureError(f"Answer boundary sample {sample_id} missing file.")
-        sample_path = ROOT / rel_file
-        if not sample_path.exists():
+        sample_path = resolve_answer_sample_path(rel_file, fixture_path=fixture_path, root=ROOT)
+        if sample_path is None:
             raise FixtureError(f"Answer boundary sample file not found: {rel_file}")
         return sample_path.read_text(encoding="utf-8"), {
             "type": "sample",
             "sample_id": sample_id,
-            "file": _display_path(sample_path),
+            "file": rel_file,
             "expected_status": sample.get("expected_status"),
         }
 

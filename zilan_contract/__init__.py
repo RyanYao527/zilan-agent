@@ -46,6 +46,7 @@ _SEMANTIC_FIXTURE = _FIXTURE_DIR / "retrieval_chunks" / "semantic_chunks.yaml"
 _PROJECT_ROOT = Path(__file__).resolve().parents[1]
 _DEV_FIXTURES = _PROJECT_ROOT / "tests" / "fixtures"
 _DEV_CASES = _PROJECT_ROOT / "tests" / "reasoning_cases.yaml"
+_DEFAULT_SOURCE_ROOT = _PROJECT_ROOT if (_PROJECT_ROOT / "context").is_dir() else None
 
 
 def get_fixture_path(name: str = "semantic_chunks.yaml") -> Path:
@@ -102,15 +103,20 @@ class ContractRunner:
         Override the default semantic fixture path.
     cases_path:
         Override the default reasoning cases path.
+    source_root:
+        Optional source checkout root for repository-only local evidence checks. If absent, bundled package fixtures
+        mark local Agama source-anchor checks as not_applicable.
     """
 
     def __init__(
         self,
         fixture_path: Path | None = None,
         cases_path: Path | None = None,
+        source_root: Path | None = _DEFAULT_SOURCE_ROOT,
     ):
         self._fixture_path = fixture_path or get_fixture_path()
         self._cases_path = cases_path or get_cases_path()
+        self._source_root = source_root
 
     def check(
         self,
@@ -139,6 +145,7 @@ class ContractRunner:
             answer_text=answer_text,
             answer_file=answer_file,
             sample_id=sample_id,
+            source_root=self._source_root,
         )
         return ContractResult(raw)
 

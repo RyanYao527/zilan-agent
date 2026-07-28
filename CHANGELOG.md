@@ -32,6 +32,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Fixed
 
+- Bundled answer sample Markdown fixtures in the `zilan_contract` wheel, made installed-package Agama local source-anchor checks report `not_applicable` without a source checkout, and added installed-package smoke coverage so `ContractRunner` quickstart `sample_id` and `answer_text` paths work outside a source checkout.
 - Fixed `zilan_contract` fixture path (`_SEMANTIC_FIXTURE` missing `retrieval_chunks/` component) so `ContractRunner` works in pip-installed mode.
 - Fixed `scripts/demo.sh` stderr pollution (`2>&1` before JSON pipe) that could corrupt `json.load`.
 - Fixed incorrect validator line-count claim (~170 → ~200–256, Agama evidence checker 430) in `docs/article-output-contracts.md`.

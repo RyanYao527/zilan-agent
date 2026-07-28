@@ -61,8 +61,8 @@ LLMs in specialized domains drift: they drop critical terms, overclaim certainty
 ### The numbers · 工程指标
 
 ```text
-172 tests    ·    86% code coverage (zilanlib)
-mypy: 0 errors across 48 source files
+176 tests    ·    86% code coverage (zilanlib)
+mypy: 0 errors across 52 source files
 ruff:  0 issues (B/BLE/E/F/I/SIM/UP rules)
 CI:    lint → type-check → test → smoke-test on every push
 ```
