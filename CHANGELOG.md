@@ -4,6 +4,17 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+### Added
+
+- Added `zilan_contract` standalone package: a clean public API (`ContractRunner`, `HetuvidyaValidator`, `ContractResult`) with bundled fixtures, `py.typed` marker, and a `docs/zilan-contract-quickstart.md` guide covering 60-second try and custom contract authoring.
+- Added `docs/article-output-contracts.md`: a ~1,970-word technical article pitching the output-contract + deterministic-validator pattern to an LLM engineering audience, with concrete code examples, pass/fail samples, and a domain-generalization table.
+- Added `docs/awesome-list-pr-entries.md`: pre-written PR entries for four curated awesome lists (`awesome-claude-skills`, `Awesome-Prompt-Engineering`, `awesome-agents`, `Awesome-LLM`) with descriptions and submission checklists.
+- Added `docs/codex-manual-tasks.md`: a four-task manual-operation checklist (record demo GIF, upload HF dataset, submit awesome-list PRs, publish article) designed for Codex to execute autonomously.
+- Added `scripts/hf_upload_dataset.py`: a HuggingFace Dataset upload script that packages the Agama corpus (1,844 passages) and six knowledge-base files with a dataset card, dry-run mode, and interactive repo-id prompting.
+- Added `scripts/demo.sh` and `scripts/demo.tape`: a 60-second CLI demo script (asciinema-compatible) and a vhs tape definition for recording terminal GIFs.
+- Added a four-tier contributor ladder (`🪜 贡献者阶梯` / `Contributor Ladder`) to `CONTRIBUTING.md` and `CONTRIBUTING-en.md`, with concrete first tasks for Evidence Runner (L1), Documentation Reviewer (L2), Contract Reviewer (L3), and Code Contributor (L4).
+- Added a "For Engineers" section to `README.md`, pitching the output-contract pattern and engineering metrics (172 tests, 86% coverage, mypy/ruff clean) to LLM reliability engineers before the Buddhist-domain content.
+
 ### Changed
 
 - Updated public Skill script inventories for `scripts/hf_upload_dataset.py` after the Hugging Face dataset helper landed on `main`.
@@ -15,10 +26,18 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Replaced duplicated reasoning contract runner not-applicable test constants with a behavior-preserving factory helper.
 - Scoped pytest coverage reporting to `scripts/zilanlib`, with a 2026-07-23 local baseline of 87%, while keeping root CLI wrapper tests in the suite.
 - Marked `zilanlib` as a typed package and added package discovery, package-data, project URLs, and classifier metadata.
+- Updated `pyproject.toml` with keywords, classifiers, `zilan_contract` package discovery, fixture package-data, and mypy/ruff/coverage inclusion for the new top-level package.
+- Synced `SKILL-en.md` with `SKILL.md`: added missing Collected Topics total/part boundary output contract, cognitive-analysis & vipassanā practice boundary output contract, and Agent Mode sections.
+- Added `.coverage` to `.gitignore`.
 
 ### Fixed
 
 - Bundled answer sample Markdown fixtures in the `zilan_contract` wheel, made installed-package Agama local source-anchor checks report `not_applicable` without a source checkout, and added installed-package smoke coverage so `ContractRunner` quickstart `sample_id` and `answer_text` paths work outside a source checkout.
+- Fixed `zilan_contract` fixture path (`_SEMANTIC_FIXTURE` missing `retrieval_chunks/` component) so `ContractRunner` works in pip-installed mode.
+- Fixed `scripts/demo.sh` stderr pollution (`2>&1` before JSON pipe) that could corrupt `json.load`.
+- Fixed incorrect validator line-count claim (~170 → ~200–256, Agama evidence checker 430) in `docs/article-output-contracts.md`.
+- Fixed `docs/zilan-contract-quickstart.md` custom-contract tutorial: corrected YAML field formats (`query_id` → `id`, `required_slots` as dict list) and resolved fixture filename inconsistency.
+- Added `zilan_contract` to mypy `files`, ruff `include`, and coverage measurement.
 
 ## [2.5.5] - 2026-07-21
 
