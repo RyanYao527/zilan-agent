@@ -281,7 +281,12 @@ def _build_madhyamaka_prasanga_validator(cases_path: Path, dry_run: dict[str, An
         limitations=limitations,
     )
 
-def _build_agama_evidence_validator(cases_path: Path, dry_run: dict[str, Any]) -> dict[str, Any]:
+def _build_agama_evidence_validator(
+    cases_path: Path,
+    dry_run: dict[str, Any],
+    retrieval_fixture_path: Path,
+    source_root: Path | None,
+) -> dict[str, Any]:
     case_ids = _reasoning_case_ids_for_role(dry_run, "agama_evidence")
     if not case_ids:
         return build_not_applicable_validator_output(
@@ -300,7 +305,12 @@ def _build_agama_evidence_validator(cases_path: Path, dry_run: dict[str, Any]) -
     limitations: list[str] = []
 
     for case_id in case_ids:
-        result = agama_evidence_checker.build_agama_evidence_check(cases_path, case_id=case_id)
+        result = agama_evidence_checker.build_agama_evidence_check(
+            cases_path,
+            case_id=case_id,
+            retrieval_fixture_path=retrieval_fixture_path,
+            source_root=source_root,
+        )
         mode = result["mode"]
         output_schema = result["output_schema"]
         source = result["source"]
@@ -341,6 +351,7 @@ def build_reasoning_contract_run(
     answer_text: str | None = None,
     answer_file: Path | None = None,
     sample_id: str | None = None,
+    source_root: Path | None = ROOT,
 ) -> dict[str, Any]:
     """Run the local reasoning-contract fixture checks for one semantic query."""
 
@@ -360,7 +371,7 @@ def build_reasoning_contract_run(
         "collected_topics": _build_collected_topics_validator(cases_path, dry_run),
         "madhyamaka_prasanga": _build_madhyamaka_prasanga_validator(cases_path, dry_run),
         "cognitive_analysis": _build_cognitive_analysis_validator(cases_path, dry_run),
-        "agama_evidence": _build_agama_evidence_validator(cases_path, dry_run),
+        "agama_evidence": _build_agama_evidence_validator(cases_path, dry_run, fixture_path, source_root),
     }
     status = _overall_status(role_coverage, answer_review_status)
 

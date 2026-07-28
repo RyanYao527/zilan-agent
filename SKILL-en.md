@@ -255,6 +255,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │           ├── __init__.py
 │           ├── answer_boundary_review.py
 │           ├── answer_contract_review.py
+│           ├── sample_paths.py
 │           ├── context_bundle.py
 │           ├── retrieval_dry_run.py
 │           └── role_coverage.py

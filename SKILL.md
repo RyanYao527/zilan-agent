@@ -247,6 +247,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │           ├── __init__.py
 │           ├── answer_boundary_review.py
 │           ├── answer_contract_review.py
+│           ├── sample_paths.py
 │           ├── context_bundle.py
 │           ├── retrieval_dry_run.py
 │           └── role_coverage.py

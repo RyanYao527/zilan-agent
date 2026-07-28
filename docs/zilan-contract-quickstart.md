@@ -205,6 +205,10 @@ assert not result.passed()
 - **Not a replacement for human review.** It catches structural errors so humans
   can focus on substance — like a linter for LLM outputs.
 
+## Installed package fixture boundary
+
+When installed from PyPI, `zilan_contract` uses bundled fixtures under `zilan_contract/fixtures/`. These fixtures include deterministic contract YAML and answer samples, but not the full repository `context/agama/` corpus. Agama local source-anchor checks therefore report `not_applicable` in installed-package mode. Run from a source checkout with the repository fixtures when you need local CBETA/context line-anchor validation.
+
 ## Direct CLI access
 
 The library wraps the existing CLI scripts. You can also call them directly:
@@ -221,4 +225,5 @@ python scripts/reasoning_contract_runner.py \
 - Full zilan-agent docs: [github.com/RyanYao527/zilan-agent](https://github.com/RyanYao527/zilan-agent)
 - Architecture overview: `ARCHITECTURE.md`
 - Output contract design: `docs/architecture/reasoning-contract.md`
-- All bundled fixtures: `tests/reasoning_cases.yaml`, `tests/fixtures/`
+- Bundled package fixtures: `zilan_contract/fixtures/`
+- Source fixture mirrors: `tests/reasoning_cases.yaml`, `tests/fixtures/`

@@ -18,6 +18,10 @@ LIMITATIONS = (
     "Local evidence checks read checked-in semantic retrieval chunks and local Agama Markdown files.",
     "No Agama search execution, CBETA XML collation, provider calls, prompt changes, or citation grading.",
 )
+PACKAGE_LOCAL_EVIDENCE_LIMITATION = (
+    "Local Agama source-anchor checks require a source checkout; bundled zilan_contract package fixtures "
+    "do not include the full context/agama corpus."
+)
 
 
 class AgamaEvidenceCheckerError(ValueError):
@@ -128,13 +132,17 @@ def _index_text(index_path: Path) -> str:
     return index_path.read_text(encoding="utf-8")
 
 
-def _reference_file_checks(reference_files: list[str], index_path: Path) -> list[dict[str, Any]]:
+def _reference_file_checks(
+    reference_files: list[str],
+    index_path: Path,
+    source_root: Path,
+) -> list[dict[str, Any]]:
     index = _index_text(index_path)
     normalized_index = _normalize_cbeta_id(index)
     checks: list[dict[str, Any]] = []
 
     for reference_file in reference_files:
-        path = ROOT / reference_file
+        path = source_root / reference_file
         kind = _file_kind(reference_file)
         exists = path.exists()
         check: dict[str, Any] = {
@@ -159,9 +167,9 @@ def _reference_file_checks(reference_files: list[str], index_path: Path) -> list
     return checks
 
 
-def _index_check(reference_files: list[str]) -> dict[str, Any]:
-    index_path = ROOT / "context" / "agama" / "agama-index.md"
-    reference_checks = _reference_file_checks(reference_files, index_path)
+def _index_check(reference_files: list[str], source_root: Path) -> dict[str, Any]:
+    index_path = source_root / "context" / "agama" / "agama-index.md"
+    reference_checks = _reference_file_checks(reference_files, index_path, source_root)
     required_agama_files = [item for item in reference_checks if item["kind"] == "agama_markdown"]
     failures = [item["path"] for item in required_agama_files if item["status"] != "pass"]
     return {
@@ -185,7 +193,7 @@ def _agama_passage_chunks(chunks: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return result
 
 
-def _passage_anchor_check(chunk: dict[str, Any]) -> dict[str, Any]:
+def _passage_anchor_check(chunk: dict[str, Any], source_root: Path) -> dict[str, Any]:
     chunk_id = chunk.get("chunk_id")
     source_file = chunk.get("source_file")
     metadata = chunk.get("metadata")
@@ -204,7 +212,7 @@ def _passage_anchor_check(chunk: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(text, str) or not text:
         raise AgamaEvidenceCheckerError(f"{chunk_id} text must be a non-empty string.")
 
-    path = ROOT / source_file
+    path = source_root / source_file
     exists = path.exists()
     line_range_status = "missing_file"
     cbeta_id = metadata.get("cbeta_id")
@@ -237,20 +245,45 @@ def _local_evidence(
     *,
     reference_files: list[str],
     retrieval_fixture_path: Path,
+    source_root: Path | None,
 ) -> dict[str, Any]:
+    if source_root is None:
+        return {
+            "status": "not_applicable",
+            "retrieval_fixture": _display_path(retrieval_fixture_path),
+            "source_root": None,
+            "index_check": {
+                "path": "context/agama/agama-index.md",
+                "exists": False,
+                "required_agama_files": [],
+                "missing_or_unindexed": [],
+                "status": "not_applicable",
+            },
+            "reference_file_checks": [],
+            "passage_anchor_checks": [],
+            "failed_references": [],
+            "failed_passage_anchors": [],
+            "limitations": [PACKAGE_LOCAL_EVIDENCE_LIMITATION],
+        }
+
     retrieval_fixture = _load_yaml(retrieval_fixture_path)
     passage_checks = [
-        _passage_anchor_check(chunk)
+        _passage_anchor_check(chunk, source_root)
         for chunk in _agama_passage_chunks(_chunk_list(retrieval_fixture, retrieval_fixture_path))
     ]
-    reference_checks = _reference_file_checks(reference_files, ROOT / "context" / "agama" / "agama-index.md")
-    index_check = _index_check(reference_files)
+    reference_checks = _reference_file_checks(
+        reference_files,
+        source_root / "context" / "agama" / "agama-index.md",
+        source_root,
+    )
+    index_check = _index_check(reference_files, source_root)
     failed_references = [item["path"] for item in reference_checks if item["status"] != "pass"]
     failed_passages = [item["chunk_id"] for item in passage_checks if item["status"] != "pass"]
     status = "pass" if not failed_references and not failed_passages and index_check["status"] == "pass" else "fail"
     return {
         "status": status,
         "retrieval_fixture": _display_path(retrieval_fixture_path),
+        "source_root": _display_path(source_root),
         "index_check": index_check,
         "reference_file_checks": reference_checks,
         "passage_anchor_checks": passage_checks,
@@ -327,6 +360,14 @@ def _diagnostics(
                 "message": "The fixture requires explicit boundary language.",
             }
         )
+    if local_evidence_status == "not_applicable":
+        diagnostics.append(
+            {
+                "code": "local_evidence_anchors_not_available",
+                "severity": "info",
+                "message": PACKAGE_LOCAL_EVIDENCE_LIMITATION,
+            }
+        )
     if local_evidence_status == "pass":
         diagnostics.append(
             {
@@ -338,7 +379,11 @@ def _diagnostics(
     return diagnostics
 
 
-def _check_case(case: dict[str, Any], retrieval_fixture_path: Path) -> dict[str, Any]:
+def _check_case(
+    case: dict[str, Any],
+    retrieval_fixture_path: Path,
+    source_root: Path | None,
+) -> dict[str, Any]:
     case_id = case.get("id")
     expected = case.get("expected")
     if not isinstance(case_id, str) or not case_id:
@@ -357,7 +402,11 @@ def _check_case(case: dict[str, Any], retrieval_fixture_path: Path) -> dict[str,
     collation_boundary = bool(agama_evidence.get("collation_boundary", False))
     boundary_required = bool(expected.get("boundary_statement", False))
     reference_files = _string_list(case.get("reference_files"), "reference_files", case_id)
-    local_evidence = _local_evidence(reference_files=reference_files, retrieval_fixture_path=retrieval_fixture_path)
+    local_evidence = _local_evidence(
+        reference_files=reference_files,
+        retrieval_fixture_path=retrieval_fixture_path,
+        source_root=source_root,
+    )
 
     return {
         "case_id": case_id,
@@ -407,6 +456,7 @@ def build_agama_evidence_check(
     *,
     case_id: str | None = None,
     retrieval_fixture_path: Path = DEFAULT_RETRIEVAL_FIXTURE,
+    source_root: Path | None = ROOT,
 ) -> dict[str, Any]:
     """Return structured Agama evidence checks from checked-in reasoning cases."""
 
@@ -415,7 +465,7 @@ def build_agama_evidence_check(
     if case_id is not None and "agama_evidence" not in selected[0].get("contracts", []):
         raise AgamaEvidenceCheckerError(f"{case_id} is not an Agama evidence reasoning case.")
 
-    evidence_reviews = [_check_case(case, retrieval_fixture_path) for case in selected]
+    evidence_reviews = [_check_case(case, retrieval_fixture_path, source_root) for case in selected]
 
     return build_validator_output(
         validator=VALIDATOR,

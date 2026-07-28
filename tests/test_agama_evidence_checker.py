@@ -79,6 +79,23 @@ def test_agama_evidence_checker_defaults_to_agama_cases() -> None:
     assert any("Local evidence checks" in item for item in result["limitations"])
 
 
+def test_agama_evidence_checker_marks_local_source_anchors_not_applicable_without_source_root() -> None:
+    result = build_agama_evidence_check(DEFAULT_CASES, case_id="ZR-05", source_root=None)
+    review = result["evidence_reviews"][0]
+    local_evidence = review["agama_evidence"]["local_evidence"]
+
+    assert local_evidence["status"] == "not_applicable"
+    assert local_evidence["source_root"] is None
+    assert local_evidence["index_check"]["status"] == "not_applicable"
+    assert local_evidence["reference_file_checks"] == []
+    assert local_evidence["passage_anchor_checks"] == []
+    assert local_evidence["failed_references"] == []
+    assert local_evidence["failed_passage_anchors"] == []
+    diagnostic_codes = {item["code"] for item in review["diagnostics"]}
+    assert "local_evidence_anchors_not_available" in diagnostic_codes
+    assert "local_evidence_anchors_verified" not in diagnostic_codes
+
+
 def test_agama_evidence_checker_rejects_non_agama_case() -> None:
     try:
         build_agama_evidence_check(DEFAULT_CASES, case_id="ZR-03")

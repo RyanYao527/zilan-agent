@@ -16,6 +16,9 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Scoped pytest coverage reporting to `scripts/zilanlib`, with a 2026-07-23 local baseline of 87%, while keeping root CLI wrapper tests in the suite.
 - Marked `zilanlib` as a typed package and added package discovery, package-data, project URLs, and classifier metadata.
 
+### Fixed
+
+- Bundled answer sample Markdown fixtures in the `zilan_contract` wheel, made installed-package Agama local source-anchor checks report `not_applicable` without a source checkout, and added installed-package smoke coverage so `ContractRunner` quickstart `sample_id` and `answer_text` paths work outside a source checkout.
 
 ## [2.5.5] - 2026-07-21
 
