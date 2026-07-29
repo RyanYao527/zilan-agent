@@ -5,6 +5,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from zilanlib.reasoning import contract_runner
 from zilanlib.reasoning.contract_runner import build_reasoning_contract_run
 from zilanlib.semantic.retrieval_dry_run import DEFAULT_FIXTURE, FixtureError
 
@@ -74,6 +75,19 @@ CHAIN_STEP_ROLES = [
     "classification_labeling",
     "volitional_response",
 ]
+
+
+def test_reasoning_contract_runner_validator_specs_cover_known_domains() -> None:
+    assert [
+        (spec.role, spec.result_key, spec.payload_key, spec.module.VALIDATOR)
+        for spec in contract_runner._VALIDATOR_SPECS
+    ] == [
+        ("hetuvidya", "validations", "validations", "hetuvidya_validator"),
+        ("collected_topics", "analyses", "analyses", "collected_topics_analyzer"),
+        ("madhyamaka_prasanga", "critiques", "critiques", "madhyamaka_critique_engine"),
+        ("cognitive_analysis", "mappings", "mappings", "cognitive_analysis_mapper"),
+        ("agama_evidence", "evidence_reviews", "evidence_reviews", "agama_evidence_checker"),
+    ]
 
 
 def test_reasoning_contract_runner_passes_hetuvidya_sample() -> None:

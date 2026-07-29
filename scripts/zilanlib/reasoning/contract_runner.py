@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Callable
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -117,219 +119,161 @@ def _build_answer_review(
     return review, str(review.get("overall_status", "unknown"))
 
 
-def _build_hetuvidya_validator(cases_path: Path, dry_run: dict[str, Any]) -> dict[str, Any]:
-    case_ids = _reasoning_case_ids_for_role(dry_run, "hetuvidya")
-    if not case_ids:
-        return build_not_applicable_validator_output(
-            validator=hetuvidya_validator.VALIDATOR,
-            contract_family=hetuvidya_validator.CONTRACT_FAMILY,
-            output_schema=hetuvidya_validator.OUTPUT_SCHEMA,
-            source=_display_path(cases_path),
-            payload_key="validations",
-            limitation="No selected reasoning case with hetuvidya role was found for this query fixture.",
-        )
+@dataclass(frozen=True)
+class _ValidatorSpec:
+    role: str
+    result_key: str
+    payload_key: str
+    module: Any
+    build_case: Callable[[Path, str, Path, Path | None], dict[str, Any]]
 
-    validations: list[dict[str, Any]] = []
-    mode = ""
-    output_schema = ""
-    source = _display_path(cases_path)
-    limitations: list[str] = []
 
-    for case_id in case_ids:
-        result = hetuvidya_validator.build_hetuvidya_validation(cases_path, case_id=case_id)
-        mode = result["mode"]
-        output_schema = result["output_schema"]
-        source = result["source"]
-        validations.extend(result["validations"])
-        for limitation in result["limitations"]:
-            if limitation not in limitations:
-                limitations.append(limitation)
+def _build_hetuvidya_case(
+    cases_path: Path,
+    case_id: str,
+    _retrieval_fixture_path: Path,
+    _source_root: Path | None,
+) -> dict[str, Any]:
+    return hetuvidya_validator.build_hetuvidya_validation(cases_path, case_id=case_id)
 
-    return build_validator_output(
-        validator=hetuvidya_validator.VALIDATOR,
-        contract_family=hetuvidya_validator.CONTRACT_FAMILY,
-        mode=mode,
-        output_schema=output_schema,
-        source=source,
-        case_id=None,
+
+def _build_collected_topics_case(
+    cases_path: Path,
+    case_id: str,
+    _retrieval_fixture_path: Path,
+    _source_root: Path | None,
+) -> dict[str, Any]:
+    return collected_topics_analyzer.build_collected_topics_analysis(cases_path, case_id=case_id)
+
+
+def _build_madhyamaka_case(
+    cases_path: Path,
+    case_id: str,
+    _retrieval_fixture_path: Path,
+    _source_root: Path | None,
+) -> dict[str, Any]:
+    return madhyamaka_critique_engine.build_madhyamaka_critique(cases_path, case_id=case_id)
+
+
+def _build_cognitive_analysis_case(
+    cases_path: Path,
+    case_id: str,
+    _retrieval_fixture_path: Path,
+    _source_root: Path | None,
+) -> dict[str, Any]:
+    return cognitive_analysis_mapper.build_cognitive_analysis_mapping(cases_path, case_id=case_id)
+
+
+def _build_agama_evidence_case(
+    cases_path: Path,
+    case_id: str,
+    retrieval_fixture_path: Path,
+    source_root: Path | None,
+) -> dict[str, Any]:
+    return agama_evidence_checker.build_agama_evidence_check(
+        cases_path,
+        case_id=case_id,
+        retrieval_fixture_path=retrieval_fixture_path,
+        source_root=source_root,
+    )
+
+
+_VALIDATOR_SPECS = (
+    _ValidatorSpec(
+        role="hetuvidya",
+        result_key="validations",
         payload_key="validations",
-        payload=validations,
-        limitations=limitations,
-    )
-
-
-def _build_cognitive_analysis_validator(cases_path: Path, dry_run: dict[str, Any]) -> dict[str, Any]:
-    case_ids = _reasoning_case_ids_for_role(dry_run, "cognitive_analysis")
-    if not case_ids:
-        return build_not_applicable_validator_output(
-            validator=cognitive_analysis_mapper.VALIDATOR,
-            contract_family=cognitive_analysis_mapper.CONTRACT_FAMILY,
-            output_schema=cognitive_analysis_mapper.OUTPUT_SCHEMA,
-            source=_display_path(cases_path),
-            payload_key="mappings",
-            limitation="No selected reasoning case with cognitive_analysis role was found for this query fixture.",
-        )
-
-    mappings: list[dict[str, Any]] = []
-    mode = ""
-    output_schema = ""
-    source = _display_path(cases_path)
-    limitations: list[str] = []
-
-    for case_id in case_ids:
-        result = cognitive_analysis_mapper.build_cognitive_analysis_mapping(cases_path, case_id=case_id)
-        mode = result["mode"]
-        output_schema = result["output_schema"]
-        source = result["source"]
-        mappings.extend(result["mappings"])
-        for limitation in result["limitations"]:
-            if limitation not in limitations:
-                limitations.append(limitation)
-
-    return build_validator_output(
-        validator=cognitive_analysis_mapper.VALIDATOR,
-        contract_family=cognitive_analysis_mapper.CONTRACT_FAMILY,
-        mode=mode,
-        output_schema=output_schema,
-        source=source,
-        case_id=None,
-        payload_key="mappings",
-        payload=mappings,
-        limitations=limitations,
-    )
-
-
-def _build_collected_topics_validator(cases_path: Path, dry_run: dict[str, Any]) -> dict[str, Any]:
-    case_ids = _reasoning_case_ids_for_role(dry_run, "collected_topics")
-    if not case_ids:
-        return build_not_applicable_validator_output(
-            validator=collected_topics_analyzer.VALIDATOR,
-            contract_family=collected_topics_analyzer.CONTRACT_FAMILY,
-            output_schema=collected_topics_analyzer.OUTPUT_SCHEMA,
-            source=_display_path(cases_path),
-            payload_key="analyses",
-            limitation="No selected reasoning case with collected_topics role was found for this query fixture.",
-        )
-
-    analyses: list[dict[str, Any]] = []
-    mode = ""
-    output_schema = ""
-    source = _display_path(cases_path)
-    limitations: list[str] = []
-
-    for case_id in case_ids:
-        result = collected_topics_analyzer.build_collected_topics_analysis(cases_path, case_id=case_id)
-        mode = result["mode"]
-        output_schema = result["output_schema"]
-        source = result["source"]
-        analyses.extend(result["analyses"])
-        for limitation in result["limitations"]:
-            if limitation not in limitations:
-                limitations.append(limitation)
-
-    return build_validator_output(
-        validator=collected_topics_analyzer.VALIDATOR,
-        contract_family=collected_topics_analyzer.CONTRACT_FAMILY,
-        mode=mode,
-        output_schema=output_schema,
-        source=source,
-        case_id=None,
+        module=hetuvidya_validator,
+        build_case=_build_hetuvidya_case,
+    ),
+    _ValidatorSpec(
+        role="collected_topics",
+        result_key="analyses",
         payload_key="analyses",
-        payload=analyses,
-        limitations=limitations,
-    )
-
-
-
-def _build_madhyamaka_prasanga_validator(cases_path: Path, dry_run: dict[str, Any]) -> dict[str, Any]:
-    case_ids = _reasoning_case_ids_for_role(dry_run, "madhyamaka_prasanga")
-    if not case_ids:
-        return build_not_applicable_validator_output(
-            validator=madhyamaka_critique_engine.VALIDATOR,
-            contract_family=madhyamaka_critique_engine.CONTRACT_FAMILY,
-            output_schema=madhyamaka_critique_engine.OUTPUT_SCHEMA,
-            source=_display_path(cases_path),
-            payload_key="critiques",
-            limitation="No selected reasoning case with madhyamaka_prasanga role was found for this query fixture.",
-        )
-
-    critiques: list[dict[str, Any]] = []
-    mode = ""
-    output_schema = ""
-    source = _display_path(cases_path)
-    limitations: list[str] = []
-
-    for case_id in case_ids:
-        result = madhyamaka_critique_engine.build_madhyamaka_critique(cases_path, case_id=case_id)
-        mode = result["mode"]
-        output_schema = result["output_schema"]
-        source = result["source"]
-        critiques.extend(result["critiques"])
-        for limitation in result["limitations"]:
-            if limitation not in limitations:
-                limitations.append(limitation)
-
-    return build_validator_output(
-        validator=madhyamaka_critique_engine.VALIDATOR,
-        contract_family=madhyamaka_critique_engine.CONTRACT_FAMILY,
-        mode=mode,
-        output_schema=output_schema,
-        source=source,
-        case_id=None,
+        module=collected_topics_analyzer,
+        build_case=_build_collected_topics_case,
+    ),
+    _ValidatorSpec(
+        role="madhyamaka_prasanga",
+        result_key="critiques",
         payload_key="critiques",
-        payload=critiques,
-        limitations=limitations,
-    )
+        module=madhyamaka_critique_engine,
+        build_case=_build_madhyamaka_case,
+    ),
+    _ValidatorSpec(
+        role="cognitive_analysis",
+        result_key="mappings",
+        payload_key="mappings",
+        module=cognitive_analysis_mapper,
+        build_case=_build_cognitive_analysis_case,
+    ),
+    _ValidatorSpec(
+        role="agama_evidence",
+        result_key="evidence_reviews",
+        payload_key="evidence_reviews",
+        module=agama_evidence_checker,
+        build_case=_build_agama_evidence_case,
+    ),
+)
 
-def _build_agama_evidence_validator(
+
+def _build_validator_from_spec(
+    spec: _ValidatorSpec,
     cases_path: Path,
     dry_run: dict[str, Any],
     retrieval_fixture_path: Path,
     source_root: Path | None,
 ) -> dict[str, Any]:
-    case_ids = _reasoning_case_ids_for_role(dry_run, "agama_evidence")
+    case_ids = _reasoning_case_ids_for_role(dry_run, spec.role)
     if not case_ids:
         return build_not_applicable_validator_output(
-            validator=agama_evidence_checker.VALIDATOR,
-            contract_family=agama_evidence_checker.CONTRACT_FAMILY,
-            output_schema=agama_evidence_checker.OUTPUT_SCHEMA,
+            validator=spec.module.VALIDATOR,
+            contract_family=spec.module.CONTRACT_FAMILY,
+            output_schema=spec.module.OUTPUT_SCHEMA,
             source=_display_path(cases_path),
-            payload_key="evidence_reviews",
-            limitation="No selected reasoning case with agama_evidence role was found for this query fixture.",
+            payload_key=spec.payload_key,
+            limitation=f"No selected reasoning case with {spec.role} role was found for this query fixture.",
         )
 
-    evidence_reviews: list[dict[str, Any]] = []
+    payload: list[dict[str, Any]] = []
     mode = ""
     output_schema = ""
     source = _display_path(cases_path)
     limitations: list[str] = []
 
     for case_id in case_ids:
-        result = agama_evidence_checker.build_agama_evidence_check(
-            cases_path,
-            case_id=case_id,
-            retrieval_fixture_path=retrieval_fixture_path,
-            source_root=source_root,
-        )
-        mode = result["mode"]
-        output_schema = result["output_schema"]
-        source = result["source"]
-        evidence_reviews.extend(result["evidence_reviews"])
+        result = spec.build_case(cases_path, case_id, retrieval_fixture_path, source_root)
+        mode = str(result["mode"])
+        output_schema = str(result["output_schema"])
+        source = str(result["source"])
+        payload.extend(result[spec.result_key])
         for limitation in result["limitations"]:
             if limitation not in limitations:
                 limitations.append(limitation)
 
     return build_validator_output(
-        validator=agama_evidence_checker.VALIDATOR,
-        contract_family=agama_evidence_checker.CONTRACT_FAMILY,
+        validator=spec.module.VALIDATOR,
+        contract_family=spec.module.CONTRACT_FAMILY,
         mode=mode,
         output_schema=output_schema,
         source=source,
         case_id=None,
-        payload_key="evidence_reviews",
-        payload=evidence_reviews,
+        payload_key=spec.payload_key,
+        payload=payload,
         limitations=limitations,
     )
+
+
+def _build_validators(
+    cases_path: Path,
+    dry_run: dict[str, Any],
+    retrieval_fixture_path: Path,
+    source_root: Path | None,
+) -> dict[str, dict[str, Any]]:
+    return {
+        spec.role: _build_validator_from_spec(spec, cases_path, dry_run, retrieval_fixture_path, source_root)
+        for spec in _VALIDATOR_SPECS
+    }
 
 def _overall_status(role_coverage: dict[str, Any], answer_review_status: str) -> str:
     if role_coverage.get("missing_needs"):
@@ -366,13 +310,7 @@ def build_reasoning_contract_run(
         answer_file=answer_file,
         sample_id=sample_id,
     )
-    validators = {
-        "hetuvidya": _build_hetuvidya_validator(cases_path, dry_run),
-        "collected_topics": _build_collected_topics_validator(cases_path, dry_run),
-        "madhyamaka_prasanga": _build_madhyamaka_prasanga_validator(cases_path, dry_run),
-        "cognitive_analysis": _build_cognitive_analysis_validator(cases_path, dry_run),
-        "agama_evidence": _build_agama_evidence_validator(cases_path, dry_run, fixture_path, source_root),
-    }
+    validators = _build_validators(cases_path, dry_run, fixture_path, source_root)
     status = _overall_status(role_coverage, answer_review_status)
 
     return {
