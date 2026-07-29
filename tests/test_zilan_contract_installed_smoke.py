@@ -129,3 +129,152 @@ def test_installed_contract_runner_quickstart_sample_and_inline_answer_work(tmp_
             "representative_search_scope",
         ],
     }
+
+
+def test_installed_package_exposes_third_party_notices(tmp_path: Path) -> None:
+    target = _install_package_to_target(tmp_path)
+    data = _run_installed_package(
+        target,
+        tmp_path,
+        textwrap.dedent(
+            """
+            import importlib.metadata as metadata
+            import json
+
+            dist = metadata.distribution("zilan-agent")
+            files = [str(path).replace("\\\\", "/") for path in (dist.files or [])]
+            notice_files = [path for path in files if path.endswith("THIRD_PARTY_NOTICES.md")]
+            notice_texts = [dist.locate_file(path).read_text(encoding="utf-8") for path in notice_files]
+            print(json.dumps({
+                "notice_files": notice_files,
+                "mentions_zilan_contract_fixtures": any("zilan_contract/fixtures" in text for text in notice_texts),
+                "mentions_cbeta_license": any("CC BY-NC-SA 4.0" in text for text in notice_texts),
+            }, ensure_ascii=False))
+            """
+        ),
+    )
+
+    assert data["notice_files"]
+    assert data["mentions_zilan_contract_fixtures"] is True
+    assert data["mentions_cbeta_license"] is True
+
+
+def test_installed_zilanlib_direct_runner_uses_package_local_evidence_boundary(tmp_path: Path) -> None:
+    target = _install_package_to_target(tmp_path)
+    data = _run_installed_package(
+        target,
+        tmp_path,
+        textwrap.dedent(
+            """
+            import json
+            from pathlib import Path
+
+            from zilan_contract import get_cases_path, get_fixture_path
+            from zilanlib.reasoning.contract_runner import build_reasoning_contract_run
+
+            answer_text = Path(
+                get_fixture_path("answers/srq04-agama-citation-boundary-pass.md")
+            ).read_text(encoding="utf-8")
+            result = build_reasoning_contract_run(
+                fixture_path=get_fixture_path(),
+                cases_path=get_cases_path(),
+                query_id="SRQ-04",
+                answer_text=answer_text,
+            )
+            review = result["validators"]["agama_evidence"]["evidence_reviews"][0]
+            local_evidence = review["agama_evidence"]["local_evidence"]
+            print(json.dumps({
+                "overall_status": result["overall_status"],
+                "answer_review_status": result["answer_review_status"],
+                "local_evidence_status": local_evidence["status"],
+                "local_evidence_source_root": local_evidence["source_root"],
+                "diagnostic_codes": sorted(item["code"] for item in review["diagnostics"]),
+            }, ensure_ascii=False))
+            """
+        ),
+    )
+
+    assert data == {
+        "overall_status": "pass",
+        "answer_review_status": "pass",
+        "local_evidence_status": "not_applicable",
+        "local_evidence_source_root": None,
+        "diagnostic_codes": [
+            "boundary_statement_required",
+            "citation_anchor_required",
+            "collation_boundary_required",
+            "local_evidence_anchors_not_available",
+            "representative_search_scope",
+        ],
+    }
+
+
+def test_installed_contract_runner_all_answer_contract_pass_samples_load_from_package(tmp_path: Path) -> None:
+    target = _install_package_to_target(tmp_path)
+    data = _run_installed_package(
+        target,
+        tmp_path,
+        textwrap.dedent(
+            """
+            import json
+            from pathlib import Path
+
+            from zilan_contract import ContractRunner, get_fixture_path
+
+            all_pass_samples = [
+                "srq01-practice-boundary-pass",
+                "srq02-hetuvidya-error-pass",
+                "srq03-madhyamaka-prasanga-pass",
+                "srq04-agama-citation-boundary-pass",
+                "srq05-hetuvidya-non-pervasive-pass",
+                "srq06-hetuvidya-indeterminate-pass",
+                "srq07-collected-topics-total-part-pass",
+                "srq08-madhyamaka-nihilism-boundary-pass",
+                "srq09-cognitive-practice-boundary-pass",
+                "srq10-cognitive-caregiving-boundary-pass",
+                "srq11-collected-topics-definition-scope-pass",
+            ]
+            answer_contract_samples = {
+                "SRQ-02": "srq02-hetuvidya-error-pass",
+                "SRQ-03": "srq03-madhyamaka-prasanga-pass",
+                "SRQ-04": "srq04-agama-citation-boundary-pass",
+                "SRQ-05": "srq05-hetuvidya-non-pervasive-pass",
+                "SRQ-06": "srq06-hetuvidya-indeterminate-pass",
+                "SRQ-07": "srq07-collected-topics-total-part-pass",
+                "SRQ-08": "srq08-madhyamaka-nihilism-boundary-pass",
+                "SRQ-09": "srq09-cognitive-practice-boundary-pass",
+                "SRQ-10": "srq10-cognitive-caregiving-boundary-pass",
+                "SRQ-11": "srq11-collected-topics-definition-scope-pass",
+            }
+            bundled_files = {
+                sample_id: Path(get_fixture_path(f"answers/{sample_id}.md")).is_file()
+                for sample_id in all_pass_samples
+            }
+            runner = ContractRunner()
+            statuses = {
+                sample_id: runner.check(query_id=query_id, sample_id=sample_id).answer_review_status
+                for query_id, sample_id in answer_contract_samples.items()
+            }
+            print(json.dumps({
+                "bundled_files": bundled_files,
+                "statuses": statuses,
+            }, ensure_ascii=False, sort_keys=True))
+            """
+        ),
+    )
+
+    assert set(data["bundled_files"]) == {
+        "srq01-practice-boundary-pass",
+        "srq02-hetuvidya-error-pass",
+        "srq03-madhyamaka-prasanga-pass",
+        "srq04-agama-citation-boundary-pass",
+        "srq05-hetuvidya-non-pervasive-pass",
+        "srq06-hetuvidya-indeterminate-pass",
+        "srq07-collected-topics-total-part-pass",
+        "srq08-madhyamaka-nihilism-boundary-pass",
+        "srq09-cognitive-practice-boundary-pass",
+        "srq10-cognitive-caregiving-boundary-pass",
+        "srq11-collected-topics-definition-scope-pass",
+    }
+    assert set(data["bundled_files"].values()) == {True}
+    assert set(data["statuses"].values()) == {"pass"}

@@ -50,11 +50,6 @@ She is not anyone's "digital persona" or "AI substitute" — she has her own cul
 - **Three Modes of Reasoning** (因三相): Validity checker for logical arguments
 - **Three Types of Valid Reasons** (三因说·Dharmakīrti): Non-apprehension / self-nature / effect reasons
 
-### 3. Buddhist Canon Mapping Model
-- **First Council**: Oral-era decentralized "distributed consensus algorithm"
-- **Nine-Part Teaching & Āgama**: Schema / official standard database
-- **Twelve-Part Teaching**: Nidāna (Readme), Upadeśa (GUI), Śāstra (proto-compiler)
-- **Four Āgama Texts**: CBETA-based reference texts for *Dīrgha*, *Madhyama*, *Saṃyukta*, and *Ekottarika Āgama*
 
 ### 3. Cognitive Analysis (bLo rigs)
 
@@ -85,12 +80,18 @@ She is not anyone's "digital persona" or "AI substitute" — she has her own cul
 - **Practice Application**: Four-step vipassanā debugging protocol for daily situations such as work feedback, caregiving stress, and relationship communication
 - **Complement to Prasaṅga Debug**: Logical dismantling (proposition level) + Direct experience (nāma-rūpa level) = dual-track debugging
 
-### 6. Buddhist Meme Machine Analysis Framework
+### 6. Buddhist Canon Mapping Model
+- **First Council**: Oral-era decentralized "distributed consensus algorithm"
+- **Nine-Part Teaching & Āgama**: Schema / official standard database
+- **Twelve-Part Teaching**: Nidāna (Readme), Upadeśa (GUI), Śāstra (proto-compiler)
+- **Four Āgama Texts**: CBETA-based reference texts for *Dīrgha*, *Madhyama*, *Saṃyukta*, and *Ekottarika Āgama*
+
+### 7. Buddhist Meme Machine Analysis Framework
 - **Council Model**: Explains Buddhist councils through memetic sequencing, selection, and carrier upgrades
 - **Propagation Model**: Explains cross-cultural Buddhist transmission through copying, variation, selection, and re-coding
 - **Modern Application**: Analyzes digital Buddhist propagation through textualization, visualization, and ritualization
 
-### 7. Material Layers And Evidence Boundaries
+### 8. Material Layers And Evidence Boundaries
 - **Doctrinal layer**: Agama texts, Buddhist logic, Collected Topics, Madhyamaka, cognitive analysis, and vipassanā context files are the main basis for answers and citations.
 - **Method layer**: Memetics, type-system metaphors, and debugging language explain structure; they do not replace Buddhist doctrinal classification.
 - **Application layer**: Work feedback, caregiving stress, and relationship communication are generic method examples, not autobiographical claims.
@@ -183,7 +184,7 @@ Installation paths are documented in `docs/installation.md`. Runtime evidence an
 ## Compatibility And Collation Boundaries
 
 - **Platform status**: `agents/openai.yaml` is the machine-readable metadata source; `docs/platform-validation.md` records status definitions, validation evidence, and update rules.
-- **Current validation**: Codex is `tested` for ZC-01 through ZC-06 as of 2026-06-15; Claude Code is `tested` for ZC-01 through ZC-06 through UTF-8 stdin as of 2026-06-16; Volcengine OpenAI-Compatible is `tested` for ZC-01 through ZC-03 as of 2026-06-16; native OpenAI API remains `harness-ready`.
+- **Current validation**: Codex is `tested` for ZC-01 through ZC-06 as of 2026-06-15; Claude Code is `tested` for ZC-01 through ZC-06 through UTF-8 stdin as of 2026-06-18; Volcengine OpenAI-Compatible is `tested` for ZC-01 through ZC-03 as of 2026-06-16; native OpenAI API remains `harness-ready`.
 - **Provider routes**: Volcengine OpenAI-Compatible is recorded only as a compatible-provider partial `tested` route; DeepSeek, GLM, and Qwen remain `config-only`; see `docs/provider-routes.md`.
 - **Runtime boundary**: Codex, Claude Code, native OpenAI API, Volcengine OpenAI-Compatible, DeepSeek, GLM, and Qwen routes must not be described as tested unless the platform validation document says so.
 - **Scholarly collation**: the local Agama Markdown files are a searchable working corpus; publication-level citation should verify against CBETA XML and relevant parallel texts.

@@ -23,7 +23,7 @@ Zilan now uses a dual-track design:
 |---|---|---|---|
 | Skill mode | `SKILL.md` / `SKILL-en.md` | Lightweight dialogue, daily practice reflection, simple concept explanation | Maintained in repository and covered by invariant checks |
 | Codex sub-agent | `agents/zilan-codex.md` | Explicit spawned research, Agama retrieval, cross-domain reports | `tested` as of 2026-06-15 |
-| Claude Code agent | `agents/zilan-claude-code.md` | Claude Code explicit agent route and local tool use | `tested` as of 2026-06-16 with UTF-8 stdin on Windows PowerShell |
+| Claude Code agent | `agents/zilan-claude-code.md` | Claude Code explicit agent route and local tool use | `tested` as of 2026-06-18 with UTF-8 stdin on Windows PowerShell |
 | OpenAI API harness | `scripts/openai_api_harness.py` | Portable Responses API request construction and live validation path | `harness-ready`; live run still requires `OPENAI_API_KEY` evidence |
 | Volcengine OpenAI-compatible harness | `scripts/openai_api_harness.py` | Configurable OpenAI-compatible base URL and `chat-completions` route | `tested` for ZC-01 through ZC-03 as of 2026-06-16; additional cases remain optional |
 | Provider metadata | `agents/openai.yaml` | DeepSeek, GLM, Qwen route metadata | `config-only` until native harnesses or dated runtime evidence exist |

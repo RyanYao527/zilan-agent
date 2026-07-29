@@ -48,6 +48,7 @@ dev = ["mypy>=1.10,<2.0", "pytest>=7.4,<8.0", "pytest-cov>=5.0", "ruff>=0.6"]
 
 [tool.setuptools]
 py-modules = []
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
 
 [tool.setuptools.packages.find]
 where = [".", "scripts"]

@@ -260,7 +260,9 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │           ├── retrieval_dry_run.py
 │           └── role_coverage.py
 ├── agents/
-│   └── openai.yaml
+│   ├── zilan-claude-code.md  # Claude Code Agent source file
+│   ├── zilan-codex.md        # Codex sub-agent prompt
+│   └── openai.yaml           # UI metadata
 └── docs/archive/         # Historical archive, not a current runtime or validation entrypoint
 ```
 
@@ -295,7 +297,7 @@ For the following types of complex tasks, Codex can run Zilan as an independent 
 - Batch literature research (requiring WebSearch / WebFetch support)
 - Long-form analysis report generation
 
-Claude Code Agent definition: `~/.claude/agents/zilan.md`
+Claude Code Agent source file: `agents/zilan-claude-code.md`; recommended installed path: `~/.claude/agents/zilan.md`
 Codex sub-agent prompt: `agents/zilan-codex.md`
 Codex Skill root: `<zilan-agent-root>` (the install directory of this repo on the current machine)
 Codex knowledge base path: `<zilan-agent-root>/context/`

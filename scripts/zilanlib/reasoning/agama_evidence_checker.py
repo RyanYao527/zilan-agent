@@ -4,11 +4,13 @@ from pathlib import Path
 from typing import Any
 
 from zilanlib.reasoning.validator_output import build_validator_output
+from zilanlib.repository import detect_source_root
 from zilanlib.yaml_io import display_path, load_yaml_mapping
 
 ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_CASES = ROOT / "tests" / "reasoning_cases.yaml"
 DEFAULT_RETRIEVAL_FIXTURE = ROOT / "tests" / "fixtures" / "retrieval_chunks" / "semantic_chunks.yaml"
+DEFAULT_SOURCE_ROOT = detect_source_root(ROOT)
 VALIDATOR = "agama_evidence_checker"
 CONTRACT_FAMILY = "agama_evidence"
 MODE = "agama-evidence-checker-v0.1"
@@ -247,6 +249,9 @@ def _local_evidence(
     retrieval_fixture_path: Path,
     source_root: Path | None,
 ) -> dict[str, Any]:
+    retrieval_fixture = _load_yaml(retrieval_fixture_path)
+    chunks = _chunk_list(retrieval_fixture, retrieval_fixture_path)
+
     if source_root is None:
         return {
             "status": "not_applicable",
@@ -266,11 +271,7 @@ def _local_evidence(
             "limitations": [PACKAGE_LOCAL_EVIDENCE_LIMITATION],
         }
 
-    retrieval_fixture = _load_yaml(retrieval_fixture_path)
-    passage_checks = [
-        _passage_anchor_check(chunk, source_root)
-        for chunk in _agama_passage_chunks(_chunk_list(retrieval_fixture, retrieval_fixture_path))
-    ]
+    passage_checks = [_passage_anchor_check(chunk, source_root) for chunk in _agama_passage_chunks(chunks)]
     reference_checks = _reference_file_checks(
         reference_files,
         source_root / "context" / "agama" / "agama-index.md",
@@ -456,7 +457,7 @@ def build_agama_evidence_check(
     *,
     case_id: str | None = None,
     retrieval_fixture_path: Path = DEFAULT_RETRIEVAL_FIXTURE,
-    source_root: Path | None = ROOT,
+    source_root: Path | None = DEFAULT_SOURCE_ROOT,
 ) -> dict[str, Any]:
     """Return structured Agama evidence checks from checked-in reasoning cases."""
 
