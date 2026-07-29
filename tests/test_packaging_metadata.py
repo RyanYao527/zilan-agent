@@ -22,6 +22,7 @@ def test_zilanlib_package_metadata_is_declared() -> None:
         'Issues = "https://github.com/RyanYao527/zilan-agent/issues"',
         'Changelog = "https://github.com/RyanYao527/zilan-agent/blob/main/CHANGELOG.md"',
         "[tool.setuptools.packages.find]",
+        'license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]',
         'where = [".", "scripts"]',
         'include = ["zilan_contract*", "zilanlib*"]',
         "[tool.setuptools.package-data]",
@@ -41,4 +42,17 @@ def test_zilan_contract_answer_samples_are_bundled() -> None:
     assert [path.name for path in bundled_files] == [path.name for path in source_files]
     for source_file in source_files:
         bundled_file = bundled_dir / source_file.name
+        assert bundled_file.read_text(encoding="utf-8") == source_file.read_text(encoding="utf-8")
+
+
+def test_zilan_contract_yaml_fixtures_are_bundled_without_drift() -> None:
+    pairs = [
+        (ROOT / "tests" / "reasoning_cases.yaml", ROOT / "zilan_contract" / "fixtures" / "reasoning_cases.yaml"),
+        (
+            ROOT / "tests" / "fixtures" / "retrieval_chunks" / "semantic_chunks.yaml",
+            ROOT / "zilan_contract" / "fixtures" / "retrieval_chunks" / "semantic_chunks.yaml",
+        ),
+    ]
+
+    for source_file, bundled_file in pairs:
         assert bundled_file.read_text(encoding="utf-8") == source_file.read_text(encoding="utf-8")

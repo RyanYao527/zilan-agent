@@ -5,6 +5,12 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 
 
+def detect_source_root(root: Path) -> Path | None:
+    """Return *root* only when it looks like a zilan-agent source checkout."""
+
+    return root if (root / "context").is_dir() else None
+
+
 def check_required_paths(
     root: Path,
     required_files: Sequence[str],

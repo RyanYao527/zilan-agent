@@ -29,6 +29,8 @@ _scripts_dir = Path(__file__).resolve().parents[1] / "scripts"
 if _scripts_dir.is_dir() and str(_scripts_dir) not in sys.path:
     sys.path.insert(0, str(_scripts_dir))
 
+from zilanlib.repository import detect_source_root  # noqa: E402
+
 __version__ = "2.5.5"
 __all__ = [
     "ContractRunner",
@@ -46,7 +48,7 @@ _SEMANTIC_FIXTURE = _FIXTURE_DIR / "retrieval_chunks" / "semantic_chunks.yaml"
 _PROJECT_ROOT = Path(__file__).resolve().parents[1]
 _DEV_FIXTURES = _PROJECT_ROOT / "tests" / "fixtures"
 _DEV_CASES = _PROJECT_ROOT / "tests" / "reasoning_cases.yaml"
-_DEFAULT_SOURCE_ROOT = _PROJECT_ROOT if (_PROJECT_ROOT / "context").is_dir() else None
+_DEFAULT_SOURCE_ROOT = detect_source_root(_PROJECT_ROOT)
 
 
 def get_fixture_path(name: str = "semantic_chunks.yaml") -> Path:

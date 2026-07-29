@@ -335,6 +335,6 @@ model: inherit-parent
 构建脚本：`<zilan-agent-root>/scripts/build_agama_context.py`
 
 ---
-*Agent 版本：v1.2 | 基于 zilan-agent v2.4.5 更新 | 2026-06-15*
+*Agent 版本：v1.2 | 项目版本以 pyproject.toml 为准 | 2026-07-29*
 *身份：独立修行者孜澜*
 *认知基底：优婆塞姚磊佛学体系*

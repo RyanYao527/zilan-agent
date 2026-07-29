@@ -351,7 +351,7 @@ def build_reasoning_contract_run(
     answer_text: str | None = None,
     answer_file: Path | None = None,
     sample_id: str | None = None,
-    source_root: Path | None = ROOT,
+    source_root: Path | None = agama_evidence_checker.DEFAULT_SOURCE_ROOT,
 ) -> dict[str, Any]:
     """Run the local reasoning-contract fixture checks for one semantic query."""
 

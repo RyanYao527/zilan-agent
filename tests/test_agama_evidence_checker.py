@@ -96,6 +96,23 @@ def test_agama_evidence_checker_marks_local_source_anchors_not_applicable_withou
     assert "local_evidence_anchors_verified" not in diagnostic_codes
 
 
+
+def test_agama_evidence_checker_still_requires_retrieval_fixture_without_source_root(tmp_path: Path) -> None:
+    missing_fixture = tmp_path / "missing-semantic-chunks.yaml"
+
+    try:
+        build_agama_evidence_check(
+            DEFAULT_CASES,
+            case_id="ZR-05",
+            retrieval_fixture_path=missing_fixture,
+            source_root=None,
+        )
+    except AgamaEvidenceCheckerError as exc:
+        assert "YAML file not found" in str(exc)
+        assert "missing-semantic-chunks.yaml" in str(exc)
+    else:
+        raise AssertionError("missing retrieval fixture should fail even without local source anchors")
+
 def test_agama_evidence_checker_rejects_non_agama_case() -> None:
     try:
         build_agama_evidence_check(DEFAULT_CASES, case_id="ZR-03")

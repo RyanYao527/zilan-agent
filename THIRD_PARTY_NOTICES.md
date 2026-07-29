@@ -13,7 +13,7 @@ The local Agama corpus is derived from CBETA XML-P5 material published by CBETA:
 - Source repository: https://github.com/cbeta-org/xml-p5
 - Copyright and usage terms: https://www.cbeta.org/copyright.php
 
-CBETA-derived material is not relicensed under the MIT License by this repository. Use, copying, modification, redistribution, publication, or commercial use of CBETA-derived material must follow the CBETA terms and any attribution, non-commercial, or other requirements described by CBETA.
+CBETA-derived material is not relicensed under the MIT License by this repository. CBETA currently describes its database as non-commercial and, except for specially noted materials, released under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0). Use, copying, modification, redistribution, publication, or commercial use of CBETA-derived material must follow the CBETA terms and any attribution, non-commercial, share-alike, or other requirements described by CBETA.
 
 Primary covered paths:
 
@@ -30,8 +30,10 @@ Derivative or excerpt-bearing paths may also include:
 
 - `context/agama/agama-index.md`
 - `tests/fixtures/retrieval_chunks/semantic_chunks.yaml`
+- `zilan_contract/fixtures/retrieval_chunks/semantic_chunks.yaml`
 - `tests/fixtures/retrieval_chunks/agama_bad_anchor_chunks.yaml`
 - `tests/fixtures/answers/`
+- `zilan_contract/fixtures/answers/`
 - `docs/runtime-evidence/`
 - generated citations or excerpts emitted by `scripts/search_agama.py` and copied into validation logs
 

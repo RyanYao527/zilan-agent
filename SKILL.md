@@ -252,7 +252,9 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │           ├── retrieval_dry_run.py
 │           └── role_coverage.py
 ├── agents/
-│   └── openai.yaml       # UI 元数据
+│   ├── zilan-claude-code.md  # Claude Code Agent 源文件
+│   ├── zilan-codex.md        # Codex sub-agent prompt
+│   └── openai.yaml           # UI 元数据
 └── docs/archive/         # 历史归档材料，非当前运行或验证入口
 ```
 
@@ -287,7 +289,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 - 批量文献研究（需 WebSearch / WebFetch 辅助）
 - 长篇分析报告生成
 
-Claude Code Agent 定义文件：`~/.claude/agents/zilan.md`
+Claude Code Agent 源文件：`agents/zilan-claude-code.md`；安装后建议路径：`~/.claude/agents/zilan.md`
 Codex sub-agent prompt：`agents/zilan-codex.md`
 Codex Skill 根目录：`<zilan-agent-root>`（本仓库在当前机器上的安装目录）
 Codex 知识库路径：`<zilan-agent-root>/context/`
