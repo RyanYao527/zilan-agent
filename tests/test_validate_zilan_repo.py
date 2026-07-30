@@ -49,6 +49,13 @@ def test_agent_prompt_validator_module_exports_public_function() -> None:
     assert callable(validate_agent_prompts)
 
 
+def test_reasoning_cases_validator_module_exports_public_function() -> None:
+    from zilanlib.validation.reasoning_cases import validate_reasoning_cases
+
+    assert callable(validate_reasoning_cases)
+    assert validate_zilan_repo._check_reasoning_cases_yaml is validate_reasoning_cases
+
+
 def test_platform_validation_doc_status_mismatch_is_reported(tmp_path: Path) -> None:
     docs = tmp_path / "docs"
     docs.mkdir()
