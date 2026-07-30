@@ -53,6 +53,7 @@ claiming natural-language parsing or doctrinal grading.
 answer-contract review, and Hetuvidya structured validator into one fixture-only entrypoint. Its `pass`, `fail`, and
 `review_needed` statuses are contract-review statuses only; they do not generate answers, call providers, grade doctrine,
 or change platform validation status.
+When answer-contract review passes, the runner also checks that each structured validator role declared in `needs` has an actual selected reasoning case; otherwise the run fails to prevent answer-contract / validator drift.
 
 `scripts/reasoning_answer_review.py` is a thinner manual-review wrapper over the runner. It returns compact JSON and
 Markdown focused on a provided answer source (`--answer-text`, `--answer-file`, or checked-in `--sample-id`), including
