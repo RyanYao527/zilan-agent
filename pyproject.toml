@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zilan-agent"
-version = "2.5.5"
+version = "2.5.6"
 description = "Deterministic output-contract validators for LLM responses + Buddhist philosophy Agent/Skill framework."
 readme = "README.md"
 requires-python = ">=3.10"

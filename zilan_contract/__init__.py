@@ -31,7 +31,7 @@ if _scripts_dir.is_dir() and str(_scripts_dir) not in sys.path:
 
 from zilanlib.repository import detect_source_root  # noqa: E402
 
-__version__ = "2.5.5"
+__version__ = "2.5.6"
 __all__ = [
     "ContractRunner",
     "HetuvidyaValidator",

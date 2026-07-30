@@ -4,6 +4,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+## [2.5.6] - 2026-07-30
+
 ### Added
 
 - Added 2026-07-30 post-alignment answer-review replay evidence covering the existing 2026-07-17 and 2026-07-20 batch manifests, confirming no missing structured validator cases after the #150/#151 alignment reporting changes without provider calls or platform-status changes.
