@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added 2026-07-30 post-alignment answer-review replay evidence covering the existing 2026-07-17 and 2026-07-20 batch manifests, confirming no missing structured validator cases after the #150/#151 alignment reporting changes without provider calls or platform-status changes.
 - Added `zilan_contract` standalone package: a clean public API (`ContractRunner`, `HetuvidyaValidator`, `ContractResult`) with bundled fixtures, `py.typed` marker, and a `docs/zilan-contract-quickstart.md` guide covering 60-second try and custom contract authoring.
 - Added `docs/article-output-contracts.md`: a ~1,970-word technical article pitching the output-contract + deterministic-validator pattern to an LLM engineering audience, with concrete code examples, pass/fail samples, and a domain-generalization table.
 - Added `docs/awesome-list-pr-entries.md`: pre-written PR entries for four curated awesome lists (`awesome-claude-skills`, `Awesome-Prompt-Engineering`, `awesome-agents`, `Awesome-LLM`) with descriptions and submission checklists.

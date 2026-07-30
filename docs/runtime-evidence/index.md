@@ -1,6 +1,6 @@
 # Runtime Evidence Index
 
-> Last updated: 2026-07-20
+> Last updated: 2026-07-30
 
 This index is a navigation aid for `docs/runtime-evidence/`. It does not change platform validation status. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -15,6 +15,12 @@ This index is a navigation aid for `docs/runtime-evidence/`. It does not change 
 | Provider/smoke evidence | Clean install, route smoke, or live-provider response summary. | no |
 
 Do not use summary-only evidence as `answer_file` input. Use the standalone answer excerpts listed below.
+
+## Batch Replay Reports
+
+| Report | Inputs | Status | Notes |
+|---|---|---|---|
+| `2026-07-30-post-alignment-answer-review-replay.md` | Replays the 2026-07-17 and 2026-07-20 answer-review batch manifests after #150/#151 answer-validator alignment reporting | pass / fail expected | No missing structured validator cases were found; the compact `ZC-04` progression keeps its expected historical shallow-contract fail. |
 
 ## Batch Review Index
 
