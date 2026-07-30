@@ -58,7 +58,7 @@ When answer-contract review passes, the runner also checks that each structured 
 `scripts/reasoning_answer_review.py` is a thinner manual-review wrapper over the runner. It returns compact JSON and
 Markdown focused on a provided answer source (`--answer-text`, `--answer-file`, or checked-in `--sample-id`), including
 missing answer-contract terms and slots, role-coverage gaps, selected validator families, and prototype limitations.
-It does not call providers, generate answers, alter prompts, or promote platform validation status.
+It does not call providers, generate answers, alter prompts, or promote platform validation status. It also preserves the runner answer-validator alignment summary so a batch report can distinguish answer-surface contract failures from missing structured validator cases.
 
 `scripts/reasoning_answer_review_batch.py` reads a small YAML manifest (`version: 1`, `reviews: [...]`) and runs the same
 compact answer review for each listed `query_id` / answer source pair. This is intended for transcript or answer-excerpt

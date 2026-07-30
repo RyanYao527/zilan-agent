@@ -98,6 +98,27 @@ def _role_summary(role_coverage: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _alignment_summary(answer_validator_alignment: dict[str, Any] | None) -> dict[str, Any]:
+    if not isinstance(answer_validator_alignment, dict):
+        return {
+            "status": "unknown",
+            "checked_roles": [],
+            "missing_validator_cases": [],
+        }
+
+    checked_roles = answer_validator_alignment.get("checked_roles", [])
+    missing_validator_cases = answer_validator_alignment.get("missing_validator_cases", [])
+    return {
+        "status": answer_validator_alignment.get("status", "unknown"),
+        "checked_roles": [item for item in checked_roles if isinstance(item, dict)]
+        if isinstance(checked_roles, list)
+        else [],
+        "missing_validator_cases": [item for item in missing_validator_cases if isinstance(item, dict)]
+        if isinstance(missing_validator_cases, list)
+        else [],
+    }
+
+
 def _answer_source(answer_contract_review: dict[str, Any] | None) -> dict[str, Any] | None:
     if answer_contract_review is None:
         return None
@@ -116,6 +137,7 @@ def _render_review_text(result: dict[str, Any]) -> str:
         f"Overall status: {result['overall_status']}",
         f"Answer review: {result['answer_review_status']}",
         f"Role coverage: {role_summary['status']}",
+        f"Answer-validator alignment: {result['answer_validator_alignment_summary']['status']}",
         f"Answer source: {_render_answer_source(result.get('answer_source'))}",
         "",
         "Boundary: local fixture review only; this is not runtime platform validation.",
@@ -130,6 +152,18 @@ def _render_review_text(result: dict[str, Any]) -> str:
     if role_summary["missing_needs"]:
         for need in role_summary["missing_needs"]:
             lines.append(f"- {need}")
+    else:
+        lines.append("- none")
+
+    lines.extend(["", "## Missing Validator Cases"])
+    missing_validator_cases = result["answer_validator_alignment_summary"]["missing_validator_cases"]
+    if missing_validator_cases:
+        for item in missing_validator_cases:
+            case_ids = ", ".join(_string_list(item.get("case_ids"))) or "none"
+            lines.append(
+                f"- {item.get('role', '')}: {item.get('validator', '')} "
+                f"({item.get('validator_status', 'unknown')}; cases={case_ids})"
+            )
     else:
         lines.append("- none")
 
@@ -196,6 +230,7 @@ def build_reasoning_answer_review(
         "answer_source": _answer_source(runner.get("answer_contract_review")),
         "role_coverage_summary": _role_summary(runner["role_coverage"]),
         "contract_summary": contract_summary,
+        "answer_validator_alignment_summary": _alignment_summary(runner.get("answer_validator_alignment")),
         "validator_summaries": _validator_summary(runner["validators"]),
         "limitations": list(LIMITATIONS),
     }

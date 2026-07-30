@@ -127,6 +127,7 @@ def _validator_families(review: dict[str, Any]) -> list[dict[str, Any]]:
 def _compact_review(review_id: str, review: dict[str, Any]) -> dict[str, Any]:
     contract_summary = review["contract_summary"]
     role_summary = review["role_coverage_summary"]
+    alignment_summary = review["answer_validator_alignment_summary"]
     return {
         "id": review_id,
         "query_id": review["query_id"],
@@ -140,6 +141,8 @@ def _compact_review(review_id: str, review: dict[str, Any]) -> dict[str, Any]:
         "missing_required_terms": contract_summary["missing_required_terms"],
         "present_forbidden_terms": contract_summary["present_forbidden_terms"],
         "missing_required_slots": contract_summary["missing_required_slots"],
+        "answer_validator_alignment_status": alignment_summary["status"],
+        "missing_validator_cases": alignment_summary["missing_validator_cases"],
         "validator_families": _validator_families(review),
     }
 
@@ -196,6 +199,13 @@ def _render_batch_text(result: dict[str, Any]) -> str:
             lines.append(f"  missing: {', '.join(missing)}")
         if review["missing_needs"]:
             lines.append(f"  missing needs: {', '.join(review['missing_needs'])}")
+        if review["missing_validator_cases"]:
+            roles = []
+            for item in review["missing_validator_cases"]:
+                role = item.get("role")
+                if isinstance(role, str) and role and role not in roles:
+                    roles.append(role)
+            lines.append(f"  validator drift: {', '.join(roles) or 'unknown'}")
 
     lines.extend(["", "## Limitations"])
     for limitation in result["limitations"]:

@@ -65,6 +65,37 @@ def test_reasoning_answer_review_marks_missing_answer_as_review_needed() -> None
     assert "Answer source: none" in result["review_text"]
 
 
+def test_reasoning_answer_review_exposes_answer_validator_alignment_failure(tmp_path: Path) -> None:
+    fixture_path = tmp_path / "semantic_chunks.yaml"
+    fixture_text = DEFAULT_FIXTURE.read_text(encoding="utf-8").replace(
+        "      - reasoning:ZR-07:hetuvidya-non-pervasive\n",
+        "",
+    )
+    fixture_path.write_text(fixture_text, encoding="utf-8")
+
+    result = build_reasoning_answer_review(
+        fixture_path,
+        query_id="SRQ-05",
+        sample_id="srq05-hetuvidya-non-pervasive-pass",
+    )
+
+    assert result["overall_status"] == "fail"
+    assert result["answer_review_status"] == "pass"
+    assert result["contract_summary"]["status"] == "pass"
+    assert result["answer_validator_alignment_summary"]["status"] == "fail"
+    assert result["answer_validator_alignment_summary"]["missing_validator_cases"] == [
+        {
+            "role": "hetuvidya",
+            "validator": "hetuvidya_validator",
+            "validator_status": "not_applicable",
+            "case_ids": [],
+            "reason": "answer_contract_passed_without_structured_validator_case",
+        }
+    ]
+    assert "Answer-validator alignment: fail" in result["review_text"]
+    assert "hetuvidya: hetuvidya_validator (not_applicable; cases=none)" in result["review_text"]
+
+
 def test_reasoning_answer_review_cli_json_output_is_machine_readable() -> None:
     completed = subprocess.run(
         [
