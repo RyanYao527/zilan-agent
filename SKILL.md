@@ -226,6 +226,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │           ├── __init__.py
 │           ├── agent_prompts.py
 │           ├── platform.py
+│           ├── regression_cases.py
 │           ├── reasoning_cases.py
 │           └── runtime_evidence.py
 │       ├── agama/                     # Agama search library helpers

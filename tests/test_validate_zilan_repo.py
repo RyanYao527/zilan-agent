@@ -9,6 +9,7 @@ from validate_zilan_repo import (
     _check_portable_upgrade_doc,
     _check_public_style_boundaries,
     _check_reasoning_cases_yaml,
+    _check_regression_cases_yaml,
     _check_retrieval_chunks_yaml,
     _check_runtime_evidence_docs,
     _check_version_consistency,
@@ -47,6 +48,14 @@ def test_agent_prompt_validator_module_exports_public_function() -> None:
     from zilanlib.validation.agent_prompts import validate_agent_prompts
 
     assert callable(validate_agent_prompts)
+
+
+def test_regression_cases_validator_module_exports_public_function() -> None:
+    from zilanlib.validation.regression_cases import validate_regression_cases
+
+    assert callable(validate_regression_cases)
+    assert validate_zilan_repo._check_regression_cases_yaml is validate_regression_cases
+    assert _check_regression_cases_yaml is validate_regression_cases
 
 
 def test_reasoning_cases_validator_module_exports_public_function() -> None:

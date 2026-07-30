@@ -17,6 +17,7 @@ from zilanlib.text_checks import check_required_fragments
 from zilanlib.validation import agent_prompts as agent_prompt_validation
 from zilanlib.validation import platform as platform_validation
 from zilanlib.validation import reasoning_cases as reasoning_cases_validation
+from zilanlib.validation import regression_cases as regression_cases_validation
 from zilanlib.validation import runtime_evidence as runtime_evidence_validation
 from zilanlib.yaml_io import (
     is_non_empty_int_list,
@@ -92,6 +93,7 @@ REQUIRED_FILES = (
     "scripts/zilanlib/validation/__init__.py",
     "scripts/zilanlib/validation/agent_prompts.py",
     "scripts/zilanlib/validation/platform.py",
+    "scripts/zilanlib/validation/regression_cases.py",
     "scripts/zilanlib/validation/reasoning_cases.py",
     "scripts/zilanlib/validation/runtime_evidence.py",
     "scripts/zilanlib/agama/__init__.py",
@@ -147,7 +149,7 @@ GENERATED_AGAMA_FILES = (
 )
 
 REGRESSION_CASES = runtime_evidence_validation.REGRESSION_CASES
-REGRESSION_CASES_PATH = "tests/regression_cases.yaml"
+REGRESSION_CASES_PATH = regression_cases_validation.REGRESSION_CASES_PATH
 REASONING_CASES_PATH = reasoning_cases_validation.REASONING_CASES_PATH
 RETRIEVAL_CHUNKS_PATH = "tests/fixtures/retrieval_chunks/semantic_chunks.yaml"
 README_FILES = ("README.md", "README.zh.md", "README.en.md")
@@ -236,71 +238,8 @@ def _check_regression_matrix(root: Path, failures: list[str]) -> None:
     check_regression_matrix(root, "CODEX_REGRESSION_TESTS.md", REGRESSION_CASES, failures)
 
 
-def _check_regression_cases_yaml(root: Path, failures: list[str], warnings: list[str], strict_yaml: bool) -> None:
-    data = _load_yaml(root, REGRESSION_CASES_PATH, failures, warnings, strict_yaml)
-    if data is None:
-        return
-    if not isinstance(data, dict):
-        failures.append(f"{REGRESSION_CASES_PATH} must be a mapping.")
-        return
-
-    cases = data.get("cases")
-    if not isinstance(cases, list):
-        failures.append(f"{REGRESSION_CASES_PATH} must contain a cases list.")
-        return
-
-    seen_ids: set[str] = set()
-    for item in cases:
-        if not isinstance(item, dict):
-            failures.append(f"{REGRESSION_CASES_PATH} contains a non-mapping case.")
-            continue
-
-        case_id = item.get("id")
-        if not isinstance(case_id, str) or not case_id:
-            failures.append(f"{REGRESSION_CASES_PATH} contains a case without a string id.")
-            continue
-        if case_id in seen_ids:
-            failures.append(f"{REGRESSION_CASES_PATH} contains duplicate case id: {case_id}")
-        seen_ids.add(case_id)
-
-        for field in ("mode", "category", "prompt"):
-            if not isinstance(item.get(field), str) or not item[field]:
-                failures.append(f"{REGRESSION_CASES_PATH} {case_id} missing string field: {field}")
-
-        requires = item.get("requires")
-        if not isinstance(requires, dict):
-            failures.append(f"{REGRESSION_CASES_PATH} {case_id} missing requires mapping.")
-        else:
-            for field in ("subagent", "agama_search", "file_output"):
-                if not isinstance(requires.get(field), bool):
-                    failures.append(f"{REGRESSION_CASES_PATH} {case_id} requires.{field} must be boolean.")
-
-        expected = item.get("expected")
-        if not isinstance(expected, dict):
-            failures.append(f"{REGRESSION_CASES_PATH} {case_id} missing expected mapping.")
-            continue
-
-        reference_files = expected.get("reference_files")
-        if not isinstance(reference_files, list) or not reference_files:
-            failures.append(f"{REGRESSION_CASES_PATH} {case_id} expected.reference_files must be a non-empty list.")
-        else:
-            for rel_path in reference_files:
-                if not isinstance(rel_path, str) or not (root / rel_path).exists():
-                    failures.append(f"{REGRESSION_CASES_PATH} {case_id} references missing path: {rel_path}")
-
-        keywords = expected.get("keywords")
-        if not isinstance(keywords, list) or not all(isinstance(keyword, str) and keyword for keyword in keywords):
-            failures.append(f"{REGRESSION_CASES_PATH} {case_id} expected.keywords must be a non-empty string list.")
-        if not isinstance(expected.get("boundary_statement"), bool):
-            failures.append(f"{REGRESSION_CASES_PATH} {case_id} expected.boundary_statement must be boolean.")
-
-    expected_ids = set(REGRESSION_CASES)
-    if seen_ids != expected_ids:
-        failures.append(
-            f"{REGRESSION_CASES_PATH} case ids do not match CODEX matrix: "
-            f"expected {sorted(expected_ids)}, got {sorted(seen_ids)}"
-        )
-
+_check_regression_cases_yaml = regression_cases_validation.validate_regression_cases
+validate_regression_cases = regression_cases_validation.validate_regression_cases
 
 def _retrieval_line_text_hash(source_lines: list[str], start_line: int, end_line: int) -> str:
     text = "\n".join(line.strip() for line in source_lines[start_line - 1 : end_line] if line.strip())
