@@ -188,14 +188,14 @@ The practical value: **when you change a system prompt, you don't eyeball a few 
 Patterns are cheap. Working, tested, CI-guarded code makes the case:
 
 ```text
-181 tests, all passing
+182 tests, all passing
 86% code coverage on zilanlib (the core library)
 mypy:  0 errors across 52 source files
 ruff:  0 issues (B/BLE/E/F/I/SIM/UP rules)
 CI:    lint → type-check → test → smoke-test on every push
 ```
 
-The project is `zilan-agent` on GitHub. It is intentionally dependency-minimal — PyYAML is the only runtime dependency. It does not use LangChain, LlamaIndex, vector databases, Docker, or any LLM-as-judge framework. The validators are pure Python functions that read YAML fixtures and return JSON. You can clone the repo, run `pytest`, and have 181 green dots in under a minute.
+The project is `zilan-agent` on GitHub. It is intentionally dependency-minimal — PyYAML is the only runtime dependency. It does not use LangChain, LlamaIndex, vector databases, Docker, or any LLM-as-judge framework. The validators are pure Python functions that read YAML fixtures and return JSON. You can clone the repo, run `pytest`, and have 182 green dots in under a minute.
 
 ---
 
@@ -243,7 +243,7 @@ The project is open-source (MIT). Read the code, run the tests, and port the pat
 git clone https://github.com/RyanYao527/zilan-agent.git
 cd zilan-agent
 pip install -e ".[dev]"
-python -m pytest                     # 181 tests
+python -m pytest                     # 182 tests
 python scripts/reasoning_contract_runner.py \
   --query-id SRQ-04 \
   --sample-id srq04-agama-citation-boundary-pass \
