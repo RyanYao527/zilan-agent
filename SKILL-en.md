@@ -234,6 +234,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │           ├── __init__.py
 │           ├── agent_prompts.py
 │           ├── platform.py
+│           ├── reasoning_cases.py
 │           └── runtime_evidence.py
 │       ├── agama/                     # Agama search library helpers
 │           ├── __init__.py
