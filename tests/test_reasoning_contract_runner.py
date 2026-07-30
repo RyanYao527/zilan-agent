@@ -121,6 +121,36 @@ def test_reasoning_contract_runner_passes_hetuvidya_sample() -> None:
     assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
 
 
+def test_reasoning_contract_runner_fails_answer_pass_without_structured_validator_case(tmp_path: Path) -> None:
+    fixture_path = tmp_path / "semantic_chunks.yaml"
+    fixture_text = DEFAULT_FIXTURE.read_text(encoding="utf-8").replace(
+        "      - reasoning:ZR-07:hetuvidya-non-pervasive\n",
+        "",
+    )
+    fixture_path.write_text(fixture_text, encoding="utf-8")
+
+    result = build_reasoning_contract_run(
+        fixture_path,
+        query_id="SRQ-05",
+        sample_id="srq05-hetuvidya-non-pervasive-pass",
+    )
+
+    assert result["answer_review_status"] == "pass"
+    assert result["role_coverage"]["coverage_status"] == "complete"
+    assert result["validators"]["hetuvidya"]["status"] == "not_applicable"
+    assert result["answer_validator_alignment"]["status"] == "fail"
+    assert result["answer_validator_alignment"]["missing_validator_cases"] == [
+        {
+            "role": "hetuvidya",
+            "validator": "hetuvidya_validator",
+            "validator_status": "not_applicable",
+            "case_ids": [],
+            "reason": "answer_contract_passed_without_structured_validator_case",
+        }
+    ]
+    assert result["overall_status"] == "fail"
+
+
 def test_reasoning_contract_runner_runs_madhyamaka_critique_engine_for_srq08() -> None:
     result = build_reasoning_contract_run(
         DEFAULT_FIXTURE,
@@ -249,6 +279,7 @@ def test_reasoning_contract_runner_runs_collected_topics_analyzer_for_srq07() ->
         "total_part_distinction": "required",
     }
 
+
 def test_reasoning_contract_runner_runs_collected_topics_analyzer_for_srq11() -> None:
     result = build_reasoning_contract_run(
         DEFAULT_FIXTURE,
@@ -262,9 +293,7 @@ def test_reasoning_contract_runner_runs_collected_topics_analyzer_for_srq11() ->
     assert result["validators"]["collected_topics"]["case_ids"] == ["ZR-12"]
     analysis = result["validators"]["collected_topics"]["analyses"][0]
     assert analysis["case_id"] == "ZR-12"
-    relation_checks = {
-        item["id"]: item["status"] for item in analysis["collected_topics"]["relation_checks"]
-    }
+    relation_checks = {item["id"]: item["status"] for item in analysis["collected_topics"]["relation_checks"]}
     assert relation_checks == {
         "definition_scope": "fail",
         "definiendum_boundary": "required",
@@ -322,6 +351,7 @@ def test_reasoning_contract_runner_runs_cognitive_mapper_for_srq10() -> None:
     assert cognitive_validator["mappings"][0]["case_id"] == "ZR-11"
     chain_steps = cognitive_validator["mappings"][0]["cognitive_analysis"]["chain_steps"]
     assert [item["role"] for item in chain_steps] == CHAIN_STEP_ROLES
+
 
 def test_reasoning_contract_runner_runs_agama_evidence_checker_for_srq04() -> None:
     result = build_reasoning_contract_run(

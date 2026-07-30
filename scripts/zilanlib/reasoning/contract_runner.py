@@ -275,10 +275,76 @@ def _build_validators(
         for spec in _VALIDATOR_SPECS
     }
 
-def _overall_status(role_coverage: dict[str, Any], answer_review_status: str) -> str:
+
+def _build_answer_validator_alignment(
+    dry_run: dict[str, Any],
+    answer_review_status: str,
+    validators: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    if answer_review_status != "pass":
+        return {
+            "status": "not_applicable",
+            "checked_roles": [],
+            "missing_validator_cases": [],
+            "limitations": [
+                "Alignment is checked only after answer_contract_review passes.",
+            ],
+        }
+
+    needs = dry_run.get("needs", [])
+    need_set = {need for need in needs if isinstance(need, str)} if isinstance(needs, list) else set()
+    checked_roles: list[dict[str, Any]] = []
+    missing_validator_cases: list[dict[str, Any]] = []
+
+    for spec in _VALIDATOR_SPECS:
+        if spec.role not in need_set:
+            continue
+
+        validator = validators.get(spec.role, {})
+        validator_status = str(validator.get("status", "missing"))
+        case_ids_value = validator.get("case_ids", [])
+        case_ids = (
+            [case_id for case_id in case_ids_value if isinstance(case_id, str)]
+            if isinstance(case_ids_value, list)
+            else []
+        )
+        checked_role = {
+            "role": spec.role,
+            "validator": spec.module.VALIDATOR,
+            "validator_status": validator_status,
+            "case_ids": case_ids,
+        }
+        checked_roles.append(checked_role)
+
+        if validator_status != "run" or not case_ids:
+            missing_validator_cases.append(
+                {
+                    **checked_role,
+                    "reason": "answer_contract_passed_without_structured_validator_case",
+                }
+            )
+
+    return {
+        "status": "fail" if missing_validator_cases else "pass",
+        "checked_roles": checked_roles,
+        "missing_validator_cases": missing_validator_cases,
+        "limitations": [
+            "Checks only structured validator roles declared in retrieval fixture needs after answer contracts pass.",
+            "This is a consistency guard; it does not grade doctrinal correctness.",
+        ],
+    }
+
+
+def _overall_status(
+    role_coverage: dict[str, Any],
+    answer_review_status: str,
+    answer_validator_alignment_status: str,
+) -> str:
     if role_coverage.get("missing_needs"):
         return "fail"
     if answer_review_status == "fail":
+        return "fail"
+    if answer_validator_alignment_status == "fail":
         return "fail"
     if answer_review_status == "review_needed":
         return "review_needed"
@@ -311,7 +377,8 @@ def build_reasoning_contract_run(
         sample_id=sample_id,
     )
     validators = _build_validators(cases_path, dry_run, fixture_path, source_root)
-    status = _overall_status(role_coverage, answer_review_status)
+    answer_validator_alignment = _build_answer_validator_alignment(dry_run, answer_review_status, validators)
+    status = _overall_status(role_coverage, answer_review_status, str(answer_validator_alignment["status"]))
 
     return {
         "mode": MODE,
@@ -325,6 +392,7 @@ def build_reasoning_contract_run(
         "role_coverage": role_coverage,
         "answer_review_status": answer_review_status,
         "answer_contract_review": answer_contract_review,
+        "answer_validator_alignment": answer_validator_alignment,
         "validators": validators,
         "limitations": list(LIMITATIONS),
     }
