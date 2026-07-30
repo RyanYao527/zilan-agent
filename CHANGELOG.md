@@ -13,10 +13,11 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added `scripts/hf_upload_dataset.py`: a HuggingFace Dataset upload script that packages the Agama corpus (1,844 passages) and six knowledge-base files with a dataset card, dry-run mode, and interactive repo-id prompting.
 - Added `scripts/demo.sh` and `scripts/demo.tape`: a 60-second CLI demo script (asciinema-compatible) and a vhs tape definition for recording terminal GIFs.
 - Added a four-tier contributor ladder (`🪜 贡献者阶梯` / `Contributor Ladder`) to `CONTRIBUTING.md` and `CONTRIBUTING-en.md`, with concrete first tasks for Evidence Runner (L1), Documentation Reviewer (L2), Contract Reviewer (L3), and Code Contributor (L4).
-- Added a "For Engineers" section to `README.md`, pitching the output-contract pattern and engineering metrics (183 tests, 86% coverage, mypy/ruff clean) to LLM reliability engineers before the Buddhist-domain content.
+- Added a "For Engineers" section to `README.md`, pitching the output-contract pattern and engineering metrics (185 tests, 86% coverage, mypy/ruff clean) to LLM reliability engineers before the Buddhist-domain content.
 
 ### Changed
 
+- Propagated answer-validator alignment status into single and batch reasoning answer reviews so reports distinguish answer-surface failures from missing structured validator cases.
 - Added a reasoning contract runner answer-validator alignment guard so a passing answer contract now fails the run if the corresponding structured validator role has no selected reasoning case.
 - Consolidated reasoning contract runner validator dispatch into a single internal spec table, preserving the stable CLI/API output while reducing future validator wiring drift.
 - Updated public Skill script inventories for `scripts/hf_upload_dataset.py` after the Hugging Face dataset helper landed on `main`.

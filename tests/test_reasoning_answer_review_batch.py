@@ -67,6 +67,56 @@ def test_reasoning_answer_review_batch_summarizes_mixed_statuses(tmp_path: Path)
     assert "- agama-fail: fail" in result["review_text"]
 
 
+def test_reasoning_answer_review_batch_exposes_answer_validator_alignment_failure(tmp_path: Path) -> None:
+    fixture_path = tmp_path / "semantic_chunks.yaml"
+    fixture_text = (
+        (ROOT / "tests" / "fixtures" / "retrieval_chunks" / "semantic_chunks.yaml")
+        .read_text(encoding="utf-8")
+        .replace(
+            "      - reasoning:ZR-07:hetuvidya-non-pervasive\n",
+            "",
+        )
+    )
+    fixture_path.write_text(fixture_text, encoding="utf-8")
+    batch_path = tmp_path / "answer-review-batch.yaml"
+    batch_path.write_text(
+        """
+version: 1
+reviews:
+  - id: hetuvidya-alignment-drift
+    query_id: SRQ-05
+    sample_id: srq05-hetuvidya-non-pervasive-pass
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    result = build_reasoning_answer_review_batch(batch_path, fixture_path=fixture_path)
+
+    assert result["overall_status"] == "fail"
+    assert result["summary"] == {
+        "total": 1,
+        "pass": 0,
+        "fail": 1,
+        "review_needed": 0,
+        "other": 0,
+    }
+    review = result["reviews"][0]
+    assert review["answer_review_status"] == "pass"
+    assert review["contract_status"] == "pass"
+    assert review["answer_validator_alignment_status"] == "fail"
+    assert review["missing_validator_cases"] == [
+        {
+            "role": "hetuvidya",
+            "validator": "hetuvidya_validator",
+            "validator_status": "not_applicable",
+            "case_ids": [],
+            "reason": "answer_contract_passed_without_structured_validator_case",
+        }
+    ]
+    assert "validator drift: hetuvidya" in result["review_text"]
+
+
 def test_reasoning_answer_review_batch_rejects_missing_review_id(tmp_path: Path) -> None:
     batch_path = tmp_path / "invalid-batch.yaml"
     batch_path.write_text(
