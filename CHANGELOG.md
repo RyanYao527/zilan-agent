@@ -8,6 +8,12 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 - Extracted reasoning-case schema validation into `scripts/zilanlib/validation/reasoning_cases.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
 - Extracted regression-case schema validation into `scripts/zilanlib/validation/regression_cases.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
+- Extracted retrieval-chunk fixture validation into `scripts/zilanlib/validation/retrieval_chunks.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
+- Refreshed public engineering metrics to the current local baseline of 190 tests, 83% zilanlib coverage, and 55 mypy-checked source files.
+
+### Fixed
+
+- Ignored local `build/` artifacts during mock Claude Code install smoke copies so stale packaging output cannot break repository-level pytest runs.
 
 ## [2.5.6] - 2026-07-30
 

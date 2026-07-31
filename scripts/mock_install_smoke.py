@@ -15,6 +15,7 @@ COPY_IGNORE_PATTERNS = (
     ".git",
     ".pytest_cache",
     ".ruff_cache",
+    "build",
     "__pycache__",
     "*.pyc",
 )
