@@ -65,6 +65,14 @@ def test_reasoning_cases_validator_module_exports_public_function() -> None:
     assert validate_zilan_repo._check_reasoning_cases_yaml is validate_reasoning_cases
 
 
+def test_retrieval_chunks_validator_module_exports_public_function() -> None:
+    from zilanlib.validation.retrieval_chunks import validate_retrieval_chunks
+
+    assert callable(validate_retrieval_chunks)
+    assert validate_zilan_repo._check_retrieval_chunks_yaml is validate_retrieval_chunks
+    assert _check_retrieval_chunks_yaml is validate_retrieval_chunks
+
+
 def test_platform_validation_doc_status_mismatch_is_reported(tmp_path: Path) -> None:
     docs = tmp_path / "docs"
     docs.mkdir()
@@ -259,6 +267,88 @@ queries:
     assert any("answer_contract_samples Bad ID expected_status" in failure for failure in failures)
     assert any("unknown expected chunks" in failure for failure in failures)
 
+
+
+def test_retrieval_query_malformed_need_shapes_preserve_follow_on_behavior(tmp_path: Path) -> None:
+    docs = tmp_path / "docs" / "architecture"
+    docs.mkdir(parents=True)
+    (docs / "semantic-retrieval-interface.md").write_text("# Semantic Retrieval\n", encoding="utf-8")
+    context = tmp_path / "context"
+    context.mkdir()
+    (context / "sample.md").write_text("line one\nline two\n", encoding="utf-8")
+    fixtures = tmp_path / "tests" / "fixtures" / "retrieval_chunks"
+    fixtures.mkdir(parents=True)
+    (fixtures / "semantic_chunks.yaml").write_text(
+        """version: 1
+source: docs/architecture/semantic-retrieval-interface.md
+purpose: Test retrieval chunks.
+chunks:
+  - chunk_id: chunk-1
+    chunk_type: context_topic
+    source_file: context/sample.md
+    start_line: 1
+    end_line: 1
+    citation: "context/sample.md:1"
+    passage_citation: "context/sample.md:1"
+    text: "line one"
+    metadata:
+      topics:
+        - sample
+      reasoning_roles:
+        - cognitive_analysis
+queries:
+  - id: SRQ-01
+    query: "sample query"
+    needs:
+      practice_boundary: true
+    non_chunk_needs:
+      - practice_boundary
+    answer_boundary_contracts:
+      practice_boundary:
+        description: Practice boundary.
+        required_terms:
+          - boundary
+    keywords:
+      classical:
+        - sample
+      modern:
+        - sample
+    expected_sources:
+      - context/sample.md
+    expected_chunk_ids:
+      - chunk-1
+  - id: SRQ-02
+    query: "sample query"
+    needs:
+      - practice_boundary
+    non_chunk_needs: practice_boundary
+    answer_boundary_contracts:
+      practice_boundary:
+        description: Practice boundary.
+        required_terms:
+          - boundary
+    keywords:
+      classical:
+        - sample
+      modern:
+        - sample
+    expected_sources:
+      - context/sample.md
+    expected_chunk_ids:
+      - chunk-1
+""",
+        encoding="utf-8",
+    )
+    failures: list[str] = []
+    warnings: list[str] = []
+
+    _check_retrieval_chunks_yaml(tmp_path, failures, warnings, strict_yaml=True)
+
+    assert warnings == []
+    assert any("SRQ-01 needs must be a list" in failure for failure in failures)
+    assert not any("SRQ-01 non_chunk_needs are not listed in needs" in failure for failure in failures)
+    assert any("SRQ-02 non_chunk_needs must be a list" in failure for failure in failures)
+    assert not any("SRQ-02 answer_boundary_contracts requires non_chunk_needs" in failure for failure in failures)
 
 def test_retrieval_agama_provenance_errors_are_reported(tmp_path: Path) -> None:
     docs = tmp_path / "docs" / "architecture"

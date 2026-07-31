@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from mock_install_smoke import run_mock_install
+from mock_install_smoke import _copy_repo_to_skill, run_mock_install
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -17,6 +17,19 @@ def test_mock_install_creates_expected_claude_layout(tmp_path: Path) -> None:
     assert Path(result.skill_dir, "context", "agama", "agama-index.md").exists()
     assert Path(result.agent_file).exists()
     assert "Found 1 matches" in result.search_excerpt
+
+
+def test_mock_install_copy_ignores_build_artifacts(tmp_path: Path) -> None:
+    source_repo = tmp_path / "repo"
+    source_repo.mkdir()
+    build_artifact = source_repo / "build" / "bdist.win-amd64" / "wheel" / "stale.egg-info"
+    build_artifact.mkdir(parents=True)
+    (build_artifact / "PKG-INFO").write_text("stale build metadata\n", encoding="utf-8")
+
+    skill_dir = tmp_path / "skill"
+    _copy_repo_to_skill(source_repo, skill_dir)
+
+    assert not (skill_dir / "build").exists()
 
 
 def test_mock_install_refuses_existing_skill_dir(tmp_path: Path) -> None:
