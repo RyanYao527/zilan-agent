@@ -227,6 +227,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │           ├── agent_prompts.py
 │           ├── agama_corpus.py
 │           ├── platform.py
+│           ├── public_docs.py
 │           ├── regression_cases.py
 │           ├── reasoning_cases.py
 │           ├── retrieval_chunks.py
