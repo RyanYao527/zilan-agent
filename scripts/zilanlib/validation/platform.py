@@ -51,6 +51,21 @@ def validate_platform_metadata(
     return validation
 
 
+def validate_platform_yaml_metadata(
+    root: Path,
+    failures: list[str],
+    warnings: list[str],
+    strict_yaml: bool,
+) -> None:
+    validation = validate_platform_metadata(root, failures, warnings, strict_yaml)
+    if not validation:
+        return
+
+    codex_validation = validation.get("codex")
+    if not isinstance(codex_validation, dict) or codex_validation.get("status") != "tested":
+        failures.append("agents/openai.yaml should mark validation.codex.status as tested.")
+
+
 def get_validation_mapping(data: object, failures: list[str]) -> dict[str, object]:
     if not isinstance(data, dict):
         failures.append("agents/openai.yaml must be a mapping.")
