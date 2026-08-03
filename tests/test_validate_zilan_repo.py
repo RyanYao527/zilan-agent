@@ -44,6 +44,27 @@ def test_platform_validator_module_exports_public_function() -> None:
     assert callable(validate_platform_metadata)
 
 
+def test_public_docs_validator_module_exports_public_functions() -> None:
+    from zilanlib.validation import platform as platform_validation
+    from zilanlib.validation.public_docs import (
+        check_portable_upgrade_doc,
+        check_public_style_boundaries,
+        check_readme_platform_validation_links,
+        check_skill_script_inventory,
+        check_third_party_notices,
+        validate_public_docs,
+    )
+
+    assert callable(validate_public_docs)
+    assert platform_validation.check_readme_platform_validation_links is check_readme_platform_validation_links
+    assert validate_zilan_repo._check_public_docs is validate_public_docs
+    assert validate_zilan_repo._check_readme_platform_validation_links is check_readme_platform_validation_links
+    assert validate_zilan_repo._check_third_party_notices is check_third_party_notices
+    assert validate_zilan_repo._check_skill_script_inventory is check_skill_script_inventory
+    assert validate_zilan_repo._check_public_style_boundaries is check_public_style_boundaries
+    assert validate_zilan_repo._check_portable_upgrade_doc is check_portable_upgrade_doc
+
+
 def test_agent_prompt_validator_module_exports_public_function() -> None:
     from zilanlib.validation.agent_prompts import validate_agent_prompts
 
@@ -615,8 +636,10 @@ reviews:
     )
 
 def test_public_style_boundary_private_fragment_is_reported(tmp_path: Path, monkeypatch) -> None:
+    from zilanlib.validation import public_docs as public_docs_validation
+
     (tmp_path / "SKILL.md").write_text("认知带宽受限", encoding="utf-8")
-    monkeypatch.setattr(validate_zilan_repo, "PUBLIC_STYLE_BOUNDARY_FILES", ("SKILL.md",))
+    monkeypatch.setattr(public_docs_validation, "PUBLIC_STYLE_BOUNDARY_FILES", ("SKILL.md",))
     failures: list[str] = []
 
     _check_public_style_boundaries(tmp_path, failures)
