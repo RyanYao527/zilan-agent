@@ -139,6 +139,70 @@ validate_generated_agama = agama_corpus_validation.validate_generated_agama
 run_checks = validation_suite.run_checks
 
 
+ENTRYPOINT_COMPATIBILITY_ALIASES = {
+    "_load_yaml": "zilanlib.yaml_io.load_yaml_for_validation",
+    "_is_non_empty_string_list": "zilanlib.yaml_io.is_non_empty_string_list",
+    "_is_non_empty_int_list": "zilanlib.yaml_io.is_non_empty_int_list",
+    "_hash_file": "zilanlib.validation.agama_corpus.hash_file",
+    "_check_paths": "zilanlib.validation.repository_metadata.check_paths",
+    "_check_version_consistency": "zilanlib.validation.repository_metadata.check_version_consistency",
+    "_check_regression_matrix": "zilanlib.validation.repository_metadata.check_regression_matrix",
+    "validate_repository_metadata": "zilanlib.validation.repository_metadata.validate_repository_metadata",
+    "_check_regression_cases_yaml": "zilanlib.validation.regression_cases.validate_regression_cases",
+    "validate_regression_cases": "zilanlib.validation.regression_cases.validate_regression_cases",
+    "_retrieval_line_text_hash": "zilanlib.validation.retrieval_chunks.retrieval_line_text_hash",
+    "_check_agama_passage_provenance": "zilanlib.validation.retrieval_chunks.check_agama_passage_provenance",
+    "_check_retrieval_chunk_metadata": "zilanlib.validation.retrieval_chunks.check_retrieval_chunk_metadata",
+    "_check_answer_samples": "zilanlib.validation.retrieval_chunks.check_answer_samples",
+    "_check_answer_contracts": "zilanlib.validation.retrieval_chunks.check_answer_contracts",
+    "_check_retrieval_queries": "zilanlib.validation.retrieval_chunks.check_retrieval_queries",
+    "_check_retrieval_chunks_yaml": "zilanlib.validation.retrieval_chunks.validate_retrieval_chunks",
+    "validate_retrieval_chunks": "zilanlib.validation.retrieval_chunks.validate_retrieval_chunks",
+    "_check_hetuvidya_contract": "zilanlib.validation.reasoning_cases.check_hetuvidya_contract",
+    "_check_collected_topics_contract": "zilanlib.validation.reasoning_cases.check_collected_topics_contract",
+    "_check_cognitive_analysis_contract": "zilanlib.validation.reasoning_cases.check_cognitive_analysis_contract",
+    "_check_madhyamaka_prasanga_contract": "zilanlib.validation.reasoning_cases.check_madhyamaka_prasanga_contract",
+    "_check_agama_evidence_contract": "zilanlib.validation.reasoning_cases.check_agama_evidence_contract",
+    "_check_reasoning_cases_yaml": "zilanlib.validation.reasoning_cases.validate_reasoning_cases",
+    "validate_reasoning_cases": "zilanlib.validation.reasoning_cases.validate_reasoning_cases",
+    "_check_agent_prompts": "zilanlib.validation.agent_prompts.validate_agent_prompts",
+    "validate_agent_prompts": "zilanlib.validation.agent_prompts.validate_agent_prompts",
+    "_get_validation_mapping": "zilanlib.validation.platform.get_validation_mapping",
+    "_check_agent_validation_entries": "zilanlib.validation.platform.check_agent_validation_entries",
+    "_parse_markdown_table_rows": "zilanlib.validation.platform.parse_markdown_table_rows",
+    "_check_platform_validation_doc": "zilanlib.validation.platform.check_platform_validation_doc",
+    "_check_readme_platform_validation_links": "zilanlib.validation.public_docs.check_readme_platform_validation_links",
+    "validate_platform_metadata": "zilanlib.validation.platform.validate_platform_metadata",
+    "_check_yaml": "zilanlib.validation.platform.validate_platform_yaml_metadata",
+    "validate_platform_yaml_metadata": "zilanlib.validation.platform.validate_platform_yaml_metadata",
+    "_check_third_party_notices": "zilanlib.validation.public_docs.check_third_party_notices",
+    "_check_skill_script_inventory": "zilanlib.validation.public_docs.check_skill_script_inventory",
+    "_check_public_style_boundaries": "zilanlib.validation.public_docs.check_public_style_boundaries",
+    "_check_public_docs": "zilanlib.validation.public_docs.validate_public_docs",
+    "validate_public_docs": "zilanlib.validation.public_docs.validate_public_docs",
+    "_check_runtime_validation_log": "zilanlib.validation.runtime_evidence.check_runtime_validation_log",
+    "_runtime_evidence_rel_path_from_ref": "zilanlib.validation.runtime_evidence.runtime_evidence_rel_path_from_ref",
+    "_runtime_evidence_refs_from_text": "zilanlib.validation.runtime_evidence.runtime_evidence_refs_from_text",
+    "_markdown_section": "zilanlib.validation.runtime_evidence.markdown_section",
+    "_runtime_evidence_summary_only_refs": "zilanlib.validation.runtime_evidence.runtime_evidence_summary_only_refs",
+    "_check_runtime_evidence_index_references": (
+        "zilanlib.validation.runtime_evidence.check_runtime_evidence_index_references"
+    ),
+    "_check_runtime_evidence_batch_manifests": (
+        "zilanlib.validation.runtime_evidence.check_runtime_evidence_batch_manifests"
+    ),
+    "_check_runtime_evidence_docs": "zilanlib.validation.runtime_evidence.check_runtime_evidence_docs",
+    "validate_runtime_evidence": "zilanlib.validation.runtime_evidence.validate_runtime_evidence",
+    "_check_portable_upgrade_doc": "zilanlib.validation.public_docs.check_portable_upgrade_doc",
+    "_check_agama_search": "zilanlib.validation.agama_corpus.validate_agama_search",
+    "validate_agama_search": "zilanlib.validation.agama_corpus.validate_agama_search",
+    "_run_build_agama": "zilanlib.validation.agama_corpus.run_build_agama",
+    "_check_generated_agama": "zilanlib.validation.agama_corpus.validate_generated_agama",
+    "validate_generated_agama": "zilanlib.validation.agama_corpus.validate_generated_agama",
+    "run_checks": "zilanlib.validation.suite.run_checks",
+}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate zilan-agent repository invariants.")
     parser.add_argument("--root", type=Path, default=ROOT, help="Repository root.")
