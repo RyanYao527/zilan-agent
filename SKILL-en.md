@@ -240,7 +240,8 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │           ├── repository_metadata.py
 │           ├── reasoning_cases.py
 │           ├── retrieval_chunks.py
-│           └── runtime_evidence.py
+│           ├── runtime_evidence.py
+│           └── suite.py
 │       ├── agama/                     # Agama search library helpers
 │           ├── __init__.py
 │           ├── candidates.py

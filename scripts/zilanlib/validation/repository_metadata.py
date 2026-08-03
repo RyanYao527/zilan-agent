@@ -83,6 +83,7 @@ REQUIRED_FILES = (
     "scripts/zilanlib/validation/repository_metadata.py",
     "scripts/zilanlib/validation/retrieval_chunks.py",
     "scripts/zilanlib/validation/runtime_evidence.py",
+    "scripts/zilanlib/validation/suite.py",
     "scripts/zilanlib/agama/__init__.py",
     "scripts/zilanlib/reasoning/__init__.py",
     "scripts/zilanlib/reasoning/agama_evidence_checker.py",

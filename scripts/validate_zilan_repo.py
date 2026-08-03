@@ -12,6 +12,7 @@ from zilanlib.validation import regression_cases as regression_cases_validation
 from zilanlib.validation import repository_metadata as repository_metadata_validation
 from zilanlib.validation import retrieval_chunks as retrieval_chunks_validation
 from zilanlib.validation import runtime_evidence as runtime_evidence_validation
+from zilanlib.validation import suite as validation_suite
 from zilanlib.yaml_io import (
     is_non_empty_int_list,
     is_non_empty_string_list,
@@ -135,34 +136,7 @@ _check_generated_agama = agama_corpus_validation.validate_generated_agama
 validate_generated_agama = agama_corpus_validation.validate_generated_agama
 
 
-def run_checks(
-    root: Path = ROOT,
-    *,
-    check_generated: bool = False,
-    strict_yaml: bool = False,
-) -> tuple[list[str], list[str]]:
-    failures: list[str] = []
-    warnings: list[str] = []
-    root = root.resolve()
-
-    _check_paths(root, failures)
-    _check_version_consistency(root, failures)
-    _check_regression_matrix(root, failures)
-    _check_regression_cases_yaml(root, failures, warnings, strict_yaml)
-    _check_reasoning_cases_yaml(root, failures, warnings, strict_yaml)
-    _check_retrieval_chunks_yaml(root, failures, warnings, strict_yaml)
-    _check_agent_prompts(root, failures)
-    _check_readme_platform_validation_links(root, failures)
-    _check_third_party_notices(root, failures)
-    _check_skill_script_inventory(root, failures)
-    _check_public_style_boundaries(root, failures)
-    validate_runtime_evidence(root, failures)
-    _check_portable_upgrade_doc(root, failures)
-    _check_yaml(root, failures, warnings, strict_yaml)
-    _check_agama_search(root, failures)
-    if check_generated:
-        _check_generated_agama(root, failures)
-    return failures, warnings
+run_checks = validation_suite.run_checks
 
 
 def main() -> int:
