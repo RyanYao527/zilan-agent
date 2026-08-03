@@ -39,9 +39,80 @@ def test_runtime_evidence_validator_module_exports_public_function() -> None:
 
 
 def test_platform_validator_module_exports_public_function() -> None:
-    from zilanlib.validation.platform import validate_platform_metadata
+    from zilanlib.validation.platform import validate_platform_metadata, validate_platform_yaml_metadata
 
     assert callable(validate_platform_metadata)
+    assert callable(validate_platform_yaml_metadata)
+    assert validate_zilan_repo._check_yaml is validate_platform_yaml_metadata
+    assert validate_zilan_repo.validate_platform_yaml_metadata is validate_platform_yaml_metadata
+
+
+def test_platform_yaml_metadata_requires_codex_tested_status(tmp_path: Path) -> None:
+    from zilanlib.validation.platform import validate_platform_yaml_metadata
+
+    agents = tmp_path / "agents"
+    agents.mkdir()
+    docs = tmp_path / "docs"
+    docs.mkdir()
+    (agents / "openai.yaml").write_text(
+        """validation:
+  codex:
+    status: config-only
+    scope: Local Codex metadata exists.
+  claude_code:
+    status: tested
+    date: "2026-06-10"
+    scope: Claude Code validation exists.
+  openai_api:
+    status: harness-ready
+    scope: Harness exists.
+  volcengine_openai_compatible:
+    status: tested
+    date: "2026-06-16"
+    scope: Volcengine route validation exists.
+  deepseek:
+    status: config-only
+    scope: Metadata exists.
+  glm:
+    status: config-only
+    scope: Metadata exists.
+  qwen:
+    status: config-only
+    scope: Metadata exists.
+""",
+        encoding="utf-8",
+    )
+    (docs / "platform-validation.md").write_text(
+        """# Platform Validation Status
+
+| Status | Meaning |
+|---|---|
+| `tested` | Runtime validation exists. |
+| `definition-versioned` | Prompt is versioned. |
+| `harness-ready` | Harness exists but live runtime is not tested. |
+| `metadata-only` | Metadata exists. |
+| `config-only` | Configuration exists. |
+| `blocked` | Validation is blocked. |
+
+| Platform route | Status | Last validated | Evidence | Boundary |
+|---|---|---|---|---|
+| Codex | `config-only` | - | evidence | boundary |
+| Claude Code | `tested` | 2026-06-10 | evidence | boundary |
+| OpenAI API | `harness-ready` | - | evidence | boundary |
+| Volcengine OpenAI-Compatible | `tested` | 2026-06-16 | evidence | boundary |
+| DeepSeek | `config-only` | - | evidence | boundary |
+| GLM | `config-only` | - | evidence | boundary |
+| Qwen | `config-only` | - | evidence | boundary |
+""",
+        encoding="utf-8",
+    )
+    failures: list[str] = []
+    warnings: list[str] = []
+
+    validate_platform_yaml_metadata(tmp_path, failures, warnings, strict_yaml=True)
+
+    assert warnings == []
+    assert failures == ["agents/openai.yaml should mark validation.codex.status as tested."]
 
 
 def test_public_docs_validator_module_exports_public_functions() -> None:

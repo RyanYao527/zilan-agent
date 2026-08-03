@@ -105,6 +105,8 @@ _parse_markdown_table_rows = platform_validation.parse_markdown_table_rows
 _check_platform_validation_doc = platform_validation.check_platform_validation_doc
 _check_readme_platform_validation_links = public_docs_validation.check_readme_platform_validation_links
 validate_platform_metadata = platform_validation.validate_platform_metadata
+_check_yaml = platform_validation.validate_platform_yaml_metadata
+validate_platform_yaml_metadata = platform_validation.validate_platform_yaml_metadata
 
 
 _check_third_party_notices = public_docs_validation.check_third_party_notices
@@ -124,16 +126,6 @@ _check_runtime_evidence_batch_manifests = runtime_evidence_validation.check_runt
 _check_runtime_evidence_docs = runtime_evidence_validation.check_runtime_evidence_docs
 validate_runtime_evidence = runtime_evidence_validation.validate_runtime_evidence
 _check_portable_upgrade_doc = public_docs_validation.check_portable_upgrade_doc
-
-
-def _check_yaml(root: Path, failures: list[str], warnings: list[str], strict_yaml: bool) -> None:
-    validation = validate_platform_metadata(root, failures, warnings, strict_yaml)
-    if not validation:
-        return
-
-    codex_validation = validation.get("codex")
-    if not isinstance(codex_validation, dict) or codex_validation.get("status") != "tested":
-        failures.append("agents/openai.yaml should mark validation.codex.status as tested.")
 
 
 _check_agama_search = agama_corpus_validation.validate_agama_search
