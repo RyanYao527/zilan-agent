@@ -4,6 +4,10 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+### Added
+
+- Added Codex Desktop maintenance workflow documentation and a 2026-08-03 local maintenance smoke evidence note without changing platform validation status.
+
 ### Changed
 
 - Extracted reasoning-case schema validation into `scripts/zilanlib/validation/reasoning_cases.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.

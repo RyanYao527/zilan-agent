@@ -1,6 +1,6 @@
 # Runtime Evidence Index
 
-> Last updated: 2026-07-30
+> Last updated: 2026-08-03
 
 This index is a navigation aid for `docs/runtime-evidence/`. It does not change platform validation status. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -80,6 +80,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence file | Scope |
 |---|---|
+| `2026-08-03-codex-desktop-maintenance-smoke.md` | Codex Desktop migration step 1 local maintenance baseline; repository validation, pytest, ruff, and mypy passed without changing platform status. |
 | `2026-06-16-volcengine-openai-compatible-zc-01-zc-03-live.md` | Volcengine OpenAI-compatible `ZC-01` through `ZC-03` live summary |
 | `2026-06-16-volcengine-openai-compatible-zc-02-live.md` | Volcengine OpenAI-compatible `ZC-02` live detail |
 | `2026-06-16-claude-code-utf8-rerun.md` | Claude Code UTF-8 stdin rerun |
