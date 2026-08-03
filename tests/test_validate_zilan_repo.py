@@ -72,6 +72,14 @@ def test_retrieval_chunks_validator_module_exports_public_function() -> None:
     assert validate_zilan_repo._check_retrieval_chunks_yaml is validate_retrieval_chunks
     assert _check_retrieval_chunks_yaml is validate_retrieval_chunks
 
+def test_agama_corpus_validator_module_exports_public_functions() -> None:
+    from zilanlib.validation.agama_corpus import validate_agama_search, validate_generated_agama
+
+    assert callable(validate_agama_search)
+    assert callable(validate_generated_agama)
+    assert validate_zilan_repo._check_agama_search is validate_agama_search
+    assert validate_zilan_repo._check_generated_agama is validate_generated_agama
+
 
 def test_platform_validation_doc_status_mismatch_is_reported(tmp_path: Path) -> None:
     docs = tmp_path / "docs"
