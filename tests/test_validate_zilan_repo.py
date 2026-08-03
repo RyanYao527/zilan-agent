@@ -32,6 +32,13 @@ def test_repository_invariants_pass_with_strict_yaml() -> None:
     assert warnings == []
 
 
+def test_validation_suite_module_exports_run_checks() -> None:
+    from zilanlib.validation.suite import run_checks as suite_run_checks
+
+    assert callable(suite_run_checks)
+    assert validate_zilan_repo.run_checks is suite_run_checks
+
+
 def test_runtime_evidence_validator_module_exports_public_function() -> None:
     from zilanlib.validation.runtime_evidence import validate_runtime_evidence
 

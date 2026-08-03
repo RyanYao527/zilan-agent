@@ -13,7 +13,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Extracted public documentation validation into `scripts/zilanlib/validation/public_docs.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
 - Extracted repository metadata validation into `scripts/zilanlib/validation/repository_metadata.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
 - Extracted platform YAML metadata guard validation into `scripts/zilanlib/validation/platform.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
-- Refreshed public engineering metrics to the current local baseline of 200 tests, 83% zilanlib coverage, and 58 mypy-checked source files.
+- Extracted validation suite orchestration into `scripts/zilanlib/validation/suite.py` while preserving `scripts/validate_zilan_repo.py` CLI behavior and `run_checks` compatibility.
+- Refreshed public engineering metrics to the current local baseline of 201 tests, 84% zilanlib coverage, and 59 mypy-checked source files.
 
 ### Fixed
 

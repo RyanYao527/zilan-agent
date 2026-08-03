@@ -232,7 +232,8 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │           ├── repository_metadata.py
 │           ├── reasoning_cases.py
 │           ├── retrieval_chunks.py
-│           └── runtime_evidence.py
+│           ├── runtime_evidence.py
+│           └── suite.py
 │       ├── agama/                     # Agama search library helpers
 │           ├── __init__.py
 │           ├── candidates.py
