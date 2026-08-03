@@ -65,6 +65,21 @@ def test_public_docs_validator_module_exports_public_functions() -> None:
     assert validate_zilan_repo._check_portable_upgrade_doc is check_portable_upgrade_doc
 
 
+def test_repository_metadata_validator_module_exports_public_functions() -> None:
+    from zilanlib.validation.repository_metadata import (
+        check_paths,
+        check_regression_matrix,
+        check_version_consistency,
+        validate_repository_metadata,
+    )
+
+    assert callable(validate_repository_metadata)
+    assert validate_zilan_repo._check_paths is check_paths
+    assert validate_zilan_repo._check_version_consistency is check_version_consistency
+    assert validate_zilan_repo._check_regression_matrix is check_regression_matrix
+    assert validate_zilan_repo.validate_repository_metadata is validate_repository_metadata
+
+
 def test_agent_prompt_validator_module_exports_public_function() -> None:
     from zilanlib.validation.agent_prompts import validate_agent_prompts
 

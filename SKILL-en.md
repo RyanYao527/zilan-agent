@@ -237,6 +237,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │           ├── platform.py
 │           ├── public_docs.py
 │           ├── regression_cases.py
+│           ├── repository_metadata.py
 │           ├── reasoning_cases.py
 │           ├── retrieval_chunks.py
 │           └── runtime_evidence.py
