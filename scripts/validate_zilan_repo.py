@@ -1,18 +1,15 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
-import subprocess
-import sys
 from pathlib import Path
 
-from zilanlib.agama.search import DEFAULT_FALSE_POSITIVE_PHRASES, search_agama
 from zilanlib.repository import (
     check_regression_matrix,
     check_required_paths,
     check_version_consistency,
 )
 from zilanlib.text_checks import check_required_fragments
+from zilanlib.validation import agama_corpus as agama_corpus_validation
 from zilanlib.validation import agent_prompts as agent_prompt_validation
 from zilanlib.validation import platform as platform_validation
 from zilanlib.validation import reasoning_cases as reasoning_cases_validation
@@ -92,6 +89,7 @@ REQUIRED_FILES = (
     "scripts/zilanlib/text_checks.py",
     "scripts/zilanlib/validation/__init__.py",
     "scripts/zilanlib/validation/agent_prompts.py",
+    "scripts/zilanlib/validation/agama_corpus.py",
     "scripts/zilanlib/validation/platform.py",
     "scripts/zilanlib/validation/regression_cases.py",
     "scripts/zilanlib/validation/reasoning_cases.py",
@@ -141,13 +139,8 @@ REQUIRED_CONTEXT_FILES = (
     "context/agama/_source/T02n0125.xml",
 )
 
-GENERATED_AGAMA_FILES = (
-    "context/agama/agama-index.md",
-    "context/agama/T0001-chang-agama.md",
-    "context/agama/T0026-zhong-agama.md",
-    "context/agama/T0099-za-agama.md",
-    "context/agama/T0125-ekottarika-agama.md",
-)
+GENERATED_AGAMA_FILES = agama_corpus_validation.GENERATED_AGAMA_FILES
+
 
 REGRESSION_CASES = runtime_evidence_validation.REGRESSION_CASES
 REGRESSION_CASES_PATH = regression_cases_validation.REGRESSION_CASES_PATH
@@ -223,8 +216,8 @@ PLATFORM_VALIDATION_LABELS = platform_validation.PLATFORM_VALIDATION_LABELS
 AGENT_PROMPT_REQUIRED_FRAGMENTS = agent_prompt_validation.AGENT_PROMPT_REQUIRED_FRAGMENTS
 
 
-def _hash_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+_hash_file = agama_corpus_validation.hash_file
+
 
 
 def _check_paths(root: Path, failures: list[str]) -> None:
@@ -351,75 +344,11 @@ def _check_yaml(root: Path, failures: list[str], warnings: list[str], strict_yam
         failures.append("agents/openai.yaml should mark validation.codex.status as tested.")
 
 
-def _check_agama_search(root: Path, failures: list[str]) -> None:
-    matches = search_agama("無我|非我|緣起", root=root, limit=30)
-    if not matches:
-        failures.append("Agama smoke search returned no matches.")
-        return
-    if any("_source" in match.file for match in matches):
-        failures.append("Agama smoke search should not return _source XML matches.")
-
-    false_positive_check = search_agama("無我|非我", root=root, limit=0)
-    if any(
-        any(phrase in match.text for phrase in DEFAULT_FALSE_POSITIVE_PHRASES)
-        for match in false_positive_check
-    ):
-        failures.append("Agama search did not filter known false positives.")
-
-
-def _run_build_agama(root: Path) -> subprocess.CompletedProcess[str]:
-    result = subprocess.run(
-        [sys.executable, str(root / "scripts" / "build_agama_context.py")],
-        cwd=root,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-    return result
-
-
-def _check_generated_agama(root: Path, failures: list[str]) -> None:
-    result = _run_build_agama(root)
-    if result.returncode != 0:
-        failures.append(
-            "build_agama_context.py failed:\n"
-            f"stdout:\n{result.stdout}\n"
-            f"stderr:\n{result.stderr}"
-        )
-        return
-    after_first_run = {rel_path: _hash_file(root / rel_path) for rel_path in GENERATED_AGAMA_FILES}
-
-    result = _run_build_agama(root)
-    if result.returncode != 0:
-        failures.append(
-            "Second build_agama_context.py run failed:\n"
-            f"stdout:\n{result.stdout}\n"
-            f"stderr:\n{result.stderr}"
-        )
-        return
-    after_second_run = {rel_path: _hash_file(root / rel_path) for rel_path in GENERATED_AGAMA_FILES}
-
-    changed = [
-        rel_path
-        for rel_path in GENERATED_AGAMA_FILES
-        if after_first_run[rel_path] != after_second_run[rel_path]
-    ]
-    if changed:
-        failures.append("Agama Markdown generation is not idempotent: " + ", ".join(changed))
-        return
-
-    diff_result = subprocess.run(
-        ["git", "diff", "--quiet", "--", *GENERATED_AGAMA_FILES],
-        cwd=root,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-    if diff_result.returncode != 0:
-        failures.append(
-            "Generated Agama Markdown differs from committed content. "
-            "Run scripts/build_agama_context.py and review the diff."
-        )
+_check_agama_search = agama_corpus_validation.validate_agama_search
+validate_agama_search = agama_corpus_validation.validate_agama_search
+_run_build_agama = agama_corpus_validation.run_build_agama
+_check_generated_agama = agama_corpus_validation.validate_generated_agama
+validate_generated_agama = agama_corpus_validation.validate_generated_agama
 
 
 def run_checks(

@@ -24,7 +24,7 @@ Add zilan-agent, a Buddhist philosophy Claude Code Skill + Agent with:
 
 - Dual-track architecture: lightweight Skill for dialogue, deep Agent for research
 - Five deterministic output-contract validators (no LLM-as-judge)
-- 190 tests, 83% coverage, mypy + ruff clean
+- 197 tests, 83% coverage, mypy + ruff clean
 - Built-in Āgama (Buddhist scripture) search with CBETA citation anchors
 - Full Chinese + English documentation
 
@@ -42,7 +42,7 @@ Agent: copy `agents/zilan-claude-code.md` to `~/.claude/agents/zilan.md`
 **PR entry:**
 
 ```markdown
-- **[zilan-agent](https://github.com/RyanYao527/zilan-agent)** — Open-source demo of the *Output Contract* pattern: structured specs (required slots, forbidden terms, boundary statements) + deterministic validators that check LLM outputs at CI speed without model calls. 190 tests, Python, MIT license.
+- **[zilan-agent](https://github.com/RyanYao527/zilan-agent)** — Open-source demo of the *Output Contract* pattern: structured specs (required slots, forbidden terms, boundary statements) + deterministic validators that check LLM outputs at CI speed without model calls. 197 tests, Python, MIT license.
 ```
 
 **PR description:**
@@ -83,7 +83,7 @@ Unlike LLM-as-judge approaches, these validators are deterministic, fast, and CI
 **PR entry:**
 
 ```markdown
-- **[zilan-agent](https://github.com/RyanYao527/zilan-agent)** — Demonstrates the *Output Contract* pattern for LLM reliability: deterministic validators check required terms, forbidden phrases, and boundary statements in LLM responses without calling another model. 190 tests, MIT license.
+- **[zilan-agent](https://github.com/RyanYao527/zilan-agent)** — Demonstrates the *Output Contract* pattern for LLM reliability: deterministic validators check required terms, forbidden phrases, and boundary statements in LLM responses without calling another model. 197 tests, MIT license.
 ```
 
 ---
