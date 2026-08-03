@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import ast
+import importlib
 from pathlib import Path
 
 import validate_zilan_repo
@@ -37,6 +39,36 @@ def test_validation_suite_module_exports_run_checks() -> None:
 
     assert callable(suite_run_checks)
     assert validate_zilan_repo.run_checks is suite_run_checks
+
+
+def test_validate_zilan_repo_exposes_compatibility_alias_manifest() -> None:
+    alias_manifest = validate_zilan_repo.ENTRYPOINT_COMPATIBILITY_ALIASES
+    required_aliases = {
+        "run_checks",
+        "_check_paths",
+        "_check_yaml",
+        "_check_public_docs",
+        "_check_runtime_evidence_docs",
+        "_check_retrieval_chunks_yaml",
+        "_check_reasoning_cases_yaml",
+        "_check_regression_cases_yaml",
+        "_check_agama_search",
+        "_check_generated_agama",
+    }
+
+    assert required_aliases <= set(alias_manifest)
+    for alias_name, qualified_target in alias_manifest.items():
+        module_name, target_name = qualified_target.rsplit(".", 1)
+        target = getattr(importlib.import_module(module_name), target_name)
+        assert getattr(validate_zilan_repo, alias_name) is target
+
+
+def test_validate_zilan_repo_keeps_local_code_to_cli_only() -> None:
+    module_path = Path(validate_zilan_repo.__file__)
+    tree = ast.parse(module_path.read_text(encoding="utf-8"))
+    local_functions = [node.name for node in tree.body if isinstance(node, ast.FunctionDef)]
+
+    assert local_functions == ["main"]
 
 
 def test_runtime_evidence_validator_module_exports_public_function() -> None:
