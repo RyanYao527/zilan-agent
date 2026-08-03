@@ -11,7 +11,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Extracted retrieval-chunk fixture validation into `scripts/zilanlib/validation/retrieval_chunks.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
 - Extracted Agama corpus search and generated Markdown validation into `scripts/zilanlib/validation/agama_corpus.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
 - Extracted public documentation validation into `scripts/zilanlib/validation/public_docs.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
-- Refreshed public engineering metrics to the current local baseline of 198 tests, 83% zilanlib coverage, and 57 mypy-checked source files.
+- Extracted repository metadata validation into `scripts/zilanlib/validation/repository_metadata.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
+- Refreshed public engineering metrics to the current local baseline of 199 tests, 83% zilanlib coverage, and 58 mypy-checked source files.
 
 ### Fixed
 
