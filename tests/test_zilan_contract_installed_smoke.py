@@ -26,6 +26,7 @@ def _install_package_to_target(tmp_path: Path) -> Path:
         cwd=ROOT,
         text=True,
         encoding="utf-8",
+        errors="replace",
         capture_output=True,
         check=False,
     )
@@ -45,6 +46,7 @@ def _run_installed_package(target: Path, tmp_path: Path, code: str) -> dict[str,
         env=env,
         text=True,
         encoding="utf-8",
+        errors="replace",
         capture_output=True,
         check=False,
     )
@@ -157,6 +159,98 @@ def test_installed_package_exposes_third_party_notices(tmp_path: Path) -> None:
     assert data["notice_files"]
     assert data["mentions_zilan_contract_fixtures"] is True
     assert data["mentions_cbeta_license"] is True
+
+
+def test_installed_package_exposes_answer_contract_runner(tmp_path: Path) -> None:
+    target = _install_package_to_target(tmp_path)
+    data = _run_installed_package(
+        target,
+        tmp_path,
+        textwrap.dedent(
+            """
+            import json
+
+            from zilan_contract import AnswerContractRunner
+
+            contracts = {
+                "support_boundary": {
+                    "required_terms": ["not therapy", "professional support"],
+                    "forbidden_terms": ["guaranteed cure"],
+                }
+            }
+            result = AnswerContractRunner().check(
+                answer_text="This is not therapy; consider professional support.",
+                contracts=contracts,
+            )
+            print(json.dumps(result.to_summary(), ensure_ascii=False))
+            """
+        ),
+    )
+
+    assert data["overall_status"] == "pass"
+    assert data["issue_count"] == 0
+
+
+def test_installed_package_cli_json_reports_issue_details(tmp_path: Path) -> None:
+    target = _install_package_to_target(tmp_path)
+    outside_cwd = tmp_path / "outside-cli"
+    outside_cwd.mkdir()
+    contract_file = outside_cwd / "contracts.yaml"
+    contract_file.write_text(
+        textwrap.dedent(
+            """
+            contracts:
+              support_boundary:
+                required_terms:
+                  - not therapy
+                forbidden_terms:
+                  - guaranteed cure
+            """
+        ),
+        encoding="utf-8",
+    )
+    answer_file = outside_cwd / "answer.md"
+    answer_file.write_text(
+        "This is not therapy, but it is not a guaranteed cure.",
+        encoding="utf-8",
+    )
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(target)
+    env.pop("PYTHONHOME", None)
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "zilan_contract.cli",
+            "check",
+            "--contract-file",
+            str(contract_file),
+            "--answer-file",
+            str(answer_file),
+            "--json",
+        ],
+        cwd=outside_cwd,
+        env=env,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 1, result.stdout + result.stderr
+    data = json.loads(result.stdout)
+    assert data["overall_status"] == "fail"
+    assert data["issues"] == [
+        {
+            "source": "answer_contract",
+            "contract_id": "support_boundary",
+            "kind": "present_forbidden_term",
+            "label": "guaranteed cure",
+            "detail": "Present forbidden term: guaranteed cure",
+        }
+    ]
 
 
 def test_installed_zilanlib_direct_runner_uses_package_local_evidence_boundary(tmp_path: Path) -> None:

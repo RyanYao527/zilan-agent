@@ -42,6 +42,19 @@ print(result.overall_status)  # 'fail'
 print(result.failed_validators())  # ['agama_evidence']
 ```
 
+## CLI example
+
+Use the package CLI when you want a CI-friendly pass/fail check without writing Python glue code:
+
+```bash
+zilan-contract check \
+  --contract-file docs/examples/zilan-contract/medical-disclaimer.yaml \
+  --answer-file docs/examples/zilan-contract/medical-disclaimer-pass.md \
+  --json
+```
+
+JSON output includes the compact pass/fail summary plus an `issues` array for machine-readable CI annotations.
+
 ## Core concepts
 
 ### Output contract

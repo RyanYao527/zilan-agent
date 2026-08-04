@@ -44,6 +44,10 @@ cp zilan-agent/agents/zilan-claude-code.md ~/.claude/agents/zilan.md
 >
 > 这不仅仅是一个佛学 skill——它是一个**面向 LLM 可靠性工程的生产级演示项目**。
 
+`zilan_contract` is the reusable SDK inside this repository: a deterministic output-contract checker for required
+terms, forbidden phrases, and boundary slots. Zilan's Buddhist fixtures are the flagship domain, not a limitation of
+the pattern.
+
 ### The hard problem · 要解决的问题
 
 LLMs in specialized domains drift: they drop critical terms, overclaim certainty, or blur safety boundaries. Most projects respond with "better prompts + human review." zilan-agent takes a different approach.
@@ -61,8 +65,8 @@ LLMs in specialized domains drift: they drop critical terms, overclaim certainty
 ### The numbers · 工程指标
 
 ```text
-214 tests    ·    85% code coverage (zilanlib)
-mypy: 0 errors across 59 source files
+225 tests    ·    85% code coverage (zilanlib)
+mypy: 0 errors across 62 source files
 ruff:  0 issues (B/BLE/E/F/I/SIM/UP rules)
 CI:    lint → type-check → test → smoke-test on every push
 ```

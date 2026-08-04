@@ -4,6 +4,10 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+### Added
+
+- Added productized `zilan_contract` public result helpers, a domain-neutral answer-contract runner, CLI/report output with machine-readable issue details, reusable medical/legal/financial examples, and installed-package smoke coverage without provider calls or platform-status changes.
+
 ### Changed
 
 - Extracted reasoning-case schema validation into `scripts/zilanlib/validation/reasoning_cases.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
@@ -20,7 +24,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added focused retrieval-chunk validation coverage for minimal valid fixtures, duplicate ids, and answer sample path boundaries.
 - Expanded reasoning-case validation coverage for invalid contracts, malformed case metadata, and non-Hetuvidya expected-output shapes.
 - Added validation-suite orchestration coverage for stable validator order, shared failure/warning state, strict YAML flag forwarding, and generated-Agama gating.
-- Refreshed public engineering metrics to the current local baseline of 214 tests, 85% zilanlib coverage, and 59 mypy-checked source files.
+- Refreshed public engineering metrics to the current local baseline of 225 tests, 85% zilanlib coverage, and 62 mypy-checked source files.
 
 ### Fixed
 

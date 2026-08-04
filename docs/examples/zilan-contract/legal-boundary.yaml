@@ -1,0 +1,18 @@
+contracts:
+  legal_boundary:
+    description: "Legal response must preserve advice and jurisdiction boundaries."
+    required_terms:
+      - "not legal advice"
+      - "lawyer"
+      - "jurisdiction"
+    forbidden_terms:
+      - "guaranteed outcome"
+      - "definitely legal"
+    required_slots:
+      - label: disclaimer
+        terms:
+          - "not legal advice"
+      - label: professional_review
+        terms:
+          - "lawyer"
+          - "jurisdiction"

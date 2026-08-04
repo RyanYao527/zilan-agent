@@ -31,9 +31,16 @@ if _scripts_dir.is_dir() and str(_scripts_dir) not in sys.path:
 
 from zilanlib.repository import detect_source_root  # noqa: E402
 
+from zilan_contract.answer_contracts import AnswerContractResult, AnswerContractRunner  # noqa: E402
+from zilan_contract.results import ContractIssue, ContractResult  # noqa: E402
+
 __version__ = "2.5.6"
 __all__ = [
+    "AnswerContractResult",
+    "AnswerContractRunner",
+    "ContractIssue",
     "ContractRunner",
+    "ContractResult",
     "HetuvidyaValidator",
     "get_fixture_path",
     "get_cases_path",
@@ -150,42 +157,6 @@ class ContractRunner:
             source_root=self._source_root,
         )
         return ContractResult(raw)
-
-
-class ContractResult:
-    """Structured result from a contract check.
-
-    Attributes
-    ----------
-    overall_status:
-        'pass', 'fail', or 'review_needed'.
-    answer_review_status:
-        Result of the surface-level answer contract review.
-    validators:
-        Dict of domain validators (hetuvidya, collected_topics, etc.)
-        each containing status and details.
-    raw:
-        The full JSON-compatible dict from the underlying runner.
-    """
-
-    def __init__(self, raw: dict):
-        self.raw = raw
-        self.overall_status: str = raw.get("overall_status", "unknown")
-        self.answer_review_status: str = raw.get("answer_review_status", "unknown")
-        self.validators: dict = raw.get("validators", {})
-        self.query_id: str | None = raw.get("query_id")
-        self.query: str | None = raw.get("query")
-
-    def __repr__(self) -> str:
-        return f"ContractResult(overall={self.overall_status!r}, review={self.answer_review_status!r})"
-
-    def passed(self) -> bool:
-        """True if the contract check passed."""
-        return self.overall_status == "pass"
-
-    def failed_validators(self) -> list[str]:
-        """Names of validators that did not pass."""
-        return [name for name, v in self.validators.items() if v.get("status") not in ("pass", "not_applicable")]
 
 
 class HetuvidyaValidator:
