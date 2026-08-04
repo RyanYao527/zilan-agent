@@ -94,6 +94,8 @@ class AnswerContractRunner:
 
 def validate_contracts(contracts: dict[str, object]) -> dict[str, dict[str, object]]:
     """Validate and normalize public answer-contract schemas."""
+    if not isinstance(contracts, dict):
+        raise AnswerContractSchemaError("Contracts must be a mapping of contract ids to contract definitions.")
     if not contracts:
         raise AnswerContractSchemaError("Contracts must contain at least one contract.")
 

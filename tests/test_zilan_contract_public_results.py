@@ -16,6 +16,8 @@ def test_contract_result_extracts_answer_contract_issues() -> None:
     assert all(isinstance(issue, ContractIssue) for issue in issues)
     assert any(issue.kind == "missing_required_term" for issue in issues)
     assert any(issue.kind == "present_forbidden_term" for issue in issues)
+    markdown = result.to_markdown()
+    assert any(issue.detail in markdown for issue in issues)
 
 
 def test_contract_result_summary_and_markdown_are_stable() -> None:
@@ -42,3 +44,18 @@ def test_contract_result_import_remains_backward_compatible() -> None:
 
     assert result.passed() is True
     assert result.failed_validators() == []
+
+
+def test_contract_result_failed_validators_ignores_run_and_not_applicable_statuses() -> None:
+    result = ContractResult(
+        {
+            "overall_status": "pass",
+            "validators": {
+                "retrieval": {"status": "run"},
+                "local_evidence": {"status": "not_applicable"},
+                "answer_contract": {"status": "fail"},
+            },
+        }
+    )
+
+    assert result.failed_validators() == ["answer_contract"]

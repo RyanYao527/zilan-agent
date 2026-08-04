@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from zilan_contract import AnswerContractRunner
+from zilan_contract import AnswerContractRunner, AnswerContractSchemaError
 
 CONTRACTS = {
     "medical_disclaimer": {
@@ -104,3 +104,11 @@ def test_answer_contract_runner_rejects_malformed_contract_schema(
 ) -> None:
     with pytest.raises(ValueError, match=message):
         AnswerContractRunner().check(answer_text="This is not legal advice.", contracts=contracts)
+
+
+def test_answer_contract_runner_rejects_non_mapping_contracts_argument() -> None:
+    with pytest.raises(AnswerContractSchemaError, match="Contracts must be a mapping"):
+        AnswerContractRunner().check(
+            answer_text="This is not legal advice.",
+            contracts=["not a mapping"],  # type: ignore[arg-type]
+        )

@@ -114,7 +114,7 @@ class ContractResult:
             lines.append("- none")
         else:
             for issue in issues:
-                lines.append(f"- {issue.contract_id}: {issue.kind} `{issue.label}`")
+                lines.append(f"- {issue.contract_id}: {issue.detail}")
         return "\n".join(lines).rstrip() + "\n"
 
 

@@ -12,7 +12,10 @@ from zilan_contract import AnswerContractResult, AnswerContractRunner
 
 
 def _load_contracts(path: Path) -> dict[str, object]:
-    data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except yaml.YAMLError as exc:
+        raise ValueError(f"Contract file contains invalid YAML: {exc}") from exc
     if not isinstance(data, dict):
         raise ValueError("Contract file must contain a top-level contracts mapping.")
     contracts = data.get("contracts")

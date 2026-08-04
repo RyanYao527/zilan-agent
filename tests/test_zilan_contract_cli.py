@@ -117,3 +117,32 @@ contracts:
     assert "zilan-contract failed:" in result.stderr
     assert "legal_boundary" in result.stderr
     assert "required_terms" in result.stderr
+
+
+def test_zilan_contract_cli_rejects_malformed_yaml(tmp_path: Path) -> None:
+    contract_file = tmp_path / "contracts.yaml"
+    answer_file = tmp_path / "answer.md"
+    contract_file.write_text("contracts:\n  legal_boundary: [", encoding="utf-8")
+    answer_file.write_text("This is not legal advice.", encoding="utf-8")
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "zilan_contract.cli",
+            "check",
+            "--contract-file",
+            str(contract_file),
+            "--answer-file",
+            str(answer_file),
+            "--json",
+        ],
+        text=True,
+        encoding="utf-8",
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 2
+    assert "zilan-contract failed:" in result.stderr
+    assert "YAML" in result.stderr
