@@ -18,7 +18,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Documented the P1 validation cleanup closeout in `docs/architecture/zilanlib-extraction-cleanup-review.md`, including the finalized module split and next quality-maintenance direction.
 - Added focused reasoning-case validation coverage for minimal valid Hetuvidya fixtures, duplicate ZR ids, and top-level metadata errors.
 - Added focused retrieval-chunk validation coverage for minimal valid fixtures, duplicate ids, and answer sample path boundaries.
-- Refreshed public engineering metrics to the current local baseline of 209 tests, 84% zilanlib coverage, and 59 mypy-checked source files.
+- Expanded reasoning-case validation coverage for invalid contracts, malformed case metadata, and non-Hetuvidya expected-output shapes.
+- Refreshed public engineering metrics to the current local baseline of 211 tests, 85% zilanlib coverage, and 59 mypy-checked source files.
 
 ### Fixed
 
