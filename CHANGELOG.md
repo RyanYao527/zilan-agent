@@ -19,7 +19,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added focused reasoning-case validation coverage for minimal valid Hetuvidya fixtures, duplicate ZR ids, and top-level metadata errors.
 - Added focused retrieval-chunk validation coverage for minimal valid fixtures, duplicate ids, and answer sample path boundaries.
 - Expanded reasoning-case validation coverage for invalid contracts, malformed case metadata, and non-Hetuvidya expected-output shapes.
-- Refreshed public engineering metrics to the current local baseline of 211 tests, 85% zilanlib coverage, and 59 mypy-checked source files.
+- Added validation-suite orchestration coverage for stable validator order, shared failure/warning state, strict YAML flag forwarding, and generated-Agama gating.
+- Refreshed public engineering metrics to the current local baseline of 214 tests, 85% zilanlib coverage, and 59 mypy-checked source files.
 
 ### Fixed
 

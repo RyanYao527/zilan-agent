@@ -91,6 +91,6 @@ pause
 
 # ── Done ──
 echo -e "\n${BOLD}${GREEN}╔══════════════════════════════════════════════╗"
-echo -e "║  211 tests · 85% coverage · mypy/ruff clean  ║"
+echo -e "║  214 tests · 85% coverage · mypy/ruff clean  ║"
 echo -e "║  github.com/RyanYao527/zilan-agent           ║"
 echo -e "╚══════════════════════════════════════════════╝${RESET}"
