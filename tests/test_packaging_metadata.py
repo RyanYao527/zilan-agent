@@ -21,6 +21,8 @@ def test_zilanlib_package_metadata_is_declared() -> None:
         'Repository = "https://github.com/RyanYao527/zilan-agent"',
         'Issues = "https://github.com/RyanYao527/zilan-agent/issues"',
         'Changelog = "https://github.com/RyanYao527/zilan-agent/blob/main/CHANGELOG.md"',
+        "[project.scripts]",
+        'zilan-contract = "zilan_contract.cli:main"',
         "[tool.setuptools.packages.find]",
         'license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]',
         'where = [".", "scripts"]',
