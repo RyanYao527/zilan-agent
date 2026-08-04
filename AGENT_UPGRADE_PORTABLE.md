@@ -1,8 +1,8 @@
 # Zilan Skill To Agent Migration Record
 
 > Current document version: v2.0
-> Last updated: 2026-07-30
-> Current project baseline: zilan-agent v2.5.6
+> Last updated: 2026-08-04
+> Current project baseline: zilan-agent v2.5.7
 
 This document records how Zilan evolved from a passive skill-style knowledge bundle into a dual-track Skill / Agent framework. It is historical and architectural context, not the source of truth for platform validation.
 

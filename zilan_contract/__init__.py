@@ -39,7 +39,7 @@ from zilan_contract.answer_contracts import (  # noqa: E402
 )
 from zilan_contract.results import ContractIssue, ContractResult  # noqa: E402
 
-__version__ = "2.5.6"
+__version__ = "2.5.7"
 __all__ = [
     "AnswerContractResult",
     "AnswerContractRunner",

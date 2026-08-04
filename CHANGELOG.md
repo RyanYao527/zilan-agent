@@ -4,6 +4,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+## [2.5.7] - 2026-08-04
+
 ### Added
 
 - Added productized `zilan_contract` public result helpers, a domain-neutral answer-contract runner, CLI/report output with machine-readable issue details, a contract schema reference, reusable medical/legal/financial examples, and installed-package smoke coverage without provider calls or platform-status changes.
