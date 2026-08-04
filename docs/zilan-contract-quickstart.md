@@ -39,7 +39,7 @@ result = runner.check(
     sample_id="srq04-agama-citation-boundary-fail",
 )
 print(result.overall_status)  # 'fail'
-print(result.failed_validators())  # ['agama_evidence']
+print(result.issues()[0].detail)  # Missing required term: ...
 ```
 
 ## CLI example
@@ -99,7 +99,7 @@ result = runner.check(
 ```python
 result.overall_status       # 'pass' | 'fail' | 'review_needed'
 result.passed()              # True if pass
-result.failed_validators()   # ['hetuvidya', 'agama_evidence'] — which ones failed
+result.failed_validators()   # explicit non-pass validator statuses; 'run' is not a failure
 result.answer_review_status  # surface-level contract review result
 result.validators            # dict of per-domain validator results
 result.raw                   # full JSON-compatible dict
