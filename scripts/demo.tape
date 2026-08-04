@@ -42,7 +42,7 @@ Enter
 Sleep 2s
 
 # ── Step 2: Tests ──
-Type "# Step 2: 182 tests, all passing"
+Type "# Step 2: 211 tests, all passing"
 Enter
 Sleep 300ms
 Type "python -m pytest -q"
@@ -74,7 +74,7 @@ Enter
 Sleep 2s
 
 # ── End ──
-Type "# 182 tests · 86% coverage · mypy/ruff clean · MIT"
+Type "# 211 tests · 85% coverage · mypy/ruff clean · MIT"
 Enter
 Sleep 1s
 
