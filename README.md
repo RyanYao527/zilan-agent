@@ -65,7 +65,7 @@ LLMs in specialized domains drift: they drop critical terms, overclaim certainty
 ### The numbers · 工程指标
 
 ```text
-225 tests    ·    85% code coverage (zilanlib)
+234 tests    ·    85% code coverage (zilanlib)
 mypy: 0 errors across 62 source files
 ruff:  0 issues (B/BLE/E/F/I/SIM/UP rules)
 CI:    lint → type-check → test → smoke-test on every push
@@ -121,6 +121,7 @@ The output-contract + deterministic-validator pattern works for **any domain whe
 | `docs/openai-api-harness.md` | OpenAI API harness 说明 · OpenAI API harness guide |
 | `docs/article-output-contracts.md` | 输出契约技术文章 · Output Contracts technical article |
 | `docs/zilan-contract-quickstart.md` | zilan_contract 快速上手 · zilan_contract quickstart |
+| `docs/zilan-contract-schema.md` | zilan_contract contract schema reference |
 | `docs/awesome-list-pr-entries.md` | Awesome-list PR 条目 · Awesome-list PR entries |
 | `docs/codex-manual-tasks.md` | Codex 手动操作清单 · Codex manual task checklist |
 | `docs/archive/` | 历史归档材料 · Historical archive |

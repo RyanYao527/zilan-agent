@@ -253,6 +253,53 @@ def test_installed_package_cli_json_reports_issue_details(tmp_path: Path) -> Non
     ]
 
 
+def test_installed_package_cli_rejects_malformed_contract_schema(tmp_path: Path) -> None:
+    target = _install_package_to_target(tmp_path)
+    outside_cwd = tmp_path / "outside-bad-schema"
+    outside_cwd.mkdir()
+    contract_file = outside_cwd / "contracts.yaml"
+    contract_file.write_text(
+        textwrap.dedent(
+            """
+            contracts:
+              support_boundary:
+                required_terms: not therapy
+            """
+        ),
+        encoding="utf-8",
+    )
+    answer_file = outside_cwd / "answer.md"
+    answer_file.write_text("This is not therapy.", encoding="utf-8")
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(target)
+    env.pop("PYTHONHOME", None)
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "zilan_contract.cli",
+            "check",
+            "--contract-file",
+            str(contract_file),
+            "--answer-file",
+            str(answer_file),
+            "--json",
+        ],
+        cwd=outside_cwd,
+        env=env,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 2, result.stdout + result.stderr
+    assert "support_boundary" in result.stderr
+    assert "required_terms" in result.stderr
+
+
 def test_installed_zilanlib_direct_runner_uses_package_local_evidence_boundary(tmp_path: Path) -> None:
     target = _install_package_to_target(tmp_path)
     data = _run_installed_package(

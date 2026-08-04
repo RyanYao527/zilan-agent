@@ -31,19 +31,26 @@ if _scripts_dir.is_dir() and str(_scripts_dir) not in sys.path:
 
 from zilanlib.repository import detect_source_root  # noqa: E402
 
-from zilan_contract.answer_contracts import AnswerContractResult, AnswerContractRunner  # noqa: E402
+from zilan_contract.answer_contracts import (  # noqa: E402
+    AnswerContractResult,
+    AnswerContractRunner,
+    AnswerContractSchemaError,
+    validate_contracts,
+)
 from zilan_contract.results import ContractIssue, ContractResult  # noqa: E402
 
 __version__ = "2.5.6"
 __all__ = [
     "AnswerContractResult",
     "AnswerContractRunner",
+    "AnswerContractSchemaError",
     "ContractIssue",
     "ContractRunner",
     "ContractResult",
     "HetuvidyaValidator",
     "get_fixture_path",
     "get_cases_path",
+    "validate_contracts",
     "__version__",
 ]
 

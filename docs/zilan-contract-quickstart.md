@@ -54,6 +54,7 @@ zilan-contract check \
 ```
 
 JSON output includes the compact pass/fail summary plus an `issues` array for machine-readable CI annotations.
+See `docs/zilan-contract-schema.md` for the full contract schema, exit codes, and report format.
 
 ## Core concepts
 
@@ -102,6 +103,30 @@ result.failed_validators()   # ['hetuvidya', 'agama_evidence'] — which ones fa
 result.answer_review_status  # surface-level contract review result
 result.validators            # dict of per-domain validator results
 result.raw                   # full JSON-compatible dict
+```
+
+### AnswerContractRunner
+
+Use `AnswerContractRunner` when you want the domain-neutral required/forbidden/slot checks without SRQ fixtures:
+
+```python
+from zilan_contract import AnswerContractRunner
+
+contracts = {
+    "legal_boundary": {
+        "required_terms": ["not legal advice"],
+        "forbidden_terms": ["guaranteed outcome"],
+        "required_slots": [
+            {"label": "care_path", "terms": ["attorney", "qualified professional"]},
+        ],
+    }
+}
+result = AnswerContractRunner().check(
+    answer_text="This is not legal advice. Consult an attorney.",
+    contracts=contracts,
+)
+print(result.to_summary())
+print(result.to_markdown())
 ```
 
 ### HetuvidyaValidator
@@ -154,8 +179,8 @@ queries:
 ```
 
 > **Note:** `required_terms` is a flat list of strings that must appear.
-> `required_slots` is a list of labeled groups — each slot's terms must all
-> appear (useful when multiple independent constraints apply).
+> `required_slots` is a list of labeled groups; each slot passes when at least
+> one of its terms appears. Use separate slots for independent constraints.
 > `forbidden_terms` is a flat list of strings that must NOT appear.
 
 ### 2. Create a reasoning cases file (optional)
