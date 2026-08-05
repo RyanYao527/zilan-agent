@@ -44,7 +44,7 @@ Issues = "https://github.com/RyanYao527/zilan-agent/issues"
 Changelog = "https://github.com/RyanYao527/zilan-agent/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
-dev = ["mypy>=1.10,<2.0", "pytest>=7.4,<8.0", "pytest-cov>=5.0", "ruff>=0.6"]
+dev = ["mypy>=1.10,<2.0", "pytest>=7.4,<8.0", "pytest-cov>=5.0", "ruff>=0.6", "wheel>=0.42"]
 
 [project.scripts]
 zilan-contract = "zilan_contract.cli:main"
