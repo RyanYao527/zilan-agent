@@ -176,7 +176,7 @@ class HetuvidyaValidator:
 
         v = HetuvidyaValidator()
         result = v.validate(case_id="ZR-01")
-        print(result["status"])  # 'pass'
+        print(result["status"])  # 'run'
     """
 
     def __init__(self, cases_path: Path | None = None):

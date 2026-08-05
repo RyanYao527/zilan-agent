@@ -138,7 +138,7 @@ from zilan_contract import HetuvidyaValidator
 
 v = HetuvidyaValidator()
 result = v.validate(case_id="ZR-01")
-print(result["status"])  # 'pass'
+print(result["status"])  # 'run'
 print(result["validations"][0]["judgment"]["result"])  # 'positive_reason'
 ```
 
