@@ -7,6 +7,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 ### Added
 
 - Added installed-package CLI smoke coverage for invalid YAML and missing top-level `contracts` mappings, confirming packaged `zilan-contract` keeps schema-loading failures at exit code `2`.
+- Added installed-package console script smoke coverage for the packaged `zilan-contract` entrypoint, confirming the `[project.scripts]` wrapper runs from outside the source checkout.
 
 ### Changed
 
