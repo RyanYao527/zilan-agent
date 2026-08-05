@@ -4,7 +4,7 @@ from pathlib import Path
 
 import openai_api_harness
 import pytest
-from openai_api_harness import OPENAI_RESPONSES_URL, build_request, run_harness
+from openai_api_harness import OPENAI_RESPONSES_URL, build_preflight, build_request, run_harness
 from openai_api_harness import _load_regression_case as load_regression_case
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -104,6 +104,64 @@ def test_provider_route_applies_volcengine_defaults(monkeypatch) -> None:
     assert result.api_key_env == "VOLCENGINE_OPENAI_API_KEY"
 
 
+def test_openai_harness_preflight_reports_native_status_without_api_key(monkeypatch) -> None:
+    monkeypatch.delenv("OPENAI_MODEL", raising=False)
+    monkeypatch.delenv("OPENAI_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENAI_API_SURFACE", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY_ENV", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+
+    result = build_preflight(
+        root=ROOT,
+        model=None,
+        provider_route=None,
+        base_url=None,
+        api_surface=None,
+        api_key_env=None,
+    )
+
+    assert result["mode"] == "preflight"
+    assert result["provider_route"] is None
+    assert result["validation_route"] == "openai_api"
+    assert result["validation_status"] == "harness-ready"
+    assert result["model"] == "gpt-5.5"
+    assert result["api_surface"] == "responses"
+    assert result["endpoint"] == OPENAI_RESPONSES_URL
+    assert result["api_key_env"] == "OPENAI_API_KEY"
+    assert result["api_key_present"] is False
+    assert "does not change platform validation status" in result["status_boundary"]
+
+
+def test_provider_route_preflight_reports_volcengine_status_without_secret(monkeypatch) -> None:
+    monkeypatch.delenv("OPENAI_MODEL", raising=False)
+    monkeypatch.delenv("OPENAI_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENAI_API_SURFACE", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY_ENV", raising=False)
+    monkeypatch.setenv("VOLCENGINE_OPENAI_API_KEY", "super-secret-test-key")
+
+    result = build_preflight(
+        root=ROOT,
+        model=None,
+        provider_route="volcengine_openai_compatible",
+        base_url=None,
+        api_surface=None,
+        api_key_env=None,
+    )
+
+    serialized = repr(result)
+    assert result["mode"] == "preflight"
+    assert result["provider_route"] == "volcengine_openai_compatible"
+    assert result["validation_route"] == "volcengine_openai_compatible"
+    assert result["validation_status"] == "tested"
+    assert "ZC-01 through ZC-03" in result["validation_scope"]
+    assert result["model"] == "ark-code-latest"
+    assert result["api_surface"] == "chat-completions"
+    assert result["endpoint"] == "https://ark.cn-beijing.volces.com/api/coding/v3/chat/completions"
+    assert result["api_key_env"] == "VOLCENGINE_OPENAI_API_KEY"
+    assert result["api_key_present"] is True
+    assert "native OpenAI API" in result["status_boundary"]
+    assert "super-secret-test-key" not in serialized
+
 def test_provider_route_rejects_unknown_route() -> None:
     try:
         run_harness(
@@ -130,6 +188,27 @@ def test_openai_harness_live_requires_api_key(monkeypatch) -> None:
     else:
         raise AssertionError("live OpenAI API harness should require OPENAI_API_KEY")
 
+
+def test_openai_harness_live_calls_resolved_endpoint_without_network(monkeypatch) -> None:
+    captured: dict[str, object] = {}
+
+    def fake_call_openai(endpoint: str, request_body: dict[str, object], api_key: str) -> dict[str, object]:
+        captured["endpoint"] = endpoint
+        captured["request_body"] = request_body
+        captured["api_key"] = api_key
+        return {"id": "resp_test", "output_text": "ok"}
+
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    monkeypatch.setattr(openai_api_harness, "call_openai", fake_call_openai)
+
+    result = run_harness(root=ROOT, case_id="ZC-02", model="gpt-5.5", prompt_override=None, live=True)
+
+    assert result.mode == "live"
+    assert result.endpoint == OPENAI_RESPONSES_URL
+    assert result.output_text == "ok"
+    assert result.response_id == "resp_test"
+    assert captured["endpoint"] == OPENAI_RESPONSES_URL
+    assert captured["api_key"] == "test-key"
 
 def test_openai_compatible_harness_live_uses_configured_key_env(monkeypatch) -> None:
     monkeypatch.delenv("VOLCENGINE_OPENAI_API_KEY", raising=False)

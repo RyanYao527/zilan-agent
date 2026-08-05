@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added `scripts/openai_api_harness.py --preflight` so native OpenAI and OpenAI-compatible provider route configuration, credential presence, validation status, and status boundaries can be checked without provider calls or platform-status changes.
 - Added installed-package CLI smoke coverage for invalid YAML and missing top-level `contracts` mappings, confirming packaged `zilan-contract` keeps schema-loading failures at exit code `2`.
 - Added installed-package console script smoke coverage for the packaged `zilan-contract` entrypoint, confirming the `[project.scripts]` wrapper runs from outside the source checkout.
 - Added wheel-install smoke coverage confirming public `zilan_contract` APIs, module CLI, console script, bundled answer fixtures, and medical-disclaimer examples work from outside the source checkout.
