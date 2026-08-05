@@ -4,6 +4,19 @@
 
 This roadmap records engineering maintenance state and next priorities for zilan-agent. It is not platform validation evidence. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
+## Current Phase
+
+`zilan_contract` productization is complete for the v2.5.7 package surface. The package now has guarded public API, module CLI, console script, schema reference, reusable examples, installed-package smoke tests, and wheel-install smoke tests. Future `zilan_contract` work should be compatibility maintenance or a separately designed schema/API version, not continued open-ended productization.
+
+Remaining boundaries:
+
+- installed `zilan_contract` checks deterministic output contracts; it is not an LLM judge, semantic grader, Buddhist doctrinal authority, or provider runtime validator;
+- the v2.5.7 schema is exact-match only and does not support regex, fuzzy matching, Unicode normalization, tokenization, semantic similarity, or nested boolean logic;
+- package smoke tests do not promote OpenAI, OpenAI-compatible, Claude Code, Codex, DeepSeek, GLM, or Qwen platform status;
+- local Agama Markdown remains a searchable working corpus; publication-level claims still require CBETA XML-P5 and parallel-text collation.
+
+Next mainline: return to reasoning and retrieval quality. The highest-ROI work is to keep `SRQ-*` answer contracts aligned with structured `ZR-*` validators, add transcript-backed runtime evidence only when prompt/runtime behavior changes, and advance citation-preserving Agama retrieval/collation before adding API services, UI layers, vector infrastructure, or broader provider claims.
+
 ## Current Baseline
 
 | Area | Current state |
@@ -63,6 +76,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | P1 | Volcengine compatible route | Expand the 2026-06-16 ZC-01 through ZC-03 live pass to ZC-04 through ZC-06 only if broader provider-route confidence is needed. | Volcengine evidence remains separated from native OpenAI API validation, with provider/model details and limitations recorded. |
 | P1 | Provider routes | Add native dry-run/live harnesses for DeepSeek, GLM, and Qwen, or record a concrete blocked state. | Each route has a dated tested or blocked entry with provider/model details and failure modes. |
 | P1 | Reasoning quality | Preserve broad `ZC-05` coverage for `SRQ-03`, `SRQ-04`, and `SRQ-08` after #124 prompt hardening and the `SRQ-03` forbidden-term conflict fix. | Broad `ZC-05` continues to satisfy Agama citation, prasaṅga, and nihilism-boundary contracts without changing platform status. |
+| P1 | Next mainline | Resume reasoning/retrieval quality after the `zilan_contract` productization closeout: maintain answer-contract / structured-validator alignment, capture transcript-backed runtime evidence when behavior changes, and improve citation-preserving Agama retrieval. | New work strengthens SRQ/ZR coverage or citation evidence without reopening package productization or changing platform status. |
 | P1 | Semantic retrieval | Preserve the post-#126 broad `ZC-04` direct Agama-summary pass and keep future prompt changes from dropping literal `检索范围`, `T02n0099`, `CBETA`, `context/agama/`, `代表性`, and `待校勘` slots. | Direct `SRQ-04`, compact `ZC-04`, broad direct `ZC-04`, generated reports, and broad `ZC-05` satisfy the `SRQ-04` contract without changing platform status. |
 | P1 | Agama citations | Extract or preserve finer-grained sutra or section markers when present in the Markdown. | Search output can cite representative passages beyond file, line, and fascicle where the source supports it. |
 | P2 | Scholarly collation | Add a stricter collation path from Markdown hits back to CBETA XML-P5 and relevant parallels. | Publication-level work has a documented verification route. |
