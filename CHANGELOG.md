@@ -4,6 +4,10 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ## [Unreleased]
 
+### Added
+
+- Added installed-package CLI smoke coverage for invalid YAML and missing top-level `contracts` mappings, confirming packaged `zilan-contract` keeps schema-loading failures at exit code `2`.
+
 ### Changed
 
 - Expanded `docs/zilan-contract-schema.md` with CLI/Python schema shapes, exact matching semantics, schema-error examples, issue kinds, unsupported v2.5.7 features, and CI exit-code guidance without changing runtime behavior or platform validation status.
