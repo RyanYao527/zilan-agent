@@ -1,6 +1,6 @@
 # OpenAI API Harness
 
-> Last updated: 2026-06-16
+> Last updated: 2026-08-05
 
 This repository includes a minimal OpenAI / OpenAI-compatible API harness for Zilan. It loads `agents/openai.yaml`, selects a regression case from `tests/regression_cases.yaml`, bundles the expected local context files, and builds either a Responses API request or an OpenAI-compatible Chat Completions request.
 
@@ -9,6 +9,15 @@ The harness is dry-run by default so CI does not require secrets:
 ```powershell
 python scripts/openai_api_harness.py --case ZC-02 --json
 ```
+
+Before a live run, use preflight to confirm the selected route without building a case bundle, requiring a secret, or calling a provider:
+
+```powershell
+python scripts/openai_api_harness.py --preflight --json
+python scripts/openai_api_harness.py --provider-route volcengine_openai_compatible --preflight --json
+```
+
+Preflight reports the resolved `model`, `api_surface`, `base_url`, `endpoint`, selected `api_key_env`, a boolean-only `api_key_present`, validation status and scope from `agents/openai.yaml`, and an explicit status boundary. It never prints secret values and does not promote any route to `tested`.
 
 To run a live request, set `OPENAI_API_KEY` and opt in explicitly:
 
@@ -50,6 +59,7 @@ python scripts\openai_api_harness.py --case ZC-02 --provider-route volcengine_op
 
 ## Status
 
+- Preflight mode: local route-resolution summary, covered by pytest; no request body, provider call, secret output, or platform-status change.
 - Default mode: dry-run request construction, covered by pytest.
 - Live mode: implemented, but not run by CI. Native OpenAI remains `harness-ready` until a dated `OPENAI_API_KEY` run is recorded; Volcengine-compatible ZC-01 through ZC-03 live evidence is recorded separately under the provider route.
 - Native OpenAI default: Responses API request with developer and user messages, `model`, `input`, and low reasoning effort.

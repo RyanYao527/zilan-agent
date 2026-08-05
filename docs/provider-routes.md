@@ -1,6 +1,6 @@
 # Provider Route Triage
 
-> Last updated: 2026-06-16
+> Last updated: 2026-08-05
 
 This document records the current state of non-Codex provider routes. It is a triage note, not runtime validation evidence. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -8,8 +8,8 @@ This document records the current state of non-Codex provider routes. It is a tr
 
 | Route | Current status | Triage | Next action |
 |---|---|---|---|
-| OpenAI API | `harness-ready` | Dry-run Responses API harness exists and is covered by tests. `OPENAI_API_KEY` was not present in the local environment during this triage. | Run `scripts/openai_api_harness.py --live` with `OPENAI_API_KEY`, then record evidence. |
-| Volcengine OpenAI-Compatible | `tested` | ZC-01 through ZC-03 passed on 2026-06-16 through the shared harness with `chat-completions`, provider route `volcengine_openai_compatible`, base URL `https://ark.cn-beijing.volces.com/api/coding/v3`, model `ark-code-latest`, and provider-specific `VOLCENGINE_OPENAI_API_KEY`. Evidence is summarized in `docs/runtime-validation-log.md`, `docs/runtime-evidence/2026-06-16-volcengine-openai-compatible-zc-01-zc-03-live.md`, and `docs/runtime-evidence/2026-06-16-volcengine-openai-compatible-zc-02-live.md`. | Use `--provider-route volcengine_openai_compatible` for future dry-run/live calls. Keep native OpenAI API separate; expand this route to ZC-04 through ZC-06 only if broader Volcengine validation is needed. |
+| OpenAI API | `harness-ready` | Dry-run Responses API harness exists and is covered by tests. `OPENAI_API_KEY` was not present in the local environment during this triage. | Run `scripts/openai_api_harness.py --preflight --json` first, then run `scripts/openai_api_harness.py --live` with `OPENAI_API_KEY` and record evidence. |
+| Volcengine OpenAI-Compatible | `tested` | ZC-01 through ZC-03 passed on 2026-06-16 through the shared harness with `chat-completions`, provider route `volcengine_openai_compatible`, base URL `https://ark.cn-beijing.volces.com/api/coding/v3`, model `ark-code-latest`, and provider-specific `VOLCENGINE_OPENAI_API_KEY`. Evidence is summarized in `docs/runtime-validation-log.md`, `docs/runtime-evidence/2026-06-16-volcengine-openai-compatible-zc-01-zc-03-live.md`, and `docs/runtime-evidence/2026-06-16-volcengine-openai-compatible-zc-02-live.md`. | Use `--provider-route volcengine_openai_compatible --preflight --json` before future dry-run/live calls. Keep native OpenAI API separate; expand this route to ZC-04 through ZC-06 only if broader Volcengine validation is needed. |
 | DeepSeek | `config-only` | Provider metadata exists. No native DeepSeek harness or `DEEPSEEK_API_KEY` was present. Claude Code local model usage is not the same as native DeepSeek route validation. | Add a native harness or document a blocked state with reproducible provider details. |
 | GLM | `config-only` | Provider metadata exists. No GLM harness or `ZHIPUAI_API_KEY` was present. | Add a minimal harness or keep as metadata only. |
 | Qwen | `config-only` | Provider metadata exists. No Qwen harness or `DASHSCOPE_API_KEY` was present. | Add a minimal harness or keep as metadata only. |
@@ -35,6 +35,17 @@ The current conservative interpretation is:
 - Claude Code route: validated through Claude Code CLI on 2026-06-12 and rerun successfully on 2026-06-16 after identifying the 2026-06-15 failure as a Windows PowerShell UTF-8 stdin issue; track that separately from native DeepSeek validation.
 - DeepSeek native route: still `config-only` until a native harness or dated provider run exists.
 - DeepSeek Anthropic-compatible route: keep the documented caveat visible if using Claude Code through that compatibility layer.
+
+## Provider Preflight
+
+Use preflight before any live provider call to confirm the route that will be used:
+
+```powershell
+python scripts/openai_api_harness.py --preflight --json
+python scripts/openai_api_harness.py --provider-route volcengine_openai_compatible --preflight --json
+```
+
+Preflight resolves environment overrides, provider-route defaults, endpoint, API surface, and selected key environment variable. It reports only whether the selected key exists, not the key value. Preflight is not live evidence and must not change native OpenAI API or compatible-provider validation status.
 
 ## Adding A New Provider Harness
 
