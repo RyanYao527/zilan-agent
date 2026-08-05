@@ -1,14 +1,15 @@
 # Runtime Evidence Excerpts
 
-> Last updated: 2026-07-20
+> Last updated: 2026-08-05
 
-This directory stores small, redacted validation excerpts that support entries in `docs/runtime-validation-log.md`.
+This directory stores small, redacted validation excerpts that support entries in `docs/runtime-validation-log.md` or preflight-only provider/smoke handoff notes.
 
 Use [`index.md`](index.md) to find evidence by class, case ID, contract ID, and whether a file is safe to pass as `--answer-file`.
 
 Use this directory for:
 
 - command-output excerpts from clean install or CI-adjacent smoke tests
+- provider preflight outputs that record route resolution without a live provider call
 - short transcript excerpts that demonstrate a specific platform behavior
 - standalone answer excerpt files for contract-reviewable runtime answers
 - redacted live-provider response summaries
@@ -20,6 +21,7 @@ Do not use this directory for:
 - raw provider payloads with private request IDs or account identifiers
 - large unredacted transcripts
 - private user content unrelated to a validation case
+- provider preflight output as an `answer_file` input
 - summary-only evidence as `answer_file` input for batch or contract review
 
 ## Answer Excerpt Capture
@@ -51,6 +53,7 @@ Examples:
 - `2026-06-16-claude-code-utf8-rerun.md`
 - `2026-06-16-volcengine-openai-compatible-zc-01-zc-03-live.md`
 - `2026-06-16-volcengine-openai-compatible-zc-02-live.md`
+- `2026-08-05-openai-harness-preflight-local.md`
 - `2026-06-18-claude-code-agama-contract-fix-review.md`
 - `2026-06-18-claude-code-madhyamaka-contract-fix-review.md`
 - `2026-06-18-claude-code-post-contract-full-rerun.md`
@@ -73,8 +76,9 @@ Each evidence excerpt should include:
 - command or prompt set
 - redaction note
 - compact output excerpts
+- status boundary for provider preflight output, when applicable
 - standalone answer excerpt status when the file is intended for `answer_file` review
 - limitations
-- link back to the relevant `docs/runtime-validation-log.md` entry
+- link back to the relevant `docs/runtime-validation-log.md` entry, or mark the field not applicable for preflight-only provider/smoke evidence
 
 Use `docs/validation-evidence.md` as the governing policy.
