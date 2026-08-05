@@ -55,6 +55,22 @@ def _run_installed_package(target: Path, tmp_path: Path, code: str) -> dict[str,
 
 
 
+def _find_installed_console_script(target: Path, script_name: str) -> Path:
+    candidates = [
+        target / "Scripts" / f"{script_name}.exe",
+        target / "Scripts" / f"{script_name}.cmd",
+        target / "Scripts" / script_name,
+        target / "bin" / script_name,
+        target / "bin" / f"{script_name}.exe",
+    ]
+    for candidate in candidates:
+        if candidate.is_file():
+            return candidate
+
+    matches = sorted(path for path in target.rglob(f"{script_name}*") if path.is_file())
+    assert matches, f"Installed console script not found under {target}"
+    return matches[0]
+
 def _run_installed_cli_check(
     target: Path,
     tmp_path: Path,
@@ -228,6 +244,55 @@ def test_installed_package_exposes_answer_contract_runner(tmp_path: Path) -> Non
     assert data["overall_status"] == "pass"
     assert data["issue_count"] == 0
 
+
+def test_installed_package_exposes_zilan_contract_console_script(tmp_path: Path) -> None:
+    target = _install_package_to_target(tmp_path)
+    outside_cwd = tmp_path / "outside-console-script"
+    outside_cwd.mkdir()
+    contract_file = outside_cwd / "contracts.yaml"
+    contract_file.write_text(
+        textwrap.dedent(
+            """
+            contracts:
+              support_boundary:
+                required_terms:
+                  - not therapy
+                forbidden_terms:
+                  - guaranteed cure
+            """
+        ),
+        encoding="utf-8",
+    )
+    answer_file = outside_cwd / "answer.md"
+    answer_file.write_text("This is not therapy.", encoding="utf-8")
+    script = _find_installed_console_script(target, "zilan-contract")
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(target)
+    env.pop("PYTHONHOME", None)
+
+    result = subprocess.run(
+        [
+            str(script),
+            "check",
+            "--contract-file",
+            str(contract_file),
+            "--answer-file",
+            str(answer_file),
+            "--json",
+        ],
+        cwd=outside_cwd,
+        env=env,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    data = json.loads(result.stdout)
+    assert data["overall_status"] == "pass"
+    assert data["issue_count"] == 0
 
 def test_installed_package_cli_json_reports_issue_details(tmp_path: Path) -> None:
     target = _install_package_to_target(tmp_path)
