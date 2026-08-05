@@ -1,6 +1,6 @@
 # Maintenance Roadmap
 
-> Last updated: 2026-08-04
+> Last updated: 2026-08-05
 
 This roadmap records engineering maintenance state and next priorities for zilan-agent. It is not platform validation evidence. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -21,7 +21,8 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | Contribution intake | `.github/ISSUE_TEMPLATE/` provides structured bug-report and feature-request templates for platform, validation, documentation, CI, and reasoning-contract work. |
 | Community conduct | `CODE_OF_CONDUCT.md` adopts Contributor Covenant 2.1 with maintainer contact via GitHub `@RyanYao527`, and `CONTRIBUTING.md` / `CONTRIBUTING-en.md` link to it. |
 | Community deliverables | `docs/article-output-contracts.md` is an LLM-engineering-facing article pitching the output-contract pattern; `docs/zilan-contract-quickstart.md` is a standalone quickstart for the `zilan_contract` pip package; `docs/awesome-list-pr-entries.md` provides pre-written PR entries for four curated awesome lists; `docs/codex-manual-tasks.md` is a checklist for recording demos, uploading HF datasets, submitting awesome-list PRs, and publishing the article. |
-| `zilan_contract` product surface | The package now exposes public result helpers, `AnswerContractRunner` for domain-neutral required/forbidden term and slot checks, `zilan-contract` / `python -m zilan_contract.cli` check commands with JSON and Markdown issue details, contract schema validation, reusable medical/legal/financial examples, and installed-package smoke coverage without provider calls or platform-status changes. |
+| `zilan_contract` product surface | The package now exposes public result helpers, `AnswerContractRunner` for domain-neutral required/forbidden term and slot checks, `zilan-contract` / `python -m zilan_contract.cli` check commands with JSON and Markdown issue details, contract schema validation, reusable medical/legal/financial examples, installed-package smoke coverage, console-script smoke coverage, and wheel-install smoke coverage without provider calls or platform-status changes. |
+| `zilan_contract` productization closeout | `docs/architecture/zilan-contract-productization-closeout.md` records the P2 closeout baseline, completion criteria, package verification guardrails, and non-goals for provider validation, semantic grading, and schema-v2 expansion. |
 | Co-maintainer path | `README.md`, `README.zh.md`, `README.en.md`, `CONTRIBUTING.md`, and `CONTRIBUTING-en.md` now invite regular collaborators and define reviewable co-maintainer work areas such as documentation, runtime validation, Agama collation, and reasoning-contract review. |
 | Installation docs | `docs/installation.md` separates Codex, Claude Code, and OpenAI API operating paths. |
 | Clean install smoke | A 2026-06-15 clean clone from GitHub passed repository checks, pytest, ruff, OpenAI dry-run, and Agama search smoke tests when run sequentially. Current CI also includes a minimal mypy type-check baseline for `scripts/`. |
@@ -66,6 +67,7 @@ This roadmap records engineering maintenance state and next priorities for zilan
 | P1 | Agama citations | Extract or preserve finer-grained sutra or section markers when present in the Markdown. | Search output can cite representative passages beyond file, line, and fascicle where the source supports it. |
 | P2 | Scholarly collation | Add a stricter collation path from Markdown hits back to CBETA XML-P5 and relevant parallels. | Publication-level work has a documented verification route. |
 | P2 | Installation docs | Keep install paths and activation expectations current after platform changes. | New users can install the skill or agent without reading implementation history. |
+| P2 | `zilan_contract` compatibility maintenance | Treat the v2.5.7 productization sweep as closed; future package work should preserve API, module CLI, console script, schema, examples, and installed/wheel smoke behavior. | Package-surface changes include targeted installed-package tests and do not change platform-validation status. |
 | P2 | Release hygiene | Keep `CHANGELOG.md` updated for user-visible changes. | Changes can be summarized for users without reading merged PRs. |
 | P2 | zilanlib cleanup | Continue only with narrow, behavior-preserving maintenance PRs documented in `docs/superpowers/plans/2026-07-22-zilan-maintenance-deepening.md`; the current concrete pain is validation-script size, harness YAML duplication, coverage scope, and packaging metadata. | Root scripts remain stable CLIs, reusable helpers live under `scripts/zilanlib/`, and each further extraction has tests plus a rollback path. |
 

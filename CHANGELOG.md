@@ -9,10 +9,12 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added installed-package CLI smoke coverage for invalid YAML and missing top-level `contracts` mappings, confirming packaged `zilan-contract` keeps schema-loading failures at exit code `2`.
 - Added installed-package console script smoke coverage for the packaged `zilan-contract` entrypoint, confirming the `[project.scripts]` wrapper runs from outside the source checkout.
 - Added wheel-install smoke coverage confirming public `zilan_contract` APIs, module CLI, console script, bundled answer fixtures, and medical-disclaimer examples work from outside the source checkout.
+- Added `docs/architecture/zilan-contract-productization-closeout.md` to close the P2 productization sweep with package-surface completion criteria, verification guardrails, and non-goals.
 
 ### Changed
 
 - Expanded `docs/zilan-contract-schema.md` with CLI/Python schema shapes, exact matching semantics, schema-error examples, issue kinds, unsupported v2.5.7 features, and CI exit-code guidance without changing runtime behavior or platform validation status.
+- Updated `docs/zilan-contract-quickstart.md` and `docs/maintenance-roadmap.md` to document installed-package, console-script, and wheel-install verification boundaries for the closed productization surface.
 
 ## [2.5.7] - 2026-08-04
 
