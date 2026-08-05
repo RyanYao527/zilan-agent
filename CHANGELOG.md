@@ -15,6 +15,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 - Expanded `docs/zilan-contract-schema.md` with CLI/Python schema shapes, exact matching semantics, schema-error examples, issue kinds, unsupported v2.5.7 features, and CI exit-code guidance without changing runtime behavior or platform validation status.
 - Updated `docs/zilan-contract-quickstart.md` and `docs/maintenance-roadmap.md` to document installed-package, console-script, and wheel-install verification boundaries for the closed productization surface.
+- Clarified `docs/maintenance-roadmap.md` to mark `zilan_contract` productization complete, list remaining package/platform/collation boundaries, and set reasoning/retrieval quality as the next mainline.
 
 ## [2.5.7] - 2026-08-04
 
