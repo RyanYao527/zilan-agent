@@ -18,6 +18,25 @@ cd zilan-agent
 pip install -e ".[dev]"
 ```
 
+## Package verification
+
+The maintained package surface is verified after installation, not only from the source tree. Release checks cover:
+
+- public Python imports and bundled fixtures;
+- `python -m zilan_contract.cli check`;
+- installed `zilan-contract` console script;
+- reusable medical-disclaimer examples;
+- malformed YAML and schema errors returning exit code `2`;
+- wheel build plus `pip install --target` from outside the source checkout.
+
+Maintainers can rerun the package-surface smoke tests with:
+
+```bash
+python -m pytest tests/test_zilan_contract_installed_smoke.py tests/test_zilan_contract_wheel_smoke.py tests/test_zilan_contract_examples.py tests/test_packaging_metadata.py
+```
+
+These checks do not call providers and do not change platform validation status.
+
 ## 60-second try
 
 ```python
