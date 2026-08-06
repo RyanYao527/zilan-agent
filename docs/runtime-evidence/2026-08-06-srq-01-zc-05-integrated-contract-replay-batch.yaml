@@ -1,0 +1,5 @@
+version: 1
+reviews:
+  - id: 2026-07-14-zc-05-broad-postfix-srq-01-integrated-replay
+    query_id: SRQ-01
+    answer_file: docs/runtime-evidence/2026-07-14-claude-code-zc-05-broad-boundary-postfix-answer.md
