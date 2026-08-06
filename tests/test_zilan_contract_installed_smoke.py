@@ -499,6 +499,7 @@ def test_installed_contract_runner_all_answer_contract_pass_samples_load_from_pa
             from zilan_contract import ContractRunner, get_fixture_path
 
             all_pass_samples = [
+                "srq01-cross-domain-no-self-pass",
                 "srq01-practice-boundary-pass",
                 "srq02-hetuvidya-error-pass",
                 "srq03-madhyamaka-prasanga-pass",
@@ -512,6 +513,7 @@ def test_installed_contract_runner_all_answer_contract_pass_samples_load_from_pa
                 "srq11-collected-topics-definition-scope-pass",
             ]
             answer_contract_samples = {
+                "SRQ-01": "srq01-cross-domain-no-self-pass",
                 "SRQ-02": "srq02-hetuvidya-error-pass",
                 "SRQ-03": "srq03-madhyamaka-prasanga-pass",
                 "SRQ-04": "srq04-agama-citation-boundary-pass",
@@ -541,6 +543,7 @@ def test_installed_contract_runner_all_answer_contract_pass_samples_load_from_pa
     )
 
     assert set(data["bundled_files"]) == {
+        "srq01-cross-domain-no-self-pass",
         "srq01-practice-boundary-pass",
         "srq02-hetuvidya-error-pass",
         "srq03-madhyamaka-prasanga-pass",

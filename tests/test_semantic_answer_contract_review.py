@@ -151,6 +151,51 @@ def test_answer_contract_review_cli_can_use_checked_in_sample() -> None:
     assert data["expected_status_match"] is True
 
 
+def test_answer_contract_review_passes_for_srq01_cross_domain_no_self_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-01",
+        sample_id="srq01-cross-domain-no-self-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["expected_status"] == "pass"
+    assert result["expected_status_match"] is True
+    assert result["reviews"][0]["contract_id"] == "cross_domain_no_self_analysis"
+    assert result["reviews"][0]["missing_required_terms"] == []
+    assert result["reviews"][0]["missing_required_slots"] == []
+    assert result["reviews"][0]["present_forbidden_terms"] == []
+
+
+def test_answer_contract_review_fails_for_srq01_cross_domain_no_self_negative_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-01",
+        sample_id="srq01-cross-domain-no-self-fail",
+    )
+
+    assert result["overall_status"] == "fail"
+    assert result["expected_status"] == "fail"
+    assert result["expected_status_match"] is True
+    assert "阿含证据" in result["reviews"][0]["missing_required_terms"]
+    assert "因明校验" in result["reviews"][0]["missing_required_terms"]
+    assert "不等于修证" in result["reviews"][0]["missing_required_terms"]
+    assert result["reviews"][0]["present_forbidden_terms"] == [
+        "已证空性",
+        "保证证悟",
+        "证明诸法绝对不存在",
+        "无需善知识",
+    ]
+    assert result["reviews"][0]["missing_required_slots"] == [
+        "agama_evidence",
+        "prasanga_argument",
+        "hetuvidya_check",
+        "collected_topics_check",
+        "cognitive_practice_mapping",
+        "practice_boundary",
+    ]
+
+
 def test_answer_contract_review_passes_for_madhyamaka_prasanga_sample() -> None:
     result = build_answer_contract_review(
         DEFAULT_FIXTURE,

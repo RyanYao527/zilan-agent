@@ -218,6 +218,25 @@ def test_reasoning_contract_runner_fails_when_role_coverage_is_incomplete() -> N
     assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
 
 
+def test_reasoning_contract_runner_passes_srq01_cross_domain_no_self_sample() -> None:
+    result = build_reasoning_contract_run(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-01",
+        sample_id="srq01-cross-domain-no-self-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["answer_review_status"] == "pass"
+    assert result["answer_contract_review"]["overall_status"] == "pass"
+    assert result["answer_validator_alignment"]["status"] == "pass"
+    assert result["role_coverage"]["missing_needs"] == []
+    assert result["validators"]["hetuvidya"]["case_ids"] == ["ZR-01", "ZR-06"]
+    assert result["validators"]["collected_topics"]["case_ids"] == ["ZR-06"]
+    assert result["validators"]["madhyamaka_prasanga"]["case_ids"] == ["ZR-06"]
+    assert result["validators"]["cognitive_analysis"]["case_ids"] == ["ZR-06"]
+    assert result["validators"]["agama_evidence"]["case_ids"] == ["ZR-06"]
+
+
 def test_reasoning_contract_runner_rejects_multiple_answer_sources() -> None:
     try:
         build_reasoning_contract_run(

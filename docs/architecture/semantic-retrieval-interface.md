@@ -318,6 +318,8 @@ reasoning-error cases.
 Example:
 
 ```powershell
+python scripts/semantic_answer_contract_review.py --query-id SRQ-01 --sample-id srq01-cross-domain-no-self-pass --json
+python scripts/semantic_answer_contract_review.py --query-id SRQ-01 --sample-id srq01-cross-domain-no-self-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-02 --sample-id srq02-hetuvidya-error-pass --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-02 --sample-id srq02-hetuvidya-error-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-05 --sample-id srq05-hetuvidya-non-pervasive-pass --json
@@ -342,6 +344,11 @@ The answer-contract helper:
 - reports missing required terms and present forbidden terms
 - reports missing required answer slots when `required_slots` are defined
 - does not generate answers, call providers, grade doctrine, or upgrade platform validation
+
+For `SRQ-01`, the current `cross_domain_no_self_analysis` contract requires a broad no-self answer to preserve visible
+sections for Agama evidence, prasaṅga framing, Hetuvidya checking, Collected Topics relations, cognitive/practice
+mapping, and an explicit practice boundary. It remains a fixture-only answer-surface check over checked-in samples, not
+runtime evidence or a platform-status change.
 
 `required_slots` add a shallow structural check on top of required / forbidden terms. A slot passes when at least one
 of its configured terms appears in the answer. This is meant to preserve visible answer parts such as argument
