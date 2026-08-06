@@ -192,13 +192,23 @@ def test_reasoning_contract_runner_marks_answer_contracts_without_answer_as_revi
     assert result["validators"]["cognitive_analysis"] == NOT_APPLICABLE_COGNITIVE_ANALYSIS
 
 
+def test_reasoning_contract_runner_marks_answer_boundary_contracts_without_answer_as_review_needed() -> None:
+    result = build_reasoning_contract_run(DEFAULT_FIXTURE, query_id="SRQ-01")
+
+    assert result["overall_status"] == "review_needed"
+    assert result["answer_review_status"] == "review_needed"
+    assert result["answer_contract_review"] is None
+    assert result["role_coverage"]["missing_needs"] == []
+
+
 def test_reasoning_contract_runner_fails_when_role_coverage_is_incomplete() -> None:
     result = build_reasoning_contract_run(DEFAULT_FIXTURE, query_id="SRQ-01", limit=1)
 
     assert result["overall_status"] == "fail"
-    assert result["answer_review_status"] == "no_answer_contracts"
+    assert result["answer_review_status"] == "review_needed"
     assert result["role_coverage"]["missing_needs"] == [
         "collected_topics",
+        "cognitive_analysis",
         "hetuvidya",
         "madhyamaka_prasanga",
     ]

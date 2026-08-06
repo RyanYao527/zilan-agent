@@ -24,6 +24,7 @@ def test_context_bundle_preserves_fixture_order_and_citations() -> None:
         "reasoning:ZR-01:hetuvidya",
         "context:collected-topics:prasanga-runtime",
         "context:madhyamaka:prasanga-method",
+        "reasoning:ZR-06:cross-domain-no-self",
     ]
     assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["chunk_ids"]
     assert result["non_chunk_needs"] == ["practice_boundary"]
@@ -69,5 +70,5 @@ def test_context_bundle_cli_json_output_is_machine_readable() -> None:
 
     assert data["mode"] == "semantic-context-bundle"
     assert data["query_id"] == "SRQ-01"
-    assert len(data["chunks"]) == 7
+    assert len(data["chunks"]) == 8
     assert "# Semantic Retrieval Context Bundle" in data["bundle_text"]

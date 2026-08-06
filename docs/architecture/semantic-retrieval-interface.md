@@ -100,6 +100,7 @@ query: "用应成论式分析诸法无我"
 needs:
   - agama_evidence
   - collected_topics
+  - cognitive_analysis
   - hetuvidya
   - madhyamaka_prasanga
   - practice_boundary
@@ -250,9 +251,11 @@ The role coverage helper:
 - treats missing needs as review findings, not runtime validation failures
 - does not edit fixtures, add chunks, call providers, or infer doctrinal completeness
 
-For the current `SRQ-01` fixture, Agama evidence, Collected Topics, Hetuvidya, and Madhyamaka prasaṅga are represented
-as chunk-covered role needs. `practice_boundary` remains a non-chunk need because it constrains answer behavior rather
-than selecting a specific evidentiary passage.
+For the current `SRQ-01` fixture, Agama evidence, Collected Topics, Cognitive Analysis, Hetuvidya, and Madhyamaka
+prasaṅga are represented as chunk-covered role needs. The selected bundle now ends with the `ZR-06` cross-domain
+no-self reasoning case so the fixture can exercise integrated Agama, Collected Topics, Hetuvidya, Madhyamaka, and
+practice-facing analysis without provider calls. `practice_boundary` remains a non-chunk need because it constrains
+answer behavior rather than selecting a specific evidentiary passage.
 
 `SRQ-02` is a narrower Hetuvidya error-detection fixture. It routes the question "检验论式：声，应是可见，以是色形故。"
 to the trairupya context chunk plus the `ZR-03` `reason_unestablished` reasoning case. It deliberately does not select

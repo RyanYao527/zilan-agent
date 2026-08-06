@@ -104,9 +104,11 @@ def _build_answer_review(
 
     answer_contracts = dry_run.get("answer_contracts", {})
     has_answer_contracts = isinstance(answer_contracts, dict) and bool(answer_contracts)
+    answer_boundary_contracts = dry_run.get("answer_boundary_contracts", {})
+    has_answer_boundary_contracts = isinstance(answer_boundary_contracts, dict) and bool(answer_boundary_contracts)
 
     if source_count == 0:
-        return None, "review_needed" if has_answer_contracts else "no_answer_contracts"
+        return None, "review_needed" if has_answer_contracts or has_answer_boundary_contracts else "no_answer_contracts"
 
     review = build_answer_contract_review(
         fixture_path,

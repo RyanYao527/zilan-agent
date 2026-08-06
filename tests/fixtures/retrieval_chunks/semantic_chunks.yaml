@@ -331,6 +331,30 @@ chunks:
       reasoning_roles:
         - agama_evidence
 
+  - chunk_id: reasoning:ZR-06:cross-domain-no-self
+    chunk_type: reasoning_case
+    source_file: tests/reasoning_cases.yaml
+    start_line: 168
+    end_line: 239
+    citation: "tests/reasoning_cases.yaml:168-239"
+    passage_citation: "tests/reasoning_cases.yaml:168-239"
+    text: "用应成论式分析诸法无我，并串联阿含、摄类学、因明和观禅。"
+    metadata:
+      topics:
+        - 跨域无我分析
+        - 应成论式
+        - 阿含证据
+        - 因明
+        - 摄类学
+        - 观禅
+      reasoning_case_id: ZR-06
+      reasoning_roles:
+        - collected_topics
+        - hetuvidya
+        - madhyamaka_prasanga
+        - cognitive_analysis
+        - agama_evidence
+
   - chunk_id: argument:work-feedback:non-pervasive
     chunk_type: argument_unit
     source_file: tests/reasoning_cases.yaml
@@ -529,6 +553,7 @@ queries:
     needs:
       - agama_evidence
       - collected_topics
+      - cognitive_analysis
       - hetuvidya
       - madhyamaka_prasanga
       - practice_boundary
@@ -558,11 +583,15 @@ queries:
       modern:
         - 无我
         - 应成论式
+        - 观禅
     expected_sources:
       - context/agama/
       - context/摄类学工具箱.md
       - context/因明推理引擎.md
       - context/中观应成精要.md
+      - context/心类学认知分析.md
+      - context/南传观禅指南.md
+      - tests/reasoning_cases.yaml
     expected_chunk_ids:
       - agama:T02n0099:juan-1:line-147
       - agama:T01n0001:juan-1:line-881
@@ -571,6 +600,7 @@ queries:
       - reasoning:ZR-01:hetuvidya
       - context:collected-topics:prasanga-runtime
       - context:madhyamaka:prasanga-method
+      - reasoning:ZR-06:cross-domain-no-self
 
   - id: SRQ-02
     query: "检验论式：声，应是可见，以是色形故。"

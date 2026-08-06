@@ -24,6 +24,7 @@ def test_dry_run_returns_expected_chunks_for_query_fixture() -> None:
         "reasoning:ZR-01:hetuvidya",
         "context:collected-topics:prasanga-runtime",
         "context:madhyamaka:prasanga-method",
+        "reasoning:ZR-06:cross-domain-no-self",
     ]
     assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
     assert result["non_chunk_needs"] == ["practice_boundary"]
@@ -50,6 +51,13 @@ def test_dry_run_can_limit_expected_chunks() -> None:
 
     assert result["expected_chunk_ids"] == ["agama:T02n0099:juan-1:line-147"]
     assert len(result["chunks"]) == 1
+
+
+def test_dry_run_preserves_srq01_exact_query_lookup() -> None:
+    result = build_dry_run(DEFAULT_FIXTURE, query="用应成论式分析诸法无我")
+
+    assert result["query_id"] == "SRQ-01"
+    assert result["expected_chunk_ids"][-1] == "reasoning:ZR-06:cross-domain-no-self"
 
 
 def test_dry_run_returns_hetuvidya_error_fixture_for_srq02() -> None:
@@ -437,7 +445,7 @@ def test_dry_run_cli_json_output_is_machine_readable() -> None:
 
     assert data["mode"] == "fixture-dry-run"
     assert data["query_id"] == "SRQ-01"
-    assert len(data["chunks"]) == 7
+    assert len(data["chunks"]) == 8
 
 
 def test_dry_run_returns_cognitive_practice_boundary_fixture_for_srq09() -> None:
