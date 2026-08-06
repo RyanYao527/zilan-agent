@@ -1,0 +1,14 @@
+version: 1
+reviews:
+  - id: 2026-08-06-zc-05-runtime-spot-srq-01-integrated
+    query_id: SRQ-01
+    answer_file: docs/runtime-evidence/2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md
+  - id: 2026-08-06-zc-05-runtime-spot-srq-03-prasanga
+    query_id: SRQ-03
+    answer_file: docs/runtime-evidence/2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md
+  - id: 2026-08-06-zc-05-runtime-spot-srq-04-agama
+    query_id: SRQ-04
+    answer_file: docs/runtime-evidence/2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md
+  - id: 2026-08-06-zc-05-runtime-spot-srq-08-nihilism
+    query_id: SRQ-08
+    answer_file: docs/runtime-evidence/2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md
