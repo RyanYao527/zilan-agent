@@ -98,6 +98,7 @@ def build_candidate_set(
                 "juan": match.juan,
                 "section_marker": match.section_marker,
                 "section_title": match.section_title,
+                "section_label": match.section_label,
                 "topics": topic_values,
                 "reasoning_roles": ["agama_evidence"],
                 "matched_lines": [match.line],

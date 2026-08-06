@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added canonical Agama `section_label` metadata to search results and semantic fixture candidates so title-bearing local citations can preserve section anchors without provider calls or platform-status changes.
 - Added a 2026-08-06 Claude Code broad `ZC-05` runtime spot evidence note and standalone answer excerpt replaying `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08`, recording `SRQ-04` pass plus remaining broad-answer explicitness gaps without platform-status changes and without validating native OpenAI API or OpenAI-compatible provider routes.
 - Added prompt hardening for broad `ZC-05` answers to preserve integrated `SRQ-01` slots across Codex, Claude Code, Skill, and OpenAI metadata surfaces, with local prompt-invariant evidence and no provider calls or platform-status changes.
 - Added a 2026-08-06 local replay of the existing broad `ZC-05` answer excerpt against the new integrated `SRQ-01` answer contract, recording the expected explicitness gap without provider calls or platform-status changes.
