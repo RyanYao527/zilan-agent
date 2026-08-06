@@ -575,6 +575,82 @@ queries:
       - id: srq01-practice-boundary-fail
         file: tests/fixtures/answers/srq01-practice-boundary-fail.md
         expected_status: fail
+    answer_contracts:
+      cross_domain_no_self_analysis:
+        description: "Answer must integrate Agama evidence, Hetuvidya, Collected Topics, Madhyamaka prasaṅga, cognitive analysis, and practice boundaries for the broad no-self query."
+        required_terms:
+          - 阿含证据
+          - CBETA
+          - context/agama/
+          - 代表性检索
+          - 待校勘
+          - 应成论式
+          - 对方承许
+          - 归谬
+          - 自性有
+          - 缘起
+          - 因明校验
+          - 因三相
+          - 摄类学
+          - 五蕴
+          - 我所
+          - 观禅
+          - 触
+          - 作意
+          - 受
+          - 想
+          - 思
+          - 边界
+          - 不等于修证
+          - 善知识指导
+        required_slots:
+          - label: agama_evidence
+            terms:
+              - 阿含证据
+              - CBETA
+              - context/agama/
+          - label: prasanga_argument
+            terms:
+              - 应成论式
+              - 对方承许
+              - 归谬
+          - label: hetuvidya_check
+            terms:
+              - 因明校验
+              - 因三相
+          - label: collected_topics_check
+            terms:
+              - 摄类学
+              - 五蕴
+              - 我所
+          - label: cognitive_practice_mapping
+            terms:
+              - 观禅
+              - 触
+              - 作意
+              - 受
+              - 想
+              - 思
+          - label: practice_boundary
+            terms:
+              - 边界
+              - 不等于修证
+              - 善知识指导
+        forbidden_terms:
+          - 已证空性
+          - 保证证悟
+          - 证明诸法绝对不存在
+          - 空性等于什么都没有
+          - 因果不存在
+          - 无需善知识
+          - 等同心理治疗
+    answer_contract_samples:
+      - id: srq01-cross-domain-no-self-pass
+        file: tests/fixtures/answers/srq01-cross-domain-no-self-pass.md
+        expected_status: pass
+      - id: srq01-cross-domain-no-self-fail
+        file: tests/fixtures/answers/srq01-cross-domain-no-self-fail.md
+        expected_status: fail
     keywords:
       classical:
         - 無我
