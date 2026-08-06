@@ -20,6 +20,7 @@ def test_role_coverage_reports_covered_and_missing_needs() -> None:
     assert result["role_needs"] == [
         "agama_evidence",
         "collected_topics",
+        "cognitive_analysis",
         "hetuvidya",
         "madhyamaka_prasanga",
     ]
@@ -29,16 +30,23 @@ def test_role_coverage_reports_covered_and_missing_needs() -> None:
             "agama:T02n0099:juan-1:line-147",
             "agama:T01n0001:juan-1:line-881",
             "agama:T01n0001:juan-3:line-1829",
+            "reasoning:ZR-06:cross-domain-no-self",
         ],
         "collected_topics": [
             "context:collected-topics:prasanga-runtime",
+            "reasoning:ZR-06:cross-domain-no-self",
+        ],
+        "cognitive_analysis": [
+            "reasoning:ZR-06:cross-domain-no-self",
         ],
         "hetuvidya": [
             "context:hetuvidya:trairupya",
             "reasoning:ZR-01:hetuvidya",
+            "reasoning:ZR-06:cross-domain-no-self",
         ],
         "madhyamaka_prasanga": [
             "context:madhyamaka:prasanga-method",
+            "reasoning:ZR-06:cross-domain-no-self",
         ],
     }
     assert result["missing_needs"] == []
@@ -56,6 +64,7 @@ def test_role_coverage_respects_chunk_limit_before_review() -> None:
     }
     assert result["missing_needs"] == [
         "collected_topics",
+        "cognitive_analysis",
         "hetuvidya",
         "madhyamaka_prasanga",
     ]

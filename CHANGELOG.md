@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added `ZR-06` cross-domain no-self reasoning-case coverage to the `SRQ-01` semantic retrieval and context-bundle fixtures without provider calls or platform-status changes.
 - Added provider preflight evidence guidance, a 2026-08-05 local OpenAI harness preflight smoke note, and a Codex Desktop handoff record without provider calls or platform-status changes.
 - Added `scripts/openai_api_harness.py --preflight` so native OpenAI and OpenAI-compatible provider route configuration, credential presence, validation status, and status boundaries can be checked without provider calls or platform-status changes.
 - Added installed-package CLI smoke coverage for invalid YAML and missing top-level `contracts` mappings, confirming packaged `zilan-contract` keeps schema-loading failures at exit code `2`.
