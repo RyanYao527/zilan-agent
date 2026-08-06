@@ -39,6 +39,7 @@ class AgamaMatch:
     text: str
     context_before: list[str]
     context_after: list[str]
+    section_label: str | None = None
 
 
 @dataclass(frozen=True)
@@ -56,6 +57,7 @@ class AgamaPassage:
     text: str
     context_before: list[str]
     context_after: list[str]
+    section_label: str | None = None
 
 
 def iter_agama_markdown_files(root: Path = ROOT) -> Iterable[Path]:
@@ -117,6 +119,16 @@ def _agama_metadata(lines: list[str], path: Path) -> tuple[str, str]:
     return sutra_name, cbeta_id
 
 
+def _section_label(section_marker: str | None, section_title: str | None) -> str | None:
+    if section_marker and section_title:
+        return f"{section_marker}{section_title}"
+    if section_marker:
+        return section_marker
+    if section_title:
+        return section_title
+    return None
+
+
 def _format_citation(
     *,
     sutra_name: str,
@@ -130,14 +142,8 @@ def _format_citation(
 ) -> str:
     line_ref = f"{file}:{start_line}" if start_line == end_line else f"{file}:{start_line}-{end_line}"
     juan_ref = juan or "卷未标注"
-    section_label = ""
-    if section_marker and section_title:
-        section_label = f"{section_marker}{section_title}"
-    elif section_marker:
-        section_label = section_marker
-    elif section_title:
-        section_label = section_title
-    section_ref = f", {section_label}" if section_label else ""
+    label = _section_label(section_marker, section_title)
+    section_ref = f", {label}" if label else ""
     return f"《{sutra_name}》({cbeta_id}) {juan_ref}{section_ref}, {line_ref}"
 
 
@@ -191,6 +197,7 @@ def search_agama(
             passage_start, passage_end = _paragraph_bounds(lines, idx)
             before, after = _context(lines, idx, idx, context_lines)
             section_marker, section_title = section_by_line.get(idx, (None, None))
+            label = _section_label(section_marker, section_title)
             matches.append(
                 AgamaMatch(
                     file=rel_file,
@@ -200,6 +207,7 @@ def search_agama(
                     juan=juan_by_line.get(idx),
                     section_marker=section_marker,
                     section_title=section_title,
+                    section_label=label,
                     passage_start_line=passage_start,
                     passage_end_line=passage_end,
                     citation=_format_citation(
@@ -269,6 +277,7 @@ def search_agama_passages(
                 juan=passage_matches[0].juan,
                 section_marker=passage_matches[0].section_marker,
                 section_title=passage_matches[0].section_title,
+                section_label=passage_matches[0].section_label,
                 start_line=start_line,
                 end_line=end_line,
                 matched_lines=[match.line for match in passage_matches],

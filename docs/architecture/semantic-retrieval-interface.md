@@ -13,6 +13,7 @@ This document defines the smallest useful interface for future semantic retrieva
 - known false-positive filtering
 - passage grouping
 - JSON output
+- section-marker, section-title, and canonical section-label metadata when available
 - stable `citation` and `passage_citation` fields
 
 Semantic retrieval must not replace this baseline until it has regression evidence.
@@ -60,6 +61,8 @@ metadata:
   cbeta_id: "T02n0099"
   juan: "1"
   section_marker: null
+  section_title: null
+  section_label: null
   topics:
     - 無我
     - 五蘊
@@ -183,7 +186,7 @@ The generator:
 - reuses `search_agama.py` as the source of truth for Agama matches
 - deduplicates hits into passage-level `agama_passage` candidates
 - preserves `citation` and `passage_citation`
-- carries CBETA ID, local source file, line range, matched lines, topic metadata, `source_hash`, `line_text_hash`, and provenance metadata
+- carries CBETA ID, local source file, line range, matched lines, section metadata, topic metadata, `source_hash`, `line_text_hash`, and provenance metadata
 - emits JSON or YAML for review before any fixture is updated
 
 This is still not semantic ranking. It is a fixture-refresh aid that keeps candidate generation tied to the
