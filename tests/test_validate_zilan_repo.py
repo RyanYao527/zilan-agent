@@ -196,6 +196,30 @@ def test_agent_prompt_validator_module_exports_public_function() -> None:
     assert callable(validate_agent_prompts)
 
 
+def test_agent_prompt_validator_requires_broad_zc05_srq01_integrated_slots() -> None:
+    from zilanlib.validation.agent_prompts import AGENT_PROMPT_REQUIRED_FRAGMENTS
+
+    required_fragments = {
+        "SRQ-01",
+        "ZC-05",
+        "阿含证据",
+        "代表性检索",
+        "因明校验",
+        "我所",
+        "触",
+        "作意",
+        "受",
+        "想",
+        "思",
+        "不等于修证",
+    }
+
+    for prompt_path in ("agents/zilan-codex.md", "agents/zilan-claude-code.md"):
+        prompt_fragments = set(AGENT_PROMPT_REQUIRED_FRAGMENTS[prompt_path])
+
+        assert required_fragments <= prompt_fragments
+
+
 def test_regression_cases_validator_module_exports_public_function() -> None:
     from zilanlib.validation.regression_cases import validate_regression_cases
 
