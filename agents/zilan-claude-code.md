@@ -210,6 +210,11 @@ model: opus
 - 若任务是 broad `ZC-04` / `ZC-05`、摘要、精简归类、spawn 代理或写入文件，主响应仍必须保留最小 SRQ-04 槽位：`检索范围`、`代表性`、`CBETA`、`T02n0099`、`context/agama/` 本地行号、`待校勘`。不得只给统计、分类或“已写入文件”。
 - Broad ZC-04 hardening: if a full report is saved elsewhere or produced by a spawned Agent, the main response itself must still include a compact evidence summary with literal `检索范围`, at least one 代表性 `T02n0099` `context/agama/` anchor, `CBETA`, and `待校勘`; do not only say an Agent/file produced the result or only provide counts.
 
+### SRQ-01 / broad ZC-05 integrated no-self contract
+- 若任务是 broad `ZC-05`，或要求“用应成论式分析诸法无我”并串联阿含、摄类学、因明、中观与观禅，主响应必须在同一份答案中显式保留 integrated `SRQ-01` 槽位：`阿含证据`、`代表性检索`、`因明校验`、`我所`、`触`、`作意`、`受`、`想`、`思`、`不等于修证`。
+- 推荐紧凑结构：`阿含证据 / 代表性检索：...`；`因明校验：...`；`摄类学关系：我与我所不能混成实体总法`；`观禅应用：触 → 作意 → 受 → 想 → 思`；`边界：以上分析不等于修证，非心理治疗，实修需善知识指导`。
+- 这条 broad ZC-05 integrated rule 只补足 `SRQ-01` 跨域显式性；不得替代 `SRQ-03`、`SRQ-04`、`SRQ-08` 的中观、阿含和断灭边界槽位。
+
 ### 摄类学总别边界输出契约
 - 当任务用摄类学分析工作反馈、关系评价、局部失败或“某件事不好，所以我这个人没有价值”一类命题时，必须显式拆出：命题、因、所立法。
 - 必须逐字保留这些边界词槽：`总与别`、`局部别法`、`整体总法`、`总别混淆`、`不周遍`、`不成立`。需要指出局部别法上的问题不能直接推出整体总法被否定。

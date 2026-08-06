@@ -6,8 +6,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added prompt hardening for broad `ZC-05` answers to preserve integrated `SRQ-01` slots across Codex, Claude Code, Skill, and OpenAI metadata surfaces, with local prompt-invariant evidence and no provider calls or platform-status changes.
 - Added a 2026-08-06 local replay of the existing broad `ZC-05` answer excerpt against the new integrated `SRQ-01` answer contract, recording the expected explicitness gap without provider calls or platform-status changes.
-
 - Added `SRQ-01` cross-domain no-self answer-contract samples covering Agama evidence, Hetuvidya, Collected Topics, Madhyamaka prasaṅga, cognitive-analysis, and practice-boundary slots without provider calls or platform-status changes.
 - Added `ZR-06` cross-domain no-self reasoning-case coverage to the `SRQ-01` semantic retrieval and context-bundle fixtures without provider calls or platform-status changes.
 - Added provider preflight evidence guidance, a 2026-08-05 local OpenAI harness preflight smoke note, and a Codex Desktop handoff record without provider calls or platform-status changes.

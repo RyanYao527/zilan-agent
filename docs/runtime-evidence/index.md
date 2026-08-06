@@ -62,6 +62,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-06-zc05-srq01-prompt-hardening-local.md` | local broad `ZC-05` / integrated `SRQ-01` prompt hardening evidence | summary-only; prompt prepared, runtime pending |
 | `2026-07-14-claude-code-post-prompt-zc-01-zc-06-rerun.md` | Claude Code `ZC-01` through `ZC-06` post-prompt rerun | links `ZC-03` and redacted `ZC-06` excerpts |
 | `2026-07-14-claude-code-broad-boundary-postfix-review.md` | broad `ZC-04` / `ZC-05` post-#124 review | links broad `ZC-05` excerpt |
 | `2026-07-14-claude-code-zc-04-post-126-agama-slot-rerun.md` | broad `ZC-04` post-#126 rerun | links broad `ZC-04` excerpt |
