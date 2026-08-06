@@ -47,6 +47,8 @@ python scripts/openai_api_harness.py --provider-route volcengine_openai_compatib
 
 Preflight resolves environment overrides, provider-route defaults, endpoint, API surface, and selected key environment variable. It reports only whether the selected key exists, not the key value. Preflight is not live evidence and must not change native OpenAI API or compatible-provider validation status.
 
+If a preflight result should be kept for handoff or audit, record it as provider/smoke evidence under `docs/runtime-evidence/` and mark it as preflight-only. A preflight record can explain why live validation is not attempted, but it cannot promote a route to `tested`.
+
 ## Adding A New Provider Harness
 
 A provider harness should:

@@ -1,6 +1,6 @@
 # Runtime Evidence Index
 
-> Last updated: 2026-07-30
+> Last updated: 2026-08-05
 
 This index is a navigation aid for `docs/runtime-evidence/`. It does not change platform validation status. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -12,7 +12,7 @@ This index is a navigation aid for `docs/runtime-evidence/`. It does not change 
 | Batch manifest | YAML input for `scripts/reasoning_answer_review_batch.py`. | no |
 | Batch report | Human-readable saved output from a batch review. | no |
 | Summary-only evidence | Runtime scenario summary, command shape, findings, and limits. | no |
-| Provider/smoke evidence | Clean install, route smoke, or live-provider response summary. | no |
+| Provider/smoke evidence | Clean install, route preflight/smoke, or live-provider response summary. | no |
 
 Do not use summary-only evidence as `answer_file` input. Use the standalone answer excerpts listed below.
 
@@ -82,6 +82,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 |---|---|
 | `2026-06-16-volcengine-openai-compatible-zc-01-zc-03-live.md` | Volcengine OpenAI-compatible `ZC-01` through `ZC-03` live summary |
 | `2026-06-16-volcengine-openai-compatible-zc-02-live.md` | Volcengine OpenAI-compatible `ZC-02` live detail |
+| `2026-08-05-openai-harness-preflight-local.md` | Native OpenAI and Volcengine-compatible local preflight route-resolution smoke; no provider calls or platform-status changes |
 | `2026-06-16-claude-code-utf8-rerun.md` | Claude Code UTF-8 stdin rerun |
 | `2026-06-15-codex-v245-runtime-rerun.md` | Codex v2.4.5 runtime rerun |
 | `2026-06-15-clean-install-smoke.md` | clean install smoke |

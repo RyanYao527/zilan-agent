@@ -19,6 +19,8 @@ python scripts/openai_api_harness.py --provider-route volcengine_openai_compatib
 
 Preflight reports the resolved `model`, `api_surface`, `base_url`, `endpoint`, selected `api_key_env`, a boolean-only `api_key_present`, validation status and scope from `agents/openai.yaml`, and an explicit status boundary. It never prints secret values and does not promote any route to `tested`.
 
+When a preflight result is useful to preserve, record it as provider/smoke evidence with `docs/runtime-evidence/evidence-template.md` and index it under `docs/runtime-evidence/index.md`. Preflight-only evidence is not an answer transcript or live-provider validation.
+
 To run a live request, set `OPENAI_API_KEY` and opt in explicitly:
 
 ```powershell
