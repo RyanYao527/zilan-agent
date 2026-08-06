@@ -72,6 +72,10 @@ AGENT_PROMPT_REQUIRED_FRAGMENTS = {
         "想",
         "思",
         "不等于修证",
+        "字面小节标签",
+        "不得改写为同义词",
+        "最小合规模板",
+        "不要只输出摘要",
     ),
     "agents/zilan-claude-code.md": (
         "输出硬约束",
@@ -139,6 +143,10 @@ AGENT_PROMPT_REQUIRED_FRAGMENTS = {
         "想",
         "思",
         "不等于修证",
+        "字面小节标签",
+        "不得改写为同义词",
+        "最小合规模板",
+        "不要只输出摘要",
     ),
 }
 

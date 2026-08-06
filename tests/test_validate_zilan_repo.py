@@ -212,6 +212,10 @@ def test_agent_prompt_validator_requires_broad_zc05_srq01_integrated_slots() -> 
         "想",
         "思",
         "不等于修证",
+        "字面小节标签",
+        "不得改写为同义词",
+        "最小合规模板",
+        "不要只输出摘要",
     }
 
     for prompt_path in ("agents/zilan-codex.md", "agents/zilan-claude-code.md"):

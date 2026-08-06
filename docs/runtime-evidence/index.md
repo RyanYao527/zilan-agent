@@ -20,6 +20,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Report | Inputs | Status | Notes |
 |---|---|---|---|
+| `2026-08-06-zc-05-srq-01-runtime-spot-review.md` | Reviews the 2026-08-06 Claude Code broad `ZC-05` runtime spot answer against `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | partial / fail | Final committed excerpt passes `SRQ-04` but still fails `SRQ-01`, `SRQ-03`, and `SRQ-08`; no platform-status changes. |
 | `2026-08-06-srq-01-zc-05-integrated-contract-replay.md` | Replays the existing 2026-07-14 broad `ZC-05` answer excerpt against the new integrated `SRQ-01` answer contract | fail expected | Confirms the older broad answer still has explicitness gaps for `阿含证据`, `代表性检索`, `因明校验`, cognitive terms, and the `不等于修证` boundary; no provider calls or platform-status changes. |
 | `2026-07-30-post-alignment-answer-review-replay.md` | Replays the 2026-07-17 and 2026-07-20 answer-review batch manifests after #150/#151 answer-validator alignment reporting | pass / fail expected | No missing structured validator cases were found; the compact `ZC-04` progression keeps its expected historical shallow-contract fail. |
 
@@ -27,6 +28,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Batch | Manifest | Inputs | Status | Notes |
 |---|---|---|---|---|
+| 2026-08-06 ZC-05 SRQ-01 runtime spot review | `2026-08-06-zc-05-srq-01-runtime-spot-review-batch.yaml` | 2026-08-06 Claude Code broad `ZC-05` as `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | partial / fail | `SRQ-04` passes; `SRQ-01`, `SRQ-03`, and `SRQ-08` still fail strict answer-contract review. |
 | 2026-08-06 SRQ-01 integrated ZC-05 replay | `2026-08-06-srq-01-zc-05-integrated-contract-replay-batch.yaml` | post-#124 broad `ZC-05` as `SRQ-01` | fail expected | Strict integrated contract replay over existing evidence; records a quality gap, not a platform-status change. |
 | 2026-07-20 latest ZC answer excerpt review | `2026-07-20-latest-zc-answer-excerpt-review-batch.yaml` | `ZC-03` as `SRQ-09`; post-#126 `ZC-04` as `SRQ-04`; post-#124 `ZC-05` as `SRQ-04`, `SRQ-03`, `SRQ-08` | pass | Current broad-answer pass set for the latest committed excerpts. |
 | 2026-07-20 compact ZC-04 progression review | `2026-07-20-compact-zc-04-answer-excerpt-progression-batch.yaml` | direct `SRQ-04`; compact `ZC-04` before #119; compact `ZC-04` after #119 | fail expected | Records the pass -> shallow-contract fail -> pass progression. The middle fail is historical evidence. |
@@ -37,6 +39,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Answer excerpt | Runtime source | Reviewed as | Batch/report | Status |
 |---|---|---|---|---|
+| `2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md` | broad `ZC-05` after 2026-08-06 minimum-template prompt hardening | `SRQ-01`, `SRQ-03`, `SRQ-04`, `SRQ-08` | ZC-05 SRQ-01 runtime spot review | partial / fail: `SRQ-04` pass; `SRQ-01`, `SRQ-03`, `SRQ-08` fail |
 | `2026-07-14-claude-code-srq-04-agama-boundary-spot-answer.md` | direct `SRQ-04` Agama spot review | `SRQ-04` | compact ZC-04 progression | pass |
 | `2026-07-14-claude-code-zc-04-compact-spot-answer.md` | compact `ZC-04` before #119 wording fix | `SRQ-04` | compact ZC-04 progression | fail expected |
 | `2026-07-14-claude-code-zc-04-compact-boundary-rerun-answer.md` | compact `ZC-04` after #119 wording fix | `SRQ-04` | compact ZC-04 progression | pass |
@@ -62,6 +65,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-06-zc-05-srq-01-runtime-spot-review.md` | Claude Code broad `ZC-05` runtime spot review after integrated `SRQ-01` prompt hardening | links standalone answer excerpt; batch status partial / fail |
 | `2026-08-06-zc05-srq01-prompt-hardening-local.md` | local broad `ZC-05` / integrated `SRQ-01` prompt hardening evidence | summary-only; prompt prepared, runtime pending |
 | `2026-07-14-claude-code-post-prompt-zc-01-zc-06-rerun.md` | Claude Code `ZC-01` through `ZC-06` post-prompt rerun | links `ZC-03` and redacted `ZC-06` excerpts |
 | `2026-07-14-claude-code-broad-boundary-postfix-review.md` | broad `ZC-04` / `ZC-05` post-#124 review | links broad `ZC-05` excerpt |

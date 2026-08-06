@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added a 2026-08-06 Claude Code broad `ZC-05` runtime spot evidence note and standalone answer excerpt replaying `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08`, recording `SRQ-04` pass plus remaining broad-answer explicitness gaps without platform-status changes and without validating native OpenAI API or OpenAI-compatible provider routes.
 - Added prompt hardening for broad `ZC-05` answers to preserve integrated `SRQ-01` slots across Codex, Claude Code, Skill, and OpenAI metadata surfaces, with local prompt-invariant evidence and no provider calls or platform-status changes.
 - Added a 2026-08-06 local replay of the existing broad `ZC-05` answer excerpt against the new integrated `SRQ-01` answer contract, recording the expected explicitness gap without provider calls or platform-status changes.
 - Added `SRQ-01` cross-domain no-self answer-contract samples covering Agama evidence, Hetuvidya, Collected Topics, Madhyamaka prasaṅga, cognitive-analysis, and practice-boundary slots without provider calls or platform-status changes.
@@ -19,6 +20,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Changed
 
+- Tightened broad `ZC-05` minimum-template prompt wording and narrowed the `SRQ-01` nihilism forbidden phrase to avoid a shallow collision with negated causality-boundary wording.
 - Expanded `docs/zilan-contract-schema.md` with CLI/Python schema shapes, exact matching semantics, schema-error examples, issue kinds, unsupported v2.5.7 features, and CI exit-code guidance without changing runtime behavior or platform validation status.
 - Updated `docs/zilan-contract-quickstart.md` and `docs/maintenance-roadmap.md` to document installed-package, console-script, and wheel-install verification boundaries for the closed productization surface.
 - Clarified `docs/maintenance-roadmap.md` to mark `zilan_contract` productization complete, list remaining package/platform/collation boundaries, and set reasoning/retrieval quality as the next mainline.
