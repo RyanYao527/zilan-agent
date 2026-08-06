@@ -1,6 +1,6 @@
 # Runtime Evidence Index
 
-> Last updated: 2026-08-05
+> Last updated: 2026-08-06
 
 This index is a navigation aid for `docs/runtime-evidence/`. It does not change platform validation status. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -20,12 +20,14 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Report | Inputs | Status | Notes |
 |---|---|---|---|
+| `2026-08-06-srq-01-zc-05-integrated-contract-replay.md` | Replays the existing 2026-07-14 broad `ZC-05` answer excerpt against the new integrated `SRQ-01` answer contract | fail expected | Confirms the older broad answer still has explicitness gaps for `阿含证据`, `代表性检索`, `因明校验`, cognitive terms, and the `不等于修证` boundary; no provider calls or platform-status changes. |
 | `2026-07-30-post-alignment-answer-review-replay.md` | Replays the 2026-07-17 and 2026-07-20 answer-review batch manifests after #150/#151 answer-validator alignment reporting | pass / fail expected | No missing structured validator cases were found; the compact `ZC-04` progression keeps its expected historical shallow-contract fail. |
 
 ## Batch Review Index
 
 | Batch | Manifest | Inputs | Status | Notes |
 |---|---|---|---|---|
+| 2026-08-06 SRQ-01 integrated ZC-05 replay | `2026-08-06-srq-01-zc-05-integrated-contract-replay-batch.yaml` | post-#124 broad `ZC-05` as `SRQ-01` | fail expected | Strict integrated contract replay over existing evidence; records a quality gap, not a platform-status change. |
 | 2026-07-20 latest ZC answer excerpt review | `2026-07-20-latest-zc-answer-excerpt-review-batch.yaml` | `ZC-03` as `SRQ-09`; post-#126 `ZC-04` as `SRQ-04`; post-#124 `ZC-05` as `SRQ-04`, `SRQ-03`, `SRQ-08` | pass | Current broad-answer pass set for the latest committed excerpts. |
 | 2026-07-20 compact ZC-04 progression review | `2026-07-20-compact-zc-04-answer-excerpt-progression-batch.yaml` | direct `SRQ-04`; compact `ZC-04` before #119; compact `ZC-04` after #119 | fail expected | Records the pass -> shallow-contract fail -> pass progression. The middle fail is historical evidence. |
 | 2026-07-17 runtime answer excerpt review | `2026-07-17-runtime-answer-excerpt-review-batch.yaml` | committed Claude Code runtime excerpts for `SRQ-02`, `SRQ-03`, `SRQ-04`, `SRQ-05`, and broad `ZC-05` | pass | Earlier committed runtime-answer baseline. |
@@ -40,7 +42,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 | `2026-07-14-claude-code-zc-04-compact-boundary-rerun-answer.md` | compact `ZC-04` after #119 wording fix | `SRQ-04` | compact ZC-04 progression | pass |
 | `2026-07-14-claude-code-zc-03-post-prompt-answer.md` | post-prompt full rerun | `SRQ-09` | latest ZC batch | pass |
 | `2026-07-14-claude-code-zc-04-post-126-answer.md` | broad `ZC-04` after #126 wording fix | `SRQ-04` | latest ZC batch | pass |
-| `2026-07-14-claude-code-zc-05-broad-boundary-postfix-answer.md` | broad `ZC-05` after #124 wording fix | `SRQ-04`, `SRQ-03`, `SRQ-08` | latest ZC batch | pass |
+| `2026-07-14-claude-code-zc-05-broad-boundary-postfix-answer.md` | broad `ZC-05` after #124 wording fix | `SRQ-04`, `SRQ-03`, `SRQ-08`; replayed as `SRQ-01` | latest ZC batch; SRQ-01 integrated replay | pass for `SRQ-03`/`SRQ-04`/`SRQ-08`; `SRQ-01` fail expected |
 | `2026-07-14-claude-code-zc-06-post-prompt-main-answer.md` | post-prompt `ZC-06` main response | not reviewed as `answer_file` | not in batch | file-completion notice only; local report path redacted |
 | `2026-06-20-claude-code-srq-05-spot-review-answer.md` | `SRQ-05` Hetuvidya spot review | `SRQ-05` | 2026-07-17 runtime batch | pass |
 | `2026-06-18-claude-code-post-contract-srq-02-answer.md` | post-contract target review | `SRQ-02` | 2026-07-17 runtime batch | pass |
@@ -94,6 +96,7 @@ Use batch manifests for grouped review:
 
 ```powershell
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-07-20-latest-zc-answer-excerpt-review-batch.yaml
+python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-06-srq-01-zc-05-integrated-contract-replay-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-07-20-compact-zc-04-answer-excerpt-progression-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-07-17-runtime-answer-excerpt-review-batch.yaml
 ```
