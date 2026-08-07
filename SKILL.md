@@ -202,6 +202,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 ├── scripts/
 │   ├── agama_evidence_checker.py      # 阿含证据边界 checker
 │   ├── build_agama_context.py         # CBETA XML-P5 → 阿含 Markdown
+│   ├── cbeta_collation_preflight.py   # CBETA XML-P5 publication-route preflight
 │   ├── cognitive_analysis_mapper.py   # 心类学/观禅 fixture mapper
 │   ├── collected_topics_analyzer.py   # 摄类学 fixture analyzer
 │   ├── hetuvidya_validator.py         # 因明 fixture validator
@@ -245,6 +246,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │       ├── agama/                     # Agama search library helpers
 │           ├── __init__.py
 │           ├── candidates.py
+│           ├── collation_preflight.py
 │           ├── fixture_review.py
 │           └── search.py
 │       ├── reasoning/                   # Reasoning contract library helpers
