@@ -202,6 +202,22 @@ def test_answer_contract_review_rejects_srq01_causality_nonexistence_overclaim()
     assert result["reviews"][0]["present_forbidden_terms"] == ["证明因果不存在"]
 
 
+def test_answer_contract_review_passes_for_srq01_runtime_spot_without_literal_labels() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-01",
+        answer_file=ROOT
+        / "docs"
+        / "runtime-evidence"
+        / "2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["reviews"][0]["missing_required_terms"] == []
+    assert result["reviews"][0]["missing_required_slots"] == []
+    assert result["reviews"][0]["present_forbidden_terms"] == []
+
+
 def test_answer_contract_review_fails_for_srq01_cross_domain_no_self_negative_sample() -> None:
     result = build_answer_contract_review(
         DEFAULT_FIXTURE,
@@ -212,8 +228,9 @@ def test_answer_contract_review_fails_for_srq01_cross_domain_no_self_negative_sa
     assert result["overall_status"] == "fail"
     assert result["expected_status"] == "fail"
     assert result["expected_status_match"] is True
-    assert "阿含证据" in result["reviews"][0]["missing_required_terms"]
-    assert "因明校验" in result["reviews"][0]["missing_required_terms"]
+    assert "CBETA" in result["reviews"][0]["missing_required_terms"]
+    assert "context/agama/" in result["reviews"][0]["missing_required_terms"]
+    assert "因三相" in result["reviews"][0]["missing_required_terms"]
     assert "不等于修证" in result["reviews"][0]["missing_required_terms"]
     assert result["reviews"][0]["present_forbidden_terms"] == [
         "已证空性",
