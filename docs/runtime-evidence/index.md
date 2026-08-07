@@ -66,6 +66,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-07-zc05-srq03-srq08-prompt-hardening-local.md` | local broad `ZC-05` second-round prompt hardening for `SRQ-03` / `SRQ-08` literal slots | summary-only; prompt prepared, runtime pending |
 | `2026-08-07-srq-01-contract-calibration-replay.md` | Local `SRQ-01` answer-contract replay after heading-label calibration | direct `SRQ-01` pass over the 2026-08-06 broad `ZC-05` excerpt |
 | `2026-08-06-zc-05-srq-01-runtime-spot-review.md` | Claude Code broad `ZC-05` runtime spot review after integrated `SRQ-01` prompt hardening | links standalone answer excerpt; batch status partial / fail |
 | `2026-08-06-zc05-srq01-prompt-hardening-local.md` | local broad `ZC-05` / integrated `SRQ-01` prompt hardening evidence | summary-only; prompt prepared, runtime pending |

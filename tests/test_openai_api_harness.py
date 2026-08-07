@@ -22,6 +22,15 @@ def test_openai_harness_builds_responses_api_request() -> None:
     assert request["reasoning"]["effort"] == "low"
 
 
+def test_openai_harness_default_prompt_preserves_broad_zc05_prasanga_nihilism_slots() -> None:
+    case = load_regression_case(ROOT, "ZC-05")
+    request = build_request(ROOT, case, "gpt-5.5")
+    developer_prompt = request["input"][0]["content"][0]["text"]
+
+    for fragment in ("SRQ-03", "SRQ-08", "不立自宗", "二谛", "proposition_decomposition"):
+        assert fragment in developer_prompt
+
+
 def test_openai_harness_wraps_invalid_yaml_parse_errors(tmp_path: Path) -> None:
     path = tmp_path / "bad.yaml"
     path.write_text("models: [unterminated\n", encoding="utf-8")

@@ -224,6 +224,47 @@ def test_agent_prompt_validator_requires_broad_zc05_srq01_integrated_slots() -> 
         assert required_fragments <= prompt_fragments
 
 
+def test_agent_prompt_validator_requires_broad_zc05_prasanga_nihilism_slots() -> None:
+    from zilanlib.validation.agent_prompts import AGENT_PROMPT_REQUIRED_FRAGMENTS
+
+    required_fragments = {
+        "SRQ-03",
+        "SRQ-08",
+        "不立自宗",
+        "二谛",
+        "proposition_decomposition",
+    }
+
+    for prompt_path in ("agents/zilan-codex.md", "agents/zilan-claude-code.md"):
+        prompt_fragments = set(AGENT_PROMPT_REQUIRED_FRAGMENTS[prompt_path])
+
+        assert required_fragments <= prompt_fragments
+
+
+def test_broad_zc05_recommended_structure_keeps_prasanga_nihilism_slots() -> None:
+    required_fragments = {
+        "应成论式",
+        "对方承许",
+        "归谬",
+        "不立自宗",
+        "二谛",
+        "proposition_decomposition",
+    }
+    prompt_markers = {
+        "agents/zilan-codex.md": "推荐紧凑结构",
+        "agents/zilan-claude-code.md": "推荐紧凑结构",
+        "SKILL.md": "推荐结构",
+        "SKILL-en.md": "Recommended structure",
+    }
+
+    for rel_path, marker in prompt_markers.items():
+        text = (ROOT / rel_path).read_text(encoding="utf-8")
+        structure_line = next(line for line in text.splitlines() if marker in line)
+
+        for fragment in required_fragments:
+            assert fragment in structure_line
+
+
 def test_regression_cases_validator_module_exports_public_function() -> None:
     from zilanlib.validation.regression_cases import validate_regression_cases
 
