@@ -350,8 +350,10 @@ The answer-contract helper:
 
 For `SRQ-01`, the current `cross_domain_no_self_analysis` contract requires a broad no-self answer to preserve visible
 sections for Agama evidence, prasaṅga framing, Hetuvidya checking, Collected Topics relations, cognitive/practice
-mapping, and an explicit practice boundary. It remains a fixture-only answer-surface check over checked-in samples, not
-runtime evidence or a platform-status change.
+mapping, and an explicit practice boundary. The contract treats heading-like labels such as `阿含证据`, `代表性检索`,
+and `因明校验` as prompt ergonomics rather than mandatory global literals when concrete citation and reasoning surfaces
+are present. It remains a fixture-only answer-surface check over checked-in samples, not runtime evidence or a
+platform-status change.
 
 `required_slots` add a shallow structural check on top of required / forbidden terms. A slot passes when at least one
 of its configured terms appears in the answer. This is meant to preserve visible answer parts such as argument

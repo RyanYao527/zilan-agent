@@ -579,17 +579,14 @@ queries:
       cross_domain_no_self_analysis:
         description: "Answer must integrate Agama evidence, Hetuvidya, Collected Topics, Madhyamaka prasaṅga, cognitive analysis, and practice boundaries for the broad no-self query."
         required_terms:
-          - 阿含证据
           - CBETA
           - context/agama/
-          - 代表性检索
           - 待校勘
           - 应成论式
           - 对方承许
           - 归谬
           - 自性有
           - 缘起
-          - 因明校验
           - 因三相
           - 摄类学
           - 五蕴
