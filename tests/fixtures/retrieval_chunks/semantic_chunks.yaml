@@ -7,14 +7,16 @@ chunks:
     source_file: context/agama/T0099-za-agama.md
     start_line: 147
     end_line: 149
-    citation: "《雜阿含經》(T02n0099) 卷 1, context/agama/T0099-za-agama.md:147"
-    passage_citation: "《雜阿含經》(T02n0099) 卷 1, context/agama/T0099-za-agama.md:147-149"
+    citation: "《雜阿含經》(T02n0099) 卷 1, （九）, context/agama/T0099-za-agama.md:147"
+    passage_citation: "《雜阿含經》(T02n0099) 卷 1, （九）, context/agama/T0099-za-agama.md:147-149"
     text: "色無常，無常即苦，苦即非我"
     metadata:
       collection: 雜阿含經
       cbeta_id: T02n0099
       juan: 卷 1
-      section_marker:
+      section_marker: （九）
+      section_title:
+      section_label: （九）
       topics:
         - 無我
         - 五蘊
@@ -41,14 +43,16 @@ chunks:
     source_file: context/agama/T0001-chang-agama.md
     start_line: 881
     end_line: 881
-    citation: "《長阿含經》(T01n0001) 卷 1, context/agama/T0001-chang-agama.md:881"
-    passage_citation: "《長阿含經》(T01n0001) 卷 1, context/agama/T0001-chang-agama.md:881"
+    citation: "《長阿含經》(T01n0001) 卷 1, （一）第一分初大本經第一, context/agama/T0001-chang-agama.md:881"
+    passage_citation: "《長阿含經》(T01n0001) 卷 1, （一）第一分初大本經第一, context/agama/T0001-chang-agama.md:881"
     text: "若學決定法，知諸法無我；"
     metadata:
       collection: 長阿含經
       cbeta_id: T01n0001
       juan: 卷 1
-      section_marker:
+      section_marker: （一）
+      section_title: 第一分初大本經第一
+      section_label: （一）第一分初大本經第一
       topics:
         - 無我
         - 非我
@@ -83,6 +87,8 @@ chunks:
       cbeta_id: T01n0001
       juan: 卷 3
       section_marker:
+      section_title:
+      section_label:
       topics:
         - 無我
         - 陰界入
@@ -109,14 +115,16 @@ chunks:
     source_file: context/agama/T0001-chang-agama.md
     start_line: 3997
     end_line: 3997
-    citation: "《長阿含經》(T01n0001) 卷 10, context/agama/T0001-chang-agama.md:3997"
-    passage_citation: "《長阿含經》(T01n0001) 卷 10, context/agama/T0001-chang-agama.md:3997"
+    citation: "《長阿含經》(T01n0001) 卷 10, （一三）佛說長阿含第二分大緣方便經第九, context/agama/T0001-chang-agama.md:3997"
+    passage_citation: "《長阿含經》(T01n0001) 卷 10, （一三）佛說長阿含第二分大緣方便經第九, context/agama/T0001-chang-agama.md:3997"
     text: "「阿難！彼見我者，言受是我，當語彼言：『如來說三受，樂受、苦受、不苦不樂受。當有樂受時，無有苦受、不苦不樂受；有苦受時，無有樂受、不苦不樂受；有不苦不樂受時，無有苦受、樂受。』所以然者？阿難！樂觸緣生樂受，若樂觸滅受亦滅。阿難！苦觸緣生苦受，若苦觸滅受亦滅；不苦不樂觸緣生不苦不樂受，若不苦不樂觸滅受亦滅。阿難！如兩木相攢則有火生，各置異處則無有火。此亦如是，因樂觸緣故生樂受，若樂觸滅受亦俱滅；因苦觸緣故生苦受，若苦觸滅受亦俱滅；因不苦不樂觸緣生不苦不樂受，若不苦不樂觸滅受亦俱滅。阿難！此三受有為無常，從因緣生，盡法、滅法，為朽壞法。彼非我有，我非彼有，當以正智如實觀之。阿難！彼見我者，以受為我，彼則為非。"
     metadata:
       collection: 長阿含經
       cbeta_id: T01n0001
       juan: 卷 10
-      section_marker:
+      section_marker: （一三）
+      section_title: 佛說長阿含第二分大緣方便經第九
+      section_label: （一三）佛說長阿含第二分大緣方便經第九
       topics:
         - 无我
         - 非我

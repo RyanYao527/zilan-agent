@@ -6,6 +6,7 @@ from collections.abc import Container
 from pathlib import Path
 from typing import cast
 
+from zilanlib.agama.search import _line_section_map
 from zilanlib.validation.reasoning_cases import ALLOWED_REASONING_CONTRACTS
 from zilanlib.yaml_io import is_non_empty_int_list, is_non_empty_string_list, load_yaml_for_validation
 
@@ -28,6 +29,42 @@ def retrieval_line_text_hash(source_lines: list[str], start_line: int, end_line:
     text = "\n".join(line.strip() for line in source_lines[start_line - 1 : end_line] if line.strip())
     digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
     return f"{RETRIEVAL_HASH_ALGORITHM}:{digest}"
+
+
+def retrieval_section_label(section_marker: object, section_title: object) -> str | None:
+    marker = section_marker if isinstance(section_marker, str) and section_marker else None
+    title = section_title if isinstance(section_title, str) and section_title else None
+    if marker and title:
+        return f"{marker}{title}"
+    if marker:
+        return marker
+    return title
+
+
+def check_agama_section_metadata(
+    *,
+    chunk_id: str,
+    metadata: dict[str, object],
+    source_lines: list[str],
+    start_line: int,
+    failures: list[str],
+) -> None:
+    for field in ("section_marker", "section_title"):
+        value = metadata.get(field)
+        if value is not None and not isinstance(value, str):
+            failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.{field} must be a string or null.")
+
+    source_section_marker, source_section_title = _line_section_map(source_lines).get(start_line, (None, None))
+    expected_label = retrieval_section_label(source_section_marker, source_section_title)
+    if metadata.get("section_marker") != source_section_marker:
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.section_marker must match source section.")
+    if metadata.get("section_title") != source_section_title:
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.section_title must match source section.")
+    if "section_label" not in metadata or metadata.get("section_label") != expected_label:
+        failures.append(
+            f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} "
+            "metadata.section_label must match section_marker and section_title."
+        )
 
 
 def check_agama_passage_provenance(
@@ -145,6 +182,13 @@ def check_retrieval_chunk_metadata(
             and isinstance(end_line, int)
             and isinstance(source_lines, list)
         ):
+            check_agama_section_metadata(
+                chunk_id=case_id,
+                metadata=metadata,
+                source_lines=source_lines,
+                start_line=start_line,
+                failures=failures,
+            )
             check_agama_passage_provenance(
                 chunk_id=case_id,
                 metadata=metadata,
@@ -482,10 +526,19 @@ def validate_retrieval_chunks(root: Path, failures: list[str], warnings: list[st
             if snippet not in selected:
                 failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} text is not present in source range.")
 
+        metadata = item.get("metadata")
+        section_label = metadata.get("section_label") if isinstance(metadata, dict) else None
         for field in ("citation", "passage_citation"):
             value = item.get(field)
             if not isinstance(value, str) or source_file not in value or f":{start_line}" not in value:
                 failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} {field} must include the local line anchor.")
+            if (
+                isinstance(value, str)
+                and isinstance(section_label, str)
+                and section_label
+                and section_label not in value
+            ):
+                failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} {field} must include metadata.section_label.")
 
         check_retrieval_chunk_metadata(
             chunk_id,
@@ -502,6 +555,8 @@ def validate_retrieval_chunks(root: Path, failures: list[str], warnings: list[st
 
 
 _retrieval_line_text_hash = retrieval_line_text_hash
+_retrieval_section_label = retrieval_section_label
+_check_agama_section_metadata = check_agama_section_metadata
 _check_agama_passage_provenance = check_agama_passage_provenance
 _check_retrieval_chunk_metadata = check_retrieval_chunk_metadata
 _check_answer_samples = check_answer_samples
