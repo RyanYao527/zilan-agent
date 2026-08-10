@@ -1,0 +1,19 @@
+version: 1
+source: docs/architecture/cbeta-xml-p5-collation-preflight.md
+purpose: Candidate-only map for high-value no-self passages that should receive future manual parallel-text collation.
+candidate_sets:
+  - set_id: no-self-five-aggregates-and-feeling
+    theme: five_aggregates_and_three_feelings_no_self
+    status: candidate_map_only
+    source_anchor_probe: cbeta-anchor:T02n0099:line-147
+    source_chunk_id: agama:T02n0099:juan-1:line-147
+    candidate_parallels:
+      - anchor_probe: cbeta-anchor:T01n0001:line-3997
+        chunk_id: agama:T01n0001:juan-10:line-3997
+        relation: doctrinal_theme_parallel
+        confidence: review_candidate
+        collation_status: pending_manual_collation
+        rationale: Both checked passages are high-value no-self evidence used by SRQ-04, but this map only marks them as future manual collation candidates.
+    boundaries:
+      - Candidate map only; does not prove publication-level equivalence.
+      - XML anchors locate committed CBETA body spans, but parallel-text collation remains pending.

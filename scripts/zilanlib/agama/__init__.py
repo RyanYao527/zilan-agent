@@ -1,8 +1,15 @@
 """Agama corpus helper APIs."""
+
 from __future__ import annotations
 
 from zilanlib.agama.candidates import CandidateError, build_candidate_set
-from zilanlib.agama.collation_preflight import CollationPreflightError, CollationWork, build_preflight
+from zilanlib.agama.collation_preflight import (
+    AnchorProbe,
+    CollationPreflightError,
+    CollationWork,
+    build_anchor_report,
+    build_preflight,
+)
 from zilanlib.agama.fixture_review import ReviewError, build_review
 from zilanlib.agama.search import (
     DEFAULT_FALSE_POSITIVE_PHRASES,
@@ -20,10 +27,12 @@ __all__ = [
     "DEFAULT_PATTERN",
     "AgamaMatch",
     "AgamaPassage",
+    "AnchorProbe",
     "CandidateError",
     "CollationPreflightError",
     "CollationWork",
     "ReviewError",
+    "build_anchor_report",
     "build_preflight",
     "build_candidate_set",
     "build_review",

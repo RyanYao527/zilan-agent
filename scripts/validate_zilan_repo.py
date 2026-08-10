@@ -5,6 +5,7 @@ from pathlib import Path
 
 from zilanlib.validation import agama_corpus as agama_corpus_validation
 from zilanlib.validation import agent_prompts as agent_prompt_validation
+from zilanlib.validation import collation as collation_validation
 from zilanlib.validation import platform as platform_validation
 from zilanlib.validation import public_docs as public_docs_validation
 from zilanlib.validation import reasoning_cases as reasoning_cases_validation
@@ -64,6 +65,8 @@ RETRIEVAL_HASH_ALGORITHM = retrieval_chunks_validation.RETRIEVAL_HASH_ALGORITHM
 RETRIEVAL_SOURCE_SCRIPT = retrieval_chunks_validation.RETRIEVAL_SOURCE_SCRIPT
 RETRIEVAL_SOURCE_HASH_SCOPE = retrieval_chunks_validation.RETRIEVAL_SOURCE_HASH_SCOPE
 RETRIEVAL_LINE_TEXT_HASH_SCOPE = retrieval_chunks_validation.RETRIEVAL_LINE_TEXT_HASH_SCOPE
+COLLATION_ANCHOR_PROBES_PATH = collation_validation.ANCHOR_PROBES_PATH
+COLLATION_PARALLEL_CANDIDATES_PATH = collation_validation.PARALLEL_CANDIDATES_PATH
 PLATFORM_VALIDATION_LABELS = platform_validation.PLATFORM_VALIDATION_LABELS
 AGENT_PROMPT_REQUIRED_FRAGMENTS = agent_prompt_validation.AGENT_PROMPT_REQUIRED_FRAGMENTS
 
@@ -87,6 +90,7 @@ _check_answer_contracts = retrieval_chunks_validation.check_answer_contracts
 _check_retrieval_queries = retrieval_chunks_validation.check_retrieval_queries
 _check_retrieval_chunks_yaml = retrieval_chunks_validation.validate_retrieval_chunks
 validate_retrieval_chunks = retrieval_chunks_validation.validate_retrieval_chunks
+validate_collation_fixtures = collation_validation.validate_collation_fixtures
 
 _check_hetuvidya_contract = reasoning_cases_validation.check_hetuvidya_contract
 _check_collected_topics_contract = reasoning_cases_validation.check_collected_topics_contract
@@ -158,6 +162,7 @@ ENTRYPOINT_COMPATIBILITY_ALIASES = {
     "_check_retrieval_queries": "zilanlib.validation.retrieval_chunks.check_retrieval_queries",
     "_check_retrieval_chunks_yaml": "zilanlib.validation.retrieval_chunks.validate_retrieval_chunks",
     "validate_retrieval_chunks": "zilanlib.validation.retrieval_chunks.validate_retrieval_chunks",
+    "validate_collation_fixtures": "zilanlib.validation.collation.validate_collation_fixtures",
     "_check_hetuvidya_contract": "zilanlib.validation.reasoning_cases.check_hetuvidya_contract",
     "_check_collected_topics_contract": "zilanlib.validation.reasoning_cases.check_collected_topics_contract",
     "_check_cognitive_analysis_contract": "zilanlib.validation.reasoning_cases.check_cognitive_analysis_contract",

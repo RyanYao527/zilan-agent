@@ -29,6 +29,7 @@ def test_validation_suite_runs_validators_in_stable_order(monkeypatch, tmp_path:
     monkeypatch.setattr(suite.regression_cases_validation, "validate_regression_cases", record("regression_cases"))
     monkeypatch.setattr(suite.reasoning_cases_validation, "validate_reasoning_cases", record("reasoning_cases"))
     monkeypatch.setattr(suite.retrieval_chunks_validation, "validate_retrieval_chunks", record("retrieval_chunks"))
+    monkeypatch.setattr(suite.collation_validation, "validate_collation_fixtures", record("collation"))
     monkeypatch.setattr(suite.agent_prompt_validation, "validate_agent_prompts", record("agent_prompts"))
     monkeypatch.setattr(
         suite.public_docs_validation,
@@ -55,6 +56,7 @@ def test_validation_suite_runs_validators_in_stable_order(monkeypatch, tmp_path:
         "regression_cases",
         "reasoning_cases",
         "retrieval_chunks",
+        "collation",
         "agent_prompts",
         "readme_links",
         "third_party_notices",
@@ -95,6 +97,7 @@ def test_validation_suite_passes_shared_state_and_flags(monkeypatch, tmp_path: P
     monkeypatch.setattr(suite.regression_cases_validation, "validate_regression_cases", record_yaml("regression"))
     monkeypatch.setattr(suite.reasoning_cases_validation, "validate_reasoning_cases", record_yaml("reasoning"))
     monkeypatch.setattr(suite.retrieval_chunks_validation, "validate_retrieval_chunks", record_yaml("retrieval"))
+    monkeypatch.setattr(suite.collation_validation, "validate_collation_fixtures", record_yaml("collation"))
     def noop_two(_root: Path, _failures: list[str]) -> None:
         return None
 
@@ -112,7 +115,13 @@ def test_validation_suite_passes_shared_state_and_flags(monkeypatch, tmp_path: P
     failures, warnings = suite.run_checks(tmp_path / ".", check_generated=False, strict_yaml=True)
 
     assert failures == ["check_paths failure", "version failure", "matrix failure"]
-    assert warnings == ["regression warning", "reasoning warning", "retrieval warning", "platform warning"]
+    assert warnings == [
+        "regression warning",
+        "reasoning warning",
+        "retrieval warning",
+        "collation warning",
+        "platform warning",
+    ]
     failure_ids = {failure_id for _name, _root, failure_id in observed_simple}
     failure_ids.update(failure_id for _name, _root, failure_id, _warnings_id, _flag, _seen in observed_yaml)
     warning_ids = {warning_id for _name, _root, _failure_id, warning_id, _flag, _seen in observed_yaml}
@@ -151,6 +160,11 @@ def test_validation_suite_skips_generated_agama_when_not_requested(monkeypatch, 
     monkeypatch.setattr(
         suite.retrieval_chunks_validation,
         "validate_retrieval_chunks",
+        lambda _root, _failures, _warnings, _strict_yaml: None,
+    )
+    monkeypatch.setattr(
+        suite.collation_validation,
+        "validate_collation_fixtures",
         lambda _root, _failures, _warnings, _strict_yaml: None,
     )
     monkeypatch.setattr(suite.agent_prompt_validation, "validate_agent_prompts", noop_two)

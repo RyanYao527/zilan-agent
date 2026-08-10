@@ -4,6 +4,7 @@ from pathlib import Path
 
 from zilanlib.validation import agama_corpus as agama_corpus_validation
 from zilanlib.validation import agent_prompts as agent_prompt_validation
+from zilanlib.validation import collation as collation_validation
 from zilanlib.validation import platform as platform_validation
 from zilanlib.validation import public_docs as public_docs_validation
 from zilanlib.validation import reasoning_cases as reasoning_cases_validation
@@ -31,6 +32,7 @@ def run_checks(
     regression_cases_validation.validate_regression_cases(root, failures, warnings, strict_yaml)
     reasoning_cases_validation.validate_reasoning_cases(root, failures, warnings, strict_yaml)
     retrieval_chunks_validation.validate_retrieval_chunks(root, failures, warnings, strict_yaml)
+    collation_validation.validate_collation_fixtures(root, failures, warnings, strict_yaml)
     agent_prompt_validation.validate_agent_prompts(root, failures)
     public_docs_validation.check_readme_platform_validation_links(root, failures)
     public_docs_validation.check_third_party_notices(root, failures)

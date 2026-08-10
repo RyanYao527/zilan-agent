@@ -1,6 +1,6 @@
 # Runtime Evidence Index
 
-> Last updated: 2026-08-07
+> Last updated: 2026-08-10
 
 This index is a navigation aid for `docs/runtime-evidence/`. It does not change platform validation status. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -20,6 +20,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Report | Inputs | Status | Notes |
 |---|---|---|---|
+| `2026-08-10-cbeta-anchor-parallel-local-replay.md` | Replays committed broad `ZC-05` evidence while recording local CBETA XML anchor probes and a high-value no-self candidate map | pass / fail expected | Confirms `SRQ-01` / `SRQ-04` still pass for the current broad spot excerpt, `SRQ-03` / `SRQ-08` remain runtime pending, and collation aids are local-only; no provider calls or platform-status changes. |
 | `2026-08-07-zc05-srq03-srq08-local-replay.md` | Replays committed broad `ZC-05` excerpts plus `SRQ-03` / `SRQ-08` fixture samples after second-round prompt hardening | pass / fail expected | Confirms the local contracts and prompt invariants can see the target `不立自宗`, `二谛`, and `proposition_decomposition` gaps; no provider calls or platform-status changes. |
 | `2026-08-07-srq-01-contract-calibration-replay.md` | Replays the 2026-08-06 broad `ZC-05` answer excerpt after `SRQ-01` contract calibration | pass | Confirms the same answer passes direct `SRQ-01` review once heading-like labels are separated from concrete evidence terms; no provider calls or platform-status changes. |
 | `2026-08-06-zc-05-srq-01-runtime-spot-review.md` | Reviews the 2026-08-06 Claude Code broad `ZC-05` runtime spot answer against `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | partial / fail | After 2026-08-07 contract calibration, final committed excerpt passes `SRQ-01` and `SRQ-04`; `SRQ-03` and `SRQ-08` still fail. |
@@ -67,6 +68,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-10-cbeta-anchor-parallel-local-replay.md` | local CBETA XML anchor probes, high-value no-self candidate map, and reasoning/retrieval replay refresh | summary-only; collation and broad runtime pending |
 | `2026-08-07-zc05-srq03-srq08-local-replay.md` | local replay over committed broad `ZC-05` excerpts and `SRQ-03` / `SRQ-08` samples after second-round prompt hardening | summary-only; prompt prepared, runtime pending |
 | `2026-08-07-zc05-srq03-srq08-prompt-hardening-local.md` | local broad `ZC-05` second-round prompt hardening for `SRQ-03` / `SRQ-08` literal slots | summary-only; prompt prepared, runtime pending |
 | `2026-08-07-srq-01-contract-calibration-replay.md` | Local `SRQ-01` answer-contract replay after heading-label calibration | direct `SRQ-01` pass over the 2026-08-06 broad `ZC-05` excerpt |
