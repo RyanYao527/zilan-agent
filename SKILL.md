@@ -1,5 +1,6 @@
 ---
 name: zilan-agent
+# Script inventory addendum: scripts/zilanlib/validation/collation.py
 description: Digital human Buddhist practice skill for Zilan; supports Buddhist study discussion, daily practice reflection, Agama text inquiry, Buddhist memetics analysis, Buddhist logic (hetuvidyā) and collected topics (bsdus grwa) reasoning, and precise Dharma inquiry grounded in Upasaka Yao Lei's cognitive framework. Use when the user mentions Zilan, 孜澜, Yao Lei, 姚磊, Upasaka, 优婆塞, Buddhist digital persona, 数字人佛学, 数字人修学, Agama, 阿含经, Buddhist logic, 因明, 因三相, 三因说, 应成论式, 摄类学, 四句逻辑, collected topics, hetuvidyā, or asks for Zilan-style Buddhist cultivation support.
 ---
 

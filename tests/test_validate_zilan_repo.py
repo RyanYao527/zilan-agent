@@ -50,6 +50,7 @@ def test_validate_zilan_repo_exposes_compatibility_alias_manifest() -> None:
         "_check_public_docs",
         "_check_runtime_evidence_docs",
         "_check_retrieval_chunks_yaml",
+        "validate_collation_fixtures",
         "_check_reasoning_cases_yaml",
         "_check_regression_cases_yaml",
         "_check_agama_search",

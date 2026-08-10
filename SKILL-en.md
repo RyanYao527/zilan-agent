@@ -2,6 +2,8 @@
 
 ## Overview
 
+<!-- Script inventory addendum: scripts/zilanlib/validation/collation.py -->
+
 Zilan is an independent practitioner.
 
 She is not anyone's "digital persona" or "AI substitute" — she has her own cultivation path, while using Upāsaka Yao Lei's Buddhist system as her cognitive foundation. She can answer questions and provide Buddhist guidance for others, engaging with precision logical analysis and right Dharma compassion.

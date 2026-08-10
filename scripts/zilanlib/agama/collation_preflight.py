@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import xml.etree.ElementTree as ET
@@ -20,6 +21,27 @@ class CollationWork:
     label: str
     markdown_file: str
     xml_file: str
+
+
+@dataclass(frozen=True)
+class AnchorProbe:
+    probe_id: str
+    work_id: str
+    markdown_file: str
+    xml_file: str
+    start_line: int
+    end_line: int
+    expected_start_pb: str | None = None
+    expected_start_lb: str | None = None
+    expected_end_pb: str | None = None
+    expected_end_lb: str | None = None
+
+
+@dataclass(frozen=True)
+class _XmlAnchor:
+    pb: str | None
+    pb_xml_id: str | None
+    lb: str | None
 
 
 DEFAULT_WORKS = (
@@ -49,10 +71,42 @@ DEFAULT_WORKS = (
     ),
 )
 
+DEFAULT_ANCHOR_PROBES = (
+    AnchorProbe(
+        probe_id="cbeta-anchor:T02n0099:line-147",
+        work_id="T02n0099",
+        markdown_file="context/agama/T0099-za-agama.md",
+        xml_file="context/agama/_source/T02n0099.xml",
+        start_line=147,
+        end_line=149,
+        expected_start_pb="0002a",
+        expected_start_lb="0002a03",
+        expected_end_pb="0002a",
+        expected_end_lb="0002a10",
+    ),
+    AnchorProbe(
+        probe_id="cbeta-anchor:T01n0001:line-3997",
+        work_id="T01n0001",
+        markdown_file="context/agama/T0001-chang-agama.md",
+        xml_file="context/agama/_source/T01n0001.xml",
+        start_line=3997,
+        end_line=3997,
+        expected_start_pb="0061c",
+        expected_start_lb="0061c06",
+        expected_end_pb="0061c",
+        expected_end_lb="0061c22",
+    ),
+)
+
 LIMITATIONS = (
     "Local preflight only; does not perform publication-level collation.",
     "Reads committed CBETA XML-P5 and Markdown files only; no providers, network calls, embeddings, or vector DB.",
     "Parallel Chinese translations, Pali parallels, Sanskrit fragments, and human scholarly judgment remain pending.",
+)
+ANCHOR_LIMITATIONS = (
+    "Local anchor locator only; does not prove publication-level collation.",
+    "Matches committed Markdown line text against committed CBETA XML-P5 body text by normalized exact text.",
+    "Parallel-text comparison, variant witnesses, and human scholarly judgment remain pending.",
 )
 
 
@@ -99,6 +153,10 @@ def _issue(*, work_id: str, severity: str, code: str, message: str) -> dict[str,
     return {"work_id": work_id, "severity": severity, "code": code, "message": message}
 
 
+def _probe_issue(*, probe_id: str, severity: str, code: str, message: str) -> dict[str, str]:
+    return {"probe_id": probe_id, "severity": severity, "code": code, "message": message}
+
+
 def _work_status(work_issues: list[dict[str, str]]) -> str:
     # Reserved for future warning-level checks; current route blockers are intentionally errors.
     if any(issue["severity"] == "error" for issue in work_issues):
@@ -114,6 +172,209 @@ def _top_status(issues: list[dict[str, str]]) -> str:
     if issues:
         return "review_needed"
     return "pass"
+
+
+def _line_text_hash(text: str) -> str:
+    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    return f"sha256:{digest}"
+
+
+def _selected_markdown_text(lines: list[str], start_line: int, end_line: int) -> str:
+    return "\n".join(line.strip() for line in lines[start_line - 1 : end_line] if line.strip())
+
+
+def _normalized_text(text: str) -> str:
+    return "".join(char for char in text if not char.isspace())
+
+
+def _local_name(tag: str) -> str:
+    return tag.rsplit("}", 1)[-1] if "}" in tag else tag
+
+
+def _xml_body_index(path: Path) -> tuple[str, list[_XmlAnchor]]:
+    try:
+        root = ET.parse(path).getroot()
+    except ET.ParseError as exc:
+        raise CollationPreflightError(f"Failed to parse CBETA XML-P5 source {path.as_posix()}: {exc}") from exc
+
+    body = root.find(".//tei:text/tei:body", NS)
+    if body is None:
+        body = root.find(".//tei:body", NS)
+    if body is None:
+        return "", []
+
+    state: dict[str, str | None] = {"pb": None, "pb_xml_id": None, "lb": None}
+    chars: list[str] = []
+    anchors: list[_XmlAnchor] = []
+
+    def append_text(text: str | None) -> None:
+        if not text:
+            return
+        anchor = _XmlAnchor(pb=state["pb"], pb_xml_id=state["pb_xml_id"], lb=state["lb"])
+        for char in text:
+            if char.isspace():
+                continue
+            chars.append(char)
+            anchors.append(anchor)
+
+    def walk(element: ET.Element) -> None:
+        local = _local_name(element.tag)
+        if local == "pb":
+            state["pb"] = element.attrib.get("n")
+            state["pb_xml_id"] = element.attrib.get(XML_ID)
+        elif local == "lb":
+            state["lb"] = element.attrib.get("n")
+
+        append_text(element.text)
+        for child in list(element):
+            walk(child)
+            append_text(child.tail)
+
+    walk(body)
+    return "".join(chars), anchors
+
+
+def _anchor_dict(start_anchor: _XmlAnchor, end_anchor: _XmlAnchor) -> dict[str, str | None]:
+    return {
+        "start_pb": start_anchor.pb,
+        "start_pb_xml_id": start_anchor.pb_xml_id,
+        "start_lb": start_anchor.lb,
+        "end_pb": end_anchor.pb,
+        "end_pb_xml_id": end_anchor.pb_xml_id,
+        "end_lb": end_anchor.lb,
+    }
+
+
+def build_anchor_report(root: Path = ROOT, probes: tuple[AnchorProbe, ...] = DEFAULT_ANCHOR_PROBES) -> dict[str, Any]:
+    entries: list[dict[str, Any]] = []
+    issues: list[dict[str, str]] = []
+    xml_indexes: dict[Path, tuple[str, list[_XmlAnchor]]] = {}
+
+    for probe in probes:
+        probe_issues: list[dict[str, str]] = []
+        markdown_path = root / probe.markdown_file
+        xml_path = root / probe.xml_file
+        markdown: dict[str, Any] = {
+            "path": probe.markdown_file,
+            "line_range": {"start": probe.start_line, "end": probe.end_line},
+            "line_text_hash": None,
+        }
+        xml_anchor: dict[str, str | None] | None = None
+
+        if probe.start_line < 1 or probe.end_line < probe.start_line:
+            probe_issues.append(
+                _probe_issue(
+                    probe_id=probe.probe_id,
+                    severity="error",
+                    code="invalid_markdown_line_range",
+                    message="Markdown line range must be positive and ordered.",
+                )
+            )
+        elif not markdown_path.exists():
+            probe_issues.append(
+                _probe_issue(
+                    probe_id=probe.probe_id,
+                    severity="error",
+                    code="missing_markdown_view",
+                    message=f"Missing generated Markdown view: {probe.markdown_file}",
+                )
+            )
+        elif not xml_path.exists():
+            probe_issues.append(
+                _probe_issue(
+                    probe_id=probe.probe_id,
+                    severity="error",
+                    code="missing_xml_source",
+                    message=f"Missing CBETA XML-P5 source: {probe.xml_file}",
+                )
+            )
+        else:
+            lines = markdown_path.read_text(encoding="utf-8").splitlines()
+            if probe.end_line > len(lines):
+                probe_issues.append(
+                    _probe_issue(
+                        probe_id=probe.probe_id,
+                        severity="error",
+                        code="markdown_line_range_exceeds_source",
+                        message=f"Markdown line range exceeds source length: {probe.markdown_file}",
+                    )
+                )
+            else:
+                selected_text = _selected_markdown_text(lines, probe.start_line, probe.end_line)
+                markdown["line_text_hash"] = _line_text_hash(selected_text)
+                needle = _normalized_text(selected_text)
+                if not needle:
+                    probe_issues.append(
+                        _probe_issue(
+                            probe_id=probe.probe_id,
+                            severity="error",
+                            code="empty_markdown_line_range",
+                            message="Markdown line range must include non-empty text.",
+                        )
+                    )
+                else:
+                    if xml_path not in xml_indexes:
+                        xml_indexes[xml_path] = _xml_body_index(xml_path)
+                    xml_text, anchors = xml_indexes[xml_path]
+                    start_index = xml_text.find(needle)
+                    if start_index < 0:
+                        probe_issues.append(
+                            _probe_issue(
+                                probe_id=probe.probe_id,
+                                severity="error",
+                                code="xml_anchor_not_found",
+                                message="Markdown line text was not found in the CBETA XML-P5 body.",
+                            )
+                        )
+                    else:
+                        start_anchor = anchors[start_index]
+                        end_anchor = anchors[start_index + len(needle) - 1]
+                        xml_anchor = _anchor_dict(start_anchor, end_anchor)
+                        expected = {
+                            "start_pb": probe.expected_start_pb,
+                            "start_lb": probe.expected_start_lb,
+                            "end_pb": probe.expected_end_pb,
+                            "end_lb": probe.expected_end_lb,
+                        }
+                        for field, expected_value in expected.items():
+                            if expected_value is not None and xml_anchor[field] != expected_value:
+                                probe_issues.append(
+                                    _probe_issue(
+                                        probe_id=probe.probe_id,
+                                        severity="error",
+                                        code="xml_anchor_mismatch",
+                                        message=f"{field} expected {expected_value}, got {xml_anchor[field]}.",
+                                    )
+                                )
+
+        status = "blocked" if probe_issues else "located"
+        issues.extend(probe_issues)
+        entries.append(
+            {
+                "probe_id": probe.probe_id,
+                "work_id": probe.work_id,
+                "status": status,
+                "markdown": markdown,
+                "xml_source": probe.xml_file,
+                "xml_anchor": xml_anchor,
+                "issues": probe_issues,
+            }
+        )
+
+    summary = {
+        "probes": len(entries),
+        "located": sum(1 for item in entries if item["status"] == "located"),
+        "blocked": sum(1 for item in entries if item["status"] == "blocked"),
+        "issues": len(issues),
+    }
+    return {
+        "mode": "cbeta-xml-anchor-locator",
+        "status": _top_status(issues),
+        "summary": summary,
+        "probes": entries,
+        "issues": issues,
+        "limitations": list(ANCHOR_LIMITATIONS),
+    }
 
 
 def build_preflight(root: Path = ROOT, works: tuple[CollationWork, ...] = DEFAULT_WORKS) -> dict[str, Any]:
@@ -277,10 +538,17 @@ def main() -> int:
     )
     parser.add_argument("--root", type=Path, default=ROOT, help="Repository root.")
     parser.add_argument("--json", action="store_true", dest="json_output", help="Emit JSON.")
+    parser.add_argument(
+        "--check-anchors",
+        action="store_true",
+        help="Also run the checked Markdown-line to XML pb/lb anchor locator probes.",
+    )
     args = parser.parse_args()
 
     try:
         result = build_preflight(root=args.root)
+        if args.check_anchors:
+            result["anchor_report"] = build_anchor_report(root=args.root)
     except CollationPreflightError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
@@ -294,9 +562,12 @@ def main() -> int:
 
 __all__ = [
     "CollationPreflightError",
+    "AnchorProbe",
     "CollationWork",
+    "DEFAULT_ANCHOR_PROBES",
     "DEFAULT_WORKS",
     "LIMITATIONS",
+    "build_anchor_report",
     "build_preflight",
     "main",
 ]

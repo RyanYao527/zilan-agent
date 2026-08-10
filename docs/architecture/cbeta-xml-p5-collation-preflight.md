@@ -1,7 +1,7 @@
 # CBETA XML-P5 Collation Preflight
 
-> Date: 2026-08-07  
-> Status: local design and preflight only  
+> Date: 2026-08-10
+> Status: local design, preflight, anchor probes, and candidate-map fixtures only
 > Platform validation: unchanged; this document does not change `docs/platform-validation.md`
 
 ## Purpose
@@ -14,6 +14,12 @@ This preflight establishes the first local route check:
 Markdown hit -> CBETA work id -> committed XML-P5 source -> TEI header/sourceDesc present -> publication collation remains pending
 ```
 
+The 2026-08-10 follow-up adds a narrow checked fixture route:
+
+```text
+Markdown line range -> normalized text hash -> committed XML-P5 body span -> TEI pb/lb anchors -> manual collation remains pending
+```
+
 It deliberately avoids vector databases, embeddings, providers, live network calls, and platform-status claims.
 
 ## Local Helper
@@ -22,6 +28,12 @@ Run:
 
 ```powershell
 python scripts/cbeta_collation_preflight.py --json
+```
+
+To include checked Markdown-line to XML `pb` / `lb` anchor probes, run:
+
+```powershell
+python scripts/cbeta_collation_preflight.py --check-anchors --json
 ```
 
 The helper reads only committed files under:
@@ -51,6 +63,24 @@ Expected successful summary:
 }
 ```
 
+Expected successful anchor summary:
+
+```json
+{
+  "mode": "cbeta-xml-anchor-locator",
+  "status": "pass",
+  "summary": {
+    "probes": 2,
+    "located": 2,
+    "blocked": 0,
+    "issues": 0
+  }
+}
+```
+
+The checked anchor fixtures live in `tests/fixtures/collation/cbeta_anchor_probes.yaml`. The current high-value
+candidate-only parallel map lives in `tests/fixtures/collation/high_value_no_self_parallel_candidates.yaml`.
+
 ## What It Checks
 
 For each four-Agama work, the preflight checks:
@@ -62,14 +92,30 @@ For each four-Agama work, the preflight checks:
 - the Markdown view still references the CBETA work id and `_source/<work>.xml`;
 - the route is reported as `ready`, `review_needed`, or `blocked` with machine-readable issues.
 
+For the checked anchor fixture set, the anchor locator checks:
+
+- the configured Markdown file and line range exist;
+- the selected non-empty Markdown lines have a stable `sha256:` text hash;
+- the normalized Markdown line text occurs in the committed XML-P5 body text;
+- the located XML body span maps to the expected start and end `pb` / `lb` anchors.
+
+For the checked parallel candidate fixture, repository validation checks that candidate sets:
+
+- reference known anchor probes;
+- reference checked-in retrieval chunks;
+- stay marked `candidate_map_only`;
+- keep `review_candidate` confidence and `pending_manual_collation` status;
+- preserve the boundary that the map does not prove publication-level equivalence.
+
 ## What It Does Not Prove
 
 This is not publication-level collation. It does not:
 
-- align Markdown line numbers back to XML `pb` / `lb` anchors;
-- compare the generated Markdown passage text against the XML body;
+- align every Markdown line number back to XML `pb` / `lb` anchors;
+- prove full Markdown/XML equality outside the checked fixture spans;
 - deduplicate or classify search results;
-- compare parallel Chinese translations, Pali parallels, or Sanskrit fragments;
+- prove the high-value candidate map is a textual parallel;
+- compare parallel Chinese translations, Pali parallels, or Sanskrit fragments for publication use;
 - make doctrinal judgments;
 - call providers or grade runtime answers;
 - change any platform route to `tested`.
@@ -80,16 +126,20 @@ When an answer or report needs publication-grade citation, use this sequence:
 
 1. Search the local Markdown working corpus with `scripts/search_agama.py` and preserve the local citation anchor.
 2. Identify the CBETA work id and local Markdown file from the search result.
-3. Run `python scripts/cbeta_collation_preflight.py --json` to confirm the committed XML-P5 source route is available.
+3. Run `python scripts/cbeta_collation_preflight.py --check-anchors --json` when the cited line is covered by a checked
+   anchor probe; otherwise add a new narrow probe before relying on the line anchor.
 4. Manually inspect the corresponding XML-P5 source and TEI header/sourceDesc for the cited work.
-5. For publication claims, collate the passage against relevant parallel Chinese translations, Pali parallels, or other witnesses as appropriate.
-6. Record the evidence separately as collation notes; do not upgrade runtime/platform validation status from this preflight.
+5. If a candidate set exists in `tests/fixtures/collation/high_value_no_self_parallel_candidates.yaml`, treat it only as
+   a review queue item, not as a verified parallel.
+6. For publication claims, collate the passage against relevant parallel Chinese translations, Pali parallels, or other
+   witnesses as appropriate.
+7. Record the evidence separately as collation notes; do not upgrade runtime/platform validation status from this preflight.
 
 ## Next Narrow PRs
 
 Useful follow-ups, still without vector infrastructure:
 
-- add a Markdown-line to XML-page/line locator for a small checked fixture set;
-- add a tiny parallel-text candidate map for high-value no-self passages;
+- expand anchor probes only when a specific cited passage needs review;
+- turn one high-value candidate into a dated manual collation note after human review;
 - add collation evidence manifests under `docs/runtime-evidence/` only when a dated manual collation note exists;
 - keep answer contracts saying `待校勘` / publication collation pending until those manual checks are recorded.

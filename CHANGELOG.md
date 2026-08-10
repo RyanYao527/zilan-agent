@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added Markdown-line to CBETA XML-P5 anchor probes, a high-value no-self parallel candidate map, collation fixture validation, and a 2026-08-10 local replay evidence note without provider calls or platform-status changes.
 - Added a local CBETA XML-P5 collation preflight helper and architecture note for checking the publication-level route from Agama Markdown back to committed XML sources without vector infrastructure, provider calls, or platform-status changes.
 - Added Codex Desktop maintenance workflow documentation and a 2026-08-03 local maintenance smoke evidence note without changing platform validation status.
 - Added `section_label` metadata validation for checked-in Agama retrieval chunks, fixture-review drift reporting, and citation checks so section anchors cannot silently drift from the source corpus.
@@ -26,6 +27,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Added `docs/architecture/zilan-contract-productization-closeout.md` to close the P2 productization sweep with package-surface completion criteria, verification guardrails, and non-goals.
 
 ### Changed
+
+- Refreshed public engineering metrics to the current local baseline of 277 tests, 84% zilanlib coverage, and 65 mypy-checked source files.
 
 - Calibrated the integrated `SRQ-01` answer contract so heading-like labels (`阿含证据`, `代表性检索`, `因明校验`) are no longer mandatory global literals when concrete Agama and Hetuvidya surfaces are present.
 - Tightened broad `ZC-05` minimum-template prompt wording and narrowed the `SRQ-01` nihilism forbidden phrase to avoid a shallow collision with negated causality-boundary wording.
