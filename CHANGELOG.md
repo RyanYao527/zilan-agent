@@ -7,6 +7,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 ### Added
 
 - Added a local CBETA XML-P5 collation preflight helper and architecture note for checking the publication-level route from Agama Markdown back to committed XML sources without vector infrastructure, provider calls, or platform-status changes.
+- Added Codex Desktop maintenance workflow documentation and a 2026-08-03 local maintenance smoke evidence note without changing platform validation status.
 - Added `section_label` metadata validation for checked-in Agama retrieval chunks, fixture-review drift reporting, and citation checks so section anchors cannot silently drift from the source corpus.
 - Added a 2026-08-07 local replay evidence note proving committed broad `ZC-05` excerpts and `SRQ-03` / `SRQ-08` samples expose the remaining `不立自宗`, `二谛`, and `proposition_decomposition` gaps, with `runtime pending` and no provider calls or platform-status changes.
 - Added second-round broad `ZC-05` prompt hardening for `SRQ-03` / `SRQ-08` literal slots (`不立自宗`, `二谛`, and `proposition_decomposition`) with local prompt-invariant evidence and no provider calls or platform-status changes.

@@ -92,6 +92,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence file | Scope |
 |---|---|
+| `2026-08-03-codex-desktop-maintenance-smoke.md` | Codex Desktop migration step 1 local maintenance baseline; repository validation, pytest, ruff, and mypy passed without changing platform status. |
 | `2026-06-16-volcengine-openai-compatible-zc-01-zc-03-live.md` | Volcengine OpenAI-compatible `ZC-01` through `ZC-03` live summary |
 | `2026-06-16-volcengine-openai-compatible-zc-02-live.md` | Volcengine OpenAI-compatible `ZC-02` live detail |
 | `2026-08-05-openai-harness-preflight-local.md` | Native OpenAI and Volcengine-compatible local preflight route-resolution smoke; no provider calls or platform-status changes |
