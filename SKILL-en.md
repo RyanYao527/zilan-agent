@@ -213,6 +213,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 ├── scripts/
 │   ├── agama_evidence_checker.py      # Agama evidence-boundary checker
 │   ├── build_agama_context.py         # CBETA XML-P5 → Agama Markdown
+│   ├── cbeta_collation_preflight.py   # CBETA XML-P5 publication-route preflight
 │   ├── cognitive_analysis_mapper.py   # cognitive/vipassana fixture mapper
 │   ├── collected_topics_analyzer.py   # Collected Topics fixture analyzer
 │   ├── hetuvidya_validator.py         # Hetuvidya fixture validator
@@ -254,6 +255,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │       ├── agama/                     # Agama search library helpers
 │           ├── __init__.py
 │           ├── candidates.py
+│           ├── collation_preflight.py
 │           ├── fixture_review.py
 │           └── search.py
 │       ├── reasoning/                   # Reasoning contract library helpers
