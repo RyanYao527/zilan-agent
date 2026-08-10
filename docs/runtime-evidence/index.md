@@ -20,6 +20,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Report | Inputs | Status | Notes |
 |---|---|---|---|
+| `2026-08-10-zc-05-broad-runtime-rerun.md` | Reviews the 2026-08-10 Claude Code broad `ZC-05` runtime rerun answer against `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | pass | Confirms the new broad answer preserves the integrated no-self, prasaṅga, Agama, and nihilism-boundary slots; no provider calls through native harnesses or platform-status changes. |
 | `2026-08-10-cbeta-anchor-parallel-local-replay.md` | Replays committed broad `ZC-05` evidence while recording local CBETA XML anchor probes and a high-value no-self candidate map | pass / fail expected | Confirms `SRQ-01` / `SRQ-04` still pass for the current broad spot excerpt, `SRQ-03` / `SRQ-08` remain runtime pending, and collation aids are local-only; no provider calls or platform-status changes. |
 | `2026-08-07-zc05-srq03-srq08-local-replay.md` | Replays committed broad `ZC-05` excerpts plus `SRQ-03` / `SRQ-08` fixture samples after second-round prompt hardening | pass / fail expected | Confirms the local contracts and prompt invariants can see the target `不立自宗`, `二谛`, and `proposition_decomposition` gaps; no provider calls or platform-status changes. |
 | `2026-08-07-srq-01-contract-calibration-replay.md` | Replays the 2026-08-06 broad `ZC-05` answer excerpt after `SRQ-01` contract calibration | pass | Confirms the same answer passes direct `SRQ-01` review once heading-like labels are separated from concrete evidence terms; no provider calls or platform-status changes. |
@@ -31,6 +32,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Batch | Manifest | Inputs | Status | Notes |
 |---|---|---|---|---|
+| 2026-08-10 ZC-05 broad runtime rerun | `2026-08-10-zc-05-broad-runtime-rerun-batch.yaml` | 2026-08-10 Claude Code broad `ZC-05` as `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | pass | `pass=4`, `fail=0`; prompt-hardening follow-up not needed for `SRQ-03` / `SRQ-08` in this run. |
 | 2026-08-06 ZC-05 SRQ-01 runtime spot review | `2026-08-06-zc-05-srq-01-runtime-spot-review-batch.yaml` | 2026-08-06 Claude Code broad `ZC-05` as `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | partial / fail | After 2026-08-07 contract calibration, `SRQ-01` and `SRQ-04` pass; `SRQ-03` and `SRQ-08` still fail strict answer-contract review. |
 | 2026-08-06 SRQ-01 integrated ZC-05 replay | `2026-08-06-srq-01-zc-05-integrated-contract-replay-batch.yaml` | post-#124 broad `ZC-05` as `SRQ-01` | fail expected | Strict integrated contract replay over existing evidence; records a quality gap, not a platform-status change. |
 | 2026-07-20 latest ZC answer excerpt review | `2026-07-20-latest-zc-answer-excerpt-review-batch.yaml` | `ZC-03` as `SRQ-09`; post-#126 `ZC-04` as `SRQ-04`; post-#124 `ZC-05` as `SRQ-04`, `SRQ-03`, `SRQ-08` | pass | Current broad-answer pass set for the latest committed excerpts. |
@@ -42,6 +44,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Answer excerpt | Runtime source | Reviewed as | Batch/report | Status |
 |---|---|---|---|---|
+| `2026-08-10-claude-code-zc-05-broad-runtime-rerun-answer.md` | broad `ZC-05` after CBETA anchor and parallel-candidate preflight merge | `SRQ-01`, `SRQ-03`, `SRQ-04`, `SRQ-08` | 2026-08-10 ZC-05 broad runtime rerun | pass for all four reviewed contracts |
 | `2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md` | broad `ZC-05` after 2026-08-06 minimum-template prompt hardening | `SRQ-01`, `SRQ-03`, `SRQ-04`, `SRQ-08` | ZC-05 SRQ-01 runtime spot review; SRQ-01 contract calibration replay | current direct `SRQ-01` pass after calibration; historical batch still records `SRQ-03` and `SRQ-08` fails |
 | `2026-07-14-claude-code-srq-04-agama-boundary-spot-answer.md` | direct `SRQ-04` Agama spot review | `SRQ-04` | compact ZC-04 progression | pass |
 | `2026-07-14-claude-code-zc-04-compact-spot-answer.md` | compact `ZC-04` before #119 wording fix | `SRQ-04` | compact ZC-04 progression | fail expected |
@@ -68,6 +71,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-10-zc-05-broad-runtime-rerun.md` | Claude Code broad `ZC-05` runtime rerun and local replay for `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | links standalone answer excerpt; batch status pass |
 | `2026-08-10-cbeta-anchor-parallel-local-replay.md` | local CBETA XML anchor probes, high-value no-self candidate map, and reasoning/retrieval replay refresh | summary-only; collation and broad runtime pending |
 | `2026-08-07-zc05-srq03-srq08-local-replay.md` | local replay over committed broad `ZC-05` excerpts and `SRQ-03` / `SRQ-08` samples after second-round prompt hardening | summary-only; prompt prepared, runtime pending |
 | `2026-08-07-zc05-srq03-srq08-prompt-hardening-local.md` | local broad `ZC-05` second-round prompt hardening for `SRQ-03` / `SRQ-08` literal slots | summary-only; prompt prepared, runtime pending |
@@ -108,6 +112,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 Use batch manifests for grouped review:
 
 ```powershell
+python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-10-zc-05-broad-runtime-rerun-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-07-20-latest-zc-answer-excerpt-review-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-06-srq-01-zc-05-integrated-contract-replay-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-07-20-compact-zc-04-answer-excerpt-progression-batch.yaml
