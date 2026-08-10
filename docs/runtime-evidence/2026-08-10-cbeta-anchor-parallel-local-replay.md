@@ -43,7 +43,7 @@ The checked anchor probes are stored in `tests/fixtures/collation/cbeta_anchor_p
 The high-value no-self candidate map is stored in
 `tests/fixtures/collation/high_value_no_self_parallel_candidates.yaml`.
 
-Current candidate set:
+Candidate set at the time of this replay:
 
 - `no-self-five-aggregates-and-feeling`
 - source: `cbeta-anchor:T02n0099:line-147` / `agama:T02n0099:juan-1:line-147`
@@ -54,6 +54,9 @@ Current candidate set:
 
 This map is a review queue, not a collation result. It does not prove textual equivalence, doctrinal equivalence,
 publication-level citation readiness, or runtime answer quality.
+
+Follow-up evidence later on 2026-08-10 records a manual theme-level review for this same candidate pair in
+`2026-08-10-no-self-parallel-manual-collation.md`. This replay remains the pre-review snapshot.
 
 ## Reasoning / Retrieval Replay Interpretation
 

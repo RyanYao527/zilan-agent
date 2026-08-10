@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import cast
 
 from zilanlib.agama.collation_preflight import AnchorProbe, build_anchor_report
@@ -13,7 +13,9 @@ PARALLEL_CANDIDATES_PATH = COLLATION_FIXTURE_DIR / "high_value_no_self_parallel_
 RETRIEVAL_CHUNKS_PATH = "tests/fixtures/retrieval_chunks/semantic_chunks.yaml"
 ALLOWED_PARALLEL_RELATIONS = ("doctrinal_theme_parallel", "possible_textual_parallel")
 ALLOWED_PARALLEL_CONFIDENCE = ("review_candidate",)
-ALLOWED_COLLATION_STATUSES = ("pending_manual_collation",)
+ALLOWED_CANDIDATE_SET_STATUSES = ("candidate_map_only", "manual_theme_collation_recorded")
+ALLOWED_COLLATION_STATUSES = ("pending_manual_collation", "manual_theme_collation_recorded")
+MANUAL_COLLATION_EVIDENCE_STATUS = "manual_theme_collation_recorded"
 
 
 def _is_text(value: object) -> bool:
@@ -122,6 +124,43 @@ def _load_retrieval_chunk_ids(root: Path, failures: list[str], warnings: list[st
     }
 
 
+def _validate_manual_collation_evidence(
+    root: Path,
+    value: object,
+    context: str,
+    required_terms: tuple[str, ...],
+    failures: list[str],
+) -> None:
+    generic_error = (
+        f"{PARALLEL_CANDIDATES_PATH.as_posix()} {context} manual_collation_evidence must reference "
+        "an existing docs/runtime-evidence Markdown file."
+    )
+    if not _is_text(value):
+        failures.append(generic_error)
+        return
+
+    evidence_path = PurePosixPath(cast(str, value))
+    if evidence_path.is_absolute() or evidence_path.suffix != ".md" or evidence_path.parts[:2] != (
+        "docs",
+        "runtime-evidence",
+    ):
+        failures.append(generic_error)
+        return
+
+    full_path = root.joinpath(*evidence_path.parts)
+    if not full_path.is_file():
+        failures.append(generic_error)
+        return
+
+    evidence_text = full_path.read_text(encoding="utf-8")
+    missing_terms = tuple(term for term in required_terms if term not in evidence_text)
+    if missing_terms:
+        failures.append(
+            f"{PARALLEL_CANDIDATES_PATH.as_posix()} {context} manual_collation_evidence must mention: "
+            f"{', '.join(missing_terms)}."
+        )
+
+
 def _validate_parallel_candidates(
     root: Path,
     anchor_probe_ids: set[str],
@@ -159,8 +198,12 @@ def _validate_parallel_candidates(
             continue
         seen_ids.add(set_id)
 
-        if candidate_set.get("status") != "candidate_map_only":
-            failures.append(f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} status must be candidate_map_only.")
+        status = candidate_set.get("status")
+        if status not in ALLOWED_CANDIDATE_SET_STATUSES:
+            failures.append(
+                f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} status must be "
+                "candidate_map_only or manual_theme_collation_recorded."
+            )
         source_probe = candidate_set.get("source_anchor_probe")
         if source_probe not in anchor_probe_ids:
             failures.append(
@@ -183,6 +226,15 @@ def _validate_parallel_candidates(
         ):
             failures.append(
                 f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} boundaries must preserve the non-equivalence boundary."
+            )
+        if status == MANUAL_COLLATION_EVIDENCE_STATUS:
+            required_terms = (set_id,) + ((cast(str, source_probe),) if _is_text(source_probe) else ())
+            _validate_manual_collation_evidence(
+                root,
+                candidate_set.get("manual_collation_evidence"),
+                set_id,
+                required_terms,
+                failures,
             )
 
         parallels = candidate_set.get("candidate_parallels")
@@ -213,10 +265,24 @@ def _validate_parallel_candidates(
                 failures.append(
                     f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} candidate confidence must be review_candidate."
                 )
-            if parallel.get("collation_status") not in ALLOWED_COLLATION_STATUSES:
+            collation_status = parallel.get("collation_status")
+            if collation_status not in ALLOWED_COLLATION_STATUSES:
                 failures.append(
                     f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} candidate collation_status must be "
-                    "pending_manual_collation."
+                    "pending_manual_collation or manual_theme_collation_recorded."
+                )
+            if collation_status == MANUAL_COLLATION_EVIDENCE_STATUS:
+                required_terms = (set_id,)
+                if _is_text(source_probe):
+                    required_terms += (cast(str, source_probe),)
+                if _is_text(anchor_probe):
+                    required_terms += (cast(str, anchor_probe),)
+                _validate_manual_collation_evidence(
+                    root,
+                    parallel.get("manual_collation_evidence"),
+                    f"{set_id} candidate {anchor_probe}",
+                    required_terms,
+                    failures,
                 )
             if not _is_text(parallel.get("rationale")):
                 failures.append(

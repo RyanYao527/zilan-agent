@@ -79,7 +79,8 @@ Expected successful anchor summary:
 ```
 
 The checked anchor fixtures live in `tests/fixtures/collation/cbeta_anchor_probes.yaml`. The current high-value
-candidate-only parallel map lives in `tests/fixtures/collation/high_value_no_self_parallel_candidates.yaml`.
+parallel candidate and manual evidence map lives in
+`tests/fixtures/collation/high_value_no_self_parallel_candidates.yaml`.
 
 ## What It Checks
 
@@ -103,8 +104,9 @@ For the checked parallel candidate fixture, repository validation checks that ca
 
 - reference known anchor probes;
 - reference checked-in retrieval chunks;
-- stay marked `candidate_map_only`;
-- keep `review_candidate` confidence and `pending_manual_collation` status;
+- stay marked either `candidate_map_only` or `manual_theme_collation_recorded`;
+- keep `review_candidate` confidence and either `pending_manual_collation` or `manual_theme_collation_recorded` status;
+- attach a dated `docs/runtime-evidence/*.md` note when marked `manual_theme_collation_recorded`;
 - preserve the boundary that the map does not prove publication-level equivalence.
 
 ## What It Does Not Prove
@@ -129,8 +131,9 @@ When an answer or report needs publication-grade citation, use this sequence:
 3. Run `python scripts/cbeta_collation_preflight.py --check-anchors --json` when the cited line is covered by a checked
    anchor probe; otherwise add a new narrow probe before relying on the line anchor.
 4. Manually inspect the corresponding XML-P5 source and TEI header/sourceDesc for the cited work.
-5. If a candidate set exists in `tests/fixtures/collation/high_value_no_self_parallel_candidates.yaml`, treat it only as
-   a review queue item, not as a verified parallel.
+5. If a candidate set exists in `tests/fixtures/collation/high_value_no_self_parallel_candidates.yaml`, treat
+   `candidate_map_only` items as a review queue and `manual_theme_collation_recorded` items as dated theme-level
+   evidence, not as verified publication-level equivalence.
 6. For publication claims, collate the passage against relevant parallel Chinese translations, Pali parallels, or other
    witnesses as appropriate.
 7. Record the evidence separately as collation notes; do not upgrade runtime/platform validation status from this preflight.
@@ -140,6 +143,7 @@ When an answer or report needs publication-grade citation, use this sequence:
 Useful follow-ups, still without vector infrastructure:
 
 - expand anchor probes only when a specific cited passage needs review;
-- turn one high-value candidate into a dated manual collation note after human review;
-- add collation evidence manifests under `docs/runtime-evidence/` only when a dated manual collation note exists;
-- keep answer contracts saying `待校勘` / publication collation pending until those manual checks are recorded.
+- expand dated manual collation notes from the first `no-self-five-aggregates-and-feeling` theme-level review into
+  additional high-value candidate pairs when needed;
+- add collation evidence manifests under `docs/runtime-evidence/` only when dated manual collation notes exist;
+- keep answer contracts saying `待校勘` / publication collation pending until publication-grade checks are recorded.

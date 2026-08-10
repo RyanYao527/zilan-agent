@@ -12,6 +12,7 @@ This index is a navigation aid for `docs/runtime-evidence/`. It does not change 
 | Batch manifest | YAML input for `scripts/reasoning_answer_review_batch.py`. | no |
 | Batch report | Human-readable saved output from a batch review. | no |
 | Summary-only evidence | Runtime scenario summary, command shape, findings, and limits. | no |
+| Manual collation evidence | Dated review of anchored CBETA passages and candidate parallel classification. | no |
 | Provider/smoke evidence | Clean install, route preflight/smoke, or live-provider response summary. | no |
 
 Do not use summary-only evidence as `answer_file` input. Use the standalone answer excerpts listed below.
@@ -68,6 +69,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-10-no-self-parallel-manual-collation.md` | manual theme-level review of the `no-self-five-aggregates-and-feeling` candidate pair from `T02n0099` and `T01n0001` | summary-only; `manual_theme_collation_recorded`, not publication-level equivalence |
 | `2026-08-10-cbeta-anchor-parallel-local-replay.md` | local CBETA XML anchor probes, high-value no-self candidate map, and reasoning/retrieval replay refresh | summary-only; collation and broad runtime pending |
 | `2026-08-07-zc05-srq03-srq08-local-replay.md` | local replay over committed broad `ZC-05` excerpts and `SRQ-03` / `SRQ-08` samples after second-round prompt hardening | summary-only; prompt prepared, runtime pending |
 | `2026-08-07-zc05-srq03-srq08-prompt-hardening-local.md` | local broad `ZC-05` second-round prompt hardening for `SRQ-03` / `SRQ-08` literal slots | summary-only; prompt prepared, runtime pending |

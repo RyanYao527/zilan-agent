@@ -1,10 +1,11 @@
 version: 1
 source: docs/architecture/cbeta-xml-p5-collation-preflight.md
-purpose: Candidate-only map for high-value no-self passages that should receive future manual parallel-text collation.
+purpose: Candidate and manual theme-level evidence map for high-value no-self passages that should receive careful parallel-text review.
 candidate_sets:
   - set_id: no-self-five-aggregates-and-feeling
     theme: five_aggregates_and_three_feelings_no_self
-    status: candidate_map_only
+    status: manual_theme_collation_recorded
+    manual_collation_evidence: docs/runtime-evidence/2026-08-10-no-self-parallel-manual-collation.md
     source_anchor_probe: cbeta-anchor:T02n0099:line-147
     source_chunk_id: agama:T02n0099:juan-1:line-147
     candidate_parallels:
@@ -12,8 +13,9 @@ candidate_sets:
         chunk_id: agama:T01n0001:juan-10:line-3997
         relation: doctrinal_theme_parallel
         confidence: review_candidate
-        collation_status: pending_manual_collation
-        rationale: Both checked passages are high-value no-self evidence used by SRQ-04, but this map only marks them as future manual collation candidates.
+        collation_status: manual_theme_collation_recorded
+        manual_collation_evidence: docs/runtime-evidence/2026-08-10-no-self-parallel-manual-collation.md
+        rationale: Manual review recorded a theme-level no-self relation between the checked aggregate and feeling passages without claiming direct textual equivalence.
     boundaries:
-      - Candidate map only; does not prove publication-level equivalence.
-      - XML anchors locate committed CBETA body spans, but parallel-text collation remains pending.
+      - Manual evidence records a doctrinal-theme parallel only; it does not prove publication-level equivalence.
+      - XML anchors locate committed CBETA body spans, but broader parallel-text collation remains limited to the recorded pair.
