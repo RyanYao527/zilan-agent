@@ -1,6 +1,6 @@
 # Runtime Validation Log
 
-> Last updated: 2026-08-06
+> Last updated: 2026-08-10
 
 This log records manual runtime validation evidence for zilan-agent. It complements CI and repository invariant checks; it does not replace `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, pytest, ruff, or platform status maintenance in `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -27,6 +27,37 @@ Use conservative status labels:
 | `fail` | The case did not meet expected behavior. |
 | `blocked` | The case could not be executed because of missing access, tooling, or provider failure. |
 | `not-run` | The case remains in scope but was not executed in this session. |
+
+## 2026-08-10 Claude Code ZC-05 Broad Runtime Rerun
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.220`; local JSON model usage reported `deepseek-v4-pro[1m]` under the user's Claude Code configuration. This is Claude Code route evidence, not native OpenAI API or OpenAI-compatible provider validation. |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `398edd2` (`Add CBETA XML anchor probes and candidate map (#189)`) |
+| Branch | `codex/broad-zc05-runtime-rerun` |
+| Prompt set | One broad `ZC-05` cross-domain prompt: `请 spawn 一个 zilan agent，用应成论式分析诸法无我，并串联阿含、摄类学、因明和观禅。` |
+| Encoding setup | Windows PowerShell UTF-8 stdout, console, and stdin were set before piping the Chinese prompt into `claude -p`. |
+| Transcript status | Standalone answer excerpt committed at `docs/runtime-evidence/2026-08-10-claude-code-zc-05-broad-runtime-rerun-answer.md`; compact review committed at `docs/runtime-evidence/2026-08-10-zc-05-broad-runtime-rerun.md`; raw JSON and extracted local Markdown stayed outside the repository under `C:\tmp\zilan-zc05-runtime-rerun-20260810`. |
+| Repository checks | `python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-10-zc-05-broad-runtime-rerun-batch.yaml` passed; full maintenance baseline run before PR handoff. |
+| Overall result | `target-pass`: the broad `ZC-05` answer passes `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08`; no platform-status change. |
+
+### Contract Results
+
+| Answer excerpt | Reviewed as | Result | Notes |
+|---|---|---|---|
+| `2026-08-10-claude-code-zc-05-broad-runtime-rerun-answer.md` | `SRQ-01` | `pass` | Integrated no-self surfaces are present: Agama evidence, representative retrieval framing, Hetuvidya check, `我所`, cognitive terms, and the non-attainment boundary. |
+| `2026-08-10-claude-code-zc-05-broad-runtime-rerun-answer.md` | `SRQ-03` | `pass` | The answer explicitly preserves `不立自宗`, `二谛`, and `proposition_decomposition` surfaces. |
+| `2026-08-10-claude-code-zc-05-broad-runtime-rerun-answer.md` | `SRQ-04` | `pass` | The answer includes local Agama citation anchors and marks the evidence as representative rather than exhaustive. |
+| `2026-08-10-claude-code-zc-05-broad-runtime-rerun-answer.md` | `SRQ-08` | `pass` | The answer keeps a nihilism boundary and avoids treating emptiness/no-self analysis as annihilationism. |
+
+### Known Limits
+
+- This is a targeted broad `ZC-05` runtime spot rerun, not a full platform rerun.
+- It validates the observed Claude Code route under the local user configuration; it does not validate native OpenAI API or OpenAI-compatible provider routes.
+- The answer-contract helper is a deterministic local review aid. Passing it is evidence for required answer surfaces, not a substitute for full scholarly or practice review.
+- `docs/platform-validation.md` and platform tested status remain unchanged.
 
 ## 2026-06-10 Codex Baseline
 
