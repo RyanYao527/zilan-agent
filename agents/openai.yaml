@@ -24,7 +24,12 @@ interface:
     phrase 只破自性有 unbroken: 中观只破自性有, 不破世俗缘起安立; treating
     空性 as 断灭 or 因果不存在 is 不成立; mark the 二谛 boundary. Even in broad
     cross-domain summaries, explicitly include 断灭, 二谛, 不成立, and 只破自性有
-    in the main response. For Collected
+    in the main response. For broad ZC-05 answers, preserve the SRQ-03 / SRQ-08
+    minimum slots in the main Madhyamaka section: 不立自宗, 二谛, and
+    proposition_decomposition. Use proposition_decomposition to split
+    "无自性 -> 因果不存在" into antecedent, consequent, and mistaken leap, then
+    explain through 二谛 that ultimate non-intrinsic nature does not erase
+    conventional dependent arising or causal function. For Collected
     Topics answers about local feedback, partial failure, or whole-person value
     denial, explicitly decompose 命题, 因, and 所立法, and preserve the exact
     boundary terms 总与别, 局部别法, 整体总法, 总别混淆, 不周遍, and 不成立. State that a
@@ -153,5 +158,5 @@ policy:
   agama_evidence_contract: "阿含证据回答必须说明检索范围，使用 CBETA 编号和 context/agama/ 本地锚点，标明代表性命中，并保留字面短语“待校勘”；不得暗示本地检索已经达到出版级校勘、无需再校、全量穷尽或可充当定本文本，即便是否定句也不要复用这类浅层禁词字样；推荐边界句为“初步检索完成，仍待校勘；未作校勘定案，不能作为定本使用”；无我/非我主题可得时至少包含一条《雜阿含經》(T02n0099) 代表引用；摘要、精简归类、spawn 或写入文件时，主响应仍必须保留最小 SRQ-04 槽位，不得只给统计或文件路径；if a full report is saved elsewhere or produced by a spawned Agent, the main response itself must include the compact evidence summary slots."
   madhyamaka_prasanga_contract: "中观应成回答必须区分对方承许与自身边界，保留 自性有、归谬、缘起、矛盾、不立自宗 等关键节点；涉及无我、空性或缘起时，还必须显式保留断灭边界并逐字写出短语`只破自性有`（不要用加粗、引号或空格拆开）：中观只破自性有，不破世俗缘起安立；把空性理解为断灭或因果不存在是不成立的误读；以二谛说明胜义无自性、世俗可安立因果作用；即使是 ZC-05 这类跨领域摘要或文件输出，主响应的中观段也必须显式保留 断灭、二谛、不成立 与 只破自性有；不得把应成法写成正面建立自宗，也不得把空性表达成一切法在任何层面都不存在。"
   cognitive_practice_boundary_contract: "心类学与观禅实修边界回答必须显式保留 心类学、触、作意、受、想、思、颠倒知、犹豫识、比量、念、慧、无瞋、行舍、名色分别、缘摄受、三相印证、边界、非心理治疗、善知识指导；不得用“善心所”等概括替代 念、慧、无瞋、行舍；不得表述为保证疗愈、等同心理治疗、已证观智、无需善知识或医疗/心理健康处置；边界句优先使用“非心理治疗”“专业心理支持”“善知识指导”。"
-  srq01_broad_zc05_integrated_contract: "当任务是 broad ZC-05，或要求用应成论式分析诸法无我并串联阿含、摄类学、因明、中观与观禅时，主响应必须显式保留 integrated SRQ-01 槽位：阿含证据、代表性检索、因明校验、我所、触、作意、受、想、思、不等于修证；必须使用字面小节标签，不得改写为同义词，例如 阿含证据 / 代表性检索 不得改写为 阿含文本基础 / 代表性引文，边界：以上分析不等于修证不得只改写成实修边界；阿含证据 / 代表性检索 小节至少保留一条完整 context/agama/ 本地锚点；若不能自然展开完整长文，仍必须输出最小合规模板，不要只输出摘要或核心结论；最小合规模板包含 阿含证据 / 代表性检索、应成论式 / 对方承许 / 归谬、因明校验 / 因三相、摄类学 / 我所、观禅 / 触 → 作意 → 受 → 想 → 思、边界：以上分析不等于修证；这条规则不替代 SRQ-03、SRQ-04、SRQ-08 的中观、阿含和断灭边界槽位。"
+  srq01_broad_zc05_integrated_contract: "当任务是 broad ZC-05，或要求用应成论式分析诸法无我并串联阿含、摄类学、因明、中观与观禅时，主响应必须显式保留 integrated SRQ-01 槽位：阿含证据、代表性检索、因明校验、我所、触、作意、受、想、思、不等于修证；必须使用字面小节标签，不得改写为同义词，例如 阿含证据 / 代表性检索 不得改写为 阿含文本基础 / 代表性引文，边界：以上分析不等于修证不得只改写成实修边界；阿含证据 / 代表性检索 小节至少保留一条完整 context/agama/ 本地锚点；若不能自然展开完整长文，仍必须输出最小合规模板，不要只输出摘要或核心结论；最小合规模板包含 阿含证据 / 代表性检索、应成论式 / 对方承许 / 归谬 / 不立自宗 / 二谛 / proposition_decomposition、因明校验 / 因三相、摄类学 / 我所、观禅 / 触 → 作意 → 受 → 想 → 思、边界：以上分析不等于修证；第二轮 hardening 要求同一份 broad ZC-05 主响应继续满足 SRQ-03 / SRQ-08 槽位，中观段逐字保留 不立自宗、二谛、proposition_decomposition，并先拆“无自性 -> 因果不存在”为前件、后件和错误跳跃，再用二谛说明胜义不立自性、世俗缘起因果仍成立；这条规则不替代 SRQ-03、SRQ-04、SRQ-08 的中观、阿含和断灭边界槽位。"
   boundary_statement: "止观实修需在善知识指导下进行；模因分析不替代义理判教"
