@@ -63,6 +63,7 @@ def _chunk_range(chunk: dict[str, Any]) -> tuple[str, int, int] | None:
 
 
 def _summarize_chunk(chunk: dict[str, Any]) -> dict[str, Any]:
+    metadata = _metadata(chunk)
     return {
         "chunk_id": _chunk_id(chunk),
         "chunk_type": chunk.get("chunk_type"),
@@ -71,6 +72,7 @@ def _summarize_chunk(chunk: dict[str, Any]) -> dict[str, Any]:
         "end_line": chunk.get("end_line"),
         "citation": chunk.get("citation"),
         "passage_citation": chunk.get("passage_citation"),
+        "section_label": metadata.get("section_label"),
     }
 
 
@@ -113,7 +115,7 @@ def _provenance_drift(
     fixture_provenance = _provenance(fixture_chunk)
 
     differences: list[dict[str, Any]] = []
-    for field in ("source_hash", "line_text_hash", "matched_lines"):
+    for field in ("section_marker", "section_title", "section_label", "source_hash", "line_text_hash", "matched_lines"):
         _append_difference(
             differences,
             field=f"metadata.{field}",

@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added `section_label` metadata validation for checked-in Agama retrieval chunks, fixture-review drift reporting, and citation checks so section anchors cannot silently drift from the source corpus.
 - Added a 2026-08-07 local replay evidence note proving committed broad `ZC-05` excerpts and `SRQ-03` / `SRQ-08` samples expose the remaining `不立自宗`, `二谛`, and `proposition_decomposition` gaps, with `runtime pending` and no provider calls or platform-status changes.
 - Added second-round broad `ZC-05` prompt hardening for `SRQ-03` / `SRQ-08` literal slots (`不立自宗`, `二谛`, and `proposition_decomposition`) with local prompt-invariant evidence and no provider calls or platform-status changes.
 - Added a 2026-08-07 local `SRQ-01` contract-calibration replay showing the 2026-08-06 broad `ZC-05` answer passes direct `SRQ-01` review after heading-label calibration, without provider calls or platform-status changes.
