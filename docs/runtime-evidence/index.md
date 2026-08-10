@@ -20,6 +20,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Report | Inputs | Status | Notes |
 |---|---|---|---|
+| `2026-08-07-zc05-srq03-srq08-local-replay.md` | Replays committed broad `ZC-05` excerpts plus `SRQ-03` / `SRQ-08` fixture samples after second-round prompt hardening | pass / fail expected | Confirms the local contracts and prompt invariants can see the target `不立自宗`, `二谛`, and `proposition_decomposition` gaps; no provider calls or platform-status changes. |
 | `2026-08-07-srq-01-contract-calibration-replay.md` | Replays the 2026-08-06 broad `ZC-05` answer excerpt after `SRQ-01` contract calibration | pass | Confirms the same answer passes direct `SRQ-01` review once heading-like labels are separated from concrete evidence terms; no provider calls or platform-status changes. |
 | `2026-08-06-zc-05-srq-01-runtime-spot-review.md` | Reviews the 2026-08-06 Claude Code broad `ZC-05` runtime spot answer against `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | partial / fail | After 2026-08-07 contract calibration, final committed excerpt passes `SRQ-01` and `SRQ-04`; `SRQ-03` and `SRQ-08` still fail. |
 | `2026-08-06-srq-01-zc-05-integrated-contract-replay.md` | Replays the existing 2026-07-14 broad `ZC-05` answer excerpt against the new integrated `SRQ-01` answer contract | fail expected | Confirms the older broad answer still has explicitness gaps for `阿含证据`, `代表性检索`, `因明校验`, cognitive terms, and the `不等于修证` boundary; no provider calls or platform-status changes. |
@@ -66,6 +67,8 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-07-zc05-srq03-srq08-local-replay.md` | local replay over committed broad `ZC-05` excerpts and `SRQ-03` / `SRQ-08` samples after second-round prompt hardening | summary-only; prompt prepared, runtime pending |
+| `2026-08-07-zc05-srq03-srq08-prompt-hardening-local.md` | local broad `ZC-05` second-round prompt hardening for `SRQ-03` / `SRQ-08` literal slots | summary-only; prompt prepared, runtime pending |
 | `2026-08-07-srq-01-contract-calibration-replay.md` | Local `SRQ-01` answer-contract replay after heading-label calibration | direct `SRQ-01` pass over the 2026-08-06 broad `ZC-05` excerpt |
 | `2026-08-06-zc-05-srq-01-runtime-spot-review.md` | Claude Code broad `ZC-05` runtime spot review after integrated `SRQ-01` prompt hardening | links standalone answer excerpt; batch status partial / fail |
 | `2026-08-06-zc05-srq01-prompt-hardening-local.md` | local broad `ZC-05` / integrated `SRQ-01` prompt hardening evidence | summary-only; prompt prepared, runtime pending |

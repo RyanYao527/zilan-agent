@@ -170,8 +170,9 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 
 - When a task asks to analyze "诸法无我" through prasaṅga-style reasoning while connecting Agama, Collected Topics, Hetuvidyā, Madhyamaka, and vipassanā, the answer must preserve these integrated `SRQ-01` slots verbatim: `阿含证据`, `代表性检索`, `因明校验`, `我所`, `触`, `作意`, `受`, `想`, `思`, `不等于修证`.
 - Use literal section labels and do not paraphrase them into synonyms: `阿含证据 / 代表性检索` must not become "阿含文本基础 / 代表性引文", and `边界：以上分析不等于修证` must not become only "实修边界". The `阿含证据 / 代表性检索` section must preserve at least one complete local `context/agama/` anchor.
-- If a complete long answer cannot be naturally expanded, still output the minimum compliant template and do not only output a summary or "核心结论". The minimum compliant template includes these section headings: `阿含证据 / 代表性检索`, `应成论式 / 对方承许 / 归谬`, `因明校验 / 因三相`, `摄类学 / 我所`, `观禅 / 触 → 作意 → 受 → 想 → 思`, and `边界：以上分析不等于修证`.
-- Recommended structure: `阿含证据 / 代表性检索：...`; `因明校验：...`; `摄类学关系：我与我所不能混成实体总法`; `观禅应用：触 → 作意 → 受 → 想 → 思`; `边界：以上分析不等于修证，非心理治疗，实修需善知识指导`.
+- If a complete long answer cannot be naturally expanded, still output the minimum compliant template and do not only output a summary or "核心结论". The minimum compliant template includes these section headings: `阿含证据 / 代表性检索`, `应成论式 / 对方承许 / 归谬 / 不立自宗 / 二谛 / proposition_decomposition`, `因明校验 / 因三相`, `摄类学 / 我所`, `观禅 / 触 → 作意 → 受 → 想 → 思`, and `边界：以上分析不等于修证`.
+- Second-round hardening: the same broad `ZC-05` main response must continue to satisfy the `SRQ-03` / `SRQ-08` slots; the Madhyamaka section must preserve `不立自宗`, `二谛`, and `proposition_decomposition` verbatim. Use `proposition_decomposition` to first split "无自性 -> 因果不存在" into antecedent, consequent, and mistaken leap, then use the two truths to state that ultimately there is no intrinsic nature while conventional dependent arising and causal function still hold.
+- Recommended structure: `阿含证据 / 代表性检索：...`; `应成论式 / 对方承许 / 归谬 / 不立自宗 / 二谛 / proposition_decomposition：...`; `因明校验：...`; `摄类学关系：我与我所不能混成实体总法`; `观禅应用：触 → 作意 → 受 → 想 → 思`; `边界：以上分析不等于修证，非心理治疗，实修需善知识指导`.
 - This rule fills the broad `ZC-05` integrated explicitness gap; it does not replace the Madhyamaka, Agama, or nihilism-boundary slots.
 
 ### Collected Topics Total/Part Boundary Output Contract
