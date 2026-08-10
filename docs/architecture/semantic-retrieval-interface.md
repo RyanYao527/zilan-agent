@@ -13,6 +13,7 @@ This document defines the smallest useful interface for future semantic retrieva
 - known false-positive filtering
 - passage grouping
 - JSON output
+- section-marker, section-title, and canonical section-label metadata when available
 - stable `citation` and `passage_citation` fields
 
 Semantic retrieval must not replace this baseline until it has regression evidence.
@@ -60,6 +61,8 @@ metadata:
   cbeta_id: "T02n0099"
   juan: "1"
   section_marker: null
+  section_title: null
+  section_label: null
   topics:
     - 無我
     - 五蘊
@@ -100,6 +103,7 @@ query: "用应成论式分析诸法无我"
 needs:
   - agama_evidence
   - collected_topics
+  - cognitive_analysis
   - hetuvidya
   - madhyamaka_prasanga
   - practice_boundary
@@ -182,7 +186,7 @@ The generator:
 - reuses `search_agama.py` as the source of truth for Agama matches
 - deduplicates hits into passage-level `agama_passage` candidates
 - preserves `citation` and `passage_citation`
-- carries CBETA ID, local source file, line range, matched lines, topic metadata, `source_hash`, `line_text_hash`, and provenance metadata
+- carries CBETA ID, local source file, line range, matched lines, section metadata, topic metadata, `source_hash`, `line_text_hash`, and provenance metadata
 - emits JSON or YAML for review before any fixture is updated
 
 This is still not semantic ranking. It is a fixture-refresh aid that keeps candidate generation tied to the
@@ -250,9 +254,11 @@ The role coverage helper:
 - treats missing needs as review findings, not runtime validation failures
 - does not edit fixtures, add chunks, call providers, or infer doctrinal completeness
 
-For the current `SRQ-01` fixture, Agama evidence, Collected Topics, Hetuvidya, and Madhyamaka prasaṅga are represented
-as chunk-covered role needs. `practice_boundary` remains a non-chunk need because it constrains answer behavior rather
-than selecting a specific evidentiary passage.
+For the current `SRQ-01` fixture, Agama evidence, Collected Topics, Cognitive Analysis, Hetuvidya, and Madhyamaka
+prasaṅga are represented as chunk-covered role needs. The selected bundle now ends with the `ZR-06` cross-domain
+no-self reasoning case so the fixture can exercise integrated Agama, Collected Topics, Hetuvidya, Madhyamaka, and
+practice-facing analysis without provider calls. `practice_boundary` remains a non-chunk need because it constrains
+answer behavior rather than selecting a specific evidentiary passage.
 
 `SRQ-02` is a narrower Hetuvidya error-detection fixture. It routes the question "检验论式：声，应是可见，以是色形故。"
 to the trairupya context chunk plus the `ZR-03` `reason_unestablished` reasoning case. It deliberately does not select
@@ -315,6 +321,8 @@ reasoning-error cases.
 Example:
 
 ```powershell
+python scripts/semantic_answer_contract_review.py --query-id SRQ-01 --sample-id srq01-cross-domain-no-self-pass --json
+python scripts/semantic_answer_contract_review.py --query-id SRQ-01 --sample-id srq01-cross-domain-no-self-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-02 --sample-id srq02-hetuvidya-error-pass --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-02 --sample-id srq02-hetuvidya-error-fail --json
 python scripts/semantic_answer_contract_review.py --query-id SRQ-05 --sample-id srq05-hetuvidya-non-pervasive-pass --json
@@ -339,6 +347,13 @@ The answer-contract helper:
 - reports missing required terms and present forbidden terms
 - reports missing required answer slots when `required_slots` are defined
 - does not generate answers, call providers, grade doctrine, or upgrade platform validation
+
+For `SRQ-01`, the current `cross_domain_no_self_analysis` contract requires a broad no-self answer to preserve visible
+sections for Agama evidence, prasaṅga framing, Hetuvidya checking, Collected Topics relations, cognitive/practice
+mapping, and an explicit practice boundary. The contract treats heading-like labels such as `阿含证据`, `代表性检索`,
+and `因明校验` as prompt ergonomics rather than mandatory global literals when concrete citation and reasoning surfaces
+are present. It remains a fixture-only answer-surface check over checked-in samples, not runtime evidence or a
+platform-status change.
 
 `required_slots` add a shallow structural check on top of required / forbidden terms. A slot passes when at least one
 of its configured terms appears in the answer. This is meant to preserve visible answer parts such as argument

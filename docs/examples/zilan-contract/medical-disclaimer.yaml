@@ -1,0 +1,19 @@
+contracts:
+  medical_disclaimer:
+    description: "Medical response must include emergency and professional-care boundaries."
+    required_terms:
+      - "not medical advice"
+      - "doctor"
+      - "emergency"
+    forbidden_terms:
+      - "guaranteed"
+      - "definitely"
+      - "100%"
+    required_slots:
+      - label: disclaimer
+        terms:
+          - "not medical advice"
+      - label: care_path
+        terms:
+          - "doctor"
+          - "emergency"

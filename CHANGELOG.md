@@ -6,7 +6,38 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added a local CBETA XML-P5 collation preflight helper and architecture note for checking the publication-level route from Agama Markdown back to committed XML sources without vector infrastructure, provider calls, or platform-status changes.
 - Added Codex Desktop maintenance workflow documentation and a 2026-08-03 local maintenance smoke evidence note without changing platform validation status.
+- Added `section_label` metadata validation for checked-in Agama retrieval chunks, fixture-review drift reporting, and citation checks so section anchors cannot silently drift from the source corpus.
+- Added a 2026-08-07 local replay evidence note proving committed broad `ZC-05` excerpts and `SRQ-03` / `SRQ-08` samples expose the remaining `不立自宗`, `二谛`, and `proposition_decomposition` gaps, with `runtime pending` and no provider calls or platform-status changes.
+- Added second-round broad `ZC-05` prompt hardening for `SRQ-03` / `SRQ-08` literal slots (`不立自宗`, `二谛`, and `proposition_decomposition`) with local prompt-invariant evidence and no provider calls or platform-status changes.
+- Added a 2026-08-07 local `SRQ-01` contract-calibration replay showing the 2026-08-06 broad `ZC-05` answer passes direct `SRQ-01` review after heading-label calibration, without provider calls or platform-status changes.
+- Added canonical Agama `section_label` metadata to search results and semantic fixture candidates so title-bearing local citations can preserve section anchors without provider calls or platform-status changes.
+- Added a 2026-08-06 Claude Code broad `ZC-05` runtime spot evidence note and standalone answer excerpt replaying `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08`, recording `SRQ-04` pass plus remaining broad-answer explicitness gaps without platform-status changes and without validating native OpenAI API or OpenAI-compatible provider routes.
+- Added prompt hardening for broad `ZC-05` answers to preserve integrated `SRQ-01` slots across Codex, Claude Code, Skill, and OpenAI metadata surfaces, with local prompt-invariant evidence and no provider calls or platform-status changes.
+- Added a 2026-08-06 local replay of the existing broad `ZC-05` answer excerpt against the new integrated `SRQ-01` answer contract, recording the expected explicitness gap without provider calls or platform-status changes.
+- Added `SRQ-01` cross-domain no-self answer-contract samples covering Agama evidence, Hetuvidya, Collected Topics, Madhyamaka prasaṅga, cognitive-analysis, and practice-boundary slots without provider calls or platform-status changes.
+- Added `ZR-06` cross-domain no-self reasoning-case coverage to the `SRQ-01` semantic retrieval and context-bundle fixtures without provider calls or platform-status changes.
+- Added provider preflight evidence guidance, a 2026-08-05 local OpenAI harness preflight smoke note, and a Codex Desktop handoff record without provider calls or platform-status changes.
+- Added `scripts/openai_api_harness.py --preflight` so native OpenAI and OpenAI-compatible provider route configuration, credential presence, validation status, and status boundaries can be checked without provider calls or platform-status changes.
+- Added installed-package CLI smoke coverage for invalid YAML and missing top-level `contracts` mappings, confirming packaged `zilan-contract` keeps schema-loading failures at exit code `2`.
+- Added installed-package console script smoke coverage for the packaged `zilan-contract` entrypoint, confirming the `[project.scripts]` wrapper runs from outside the source checkout.
+- Added wheel-install smoke coverage confirming public `zilan_contract` APIs, module CLI, console script, bundled answer fixtures, and medical-disclaimer examples work from outside the source checkout.
+- Added `docs/architecture/zilan-contract-productization-closeout.md` to close the P2 productization sweep with package-surface completion criteria, verification guardrails, and non-goals.
+
+### Changed
+
+- Calibrated the integrated `SRQ-01` answer contract so heading-like labels (`阿含证据`, `代表性检索`, `因明校验`) are no longer mandatory global literals when concrete Agama and Hetuvidya surfaces are present.
+- Tightened broad `ZC-05` minimum-template prompt wording and narrowed the `SRQ-01` nihilism forbidden phrase to avoid a shallow collision with negated causality-boundary wording.
+- Expanded `docs/zilan-contract-schema.md` with CLI/Python schema shapes, exact matching semantics, schema-error examples, issue kinds, unsupported v2.5.7 features, and CI exit-code guidance without changing runtime behavior or platform validation status.
+- Updated `docs/zilan-contract-quickstart.md` and `docs/maintenance-roadmap.md` to document installed-package, console-script, and wheel-install verification boundaries for the closed productization surface.
+- Clarified `docs/maintenance-roadmap.md` to mark `zilan_contract` productization complete, list remaining package/platform/collation boundaries, and set reasoning/retrieval quality as the next mainline.
+
+## [2.5.7] - 2026-08-04
+
+### Added
+
+- Added productized `zilan_contract` public result helpers, a domain-neutral answer-contract runner, CLI/report output with machine-readable issue details, a contract schema reference, reusable medical/legal/financial examples, and installed-package smoke coverage without provider calls or platform-status changes.
 
 ### Changed
 
@@ -14,10 +45,21 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Extracted regression-case schema validation into `scripts/zilanlib/validation/regression_cases.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
 - Extracted retrieval-chunk fixture validation into `scripts/zilanlib/validation/retrieval_chunks.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
 - Extracted Agama corpus search and generated Markdown validation into `scripts/zilanlib/validation/agama_corpus.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
-- Refreshed public engineering metrics to the current local baseline of 197 tests, 83% zilanlib coverage, and 56 mypy-checked source files.
+- Extracted public documentation validation into `scripts/zilanlib/validation/public_docs.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
+- Extracted repository metadata validation into `scripts/zilanlib/validation/repository_metadata.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
+- Extracted platform YAML metadata guard validation into `scripts/zilanlib/validation/platform.py` while preserving `scripts/validate_zilan_repo.py` compatibility aliases and CLI behavior.
+- Extracted validation suite orchestration into `scripts/zilanlib/validation/suite.py` while preserving `scripts/validate_zilan_repo.py` CLI behavior and `run_checks` compatibility.
+- Added an entrypoint compatibility alias manifest and CLI-only structure guard for `scripts/validate_zilan_repo.py`.
+- Documented the P1 validation cleanup closeout in `docs/architecture/zilanlib-extraction-cleanup-review.md`, including the finalized module split and next quality-maintenance direction.
+- Added focused reasoning-case validation coverage for minimal valid Hetuvidya fixtures, duplicate ZR ids, and top-level metadata errors.
+- Added focused retrieval-chunk validation coverage for minimal valid fixtures, duplicate ids, and answer sample path boundaries.
+- Expanded reasoning-case validation coverage for invalid contracts, malformed case metadata, and non-Hetuvidya expected-output shapes.
+- Added validation-suite orchestration coverage for stable validator order, shared failure/warning state, strict YAML flag forwarding, and generated-Agama gating.
+- Refreshed public engineering metrics to the current local baseline of 237 tests, 85% zilanlib coverage, and 62 mypy-checked source files.
 
 ### Fixed
 
+- Rejected malformed `zilan_contract` public contract schemas instead of allowing scalar or empty checks to pass silently, and expanded Markdown reports with issue details.
 - Ignored local `build/` artifacts during mock Claude Code install smoke copies so stale packaging output cannot break repository-level pytest runs.
 
 ## [2.5.6] - 2026-07-30

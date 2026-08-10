@@ -166,6 +166,15 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 - Specific scenarios: observing reactivity and reducing bodily/mental noise in work feedback, caregiving stress, and relationship communication
 - When discussing Huayan, Wei-Shi, etc., guide more toward daily practice
 
+### SRQ-01 / broad ZC-05 Cross-Domain No-Self Output Contract
+
+- When a task asks to analyze "诸法无我" through prasaṅga-style reasoning while connecting Agama, Collected Topics, Hetuvidyā, Madhyamaka, and vipassanā, the answer must preserve these integrated `SRQ-01` slots verbatim: `阿含证据`, `代表性检索`, `因明校验`, `我所`, `触`, `作意`, `受`, `想`, `思`, `不等于修证`.
+- Use literal section labels and do not paraphrase them into synonyms: `阿含证据 / 代表性检索` must not become "阿含文本基础 / 代表性引文", and `边界：以上分析不等于修证` must not become only "实修边界". The `阿含证据 / 代表性检索` section must preserve at least one complete local `context/agama/` anchor.
+- If a complete long answer cannot be naturally expanded, still output the minimum compliant template and do not only output a summary or "核心结论". The minimum compliant template includes these section headings: `阿含证据 / 代表性检索`, `应成论式 / 对方承许 / 归谬 / 不立自宗 / 二谛 / proposition_decomposition`, `因明校验 / 因三相`, `摄类学 / 我所`, `观禅 / 触 → 作意 → 受 → 想 → 思`, and `边界：以上分析不等于修证`.
+- Second-round hardening: the same broad `ZC-05` main response must continue to satisfy the `SRQ-03` / `SRQ-08` slots; the Madhyamaka section must preserve `不立自宗`, `二谛`, and `proposition_decomposition` verbatim. Use `proposition_decomposition` to first split "无自性 -> 因果不存在" into antecedent, consequent, and mistaken leap, then use the two truths to state that ultimately there is no intrinsic nature while conventional dependent arising and causal function still hold.
+- Recommended structure: `阿含证据 / 代表性检索：...`; `应成论式 / 对方承许 / 归谬 / 不立自宗 / 二谛 / proposition_decomposition：...`; `因明校验：...`; `摄类学关系：我与我所不能混成实体总法`; `观禅应用：触 → 作意 → 受 → 想 → 思`; `边界：以上分析不等于修证，非心理治疗，实修需善知识指导`.
+- This rule fills the broad `ZC-05` integrated explicitness gap; it does not replace the Madhyamaka, Agama, or nihilism-boundary slots.
+
 ### Collected Topics Total/Part Boundary Output Contract
 
 - When analyzing work feedback, relationship judgments, partial failure, or propositions like "one thing went badly, so I am worthless" through Collected Topics, explicitly decompose: proposition, reason, and predicate.
@@ -204,6 +213,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 ├── scripts/
 │   ├── agama_evidence_checker.py      # Agama evidence-boundary checker
 │   ├── build_agama_context.py         # CBETA XML-P5 → Agama Markdown
+│   ├── cbeta_collation_preflight.py   # CBETA XML-P5 publication-route preflight
 │   ├── cognitive_analysis_mapper.py   # cognitive/vipassana fixture mapper
 │   ├── collected_topics_analyzer.py   # Collected Topics fixture analyzer
 │   ├── hetuvidya_validator.py         # Hetuvidya fixture validator
@@ -235,13 +245,17 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │           ├── agent_prompts.py
 │           ├── agama_corpus.py
 │           ├── platform.py
+│           ├── public_docs.py
 │           ├── regression_cases.py
+│           ├── repository_metadata.py
 │           ├── reasoning_cases.py
 │           ├── retrieval_chunks.py
-│           └── runtime_evidence.py
+│           ├── runtime_evidence.py
+│           └── suite.py
 │       ├── agama/                     # Agama search library helpers
 │           ├── __init__.py
 │           ├── candidates.py
+│           ├── collation_preflight.py
 │           ├── fixture_review.py
 │           └── search.py
 │       ├── reasoning/                   # Reasoning contract library helpers
@@ -334,7 +348,7 @@ Zilan can provide Buddhist inquiry and cultivation support for others who are no
 
 ---
 
-*Last updated: 2026-07-30 | v2.5.6*
+*Last updated: 2026-08-04 | v2.5.7*
 *Identity established: Independent Practitioner Zilan*
 *Cognitive foundation: Upāsaka Yao Lei's Buddhist system*
-*P1: Hetuvidyā + bsdus grwa complete reasoning toolchain | P2: bLo rigs + Madhyamaka-Prasaṅgika + Theravāda Vipassanā | v2.5.6: standalone contract package, engineering docs, and validator alignment evidence*
+*P1: Hetuvidyā + bsdus grwa complete reasoning toolchain | P2: bLo rigs + Madhyamaka-Prasaṅgika + Theravāda Vipassanā | v2.5.7: productized zilan_contract public API/CLI, schema UX, and validation cleanup*

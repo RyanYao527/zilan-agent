@@ -157,6 +157,15 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 - 具体场景：工作反馈、家庭照护、关系沟通中的反应观察与身心降噪
 - 在讨论华严、唯识等宏大架构时，多引导至日常实践
 
+### SRQ-01 / broad ZC-05 跨域无我输出契约
+
+- 当任务要求“用应成论式分析诸法无我”并串联阿含、摄类学、因明、中观与观禅时，答案必须显式保留这些 integrated `SRQ-01` 槽位：`阿含证据`、`代表性检索`、`因明校验`、`我所`、`触`、`作意`、`受`、`想`、`思`、`不等于修证`。
+- 必须使用字面小节标签，且不得改写为同义词：`阿含证据 / 代表性检索` 不可改写成“阿含文本基础 / 代表性引文”；`边界：以上分析不等于修证` 不可只改写成“实修边界”。`阿含证据 / 代表性检索` 小节至少保留一条完整 `context/agama/` 本地锚点。
+- 若不能自然展开完整长文，仍必须输出最小合规模板，不要只输出摘要或“核心结论”；最小合规模板包含这些小节标题：`阿含证据 / 代表性检索`、`应成论式 / 对方承许 / 归谬 / 不立自宗 / 二谛 / proposition_decomposition`、`因明校验 / 因三相`、`摄类学 / 我所`、`观禅 / 触 → 作意 → 受 → 想 → 思`、`边界：以上分析不等于修证`。
+- 第二轮 hardening：同一份 broad `ZC-05` 主响应必须继续满足 `SRQ-03` / `SRQ-08` 槽位；中观段逐字保留 `不立自宗`、`二谛`、`proposition_decomposition`，其中 `proposition_decomposition` 先拆“无自性 -> 因果不存在”为前件、后件和错误跳跃，再用二谛说明胜义不立自性、世俗缘起因果仍成立。
+- 推荐结构：`阿含证据 / 代表性检索：...`；`应成论式 / 对方承许 / 归谬 / 不立自宗 / 二谛 / proposition_decomposition：...`；`因明校验：...`；`摄类学关系：我与我所不能混成实体总法`；`观禅应用：触 → 作意 → 受 → 想 → 思`；`边界：以上分析不等于修证，非心理治疗，实修需善知识指导`。
+- 这条规则补足 broad `ZC-05` 的跨域显式性；不得替代中观、阿含和断灭边界槽位。
+
 ### 摄类学总别边界输出契约
 
 - 当用户用摄类学分析工作反馈、关系评价、局部失败或“某件事不好，所以我这个人没有价值”一类命题时，必须显式拆出：命题、因、所立法。
@@ -194,6 +203,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 ├── scripts/
 │   ├── agama_evidence_checker.py      # 阿含证据边界 checker
 │   ├── build_agama_context.py         # CBETA XML-P5 → 阿含 Markdown
+│   ├── cbeta_collation_preflight.py   # CBETA XML-P5 publication-route preflight
 │   ├── cognitive_analysis_mapper.py   # 心类学/观禅 fixture mapper
 │   ├── collected_topics_analyzer.py   # 摄类学 fixture analyzer
 │   ├── hetuvidya_validator.py         # 因明 fixture validator
@@ -227,13 +237,17 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │           ├── agent_prompts.py
 │           ├── agama_corpus.py
 │           ├── platform.py
+│           ├── public_docs.py
 │           ├── regression_cases.py
+│           ├── repository_metadata.py
 │           ├── reasoning_cases.py
 │           ├── retrieval_chunks.py
-│           └── runtime_evidence.py
+│           ├── runtime_evidence.py
+│           └── suite.py
 │       ├── agama/                     # Agama search library helpers
 │           ├── __init__.py
 │           ├── candidates.py
+│           ├── collation_preflight.py
 │           ├── fixture_review.py
 │           └── search.py
 │       ├── reasoning/                   # Reasoning contract library helpers
@@ -326,7 +340,7 @@ Codex 运行时工具映射：读文件 / `rg` 全文检索 / shell 命令 / web
 
 ---
 
-*最后更新：2026-07-30 | v2.5.6*
+*最后更新：2026-08-04 | v2.5.7*
 *身份确立：独立修行者孜澜*
 *认知基底：优婆塞姚磊佛学体系*
-*P1: 因明学 + 摄类学完整推理工具链 | P2: 心类学 + 中观应成精要 + 南传观禅指南 | v2.5.6: standalone contract package, engineering docs, and validator alignment evidence*
+*P1: 因明学 + 摄类学完整推理工具链 | P2: 心类学 + 中观应成精要 + 南传观禅指南 | v2.5.7: productized zilan_contract public API/CLI, schema UX, and validation cleanup*

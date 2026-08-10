@@ -151,6 +151,103 @@ def test_answer_contract_review_cli_can_use_checked_in_sample() -> None:
     assert data["expected_status_match"] is True
 
 
+def test_answer_contract_review_passes_for_srq01_cross_domain_no_self_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-01",
+        sample_id="srq01-cross-domain-no-self-pass",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["expected_status"] == "pass"
+    assert result["expected_status_match"] is True
+    assert result["reviews"][0]["contract_id"] == "cross_domain_no_self_analysis"
+    assert result["reviews"][0]["missing_required_terms"] == []
+    assert result["reviews"][0]["missing_required_slots"] == []
+    assert result["reviews"][0]["present_forbidden_terms"] == []
+
+
+def test_answer_contract_review_allows_srq01_negated_nihilism_boundary() -> None:
+    answer = (
+        "阿含证据 / 代表性检索：本次只基于本地 `context/agama/` 四阿含 Markdown，"
+        "列出《雜阿含經》(T02n0099) 的 CBETA 锚点；这些只是代表性检索，仍待校勘。\n"
+        "应成论式：对方承许诸法自性有，则以缘起事实作归谬，推出矛盾。\n"
+        "因明校验：以因三相检查无常缘起故无我的论式。\n"
+        "摄类学：五蕴与我、我所不能混成实体总法。\n"
+        "观禅：观察触、作意、受、想、思的名色链路。\n"
+        "边界：以上分析不等于修证；把空性理解为断灭，或推出因果不存在，是不成立的误读；"
+        "实修需善知识指导。"
+    )
+
+    result = build_answer_contract_review(DEFAULT_FIXTURE, query_id="SRQ-01", answer_text=answer)
+
+    assert result["overall_status"] == "pass"
+    assert result["reviews"][0]["present_forbidden_terms"] == []
+
+
+def test_answer_contract_review_rejects_srq01_causality_nonexistence_overclaim() -> None:
+    answer = (
+        "阿含证据 / 代表性检索：本次只基于本地 `context/agama/` 四阿含 Markdown，"
+        "列出《雜阿含經》(T02n0099) 的 CBETA 锚点；这些只是代表性检索，仍待校勘。\n"
+        "应成论式：对方承许诸法自性有，则以缘起事实作归谬，推出矛盾。\n"
+        "因明校验：以因三相检查无常缘起故无我的论式。\n"
+        "摄类学：五蕴与我、我所不能混成实体总法。\n"
+        "观禅：观察触、作意、受、想、思的名色链路。\n"
+        "边界：以上分析不等于修证；证明因果不存在；实修需善知识指导。"
+    )
+
+    result = build_answer_contract_review(DEFAULT_FIXTURE, query_id="SRQ-01", answer_text=answer)
+
+    assert result["overall_status"] == "fail"
+    assert result["reviews"][0]["present_forbidden_terms"] == ["证明因果不存在"]
+
+
+def test_answer_contract_review_passes_for_srq01_runtime_spot_without_literal_labels() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-01",
+        answer_file=ROOT
+        / "docs"
+        / "runtime-evidence"
+        / "2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md",
+    )
+
+    assert result["overall_status"] == "pass"
+    assert result["reviews"][0]["missing_required_terms"] == []
+    assert result["reviews"][0]["missing_required_slots"] == []
+    assert result["reviews"][0]["present_forbidden_terms"] == []
+
+
+def test_answer_contract_review_fails_for_srq01_cross_domain_no_self_negative_sample() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-01",
+        sample_id="srq01-cross-domain-no-self-fail",
+    )
+
+    assert result["overall_status"] == "fail"
+    assert result["expected_status"] == "fail"
+    assert result["expected_status_match"] is True
+    assert "CBETA" in result["reviews"][0]["missing_required_terms"]
+    assert "context/agama/" in result["reviews"][0]["missing_required_terms"]
+    assert "因三相" in result["reviews"][0]["missing_required_terms"]
+    assert "不等于修证" in result["reviews"][0]["missing_required_terms"]
+    assert result["reviews"][0]["present_forbidden_terms"] == [
+        "已证空性",
+        "保证证悟",
+        "证明诸法绝对不存在",
+        "无需善知识",
+    ]
+    assert result["reviews"][0]["missing_required_slots"] == [
+        "agama_evidence",
+        "prasanga_argument",
+        "hetuvidya_check",
+        "collected_topics_check",
+        "cognitive_practice_mapping",
+        "practice_boundary",
+    ]
+
+
 def test_answer_contract_review_passes_for_madhyamaka_prasanga_sample() -> None:
     result = build_answer_contract_review(
         DEFAULT_FIXTURE,

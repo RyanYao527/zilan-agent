@@ -1,6 +1,6 @@
 # Runtime Evidence Index
 
-> Last updated: 2026-08-03
+> Last updated: 2026-08-07
 
 This index is a navigation aid for `docs/runtime-evidence/`. It does not change platform validation status. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -12,7 +12,7 @@ This index is a navigation aid for `docs/runtime-evidence/`. It does not change 
 | Batch manifest | YAML input for `scripts/reasoning_answer_review_batch.py`. | no |
 | Batch report | Human-readable saved output from a batch review. | no |
 | Summary-only evidence | Runtime scenario summary, command shape, findings, and limits. | no |
-| Provider/smoke evidence | Clean install, route smoke, or live-provider response summary. | no |
+| Provider/smoke evidence | Clean install, route preflight/smoke, or live-provider response summary. | no |
 
 Do not use summary-only evidence as `answer_file` input. Use the standalone answer excerpts listed below.
 
@@ -20,12 +20,18 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Report | Inputs | Status | Notes |
 |---|---|---|---|
+| `2026-08-07-zc05-srq03-srq08-local-replay.md` | Replays committed broad `ZC-05` excerpts plus `SRQ-03` / `SRQ-08` fixture samples after second-round prompt hardening | pass / fail expected | Confirms the local contracts and prompt invariants can see the target `不立自宗`, `二谛`, and `proposition_decomposition` gaps; no provider calls or platform-status changes. |
+| `2026-08-07-srq-01-contract-calibration-replay.md` | Replays the 2026-08-06 broad `ZC-05` answer excerpt after `SRQ-01` contract calibration | pass | Confirms the same answer passes direct `SRQ-01` review once heading-like labels are separated from concrete evidence terms; no provider calls or platform-status changes. |
+| `2026-08-06-zc-05-srq-01-runtime-spot-review.md` | Reviews the 2026-08-06 Claude Code broad `ZC-05` runtime spot answer against `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | partial / fail | After 2026-08-07 contract calibration, final committed excerpt passes `SRQ-01` and `SRQ-04`; `SRQ-03` and `SRQ-08` still fail. |
+| `2026-08-06-srq-01-zc-05-integrated-contract-replay.md` | Replays the existing 2026-07-14 broad `ZC-05` answer excerpt against the new integrated `SRQ-01` answer contract | fail expected | Confirms the older broad answer still has explicitness gaps for `阿含证据`, `代表性检索`, `因明校验`, cognitive terms, and the `不等于修证` boundary; no provider calls or platform-status changes. |
 | `2026-07-30-post-alignment-answer-review-replay.md` | Replays the 2026-07-17 and 2026-07-20 answer-review batch manifests after #150/#151 answer-validator alignment reporting | pass / fail expected | No missing structured validator cases were found; the compact `ZC-04` progression keeps its expected historical shallow-contract fail. |
 
 ## Batch Review Index
 
 | Batch | Manifest | Inputs | Status | Notes |
 |---|---|---|---|---|
+| 2026-08-06 ZC-05 SRQ-01 runtime spot review | `2026-08-06-zc-05-srq-01-runtime-spot-review-batch.yaml` | 2026-08-06 Claude Code broad `ZC-05` as `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | partial / fail | After 2026-08-07 contract calibration, `SRQ-01` and `SRQ-04` pass; `SRQ-03` and `SRQ-08` still fail strict answer-contract review. |
+| 2026-08-06 SRQ-01 integrated ZC-05 replay | `2026-08-06-srq-01-zc-05-integrated-contract-replay-batch.yaml` | post-#124 broad `ZC-05` as `SRQ-01` | fail expected | Strict integrated contract replay over existing evidence; records a quality gap, not a platform-status change. |
 | 2026-07-20 latest ZC answer excerpt review | `2026-07-20-latest-zc-answer-excerpt-review-batch.yaml` | `ZC-03` as `SRQ-09`; post-#126 `ZC-04` as `SRQ-04`; post-#124 `ZC-05` as `SRQ-04`, `SRQ-03`, `SRQ-08` | pass | Current broad-answer pass set for the latest committed excerpts. |
 | 2026-07-20 compact ZC-04 progression review | `2026-07-20-compact-zc-04-answer-excerpt-progression-batch.yaml` | direct `SRQ-04`; compact `ZC-04` before #119; compact `ZC-04` after #119 | fail expected | Records the pass -> shallow-contract fail -> pass progression. The middle fail is historical evidence. |
 | 2026-07-17 runtime answer excerpt review | `2026-07-17-runtime-answer-excerpt-review-batch.yaml` | committed Claude Code runtime excerpts for `SRQ-02`, `SRQ-03`, `SRQ-04`, `SRQ-05`, and broad `ZC-05` | pass | Earlier committed runtime-answer baseline. |
@@ -35,12 +41,13 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Answer excerpt | Runtime source | Reviewed as | Batch/report | Status |
 |---|---|---|---|---|
+| `2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md` | broad `ZC-05` after 2026-08-06 minimum-template prompt hardening | `SRQ-01`, `SRQ-03`, `SRQ-04`, `SRQ-08` | ZC-05 SRQ-01 runtime spot review; SRQ-01 contract calibration replay | current direct `SRQ-01` pass after calibration; historical batch still records `SRQ-03` and `SRQ-08` fails |
 | `2026-07-14-claude-code-srq-04-agama-boundary-spot-answer.md` | direct `SRQ-04` Agama spot review | `SRQ-04` | compact ZC-04 progression | pass |
 | `2026-07-14-claude-code-zc-04-compact-spot-answer.md` | compact `ZC-04` before #119 wording fix | `SRQ-04` | compact ZC-04 progression | fail expected |
 | `2026-07-14-claude-code-zc-04-compact-boundary-rerun-answer.md` | compact `ZC-04` after #119 wording fix | `SRQ-04` | compact ZC-04 progression | pass |
 | `2026-07-14-claude-code-zc-03-post-prompt-answer.md` | post-prompt full rerun | `SRQ-09` | latest ZC batch | pass |
 | `2026-07-14-claude-code-zc-04-post-126-answer.md` | broad `ZC-04` after #126 wording fix | `SRQ-04` | latest ZC batch | pass |
-| `2026-07-14-claude-code-zc-05-broad-boundary-postfix-answer.md` | broad `ZC-05` after #124 wording fix | `SRQ-04`, `SRQ-03`, `SRQ-08` | latest ZC batch | pass |
+| `2026-07-14-claude-code-zc-05-broad-boundary-postfix-answer.md` | broad `ZC-05` after #124 wording fix | `SRQ-04`, `SRQ-03`, `SRQ-08`; replayed as `SRQ-01` | latest ZC batch; SRQ-01 integrated replay | pass for `SRQ-03`/`SRQ-04`/`SRQ-08`; `SRQ-01` fail expected |
 | `2026-07-14-claude-code-zc-06-post-prompt-main-answer.md` | post-prompt `ZC-06` main response | not reviewed as `answer_file` | not in batch | file-completion notice only; local report path redacted |
 | `2026-06-20-claude-code-srq-05-spot-review-answer.md` | `SRQ-05` Hetuvidya spot review | `SRQ-05` | 2026-07-17 runtime batch | pass |
 | `2026-06-18-claude-code-post-contract-srq-02-answer.md` | post-contract target review | `SRQ-02` | 2026-07-17 runtime batch | pass |
@@ -60,6 +67,11 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-07-zc05-srq03-srq08-local-replay.md` | local replay over committed broad `ZC-05` excerpts and `SRQ-03` / `SRQ-08` samples after second-round prompt hardening | summary-only; prompt prepared, runtime pending |
+| `2026-08-07-zc05-srq03-srq08-prompt-hardening-local.md` | local broad `ZC-05` second-round prompt hardening for `SRQ-03` / `SRQ-08` literal slots | summary-only; prompt prepared, runtime pending |
+| `2026-08-07-srq-01-contract-calibration-replay.md` | Local `SRQ-01` answer-contract replay after heading-label calibration | direct `SRQ-01` pass over the 2026-08-06 broad `ZC-05` excerpt |
+| `2026-08-06-zc-05-srq-01-runtime-spot-review.md` | Claude Code broad `ZC-05` runtime spot review after integrated `SRQ-01` prompt hardening | links standalone answer excerpt; batch status partial / fail |
+| `2026-08-06-zc05-srq01-prompt-hardening-local.md` | local broad `ZC-05` / integrated `SRQ-01` prompt hardening evidence | summary-only; prompt prepared, runtime pending |
 | `2026-07-14-claude-code-post-prompt-zc-01-zc-06-rerun.md` | Claude Code `ZC-01` through `ZC-06` post-prompt rerun | links `ZC-03` and redacted `ZC-06` excerpts |
 | `2026-07-14-claude-code-broad-boundary-postfix-review.md` | broad `ZC-04` / `ZC-05` post-#124 review | links broad `ZC-05` excerpt |
 | `2026-07-14-claude-code-zc-04-post-126-agama-slot-rerun.md` | broad `ZC-04` post-#126 rerun | links broad `ZC-04` excerpt |
@@ -83,6 +95,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 | `2026-08-03-codex-desktop-maintenance-smoke.md` | Codex Desktop migration step 1 local maintenance baseline; repository validation, pytest, ruff, and mypy passed without changing platform status. |
 | `2026-06-16-volcengine-openai-compatible-zc-01-zc-03-live.md` | Volcengine OpenAI-compatible `ZC-01` through `ZC-03` live summary |
 | `2026-06-16-volcengine-openai-compatible-zc-02-live.md` | Volcengine OpenAI-compatible `ZC-02` live detail |
+| `2026-08-05-openai-harness-preflight-local.md` | Native OpenAI and Volcengine-compatible local preflight route-resolution smoke; no provider calls or platform-status changes |
 | `2026-06-16-claude-code-utf8-rerun.md` | Claude Code UTF-8 stdin rerun |
 | `2026-06-15-codex-v245-runtime-rerun.md` | Codex v2.4.5 runtime rerun |
 | `2026-06-15-clean-install-smoke.md` | clean install smoke |
@@ -94,6 +107,7 @@ Use batch manifests for grouped review:
 
 ```powershell
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-07-20-latest-zc-answer-excerpt-review-batch.yaml
+python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-06-srq-01-zc-05-integrated-contract-replay-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-07-20-compact-zc-04-answer-excerpt-progression-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-07-17-runtime-answer-excerpt-review-batch.yaml
 ```
@@ -101,5 +115,6 @@ python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\20
 Use direct review for an individual answer excerpt:
 
 ```powershell
+python scripts\semantic_answer_contract_review.py --query-id SRQ-01 --answer-file docs\runtime-evidence\2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md
 python scripts\semantic_answer_contract_review.py --query-id SRQ-04 --answer-file docs\runtime-evidence\<answer-excerpt>.md
 ```

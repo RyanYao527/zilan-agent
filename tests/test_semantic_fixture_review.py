@@ -82,6 +82,21 @@ def test_review_reports_provenance_drift_for_existing_candidate(tmp_path: Path) 
     assert "metadata.provenance.line_text_hash" in fields
 
 
+def test_review_reports_section_metadata_drift_for_existing_candidate(tmp_path: Path) -> None:
+    candidate = build_candidate_set(root=ROOT, terms="過去九十一劫", limit=1)["chunks"][0]
+    fixture_chunk = copy.deepcopy(candidate)
+    fixture_chunk["metadata"]["section_label"] = "（一）Fixture Drift"
+    fixture_path = tmp_path / "semantic_chunks.yaml"
+    _write_fixture(fixture_path, [fixture_chunk])
+
+    result = build_review(root=ROOT, fixture_path=fixture_path, terms="過去九十一劫", limit=1)
+
+    assert result["summary"]["already_present"] == 1
+    assert result["summary"]["provenance_drifts"] == 1
+    fields = {difference["field"] for difference in result["provenance_drifts"][0]["differences"]}
+    assert "metadata.section_label" in fields
+
+
 def test_review_missing_fixture_is_reported(tmp_path: Path) -> None:
     try:
         build_review(root=ROOT, fixture_path=tmp_path / "missing.yaml", terms="\u975e\u6211", limit=1)

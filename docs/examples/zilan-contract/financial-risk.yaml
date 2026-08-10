@@ -1,0 +1,19 @@
+contracts:
+  financial_risk:
+    description: "Financial response must preserve risk and advice boundaries."
+    required_terms:
+      - "not financial advice"
+      - "risk"
+      - "independent research"
+    forbidden_terms:
+      - "guaranteed return"
+      - "risk-free"
+      - "sure profit"
+    required_slots:
+      - label: disclaimer
+        terms:
+          - "not financial advice"
+      - label: risk_boundary
+        terms:
+          - "risk"
+          - "independent research"

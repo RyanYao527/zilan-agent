@@ -26,6 +26,7 @@ def _install_package_to_target(tmp_path: Path) -> Path:
         cwd=ROOT,
         text=True,
         encoding="utf-8",
+        errors="replace",
         capture_output=True,
         check=False,
     )
@@ -45,6 +46,7 @@ def _run_installed_package(target: Path, tmp_path: Path, code: str) -> dict[str,
         env=env,
         text=True,
         encoding="utf-8",
+        errors="replace",
         capture_output=True,
         check=False,
     )
@@ -52,6 +54,60 @@ def _run_installed_package(target: Path, tmp_path: Path, code: str) -> dict[str,
     return json.loads(result.stdout)
 
 
+
+def _find_installed_console_script(target: Path, script_name: str) -> Path:
+    candidates = [
+        target / "Scripts" / f"{script_name}.exe",
+        target / "Scripts" / f"{script_name}.cmd",
+        target / "Scripts" / script_name,
+        target / "bin" / script_name,
+        target / "bin" / f"{script_name}.exe",
+    ]
+    for candidate in candidates:
+        if candidate.is_file():
+            return candidate
+
+    matches = sorted(path for path in target.rglob(f"{script_name}*") if path.is_file())
+    assert matches, f"Installed console script not found under {target}"
+    return matches[0]
+
+def _run_installed_cli_check(
+    target: Path,
+    tmp_path: Path,
+    folder_name: str,
+    contract_text: str,
+    answer_text: str = "This is not therapy.",
+) -> subprocess.CompletedProcess[str]:
+    outside_cwd = tmp_path / folder_name
+    outside_cwd.mkdir()
+    contract_file = outside_cwd / "contracts.yaml"
+    contract_file.write_text(contract_text, encoding="utf-8")
+    answer_file = outside_cwd / "answer.md"
+    answer_file.write_text(answer_text, encoding="utf-8")
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(target)
+    env.pop("PYTHONHOME", None)
+
+    return subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "zilan_contract.cli",
+            "check",
+            "--contract-file",
+            str(contract_file),
+            "--answer-file",
+            str(answer_file),
+            "--json",
+        ],
+        cwd=outside_cwd,
+        env=env,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        check=False,
+    )
 def test_installed_contract_runner_quickstart_sample_and_inline_answer_work(tmp_path: Path) -> None:
     target = _install_package_to_target(tmp_path)
     data = _run_installed_package(
@@ -159,6 +215,227 @@ def test_installed_package_exposes_third_party_notices(tmp_path: Path) -> None:
     assert data["mentions_cbeta_license"] is True
 
 
+def test_installed_package_exposes_answer_contract_runner(tmp_path: Path) -> None:
+    target = _install_package_to_target(tmp_path)
+    data = _run_installed_package(
+        target,
+        tmp_path,
+        textwrap.dedent(
+            """
+            import json
+
+            from zilan_contract import AnswerContractRunner
+
+            contracts = {
+                "support_boundary": {
+                    "required_terms": ["not therapy", "professional support"],
+                    "forbidden_terms": ["guaranteed cure"],
+                }
+            }
+            result = AnswerContractRunner().check(
+                answer_text="This is not therapy; consider professional support.",
+                contracts=contracts,
+            )
+            print(json.dumps(result.to_summary(), ensure_ascii=False))
+            """
+        ),
+    )
+
+    assert data["overall_status"] == "pass"
+    assert data["issue_count"] == 0
+
+
+def test_installed_package_exposes_zilan_contract_console_script(tmp_path: Path) -> None:
+    target = _install_package_to_target(tmp_path)
+    outside_cwd = tmp_path / "outside-console-script"
+    outside_cwd.mkdir()
+    contract_file = outside_cwd / "contracts.yaml"
+    contract_file.write_text(
+        textwrap.dedent(
+            """
+            contracts:
+              support_boundary:
+                required_terms:
+                  - not therapy
+                forbidden_terms:
+                  - guaranteed cure
+            """
+        ),
+        encoding="utf-8",
+    )
+    answer_file = outside_cwd / "answer.md"
+    answer_file.write_text("This is not therapy.", encoding="utf-8")
+    script = _find_installed_console_script(target, "zilan-contract")
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(target)
+    env.pop("PYTHONHOME", None)
+
+    result = subprocess.run(
+        [
+            str(script),
+            "check",
+            "--contract-file",
+            str(contract_file),
+            "--answer-file",
+            str(answer_file),
+            "--json",
+        ],
+        cwd=outside_cwd,
+        env=env,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    data = json.loads(result.stdout)
+    assert data["overall_status"] == "pass"
+    assert data["issue_count"] == 0
+
+def test_installed_package_cli_json_reports_issue_details(tmp_path: Path) -> None:
+    target = _install_package_to_target(tmp_path)
+    outside_cwd = tmp_path / "outside-cli"
+    outside_cwd.mkdir()
+    contract_file = outside_cwd / "contracts.yaml"
+    contract_file.write_text(
+        textwrap.dedent(
+            """
+            contracts:
+              support_boundary:
+                required_terms:
+                  - not therapy
+                forbidden_terms:
+                  - guaranteed cure
+            """
+        ),
+        encoding="utf-8",
+    )
+    answer_file = outside_cwd / "answer.md"
+    answer_file.write_text(
+        "This is not therapy, but it is not a guaranteed cure.",
+        encoding="utf-8",
+    )
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(target)
+    env.pop("PYTHONHOME", None)
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "zilan_contract.cli",
+            "check",
+            "--contract-file",
+            str(contract_file),
+            "--answer-file",
+            str(answer_file),
+            "--json",
+        ],
+        cwd=outside_cwd,
+        env=env,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 1, result.stdout + result.stderr
+    data = json.loads(result.stdout)
+    assert data["overall_status"] == "fail"
+    assert data["issues"] == [
+        {
+            "source": "answer_contract",
+            "contract_id": "support_boundary",
+            "kind": "present_forbidden_term",
+            "label": "guaranteed cure",
+            "detail": "Present forbidden term: guaranteed cure",
+        }
+    ]
+
+
+def test_installed_package_cli_rejects_malformed_contract_schema(tmp_path: Path) -> None:
+    target = _install_package_to_target(tmp_path)
+    outside_cwd = tmp_path / "outside-bad-schema"
+    outside_cwd.mkdir()
+    contract_file = outside_cwd / "contracts.yaml"
+    contract_file.write_text(
+        textwrap.dedent(
+            """
+            contracts:
+              support_boundary:
+                required_terms: not therapy
+            """
+        ),
+        encoding="utf-8",
+    )
+    answer_file = outside_cwd / "answer.md"
+    answer_file.write_text("This is not therapy.", encoding="utf-8")
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(target)
+    env.pop("PYTHONHOME", None)
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "zilan_contract.cli",
+            "check",
+            "--contract-file",
+            str(contract_file),
+            "--answer-file",
+            str(answer_file),
+            "--json",
+        ],
+        cwd=outside_cwd,
+        env=env,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 2, result.stdout + result.stderr
+    assert "support_boundary" in result.stderr
+    assert "required_terms" in result.stderr
+
+
+
+def test_installed_package_cli_rejects_malformed_yaml(tmp_path: Path) -> None:
+    target = _install_package_to_target(tmp_path)
+    result = _run_installed_cli_check(
+        target=target,
+        tmp_path=tmp_path,
+        folder_name="outside-invalid-yaml",
+        contract_text="contracts:\n  support_boundary:\n    required_terms: [not therapy\n",
+    )
+
+    assert result.returncode == 2, result.stdout + result.stderr
+    assert result.stdout == ""
+    assert "Contract file contains invalid YAML" in result.stderr
+
+
+def test_installed_package_cli_rejects_missing_contracts_mapping(tmp_path: Path) -> None:
+    target = _install_package_to_target(tmp_path)
+    result = _run_installed_cli_check(
+        target=target,
+        tmp_path=tmp_path,
+        folder_name="outside-missing-contracts",
+        contract_text=textwrap.dedent(
+            """
+            support_boundary:
+              required_terms:
+                - not therapy
+            """
+        ),
+    )
+
+    assert result.returncode == 2, result.stdout + result.stderr
+    assert result.stdout == ""
+    assert "Contract file must contain a top-level contracts mapping." in result.stderr
 def test_installed_zilanlib_direct_runner_uses_package_local_evidence_boundary(tmp_path: Path) -> None:
     target = _install_package_to_target(tmp_path)
     data = _run_installed_package(
@@ -222,6 +499,7 @@ def test_installed_contract_runner_all_answer_contract_pass_samples_load_from_pa
             from zilan_contract import ContractRunner, get_fixture_path
 
             all_pass_samples = [
+                "srq01-cross-domain-no-self-pass",
                 "srq01-practice-boundary-pass",
                 "srq02-hetuvidya-error-pass",
                 "srq03-madhyamaka-prasanga-pass",
@@ -235,6 +513,7 @@ def test_installed_contract_runner_all_answer_contract_pass_samples_load_from_pa
                 "srq11-collected-topics-definition-scope-pass",
             ]
             answer_contract_samples = {
+                "SRQ-01": "srq01-cross-domain-no-self-pass",
                 "SRQ-02": "srq02-hetuvidya-error-pass",
                 "SRQ-03": "srq03-madhyamaka-prasanga-pass",
                 "SRQ-04": "srq04-agama-citation-boundary-pass",
@@ -264,6 +543,7 @@ def test_installed_contract_runner_all_answer_contract_pass_samples_load_from_pa
     )
 
     assert set(data["bundled_files"]) == {
+        "srq01-cross-domain-no-self-pass",
         "srq01-practice-boundary-pass",
         "srq02-hetuvidya-error-pass",
         "srq03-madhyamaka-prasanga-pass",

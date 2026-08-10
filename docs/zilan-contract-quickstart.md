@@ -18,6 +18,25 @@ cd zilan-agent
 pip install -e ".[dev]"
 ```
 
+## Package verification
+
+The maintained package surface is verified after installation, not only from the source tree. Release checks cover:
+
+- public Python imports and bundled fixtures;
+- `python -m zilan_contract.cli check`;
+- installed `zilan-contract` console script;
+- reusable medical-disclaimer examples;
+- malformed YAML and schema errors returning exit code `2`;
+- wheel build plus `pip install --target` from outside the source checkout.
+
+Maintainers can rerun the package-surface smoke tests with:
+
+```bash
+python -m pytest tests/test_zilan_contract_installed_smoke.py tests/test_zilan_contract_wheel_smoke.py tests/test_zilan_contract_examples.py tests/test_packaging_metadata.py
+```
+
+These checks do not call providers and do not change platform validation status.
+
 ## 60-second try
 
 ```python
@@ -39,8 +58,22 @@ result = runner.check(
     sample_id="srq04-agama-citation-boundary-fail",
 )
 print(result.overall_status)  # 'fail'
-print(result.failed_validators())  # ['agama_evidence']
+print(result.issues()[0].detail)  # Missing required term: ...
 ```
+
+## CLI example
+
+Use the package CLI when you want a CI-friendly pass/fail check without writing Python glue code:
+
+```bash
+zilan-contract check \
+  --contract-file docs/examples/zilan-contract/medical-disclaimer.yaml \
+  --answer-file docs/examples/zilan-contract/medical-disclaimer-pass.md \
+  --json
+```
+
+JSON output includes the compact pass/fail summary plus an `issues` array for machine-readable CI annotations.
+See `docs/zilan-contract-schema.md` for the full contract schema, exit codes, and report format.
 
 ## Core concepts
 
@@ -85,10 +118,34 @@ result = runner.check(
 ```python
 result.overall_status       # 'pass' | 'fail' | 'review_needed'
 result.passed()              # True if pass
-result.failed_validators()   # ['hetuvidya', 'agama_evidence'] — which ones failed
+result.failed_validators()   # explicit non-pass validator statuses; 'run' is not a failure
 result.answer_review_status  # surface-level contract review result
 result.validators            # dict of per-domain validator results
 result.raw                   # full JSON-compatible dict
+```
+
+### AnswerContractRunner
+
+Use `AnswerContractRunner` when you want the domain-neutral required/forbidden/slot checks without SRQ fixtures:
+
+```python
+from zilan_contract import AnswerContractRunner
+
+contracts = {
+    "legal_boundary": {
+        "required_terms": ["not legal advice"],
+        "forbidden_terms": ["guaranteed outcome"],
+        "required_slots": [
+            {"label": "care_path", "terms": ["attorney", "qualified professional"]},
+        ],
+    }
+}
+result = AnswerContractRunner().check(
+    answer_text="This is not legal advice. Consult an attorney.",
+    contracts=contracts,
+)
+print(result.to_summary())
+print(result.to_markdown())
 ```
 
 ### HetuvidyaValidator
@@ -100,7 +157,7 @@ from zilan_contract import HetuvidyaValidator
 
 v = HetuvidyaValidator()
 result = v.validate(case_id="ZR-01")
-print(result["status"])  # 'pass'
+print(result["status"])  # 'run'
 print(result["validations"][0]["judgment"]["result"])  # 'positive_reason'
 ```
 
@@ -141,8 +198,8 @@ queries:
 ```
 
 > **Note:** `required_terms` is a flat list of strings that must appear.
-> `required_slots` is a list of labeled groups — each slot's terms must all
-> appear (useful when multiple independent constraints apply).
+> `required_slots` is a list of labeled groups; each slot passes when at least
+> one of its terms appears. Use separate slots for independent constraints.
 > `forbidden_terms` is a flat list of strings that must NOT appear.
 
 ### 2. Create a reasoning cases file (optional)

@@ -1,6 +1,6 @@
 # Runtime Validation Log
 
-> Last updated: 2026-07-14
+> Last updated: 2026-08-06
 
 This log records manual runtime validation evidence for zilan-agent. It complements CI and repository invariant checks; it does not replace `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, pytest, ruff, or platform status maintenance in `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -813,6 +813,37 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 
 - This is a targeted runtime spot review, not a full platform rerun.
 - The answer-contract helper is a minimum explicitness check and does not grade retrieval completeness or publication-level collation.
+
+## 2026-08-06 Claude Code ZC-05 / SRQ-01 Runtime Spot Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.220`; underlying provider is governed by the user's local Claude Code configuration |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository base | `9ef4a76` (`Harden broad ZC-05 SRQ-01 prompt slots`) plus branch-local prompt / fixture cleanup |
+| Branch | `codex/zc05-srq01-runtime-spot` |
+| Prompt set | One broad `ZC-05` cross-domain prompt: `请 spawn 一个 zilan agent，用应成论式分析诸法无我，并串联阿含、摄类学、因明和观禅。` |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console/stdin before piping Chinese prompts into `claude -p` |
+| Transcript status | Standalone answer excerpt committed at `docs/runtime-evidence/2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md`; compact review committed at `docs/runtime-evidence/2026-08-06-zc-05-srq-01-runtime-spot-review.md`; raw JSON and extracted answer Markdown kept local only under `C:\tmp\zilan-zc05-srq01-runtime-spot-20260806` |
+| Repository checks | Batch review run for `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08`; full repository checks run before PR handoff |
+| Overall result | `partial`: final committed broad `ZC-05` answer passes `SRQ-04` but still fails `SRQ-01`, `SRQ-03`, and `SRQ-08`; no platform status change |
+
+### Contract Results
+
+| Answer | Reviewed Against | Result | Notes |
+|---|---|---:|---|
+| `2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md` | `SRQ-01` / `cross_domain_no_self_analysis` | `fail` | Missing literal `阿含证据`, `代表性检索`, and `因明校验` terms. The answer also uses shortened citation bullet anchors such as `T0099-za-agama.md:147` even though the prompt asks for complete `context/agama/...` anchors. |
+| `2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md` | `SRQ-03` / `madhyamaka_prasanga_boundary` | `fail` | Missing literal `不立自宗`. |
+| `2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md` | `SRQ-04` / `agama_citation_boundary` | `pass` | Required Agama citation-boundary terms and slots are present after the minimum-template prompt hardening. |
+| `2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md` | `SRQ-08` / `madhyamaka_nihilism_boundary` | `fail` | Missing literal `二谛` and the proposition-decomposition slot. |
+
+### Known Limits
+
+- This is a targeted runtime spot review, not a full `ZC-01` through `ZC-06` platform rerun.
+- The runtime still does not prove broad `ZC-05` integrated `SRQ-01` pass; current status is runtime pending / strict replay fail.
+- The answer-contract helper checks minimum explicitness and does not grade doctrinal correctness, retrieval completeness, or publication-level collation.
+- This evidence does not validate native OpenAI API or any OpenAI-compatible provider route, and it does not change platform validation status.
 
 ## Next Validation Entries
 

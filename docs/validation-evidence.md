@@ -1,6 +1,6 @@
 # Runtime Validation Evidence Policy
 
-> Last updated: 2026-07-17
+> Last updated: 2026-08-05
 
 This policy defines what counts as validation evidence for Zilan platform routes and how to record it without leaking secrets or overclaiming support.
 
@@ -9,6 +9,7 @@ This policy defines what counts as validation evidence for Zilan platform routes
 | Level | Counts As | Does Not Prove |
 |---|---|---|
 | Repository CI | Required files, YAML shape, generated Agama idempotency, tests, lint, and smoke scripts are coherent. | Agent answer quality or provider runtime behavior. |
+| Provider preflight | A route-resolution command reports selected provider route, model, endpoint, API surface, key environment variable name, boolean key presence, and status boundary without a provider call. | The external provider accepted a request, returned an answer, or should be marked `tested`. |
 | Dry-run harness | A request can be built deterministically without credentials. | The external provider accepted or answered the request. |
 | Manual runtime summary | A human-reviewed run records prompt set, model/runtime, observed behavior, failures, and checks. | Full transcript auditability unless transcript excerpts are attached. |
 | Transcript-backed runtime | Redacted transcript excerpts or saved outputs support the summary. | That all future provider versions behave the same way. |
@@ -20,6 +21,20 @@ This policy defines what counts as validation evidence for Zilan platform routes
 - Platform status belongs in `docs/platform-validation.md` and `agents/openai.yaml`.
 - Redacted transcript or command-output excerpts may be committed under `docs/runtime-evidence/` when they are safe and useful.
 - Large raw transcripts, private account logs, and provider dashboards should not be committed. Summarize them instead.
+
+## Provider Preflight Evidence
+
+Provider preflight output may be committed as provider/smoke evidence when it helps operators confirm the route that will be used before a live run. A preflight note must record:
+
+- command line used
+- repository commit or branch
+- `provider_route`, `validation_route`, and `validation_status`
+- `model`, `api_surface`, `base_url`, and `endpoint`
+- `api_key_env` and boolean-only `api_key_present`
+- explicit `status_boundary`
+- statement that no request body was built, no provider was called, no secret value was printed, and no platform status changed
+
+Preflight-only evidence may be indexed without a `docs/runtime-validation-log.md` entry when no prompt, request body, or provider response was produced. Mark the runtime-log field as not applicable in that case. Do not use preflight-only evidence as an `answer_file` input.
 
 ## Minimum Runtime Entry
 

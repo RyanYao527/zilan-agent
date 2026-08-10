@@ -2,16 +2,17 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from zilanlib.validation import public_docs as public_docs_validation
 from zilanlib.yaml_io import load_yaml_for_validation
 
-README_FILES = ("README.md", "README.zh.md", "README.en.md")
+README_FILES = public_docs_validation.README_FILES
 PLATFORM_VALIDATION_DOC = "docs/platform-validation.md"
-RUNTIME_VALIDATION_LOG_DOC = "docs/runtime-validation-log.md"
-MAINTENANCE_ROADMAP_DOC = "docs/maintenance-roadmap.md"
-INSTALLATION_DOC = "docs/installation.md"
-VALIDATION_EVIDENCE_DOC = "docs/validation-evidence.md"
-PROVIDER_ROUTES_DOC = "docs/provider-routes.md"
-CHANGELOG_DOC = "CHANGELOG.md"
+RUNTIME_VALIDATION_LOG_DOC = public_docs_validation.RUNTIME_VALIDATION_LOG_DOC
+MAINTENANCE_ROADMAP_DOC = public_docs_validation.MAINTENANCE_ROADMAP_DOC
+INSTALLATION_DOC = public_docs_validation.INSTALLATION_DOC
+VALIDATION_EVIDENCE_DOC = public_docs_validation.VALIDATION_EVIDENCE_DOC
+PROVIDER_ROUTES_DOC = public_docs_validation.PROVIDER_ROUTES_DOC
+CHANGELOG_DOC = public_docs_validation.CHANGELOG_DOC
 ALLOWED_VALIDATION_STATUSES = (
     "tested",
     "definition-versioned",
@@ -48,6 +49,21 @@ def validate_platform_metadata(
     check_agent_validation_entries(validation, failures)
     check_platform_validation_doc(root, validation, failures)
     return validation
+
+
+def validate_platform_yaml_metadata(
+    root: Path,
+    failures: list[str],
+    warnings: list[str],
+    strict_yaml: bool,
+) -> None:
+    validation = validate_platform_metadata(root, failures, warnings, strict_yaml)
+    if not validation:
+        return
+
+    codex_validation = validation.get("codex")
+    if not isinstance(codex_validation, dict) or codex_validation.get("status") != "tested":
+        failures.append("agents/openai.yaml should mark validation.codex.status as tested.")
 
 
 def get_validation_mapping(data: object, failures: list[str]) -> dict[str, object]:
@@ -138,24 +154,4 @@ def check_platform_validation_doc(root: Path, validation: dict[str, object], fai
             )
 
 
-def check_readme_platform_validation_links(root: Path, failures: list[str]) -> None:
-    for rel_path in README_FILES:
-        text = (root / rel_path).read_text(encoding="utf-8")
-        if PLATFORM_VALIDATION_DOC not in text:
-            failures.append(f"{rel_path} should link to {PLATFORM_VALIDATION_DOC}.")
-        if RUNTIME_VALIDATION_LOG_DOC not in text:
-            failures.append(f"{rel_path} should link to {RUNTIME_VALIDATION_LOG_DOC}.")
-        if "docs/runtime-evidence/" not in text:
-            failures.append(f"{rel_path} should link to docs/runtime-evidence/.")
-        if MAINTENANCE_ROADMAP_DOC not in text:
-            failures.append(f"{rel_path} should link to {MAINTENANCE_ROADMAP_DOC}.")
-        if INSTALLATION_DOC not in text:
-            failures.append(f"{rel_path} should link to {INSTALLATION_DOC}.")
-        if VALIDATION_EVIDENCE_DOC not in text:
-            failures.append(f"{rel_path} should link to {VALIDATION_EVIDENCE_DOC}.")
-        if PROVIDER_ROUTES_DOC not in text:
-            failures.append(f"{rel_path} should link to {PROVIDER_ROUTES_DOC}.")
-        if CHANGELOG_DOC not in text:
-            failures.append(f"{rel_path} should link to {CHANGELOG_DOC}.")
-        if "agents/openai.yaml" not in text:
-            failures.append(f"{rel_path} should mention agents/openai.yaml as platform metadata.")
+check_readme_platform_validation_links = public_docs_validation.check_readme_platform_validation_links

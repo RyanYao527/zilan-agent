@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from zilanlib.agama.candidates import CandidateError, build_candidate_set
+from zilanlib.agama.collation_preflight import CollationPreflightError, CollationWork, build_preflight
 from zilanlib.agama.fixture_review import ReviewError, build_review
 from zilanlib.agama.search import (
     DEFAULT_FALSE_POSITIVE_PHRASES,
@@ -20,7 +21,10 @@ __all__ = [
     "AgamaMatch",
     "AgamaPassage",
     "CandidateError",
+    "CollationPreflightError",
+    "CollationWork",
     "ReviewError",
+    "build_preflight",
     "build_candidate_set",
     "build_review",
     "is_false_positive",

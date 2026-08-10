@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zilan-agent"
-version = "2.5.6"
+version = "2.5.7"
 description = "Deterministic output-contract validators for LLM responses + Buddhist philosophy Agent/Skill framework."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -44,7 +44,10 @@ Issues = "https://github.com/RyanYao527/zilan-agent/issues"
 Changelog = "https://github.com/RyanYao527/zilan-agent/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
-dev = ["mypy>=1.10,<2.0", "pytest>=7.4,<8.0", "pytest-cov>=5.0", "ruff>=0.6"]
+dev = ["mypy>=1.10,<2.0", "pytest>=7.4,<8.0", "pytest-cov>=5.0", "ruff>=0.6", "wheel>=0.42"]
+
+[project.scripts]
+zilan-contract = "zilan_contract.cli:main"
 
 [tool.setuptools]
 py-modules = []

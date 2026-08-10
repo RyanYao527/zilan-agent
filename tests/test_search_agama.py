@@ -5,7 +5,13 @@ import subprocess
 import sys
 from pathlib import Path
 
-from zilanlib.agama.search import iter_agama_markdown_files, search_agama, search_agama_passages
+from zilanlib.agama.search import (
+    AgamaMatch,
+    AgamaPassage,
+    iter_agama_markdown_files,
+    search_agama,
+    search_agama_passages,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "search_agama.py"
@@ -18,6 +24,45 @@ def test_agama_file_iterator_excludes_index_and_xml_sources() -> None:
     assert "agama-index.md" not in names
     assert "T0099-za-agama.md" in names
     assert all("_source" not in path.parts for path in files)
+
+
+def test_agama_result_dataclasses_keep_positional_constructor_compatibility() -> None:
+    match = AgamaMatch(
+        "context/agama/example.md",
+        1,
+        "示例經",
+        "T01n0001",
+        "卷 1",
+        None,
+        None,
+        1,
+        1,
+        "citation",
+        "passage citation",
+        "text",
+        [],
+        [],
+    )
+    passage = AgamaPassage(
+        "context/agama/example.md",
+        "示例經",
+        "T01n0001",
+        "卷 1",
+        None,
+        None,
+        1,
+        1,
+        [1],
+        "citation",
+        "text",
+        [],
+        [],
+    )
+
+    assert match.section_label is None
+    assert match.passage_start_line == 1
+    assert passage.section_label is None
+    assert passage.matched_lines == [1]
 
 
 def test_search_returns_auditable_markdown_locations() -> None:
@@ -35,11 +80,13 @@ def test_search_returns_auditable_markdown_locations() -> None:
     marked_matches = search_agama("當觀色無常", root=ROOT, limit=1)
     assert marked_matches[0].section_marker == "（一）"
     assert marked_matches[0].section_title is None
+    assert marked_matches[0].section_label == "（一）"
     assert "（一）" in marked_matches[0].citation
 
     titled_matches = search_agama("過去九十一劫", root=ROOT, limit=1)
     assert titled_matches[0].section_marker == "（一）"
     assert titled_matches[0].section_title == "第一分初大本經第一"
+    assert titled_matches[0].section_label == "（一）第一分初大本經第一"
     assert "（一）第一分初大本經第一" in titled_matches[0].citation
 
 
@@ -83,11 +130,13 @@ def test_search_can_aggregate_by_passage() -> None:
     marked_passages = search_agama_passages("當觀色無常", root=ROOT, limit=1)
     assert marked_passages[0].section_marker == "（一）"
     assert marked_passages[0].section_title is None
+    assert marked_passages[0].section_label == "（一）"
     assert "（一）" in marked_passages[0].citation
 
     titled_passages = search_agama_passages("過去九十一劫", root=ROOT, limit=1)
     assert titled_passages[0].section_marker == "（一）"
     assert titled_passages[0].section_title == "第一分初大本經第一"
+    assert titled_passages[0].section_label == "（一）第一分初大本經第一"
     assert "（一）第一分初大本經第一" in titled_passages[0].citation
 
 
@@ -111,6 +160,7 @@ def test_search_json_cli_output_is_machine_readable() -> None:
         "juan",
         "section_marker",
         "section_title",
+        "section_label",
         "citation",
         "passage_citation",
         "text",

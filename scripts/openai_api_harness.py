@@ -45,6 +45,15 @@ class HarnessResult:
     response_id: str | None = None
 
 
+@dataclass(frozen=True)
+class HarnessConfig:
+    model: str
+    base_url: str
+    api_surface: str
+    api_key_env: str
+    endpoint: str
+
+
 def _load_yaml(path: Path) -> dict[str, Any]:
     return load_yaml_mapping(
         path,
@@ -121,6 +130,109 @@ def _provider_route_defaults(root: Path, provider_route: str | None) -> dict[str
         if isinstance(value, str) and value:
             defaults[target_key] = value
     return defaults
+
+
+def _resolve_harness_config(
+    *,
+    root: Path,
+    model: str | None,
+    provider_route: str | None,
+    base_url: str | None,
+    api_surface: str | None,
+    api_key_env: str | None,
+) -> HarnessConfig:
+    route_defaults = _provider_route_defaults(root, provider_route)
+    selected_model = model or os.environ.get("OPENAI_MODEL") or route_defaults.get("model") or _default_model(root)
+    selected_base_url = _normalize_base_url(
+        base_url or os.environ.get("OPENAI_BASE_URL") or route_defaults.get("base_url") or OPENAI_DEFAULT_BASE_URL
+    )
+    selected_api_surface = (
+        api_surface
+        or os.environ.get("OPENAI_API_SURFACE")
+        or route_defaults.get("api_surface")
+        or "responses"
+    )
+    selected_api_key_env = (
+        api_key_env
+        or os.environ.get("OPENAI_API_KEY_ENV")
+        or route_defaults.get("api_key_env")
+        or "OPENAI_API_KEY"
+    )
+    if selected_api_surface not in API_SURFACES:
+        raise ValueError(f"Unsupported API surface: {selected_api_surface}. Expected one of: {', '.join(API_SURFACES)}")
+    return HarnessConfig(
+        model=selected_model,
+        base_url=selected_base_url,
+        api_surface=selected_api_surface,
+        api_key_env=selected_api_key_env,
+        endpoint=_endpoint_for(selected_base_url, selected_api_surface),
+    )
+
+
+def _provider_validation_metadata(root: Path, provider_route: str | None) -> tuple[str, str | None, str | None]:
+    validation_route = provider_route or "openai_api"
+    data = _load_yaml(root / "agents" / "openai.yaml")
+    validation = data.get("validation")
+    if not isinstance(validation, dict):
+        return validation_route, None, None
+
+    route = validation.get(validation_route)
+    if not isinstance(route, dict):
+        return validation_route, None, None
+
+    status = route.get("status")
+    scope = route.get("scope")
+    return (
+        validation_route,
+        status if isinstance(status, str) else None,
+        scope if isinstance(scope, str) else None,
+    )
+
+
+def _status_boundary_for_provider_route(provider_route: str | None) -> str:
+    if provider_route is None:
+        return (
+            "Preflight does not call native OpenAI API and does not change platform validation status; "
+            "native OpenAI remains governed by docs/platform-validation.md."
+        )
+    return (
+        "Provider-route preflight does not call the provider, does not validate native OpenAI API, "
+        "and does not change platform validation status."
+    )
+
+
+def build_preflight(
+    *,
+    root: Path,
+    model: str | None,
+    provider_route: str | None = None,
+    base_url: str | None = None,
+    api_surface: str | None = None,
+    api_key_env: str | None = None,
+) -> dict[str, Any]:
+    config = _resolve_harness_config(
+        root=root,
+        model=model,
+        provider_route=provider_route,
+        base_url=base_url,
+        api_surface=api_surface,
+        api_key_env=api_key_env,
+    )
+    validation_route, validation_status, validation_scope = _provider_validation_metadata(root, provider_route)
+    return {
+        "mode": "preflight",
+        "provider_route": provider_route,
+        "validation_route": validation_route,
+        "validation_status": validation_status,
+        "validation_scope": validation_scope,
+        "model": config.model,
+        "api_surface": config.api_surface,
+        "base_url": config.base_url,
+        "endpoint": config.endpoint,
+        "api_key_env": config.api_key_env,
+        "api_key_present": bool(os.environ.get(config.api_key_env)),
+        "status_boundary": _status_boundary_for_provider_route(provider_route),
+    }
 
 
 def _read_context_bundle(root: Path, reference_files: list[str]) -> str:
@@ -284,61 +396,49 @@ def run_harness(
     live: bool = False,
 ) -> HarnessResult:
     case = _load_regression_case(root, case_id)
-    route_defaults = _provider_route_defaults(root, provider_route)
-    selected_model = model or os.environ.get("OPENAI_MODEL") or route_defaults.get("model") or _default_model(root)
-    selected_base_url = _normalize_base_url(
-        base_url or os.environ.get("OPENAI_BASE_URL") or route_defaults.get("base_url") or OPENAI_DEFAULT_BASE_URL
+    config = _resolve_harness_config(
+        root=root,
+        model=model,
+        provider_route=provider_route,
+        base_url=base_url,
+        api_surface=api_surface,
+        api_key_env=api_key_env,
     )
-    selected_api_surface = (
-        api_surface
-        or os.environ.get("OPENAI_API_SURFACE")
-        or route_defaults.get("api_surface")
-        or "responses"
-    )
-    selected_api_key_env = (
-        api_key_env
-        or os.environ.get("OPENAI_API_KEY_ENV")
-        or route_defaults.get("api_key_env")
-        or "OPENAI_API_KEY"
-    )
-    if selected_api_surface not in API_SURFACES:
-        raise ValueError(f"Unsupported API surface: {selected_api_surface}. Expected one of: {', '.join(API_SURFACES)}")
-    endpoint = _endpoint_for(selected_base_url, selected_api_surface)
-    request_body = build_request(root, case, selected_model, prompt_override, selected_api_surface)
+    request_body = build_request(root, case, config.model, prompt_override, config.api_surface)
 
     if not live:
         return HarnessResult(
             mode="dry-run",
-            model=selected_model,
+            model=config.model,
             case_id=case.case_id,
             provider_route=provider_route,
-            endpoint=endpoint,
-            base_url=selected_base_url,
-            api_surface=selected_api_surface,
-            api_key_env=selected_api_key_env,
+            endpoint=config.endpoint,
+            base_url=config.base_url,
+            api_surface=config.api_surface,
+            api_key_env=config.api_key_env,
             prompt=prompt_override or case.prompt,
             reference_files=case.reference_files,
             request=request_body,
         )
 
-    api_key = os.environ.get(selected_api_key_env)
+    api_key = os.environ.get(config.api_key_env)
     if not api_key:
-        raise RuntimeError(f"{selected_api_key_env} is required when --live is set.")
+        raise RuntimeError(f"{config.api_key_env} is required when --live is set.")
 
-    response = call_openai(endpoint, request_body, api_key)
+    response = call_openai(config.endpoint, request_body, api_key)
     return HarnessResult(
         mode="live",
-        model=selected_model,
+        model=config.model,
         case_id=case.case_id,
         provider_route=provider_route,
-        endpoint=endpoint,
-        base_url=selected_base_url,
-        api_surface=selected_api_surface,
-        api_key_env=selected_api_key_env,
+        endpoint=config.endpoint,
+        base_url=config.base_url,
+        api_surface=config.api_surface,
+        api_key_env=config.api_key_env,
         prompt=prompt_override or case.prompt,
         reference_files=case.reference_files,
         request=request_body,
-        output_text=_extract_output_for_surface(response, selected_api_surface),
+        output_text=_extract_output_for_surface(response, config.api_surface),
         response_id=_extract_response_id(response),
     )
 
@@ -348,7 +448,7 @@ def main() -> int:
         sys.stdout.reconfigure(encoding="utf-8")
         sys.stderr.reconfigure(encoding="utf-8")
 
-    parser = argparse.ArgumentParser(description="Build or run a minimal Zilan OpenAI Responses API harness.")
+    parser = argparse.ArgumentParser(description="Build, preflight, or run a minimal Zilan OpenAI API harness.")
     parser.add_argument("--root", type=Path, default=ROOT, help="Repository root.")
     parser.add_argument("--case", default="ZC-02", help="Regression case ID from tests/regression_cases.yaml.")
     parser.add_argument(
@@ -368,6 +468,11 @@ def main() -> int:
         help="Environment variable containing the API key. Defaults to OPENAI_API_KEY_ENV or OPENAI_API_KEY.",
     )
     parser.add_argument(
+        "--preflight",
+        action="store_true",
+        help="Print resolved provider configuration and validation boundary without building or sending a request.",
+    )
+    parser.add_argument(
         "--live",
         action="store_true",
         help="Call the configured API endpoint. Requires the selected API key environment variable.",
@@ -376,20 +481,53 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        result = run_harness(
-            root=args.root.resolve(),
-            case_id=args.case,
-            model=args.model,
-            prompt_override=args.prompt,
-            provider_route=args.provider_route,
-            base_url=args.base_url,
-            api_surface=args.api_surface,
-            api_key_env=args.api_key_env,
-            live=args.live,
-        )
+        if args.preflight:
+            preflight = build_preflight(
+                root=args.root.resolve(),
+                model=args.model,
+                provider_route=args.provider_route,
+                base_url=args.base_url,
+                api_surface=args.api_surface,
+                api_key_env=args.api_key_env,
+            )
+        else:
+            result = run_harness(
+                root=args.root.resolve(),
+                case_id=args.case,
+                model=args.model,
+                prompt_override=args.prompt,
+                provider_route=args.provider_route,
+                base_url=args.base_url,
+                api_surface=args.api_surface,
+                api_key_env=args.api_key_env,
+                live=args.live,
+            )
     except (OSError, RuntimeError, ValueError) as exc:
         print(f"openai-api-harness failed: {exc}", file=sys.stderr)
         return 1
+
+    if args.preflight:
+        if args.json:
+            print(json.dumps(preflight, ensure_ascii=False, indent=2))
+        else:
+            for key in (
+                "mode",
+                "provider_route",
+                "validation_route",
+                "validation_status",
+                "validation_scope",
+                "model",
+                "api_surface",
+                "base_url",
+                "endpoint",
+                "api_key_env",
+                "api_key_present",
+                "status_boundary",
+            ):
+                value = preflight.get(key)
+                if value is not None:
+                    print(f"{key}: {value}")
+        return 0
 
     if args.json:
         print(json.dumps(asdict(result), ensure_ascii=False, indent=2))
