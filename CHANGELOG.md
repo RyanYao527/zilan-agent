@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added two 2026-08-12 limited manual XML-P5 no-self parallel collation notes, guarded candidate-status validation, and negative fixture coverage preventing anchor-located spans from being treated as completed collation, without provider calls or platform-status changes.
 - Added a 2026-08-10 Claude Code broad `ZC-05` runtime rerun answer excerpt and replay evidence showing `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` all pass without platform-status changes.
 - Added Markdown-line to CBETA XML-P5 anchor probes, a high-value no-self parallel candidate map, collation fixture validation, and a 2026-08-10 local replay evidence note without provider calls or platform-status changes.
 - Added a local CBETA XML-P5 collation preflight helper and architecture note for checking the publication-level route from Agama Markdown back to committed XML sources without vector infrastructure, provider calls, or platform-status changes.

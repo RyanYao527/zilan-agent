@@ -12,8 +12,10 @@ ANCHOR_PROBES_PATH = COLLATION_FIXTURE_DIR / "cbeta_anchor_probes.yaml"
 PARALLEL_CANDIDATES_PATH = COLLATION_FIXTURE_DIR / "high_value_no_self_parallel_candidates.yaml"
 RETRIEVAL_CHUNKS_PATH = "tests/fixtures/retrieval_chunks/semantic_chunks.yaml"
 ALLOWED_PARALLEL_RELATIONS = ("doctrinal_theme_parallel", "possible_textual_parallel")
-ALLOWED_PARALLEL_CONFIDENCE = ("review_candidate",)
-ALLOWED_COLLATION_STATUSES = ("pending_manual_collation",)
+ALLOWED_CANDIDATE_SET_STATUSES = ("candidate_map_only", "manual_collation_reviewed")
+ALLOWED_PARALLEL_CONFIDENCE = ("review_candidate", "manual_limited_theme_parallel")
+ALLOWED_COLLATION_STATUSES = ("pending_manual_collation", "manual_xml_p5_theme_parallel_reviewed")
+ALLOWED_MANUAL_REVIEW_CONCLUSIONS = ("limited_doctrinal_theme_parallel",)
 
 
 def _is_text(value: object) -> bool:
@@ -35,6 +37,50 @@ def _anchor_value(value: object, field: str) -> str | None:
         return None
     item = value.get(field)
     return item if isinstance(item, str) and item else None
+
+
+def _repo_relative_existing_path(root: Path, value: object) -> str | None:
+    if not _is_text(value):
+        return None
+    rel_path = cast(str, value).replace("\\", "/")
+    if Path(rel_path).is_absolute() or "<" in rel_path or ">" in rel_path:
+        return None
+    path = root / rel_path
+    try:
+        path.resolve().relative_to(root.resolve())
+    except ValueError:
+        return None
+    return rel_path if path.is_file() else None
+
+
+def _validate_manual_review(root: Path, set_id: str, manual_review: object, failures: list[str]) -> None:
+    if not isinstance(manual_review, dict):
+        failures.append(f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} manual_review must be a mapping.")
+        return
+
+    date = manual_review.get("date")
+    if not _is_text(date) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", cast(str, date)):
+        failures.append(f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} manual_review.date must use YYYY-MM-DD.")
+    if manual_review.get("conclusion") not in ALLOWED_MANUAL_REVIEW_CONCLUSIONS:
+        failures.append(
+            f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} manual_review.conclusion must be "
+            "limited_doctrinal_theme_parallel."
+        )
+    if not _is_text(manual_review.get("reviewer")):
+        failures.append(f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} manual_review.reviewer must be non-empty.")
+    if _repo_relative_existing_path(root, manual_review.get("evidence_file")) is None:
+        failures.append(
+            f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} manual_review.evidence_file must exist."
+        )
+
+
+def _manual_review_evidence_text(root: Path, manual_review: object) -> str | None:
+    if not isinstance(manual_review, dict):
+        return None
+    evidence_path = _repo_relative_existing_path(root, manual_review.get("evidence_file"))
+    if evidence_path is None:
+        return None
+    return (root / evidence_path).read_text(encoding="utf-8")
 
 
 def _load_anchor_probes(
@@ -159,8 +205,18 @@ def _validate_parallel_candidates(
             continue
         seen_ids.add(set_id)
 
-        if candidate_set.get("status") != "candidate_map_only":
-            failures.append(f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} status must be candidate_map_only.")
+        set_status = candidate_set.get("status")
+        if set_status not in ALLOWED_CANDIDATE_SET_STATUSES:
+            failures.append(
+                f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} status must be one of "
+                f"{', '.join(ALLOWED_CANDIDATE_SET_STATUSES)}."
+            )
+        if set_status == "manual_collation_reviewed":
+            _validate_manual_review(root, set_id, candidate_set.get("manual_review"), failures)
+        elif "manual_review" in candidate_set:
+            failures.append(
+                f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} manual_review requires manual_collation_reviewed."
+            )
         source_probe = candidate_set.get("source_anchor_probe")
         if source_probe not in anchor_probe_ids:
             failures.append(
@@ -172,18 +228,38 @@ def _validate_parallel_candidates(
             failures.append(
                 f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} source_chunk_id must reference a retrieval chunk."
             )
+        evidence_text = (
+            _manual_review_evidence_text(root, candidate_set.get("manual_review"))
+            if set_status == "manual_collation_reviewed"
+            else None
+        )
+        if evidence_text is not None and (
+            not isinstance(source_probe, str)
+            or not isinstance(source_chunk_id, str)
+            or source_probe not in evidence_text
+            or source_chunk_id not in evidence_text
+        ):
+            failures.append(
+                f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} manual_review.evidence_file must identify "
+                "the source anchor and chunk."
+            )
 
         boundaries = candidate_set.get("boundaries")
-        if (
-            not isinstance(boundaries, list)
-            or not any(
-                isinstance(item, str) and "does not prove publication-level equivalence" in item
-                for item in boundaries
-            )
-        ):
+        boundary_texts = [item for item in boundaries if isinstance(item, str)] if isinstance(boundaries, list) else []
+        if not any("does not prove publication-level equivalence" in item for item in boundary_texts):
             failures.append(
                 f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} boundaries must preserve the non-equivalence boundary."
             )
+        if set_status == "manual_collation_reviewed":
+            for required_boundary in (
+                "does not prove textual equivalence",
+                "does not change runtime or platform validation status",
+            ):
+                if not any(required_boundary in item for item in boundary_texts):
+                    failures.append(
+                        f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} boundaries must preserve: "
+                        f"{required_boundary}."
+                    )
 
         parallels = candidate_set.get("candidate_parallels")
         if not isinstance(parallels, list) or not parallels:
@@ -209,20 +285,80 @@ def _validate_parallel_candidates(
                 failures.append(
                     f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} candidate relation must be allowed."
                 )
-            if parallel.get("confidence") not in ALLOWED_PARALLEL_CONFIDENCE:
+            confidence = parallel.get("confidence")
+            if confidence not in ALLOWED_PARALLEL_CONFIDENCE:
                 failures.append(
-                    f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} candidate confidence must be review_candidate."
+                    f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} candidate confidence must be allowed."
                 )
-            if parallel.get("collation_status") not in ALLOWED_COLLATION_STATUSES:
+            collation_status = parallel.get("collation_status")
+            if collation_status == "anchor_located_collation_pending":
+                failures.append(
+                    f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} candidate "
+                    "anchor-located status cannot be used as manual collation."
+                )
+            elif collation_status not in ALLOWED_COLLATION_STATUSES:
                 failures.append(
                     f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} candidate collation_status must be "
-                    "pending_manual_collation."
+                    "allowed."
                 )
             if not _is_text(parallel.get("rationale")):
                 failures.append(
                     f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} "
                     "candidate rationale must be non-empty."
                 )
+            if set_status == "candidate_map_only":
+                if confidence != "review_candidate":
+                    failures.append(
+                        f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} "
+                        "candidate_map_only confidence must be review_candidate."
+                    )
+                if collation_status != "pending_manual_collation":
+                    failures.append(
+                        f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} "
+                        "candidate_map_only collation_status must be pending_manual_collation."
+                    )
+            if set_status == "manual_collation_reviewed":
+                if confidence != "manual_limited_theme_parallel":
+                    failures.append(
+                        f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} "
+                        "manual reviewed candidate confidence must be manual_limited_theme_parallel."
+                    )
+                if collation_status != "manual_xml_p5_theme_parallel_reviewed":
+                    failures.append(
+                        f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} "
+                        "manual reviewed candidate collation_status must be "
+                        "manual_xml_p5_theme_parallel_reviewed."
+                    )
+                if parallel.get("equivalence_claim") is not False:
+                    failures.append(
+                        f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} "
+                        "manual reviewed candidate equivalence_claim must be false."
+                    )
+                if parallel.get("source_dependence_claim") is not False:
+                    failures.append(
+                        f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} "
+                        "manual reviewed candidate source_dependence_claim must be false."
+                    )
+                if parallel.get("publication_ready") is not False:
+                    failures.append(
+                        f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} "
+                        "manual reviewed candidate publication_ready must be false."
+                    )
+                if not _is_text(parallel.get("qualified_conclusion")):
+                    failures.append(
+                        f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} "
+                        "manual reviewed candidate qualified_conclusion must be non-empty."
+                    )
+                if evidence_text is not None and (
+                    not isinstance(anchor_probe, str)
+                    or not isinstance(chunk_id, str)
+                    or anchor_probe not in evidence_text
+                    or chunk_id not in evidence_text
+                ):
+                    failures.append(
+                        f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} manual_review.evidence_file must identify "
+                        "every candidate anchor and chunk."
+                    )
 
 
 def validate_collation_fixtures(

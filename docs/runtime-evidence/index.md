@@ -1,6 +1,6 @@
 # Runtime Evidence Index
 
-> Last updated: 2026-08-10
+> Last updated: 2026-08-12
 
 This index is a navigation aid for `docs/runtime-evidence/`. It does not change platform validation status. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -71,8 +71,10 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-12-no-self-parallel-manual-collation.md` | limited manual XML-P5 review for one high-value no-self parallel candidate pair from `T02n0099` / `T01n0001` | summary-only; limited theme parallel, not textual equivalence, runtime answer evidence, or platform validation evidence |
+| `2026-08-12-long-agama-no-self-verse-manual-collation.md` | limited manual XML-P5 review for one `SRQ-04` Long Agama no-self verse candidate pair from `T01n0001` | summary-only; limited theme parallel, not textual equivalence, runtime answer evidence, or platform validation evidence |
 | `2026-08-10-zc-05-broad-runtime-rerun.md` | Claude Code broad `ZC-05` runtime rerun and local replay for `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | links standalone answer excerpt; batch status pass |
-| `2026-08-10-cbeta-anchor-parallel-local-replay.md` | local CBETA XML anchor probes, high-value no-self candidate map, and reasoning/retrieval replay refresh | summary-only; collation and broad runtime pending |
+| `2026-08-10-cbeta-anchor-parallel-local-replay.md` | local CBETA XML anchor probes, high-value no-self candidate map, and reasoning/retrieval replay refresh | summary-only; anchor/candidate preflight plus later limited manual collation follow-up; broad runtime pending in that replay |
 | `2026-08-07-zc05-srq03-srq08-local-replay.md` | local replay over committed broad `ZC-05` excerpts and `SRQ-03` / `SRQ-08` samples after second-round prompt hardening | summary-only; prompt prepared, runtime pending |
 | `2026-08-07-zc05-srq03-srq08-prompt-hardening-local.md` | local broad `ZC-05` second-round prompt hardening for `SRQ-03` / `SRQ-08` literal slots | summary-only; prompt prepared, runtime pending |
 | `2026-08-07-srq-01-contract-calibration-replay.md` | Local `SRQ-01` answer-contract replay after heading-label calibration | direct `SRQ-01` pass over the 2026-08-06 broad `ZC-05` excerpt |

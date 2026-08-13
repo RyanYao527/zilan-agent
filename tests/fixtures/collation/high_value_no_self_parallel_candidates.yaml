@@ -1,19 +1,56 @@
 version: 1
 source: docs/architecture/cbeta-xml-p5-collation-preflight.md
-purpose: Candidate-only map for high-value no-self passages that should receive future manual parallel-text collation.
+purpose: High-value no-self passage map for conservative manual XML-P5 collation review.
 candidate_sets:
   - set_id: no-self-five-aggregates-and-feeling
     theme: five_aggregates_and_three_feelings_no_self
-    status: candidate_map_only
+    status: manual_collation_reviewed
     source_anchor_probe: cbeta-anchor:T02n0099:line-147
     source_chunk_id: agama:T02n0099:juan-1:line-147
+    manual_review:
+      date: "2026-08-12"
+      reviewer: local_manual_xml_p5_review
+      evidence_file: docs/runtime-evidence/2026-08-12-no-self-parallel-manual-collation.md
+      conclusion: limited_doctrinal_theme_parallel
     candidate_parallels:
       - anchor_probe: cbeta-anchor:T01n0001:line-3997
         chunk_id: agama:T01n0001:juan-10:line-3997
         relation: doctrinal_theme_parallel
-        confidence: review_candidate
-        collation_status: pending_manual_collation
-        rationale: Both checked passages are high-value no-self evidence used by SRQ-04, but this map only marks them as future manual collation candidates.
+        confidence: manual_limited_theme_parallel
+        collation_status: manual_xml_p5_theme_parallel_reviewed
+        equivalence_claim: false
+        source_dependence_claim: false
+        publication_ready: false
+        qualified_conclusion: The passages share a no-self doctrinal theme around conditioned aggregates or feelings, but the review does not claim textual equivalence, source dependence, or publication-ready collation.
+        rationale: Manual XML-P5 inspection confirmed both anchor spans discuss non-self boundaries, while the passages remain different textual contexts and require wider scholarly collation before publication claims.
     boundaries:
-      - Candidate map only; does not prove publication-level equivalence.
-      - XML anchors locate committed CBETA body spans, but parallel-text collation remains pending.
+      - Manual review does not prove textual equivalence.
+      - Manual review does not prove publication-level equivalence.
+      - Manual review does not change runtime or platform validation status.
+      - XML anchors locate committed CBETA body spans; wider parallel-text and witness collation remains pending.
+  - set_id: long-agama-no-self-verse-and-aggregates
+    theme: long_agama_no_self_verse_evidence
+    status: manual_collation_reviewed
+    source_anchor_probe: cbeta-anchor:T01n0001:line-881
+    source_chunk_id: agama:T01n0001:juan-1:line-881
+    manual_review:
+      date: "2026-08-12"
+      reviewer: local_manual_xml_p5_review
+      evidence_file: docs/runtime-evidence/2026-08-12-long-agama-no-self-verse-manual-collation.md
+      conclusion: limited_doctrinal_theme_parallel
+    candidate_parallels:
+      - anchor_probe: cbeta-anchor:T01n0001:line-1829
+        chunk_id: agama:T01n0001:juan-3:line-1829
+        relation: doctrinal_theme_parallel
+        confidence: manual_limited_theme_parallel
+        collation_status: manual_xml_p5_theme_parallel_reviewed
+        equivalence_claim: false
+        source_dependence_claim: false
+        publication_ready: false
+        qualified_conclusion: The passages are both SRQ-04 expected chunks and share a Long Agama no-self citation surface, but the review only supports a limited theme-parallel relation for representative retrieval evidence.
+        rationale: Manual XML-P5 inspection confirmed one verse says learning the determinate Dharma knows all dharmas as non-self, while the other says aggregates, elements, and sense bases are non-self; they are different verse contexts and do not prove textual equivalence.
+    boundaries:
+      - Manual review does not prove textual equivalence.
+      - Manual review does not prove publication-level equivalence.
+      - Manual review does not change runtime or platform validation status.
+      - XML anchors locate committed CBETA body spans; wider parallel-text and witness collation remains pending.
