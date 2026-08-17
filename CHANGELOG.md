@@ -30,7 +30,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Changed
 
-- Refreshed public engineering metrics to the current local baseline of 277 tests, 84% zilanlib coverage, and 65 mypy-checked source files.
+- Refreshed public engineering metrics to the current local baseline of 285 tests, 84% zilanlib coverage, and 65 mypy-checked source files.
 
 - Calibrated the integrated `SRQ-01` answer contract so heading-like labels (`阿含证据`, `代表性检索`, `因明校验`) are no longer mandatory global literals when concrete Agama and Hetuvidya surfaces are present.
 - Tightened broad `ZC-05` minimum-template prompt wording and narrowed the `SRQ-01` nihilism forbidden phrase to avoid a shallow collision with negated causality-boundary wording.
