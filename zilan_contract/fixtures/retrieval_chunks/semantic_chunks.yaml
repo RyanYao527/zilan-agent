@@ -1329,6 +1329,9 @@ queries:
               - CBETA
               - T02n0099
               - context/agama/
+          - label: representative_agama_anchor
+            terms:
+              - "context/agama/T0099-za-agama.md:147"
           - label: evidence_status
             terms:
               - 代表性
