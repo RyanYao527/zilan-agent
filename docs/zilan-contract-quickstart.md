@@ -37,6 +37,30 @@ python -m pytest tests/test_zilan_contract_installed_smoke.py tests/test_zilan_c
 
 These checks do not call providers and do not change platform validation status.
 
+## 60-second domain-neutral contract check
+
+`zilan_contract` is a deterministic output-contract checker, not an LLM judge. The fastest non-Buddhist path is to run
+the bundled medical-disclaimer example and inspect the stable JSON result:
+
+```bash
+zilan-contract check \
+  --contract-file docs/examples/zilan-contract/medical-disclaimer.yaml \
+  --answer-file docs/examples/zilan-contract/medical-disclaimer-pass.md \
+  --json
+```
+
+For a negative control:
+
+```bash
+zilan-contract check \
+  --contract-file docs/examples/zilan-contract/medical-disclaimer.yaml \
+  --answer-file docs/examples/zilan-contract/medical-disclaimer-fail.md \
+  --json
+```
+
+The pass/fail result means explicit contract compliance only: required terms, forbidden terms, and required slots. It
+does not claim semantic grading, medical correctness, legal advice, or provider/runtime validation.
+
 ## 60-second try
 
 ```python

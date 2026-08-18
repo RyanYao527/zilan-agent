@@ -6,6 +6,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added a machine-readable runtime evidence manifest plus `scripts/srq_coverage_report.py` / `scripts/zilanlib/reasoning/srq_coverage_report.py` for local SRQ/ZR evidence coverage triage without provider calls or platform-status changes.
+- Added `docs/zilan-contract-release-checklist.md` and a domain-neutral 60-second quickstart path clarifying that `zilan_contract` is a deterministic output-contract checker, not an LLM judge or semantic grader.
 - Added two 2026-08-12 limited manual XML-P5 no-self parallel collation notes, guarded candidate-status validation, and negative fixture coverage preventing anchor-located spans from being treated as completed collation, without provider calls or platform-status changes.
 - Added a 2026-08-10 Claude Code broad `ZC-05` runtime rerun answer excerpt and replay evidence showing `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` all pass without platform-status changes.
 - Added Markdown-line to CBETA XML-P5 anchor probes, a high-value no-self parallel candidate map, collation fixture validation, and a 2026-08-10 local replay evidence note without provider calls or platform-status changes.
@@ -30,6 +32,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Changed
 
+- Updated runtime evidence and maintenance documentation to treat `docs/runtime-evidence/index.md` as human navigation and `docs/runtime-evidence/evidence_manifest.yaml` as the machine-readable local evidence index.
 - Refreshed public engineering metrics to the current local baseline of 285 tests, 84% zilanlib coverage, and 65 mypy-checked source files.
 
 - Calibrated the integrated `SRQ-01` answer contract so heading-like labels (`阿含证据`, `代表性检索`, `因明校验`) are no longer mandatory global literals when concrete Agama and Hetuvidya surfaces are present.

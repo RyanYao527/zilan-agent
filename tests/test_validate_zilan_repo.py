@@ -830,6 +830,150 @@ reviews:
         for failure in failures
     )
 
+
+def _write_runtime_evidence_manifest_case(tmp_path: Path, manifest_text: str) -> None:
+    evidence_dir = tmp_path / "docs" / "runtime-evidence"
+    evidence_dir.mkdir(parents=True)
+    (evidence_dir / "summary.md").write_text("# Summary evidence\n", encoding="utf-8")
+    (evidence_dir / "answer.md").write_text("# Standalone answer\n", encoding="utf-8")
+    (evidence_dir / "collation.md").write_text("# Manual collation\n", encoding="utf-8")
+    (evidence_dir / "evidence_manifest.yaml").write_text(manifest_text, encoding="utf-8")
+
+
+def test_runtime_evidence_manifest_valid_fixture_passes(tmp_path: Path) -> None:
+    from zilanlib.validation.runtime_evidence import validate_runtime_evidence_manifest
+
+    _write_runtime_evidence_manifest_case(
+        tmp_path,
+        """version: 1
+entries:
+  - id: valid-runtime-answer
+    file: docs/runtime-evidence/answer.md
+    date: "2026-08-10"
+    evidence_class: standalone_answer_excerpt
+    related_cases:
+      - ZC-05
+      - SRQ-04
+      - ZR-05
+    answer_file_safe: true
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-04
+        status: pass
+        source_file: docs/runtime-evidence/answer.md
+        notes: Local answer excerpt contract review.
+""",
+    )
+    failures: list[str] = []
+
+    validate_runtime_evidence_manifest(tmp_path, failures)
+
+    assert failures == []
+
+
+def test_runtime_evidence_manifest_missing_referenced_file_is_reported(tmp_path: Path) -> None:
+    from zilanlib.validation.runtime_evidence import validate_runtime_evidence_manifest
+
+    _write_runtime_evidence_manifest_case(
+        tmp_path,
+        """version: 1
+entries:
+  - id: missing-file
+    file: docs/runtime-evidence/missing.md
+    date: "2026-08-10"
+    evidence_class: standalone_answer_excerpt
+    related_cases:
+      - SRQ-04
+    answer_file_safe: true
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-04
+        status: pass
+""",
+    )
+    failures: list[str] = []
+
+    validate_runtime_evidence_manifest(tmp_path, failures)
+
+    assert any("entry missing-file file missing: docs/runtime-evidence/missing.md" in failure for failure in failures)
+
+
+def test_runtime_evidence_manifest_rejects_non_answer_classes_as_answer_file_safe(tmp_path: Path) -> None:
+    from zilanlib.validation.runtime_evidence import validate_runtime_evidence_manifest
+
+    _write_runtime_evidence_manifest_case(
+        tmp_path,
+        """version: 1
+entries:
+  - id: bad-summary
+    file: docs/runtime-evidence/summary.md
+    date: "2026-08-10"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-03
+    answer_file_safe: true
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-03
+        status: runtime_pending
+  - id: bad-collation
+    file: docs/runtime-evidence/collation.md
+    date: "2026-08-12"
+    evidence_class: manual_collation
+    related_cases:
+      - SRQ-04
+    answer_file_safe: true
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-04
+        status: manual_review_required
+""",
+    )
+    failures: list[str] = []
+
+    validate_runtime_evidence_manifest(tmp_path, failures)
+
+    assert any(
+        "entry bad-summary evidence_class summary_only must not set answer_file_safe: true" in failure
+        for failure in failures
+    )
+    assert any(
+        "entry bad-collation evidence_class manual_collation must not set answer_file_safe: true" in failure
+        for failure in failures
+    )
+
+
+def test_runtime_evidence_manifest_rejects_platform_status_changes_and_bad_status(tmp_path: Path) -> None:
+    from zilanlib.validation.runtime_evidence import validate_runtime_evidence_manifest
+
+    _write_runtime_evidence_manifest_case(
+        tmp_path,
+        """version: 1
+entries:
+  - id: bad-review
+    file: docs/runtime-evidence/answer.md
+    date: "2026-08-10"
+    evidence_class: standalone_answer_excerpt
+    related_cases:
+      - SRQ-04
+    answer_file_safe: true
+    platform_status_change: true
+    reviews:
+      - query_id: ABC-01
+        status: live_pass
+""",
+    )
+    failures: list[str] = []
+
+    validate_runtime_evidence_manifest(tmp_path, failures)
+
+    assert any("entry bad-review platform_status_change must be false" in failure for failure in failures)
+    assert any(
+        "entry bad-review reviews[0].query_id must start with SRQ-, ZC-, or ZR-" in failure
+        for failure in failures
+    )
+    assert any("entry bad-review reviews[0].status must be one of" in failure for failure in failures)
+
 def test_public_style_boundary_private_fragment_is_reported(tmp_path: Path, monkeypatch) -> None:
     from zilanlib.validation import public_docs as public_docs_validation
 

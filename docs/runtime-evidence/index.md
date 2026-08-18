@@ -1,8 +1,12 @@
 # Runtime Evidence Index
 
-> Last updated: 2026-08-12
+> Last updated: 2026-08-18
 
 This index is a navigation aid for `docs/runtime-evidence/`. It does not change platform validation status. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
+
+`docs/runtime-evidence/evidence_manifest.yaml` is the machine-readable v1 evidence index used by
+`scripts/srq_coverage_report.py`. This Markdown file remains the human navigation surface; if the two disagree, treat
+the discrepancy as manual review required rather than platform validation evidence.
 
 ## Evidence Classes
 
@@ -13,6 +17,7 @@ This index is a navigation aid for `docs/runtime-evidence/`. It does not change 
 | Batch report | Human-readable saved output from a batch review. | no |
 | Summary-only evidence | Runtime scenario summary, command shape, findings, and limits. | no |
 | Provider/smoke evidence | Clean install, route preflight/smoke, or live-provider response summary. | no |
+| Manual collation | Dated human XML-P5 or parallel-text review notes. | no |
 
 Do not use summary-only evidence as `answer_file` input. Use the standalone answer excerpts listed below.
 
