@@ -40,8 +40,8 @@ Use conservative status labels:
 | Prompt set | Direct `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` prompts from `tests/fixtures/retrieval_chunks/semantic_chunks.yaml`, each with `请直接回答，不要写入文件。` |
 | Encoding setup | Windows PowerShell UTF-8 stdout and console encoding were set before invoking `claude -p`. |
 | Transcript status | Standalone answer excerpts committed at `docs/runtime-evidence/2026-08-19-claude-code-srq-06-runtime-spot-answer.md`, `docs/runtime-evidence/2026-08-19-claude-code-srq-07-runtime-spot-answer.md`, `docs/runtime-evidence/2026-08-19-claude-code-srq-10-runtime-spot-answer.md`, and `docs/runtime-evidence/2026-08-19-claude-code-srq-11-runtime-spot-answer.md`; compact review committed at `docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review.md`. |
-| Repository checks | PR #193 recorded a pre-calibration strict-literal fail for all four cases. Current calibrated replay of the same batch returns `pass=2`, `fail=2`, and the focused `SRQ-06` / `SRQ-07` replay batch returns `pass=2`, `fail=0`. |
-| Overall result | `target-partial`: the committed `SRQ-06` / `SRQ-07` runtime answer excerpts pass the current exact alias-group contracts; `SRQ-10` / `SRQ-11` still fail. No platform-status change. |
+| Repository checks | PR #193 recorded a pre-calibration strict-literal fail for all four cases. Current calibrated replay of the same batch returns `pass=3`, `fail=1`; the focused `SRQ-06` / `SRQ-07` replay batch returns `pass=2`, `fail=0`; the focused `SRQ-10` replay batch returns `pass=1`, `fail=0`. |
+| Overall result | `target-partial`: the committed `SRQ-06` / `SRQ-07` / `SRQ-10` runtime answer excerpts pass the current exact alias-group contracts; `SRQ-11` still fails. No platform-status change. |
 
 ### Contract Results
 
@@ -49,14 +49,15 @@ Use conservative status labels:
 |---|---|---|---|
 | `2026-08-19-claude-code-srq-06-runtime-spot-answer.md` | `SRQ-06` | `pass` | Current calibrated replay accepts exact alias `无法决定` for the indeterminate-resolution slot; the original #193 strict-literal note recorded missing `不能决定`. |
 | `2026-08-19-claude-code-srq-07-runtime-spot-answer.md` | `SRQ-07` | `pass` | Current calibrated replay accepts exact alias `总与别` for the Collected Topics surface slot; the original #193 strict-literal note recorded missing `摄类学`. |
-| `2026-08-19-claude-code-srq-10-runtime-spot-answer.md` | `SRQ-10` | `fail` | The answer preserves the five-universal chain and practice boundary, but misses required explicit terms for attribution error, motive inference, affliction chain, and `不害`. |
+| `2026-08-19-claude-code-srq-10-runtime-spot-answer.md` | `SRQ-10` | `pass` | Current calibrated replay accepts exact aliases for attribution-error, motive-inference, affliction, and non-harm surfaces; the original #193 strict-literal note recorded missing explicit cognitive and corrective-factor terms. |
 | `2026-08-19-claude-code-srq-11-runtime-spot-answer.md` | `SRQ-11` | `fail` | The answer identifies the definition as too broad in ordinary wording, but misses required defining-mark boundary literals and includes the shallow forbidden phrase `性相成立` in a heading. |
 
 ### Known Limits
 
 - This is a targeted SRQ runtime spot review, not a full platform rerun.
 - It records pass evidence for the committed `SRQ-06` / `SRQ-07` answer excerpts under the current calibrated contract,
-  while preserving `SRQ-10` / `SRQ-11` fail evidence.
+  plus pass evidence for the committed `SRQ-10` excerpt under the current calibrated contract, while preserving
+  `SRQ-11` fail evidence.
 - The contract misses are deterministic exact-string / slot-surface results, not full doctrinal quality judgments.
 - `docs/platform-validation.md` and platform tested status remain unchanged.
 

@@ -1106,22 +1106,37 @@ queries:
           - 受
           - 想
           - 思
-          - 错误归因
           - 故意为难
-          - 动机推断
           - 瞋
-          - 忿
-          - 恼
           - 念
           - 慧
           - 无瞋
-          - 不害
           - 名色分别
           - 缘摄受
           - 三相印证
           - 边界
           - 非心理治疗
           - 善知识指导
+        required_term_groups:
+          - label: attribution_error_surface
+            terms:
+              - 错误归因
+              - 错误地投射
+          - label: motive_inference_surface
+            terms:
+              - 动机推断
+              - 他人心相续里的动机
+              - 间接推断
+          - label: affliction_surface
+            terms:
+              - 忿
+              - 恼
+              - 厌烦
+              - 反向攻击
+          - label: non_harm_surface
+            terms:
+              - 不害
+              - '不把对方固化成一个"敌人"标签'
         required_slots:
           - label: cognitive_chain
             terms:

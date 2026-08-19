@@ -526,6 +526,24 @@ def test_dry_run_returns_cognitive_caregiving_boundary_fixture_for_srq10() -> No
     ]
     assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
     contract = result["answer_contracts"]["cognitive_caregiving_boundary"]
+    assert contract["required_term_groups"] == [
+        {
+            "label": "attribution_error_surface",
+            "terms": ["错误归因", "错误地投射"],
+        },
+        {
+            "label": "motive_inference_surface",
+            "terms": ["动机推断", "他人心相续里的动机", "间接推断"],
+        },
+        {
+            "label": "affliction_surface",
+            "terms": ["忿", "恼", "厌烦", "反向攻击"],
+        },
+        {
+            "label": "non_harm_surface",
+            "terms": ["不害", '不把对方固化成一个"敌人"标签'],
+        },
+    ]
     assert contract["required_slots"][1] == {
         "label": "attribution_error",
         "terms": ["错误归因", "故意为难", "动机推断"],

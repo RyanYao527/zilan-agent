@@ -46,5 +46,7 @@ Boundary: batch fixture review only; this is not runtime platform validation.
 ## Boundaries
 
 - This is local answer-contract replay over committed answer excerpts, not a new runtime run.
-- `SRQ-10` and `SRQ-11` remain failing in the 2026-08-19 direct runtime spot review and are out of scope here.
+- At the time of this replay, `SRQ-10` and `SRQ-11` remained failing in the 2026-08-19 direct runtime spot review and
+  were out of scope here. A later focused `SRQ-10` replay supersedes the `SRQ-10` fail observation; `SRQ-11` remains
+  failing.
 - `docs/platform-validation.md` remains unchanged.

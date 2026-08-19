@@ -10,16 +10,18 @@ validate native OpenAI API, and does not validate any OpenAI-compatible provider
 
 ## Post-Calibration Note
 
-PR #193 captured the original strict-literal answer-contract result for all four runtime answer excerpts. A later
-fixture-local calibration added exact required-term groups for `SRQ-06` and `SRQ-07` without changing the answer text
-or calling a provider again:
+PR #193 captured the original strict-literal answer-contract result for all four runtime answer excerpts. Later
+fixture-local calibrations added exact required-term groups for `SRQ-06`, `SRQ-07`, and `SRQ-10` without changing the
+answer text or calling a provider again:
 
 - `SRQ-06`: `不能决定` / `无法决定`
 - `SRQ-07`: `摄类学` / `总与别`
+- `SRQ-10`: cognitive-analysis aliases for attribution-error, motive-inference, affliction, and non-harm surfaces
 
-Under the current calibrated contract, this same batch now reports `pass=2`, `fail=2`: `SRQ-06` and `SRQ-07` pass,
-while `SRQ-10` and `SRQ-11` still fail. See
-`docs/runtime-evidence/2026-08-19-srq06-srq07-contract-calibration-replay.md` for the focused replay note.
+Under the current calibrated contract, this same batch now reports `pass=3`, `fail=1`: `SRQ-06`, `SRQ-07`, and
+`SRQ-10` pass, while `SRQ-11` still fails. See
+`docs/runtime-evidence/2026-08-19-srq06-srq07-contract-calibration-replay.md` and
+`docs/runtime-evidence/2026-08-19-srq10-contract-calibration-replay.md` for focused replay notes.
 
 ## Runtime Command Shape
 
@@ -53,8 +55,8 @@ not native DeepSeek, native OpenAI API, or OpenAI-compatible provider validation
 | Repository base | `8037b95` (`Add SRQ evidence coverage and productization triage`) |
 | Branch | `codex/srq-evidence-closeout` |
 | Transcript status | Standalone answer excerpts committed under `docs/runtime-evidence/`; raw CLI session metadata is not committed. |
-| Repository checks | PR #193 recorded a pre-calibration strict-literal fail for all four cases. Current calibrated replay of the same batch reports `pass=2`, `fail=2`. |
-| Overall result | `target-partial`: current calibrated contracts pass for `SRQ-06` / `SRQ-07`; `SRQ-10` / `SRQ-11` still need prompt or contract follow-up before pass evidence can be recorded. |
+| Repository checks | PR #193 recorded a pre-calibration strict-literal fail for all four cases. Current calibrated replay of the same batch reports `pass=3`, `fail=1`. |
+| Overall result | `target-partial`: current calibrated contracts pass for `SRQ-06` / `SRQ-07` / `SRQ-10`; `SRQ-11` still needs prompt or contract follow-up before pass evidence can be recorded. |
 
 No second retry was used after the deterministic contract failures. Keeping the first observed answers avoids
 retry-until-pass evidence and makes the missing slots visible.
@@ -99,14 +101,14 @@ Boundary: batch fixture review only; this is not runtime platform validation.
 - `SRQ-07` preserved the total/part and pervasion boundary but missed the literal `摄类学`.
 - Current calibrated replay treats the `SRQ-06` answer's `无法决定` and the `SRQ-07` answer's `总与别` as exact
   acceptable surfaces for those two narrow slots.
-- `SRQ-10` preserved the five-universal chain and practice boundary but missed several explicit cognitive/error and
-  corrective-factor terms required by the current contract.
+- Current calibrated replay treats the `SRQ-10` answer's `错误地投射`, `他人心相续里的动机`, `间接推断`, `厌烦`,
+  `反向攻击`, and `不把对方固化成一个"敌人"标签` as exact acceptable surfaces for the cognitive-analysis slots.
 - `SRQ-11` identified the definition as too broad in ordinary wording, but missed required literal boundary terms
   (`性相过宽`, `唯在所表上成立`, `违②`) and included the shallow forbidden phrase `性相成立` in a heading.
 
 ## Boundary
 
 These results close the earlier manifest-side `not_reviewed` / `manual_review_required` ambiguity by recording
-contract-reviewable runtime answer excerpts. The current calibrated replay is pass evidence for `SRQ-06` / `SRQ-07`
-answer surfaces only; it is not a new runtime run and not platform validation evidence. `SRQ-10` / `SRQ-11` remain fail
+contract-reviewable runtime answer excerpts. The current calibrated replay is pass evidence for `SRQ-06` / `SRQ-07` /
+`SRQ-10` answer surfaces only; it is not a new runtime run and not platform validation evidence. `SRQ-11` remains fail
 evidence. None of these entries downgrade or upgrade platform status, and they do not prove doctrinal quality.

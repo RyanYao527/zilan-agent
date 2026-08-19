@@ -1,0 +1,5 @@
+version: 1
+reviews:
+  - id: 2026-08-19-srq10-cognitive-caregiving-contract-calibration-replay
+    query_id: SRQ-10
+    answer_file: docs/runtime-evidence/2026-08-19-claude-code-srq-10-runtime-spot-answer.md

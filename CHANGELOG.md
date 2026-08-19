@@ -7,7 +7,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 ### Added
 
 - Added 2026-08-19 Claude Code direct `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` runtime spot excerpts plus fail evidence, keeping all platform status unchanged.
-- Added a 2026-08-19 local `SRQ-06` / `SRQ-07` contract-calibration replay over committed runtime answer excerpts, keeping `SRQ-10` / `SRQ-11` fail evidence and all platform status unchanged.
+- Added a 2026-08-19 local `SRQ-06` / `SRQ-07` contract-calibration replay over committed runtime answer excerpts, keeping then-unresolved `SRQ-10` / `SRQ-11` fail evidence and all platform status unchanged.
+- Added a 2026-08-19 local `SRQ-10` contract-calibration replay over the committed runtime answer excerpt, keeping `SRQ-11` fail evidence and all platform status unchanged.
 - Added a 2026-08-19 limited cross-Agama XML-P5 no-self manual collation note and candidate-map entry for `SRQ-04`, without claiming textual equivalence, source dependence, publication-ready collation, runtime pass, or platform-status changes.
 - Added a 2026-08-19 SRQ manual-review handoff and reviewer note for conservative `SRQ-04`, `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` evidence disposition without provider calls or platform-status changes.
 - Added a machine-readable runtime evidence manifest plus `scripts/srq_coverage_report.py` / `scripts/zilanlib/reasoning/srq_coverage_report.py` for local SRQ/ZR evidence coverage triage without provider calls or platform-status changes.
@@ -37,6 +38,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 ### Changed
 
 - Updated `scripts/srq_coverage_report.py` Markdown and JSON output to group runtime evidence status by evidence class, making standalone answer excerpts, batch manifests, summary notes, and manual collation easier to distinguish.
+- Updated the fixture-only `SRQ-10` cognitive-analysis answer contract to accept exact alias groups for attribution-error, motive-inference, affliction, and non-harm surfaces without changing prompts, provider routes, or `zilan_contract` public APIs.
 - Updated fixture-only semantic answer contracts to support exact required-term groups for narrow alias surfaces such as `不能决定` / `无法决定` and `摄类学` / `总与别`, without fuzzy matching, semantic grading, provider calls, or public `zilan_contract` API changes.
 - Updated runtime evidence and maintenance documentation to treat `docs/runtime-evidence/index.md` as human navigation and `docs/runtime-evidence/evidence_manifest.yaml` as the machine-readable local evidence index.
 - Refreshed public engineering metrics to the current local baseline of 285 tests, 84% zilanlib coverage, and 65 mypy-checked source files.
