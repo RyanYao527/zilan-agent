@@ -389,6 +389,20 @@ entries:
         batch: docs/runtime-evidence/2026-08-19-srq11-forbidden-collision-replay-batch.yaml
         notes: Summary-only replay note; the answer excerpt remains the standalone runtime answer file, and the note itself must not be used as an answer_file.
 
+  - id: 2026-08-19-srq11-definition-prompt-hardening-local-replay
+    file: docs/runtime-evidence/2026-08-19-srq11-definition-prompt-hardening-local-replay.md
+    date: "2026-08-19"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-11
+      - ZR-12
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-11
+        status: runtime_pending
+        notes: Prompt invariant evidence only; Codex, Claude Code, and OpenAI metadata now preserve the explicit defining-mark boundary slots, but the committed runtime answer remains fail and a new runtime rerun is pending.
+
   - id: 2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review
     file: docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review.md
     date: "2026-08-19"

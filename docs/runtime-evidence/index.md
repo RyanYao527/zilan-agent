@@ -88,6 +88,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-19-srq11-definition-prompt-hardening-local-replay.md` | local prompt-invariant evidence for `SRQ-11` definition-boundary slots | summary-only prompt-prepared note; existing committed `SRQ-11` runtime answer remains fail and a new runtime rerun is pending |
 | `2026-08-19-srq11-forbidden-collision-replay.md` | local replay over committed direct `SRQ-11` runtime answer excerpt after narrowing the shallow forbidden collision | summary-only replay note; current calibrated batch remains fail for `SRQ-11`; not a new runtime run or platform validation evidence |
 | `2026-08-19-srq10-contract-calibration-replay.md` | local replay over committed direct `SRQ-10` runtime answer excerpt after exact alias-group contract calibration | summary-only replay note; current calibrated batch pass for `SRQ-10`; not a new runtime run or platform validation evidence |
 | `2026-08-19-srq06-srq07-contract-calibration-replay.md` | local replay over committed direct `SRQ-06` and `SRQ-07` runtime answer excerpts after exact alias-group contract calibration | summary-only replay note; current calibrated batch pass for `SRQ-06` / `SRQ-07`; not a new runtime run or platform validation evidence |
