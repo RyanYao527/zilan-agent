@@ -909,6 +909,26 @@ The 2026-06-15 blocker is therefore reclassified as a Windows PowerShell stdin e
 - The answer-contract helper checks minimum explicitness and does not grade doctrinal correctness, retrieval completeness, or publication-level collation.
 - This evidence does not validate native OpenAI API or any OpenAI-compatible provider route, and it does not change platform validation status.
 
+## 2026-08-19 Claude Code SRQ-11 Definition Runtime Rerun Attempt
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.234`; local configuration attempted custom DeepSeek Anthropic-compatible model `deepseek-v4-pro[1m]` |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` loaded as the system prompt |
+| Repository commit | post-`SRQ-11` definition-boundary prompt hardening on `main` |
+| Prompt set | Direct `SRQ-11` prompt: `用摄类学检查定义：瓶的性相是能盛水者。这个定义成立吗？请直接回答，不要写入文件。` |
+| Encoding setup | Windows PowerShell UTF-8 stdout/console/stdin before invoking `claude -p` |
+| Transcript status | No answer excerpt; summary-only blocked evidence committed at `docs/runtime-evidence/2026-08-19-srq11-definition-runtime-rerun.md` |
+| Repository checks | Local prompt invariant checks passed before the runtime attempt; no answer-contract batch was created because no answer file exists |
+| Overall result | `blocked` / `runtime_pending`: Claude Code returned `[claude-code:unrecognized_model] {"model":"deepseek-v4-pro[1m]","query_source":"sdk"}` before answer generation; no platform-status change |
+
+### Known Limits
+
+- This attempt does not validate `SRQ-11` runtime behavior after prompt hardening.
+- The already committed 2026-08-19 `SRQ-11` answer excerpt remains fail evidence under the current answer contract.
+- `docs/platform-validation.md` remains unchanged.
+
 ## Next Validation Entries
 
 Use this template for future manual sessions:
