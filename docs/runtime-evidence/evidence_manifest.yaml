@@ -359,6 +359,20 @@ entries:
         source_file: docs/runtime-evidence/2026-08-19-claude-code-srq-11-runtime-spot-answer.md
         notes: Current calibrated replay no longer treats the heading `性相成立的标准` as forbidden, but the standalone answer excerpt still fails on missing `性相过宽`, `唯在所表上成立`, `违②`, and `definiendum_boundary`.
 
+  - id: 2026-08-19-srq11-z-definition-runtime-rerun-blocked
+    file: docs/runtime-evidence/2026-08-19-srq11-definition-runtime-rerun.md
+    date: "2026-08-19"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-11
+      - ZR-12
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-11
+        status: runtime_pending
+        notes: Bounded Claude Code runtime rerun attempt was blocked before answer generation by the local custom DeepSeek Anthropic-compatible model setting `deepseek-v4-pro[1m]`; no answer excerpt or runtime pass was produced.
+
   - id: 2026-08-19-srq11-forbidden-collision-replay
     file: docs/runtime-evidence/2026-08-19-srq11-forbidden-collision-replay-batch.yaml
     date: "2026-08-19"
