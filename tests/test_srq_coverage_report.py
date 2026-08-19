@@ -104,6 +104,22 @@ def test_srq_coverage_report_groups_runtime_status_by_evidence_class() -> None:
     assert srq04_runtime["status_by_evidence_class"]["manual_collation"] == ["manual_review_required"]
 
 
+def test_srq04_manual_collation_boundary_stays_manual_review_required_without_runtime_promotion() -> None:
+    report = build_srq_coverage_report(ROOT)
+
+    srq04 = _case_by_id(report, "SRQ-04")
+    runtime_evidence = srq04["runtime_evidence"]
+    latest_entry = runtime_evidence["latest_entry"]
+
+    assert srq04["coverage_status"] == "manual_review_required"
+    assert runtime_evidence["latest_status"] == "manual_review_required"
+    assert latest_entry["evidence_class"] == "manual_collation"
+    assert latest_entry["answer_file_safe"] is False
+    assert latest_entry["platform_status_change"] is False
+    assert "anchor-located spans are not textual-equivalence claims" in latest_entry["notes"]
+    assert "source-dependence claims remain unreviewed" in latest_entry["notes"]
+
+
 def test_srq_coverage_report_preserves_hash_prefixed_manifest_note_text() -> None:
     report = build_srq_coverage_report(ROOT)
 

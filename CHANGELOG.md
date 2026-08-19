@@ -8,6 +8,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 - Added 2026-08-19 Claude Code direct `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` runtime spot excerpts plus fail evidence, keeping all platform status unchanged.
 - Added a local Claude Code route preflight helper and 2026-08-19 provider/smoke evidence note documenting the current custom-model blocker without provider calls, answer pass evidence, or platform-status changes.
+- Added a 2026-08-19 `SRQ-04` manual collation boundary closeout note clarifying that located XML anchors and limited theme-parallel reviews remain `manual_review_required`, not textual equivalence, source-dependence, publication collation, runtime pass, or platform validation evidence.
 - Added local `SRQ-11` definition-boundary prompt hardening for `性相过宽`, `唯在所表上成立`, `违②`, and `definiendum_boundary`, with runtime rerun pending and platform status unchanged.
 - Added a 2026-08-19 summary-only `SRQ-11` post-hardening runtime rerun attempt note documenting a local Claude Code custom-model blocker, without creating answer pass evidence or changing platform status.
 - Added a 2026-08-19 local `SRQ-06` / `SRQ-07` contract-calibration replay over committed runtime answer excerpts, keeping then-unresolved `SRQ-10` / `SRQ-11` fail evidence and all platform status unchanged.

@@ -549,3 +549,17 @@ entries:
       - query_id: SRQ-04
         status: manual_review_required
         notes: Limited cross-Agama XML-P5 theme-parallel review; not textual equivalence, source dependence, publication-ready collation, or runtime answer evidence.
+
+  - id: 2026-08-19-zz-srq04-manual-collation-boundary-closeout
+    file: docs/runtime-evidence/2026-08-19-srq04-manual-collation-boundary-closeout.md
+    date: "2026-08-19"
+    evidence_class: manual_collation
+    related_cases:
+      - SRQ-04
+      - ZR-05
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-04
+        status: manual_review_required
+        notes: SRQ-04 manual collation boundary closeout; anchor-located spans are not textual-equivalence claims, limited theme-parallel reviews are not publication-ready collation, and source-dependence claims remain unreviewed.
