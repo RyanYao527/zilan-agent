@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added a 2026-08-19 SRQ manual-review handoff and reviewer note for conservative `SRQ-04`, `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` evidence disposition without provider calls or platform-status changes.
 - Added a machine-readable runtime evidence manifest plus `scripts/srq_coverage_report.py` / `scripts/zilanlib/reasoning/srq_coverage_report.py` for local SRQ/ZR evidence coverage triage without provider calls or platform-status changes.
 - Added `docs/zilan-contract-release-checklist.md` and a domain-neutral 60-second quickstart path clarifying that `zilan_contract` is a deterministic output-contract checker, not an LLM judge or semantic grader.
 - Added two 2026-08-12 limited manual XML-P5 no-self parallel collation notes, guarded candidate-status validation, and negative fixture coverage preventing anchor-located spans from being treated as completed collation, without provider calls or platform-status changes.

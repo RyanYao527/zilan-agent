@@ -1,6 +1,6 @@
 # Runtime Evidence Index
 
-> Last updated: 2026-08-18
+> Last updated: 2026-08-19
 
 This index is a navigation aid for `docs/runtime-evidence/`. It does not change platform validation status. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -76,6 +76,8 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-19-srq-manual-review-note.md` | reviewer record for `SRQ-04`, `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` manifest-facing evidence gaps | summary-only review record; confirms `SRQ-04` remains manual semantic-boundary review, `SRQ-06` / `SRQ-07` / `SRQ-10` remain not reviewed, and `SRQ-11` remains manual review required; not runtime answer evidence or platform validation evidence |
+| `2026-08-19-srq-manual-review-handoff.md` | human handoff checklist for conservative SRQ evidence gaps surfaced by `scripts/srq_coverage_report.py` | summary-only handoff; not runtime evidence and not an `answer_file` |
 | `2026-08-12-no-self-parallel-manual-collation.md` | limited manual XML-P5 review for one high-value no-self parallel candidate pair from `T02n0099` / `T01n0001` | summary-only; limited theme parallel, not textual equivalence, runtime answer evidence, or platform validation evidence |
 | `2026-08-12-long-agama-no-self-verse-manual-collation.md` | limited manual XML-P5 review for one `SRQ-04` Long Agama no-self verse candidate pair from `T01n0001` | summary-only; limited theme parallel, not textual equivalence, runtime answer evidence, or platform validation evidence |
 | `2026-08-10-zc-05-broad-runtime-rerun.md` | Claude Code broad `ZC-05` runtime rerun and local replay for `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | links standalone answer excerpt; batch status pass |
