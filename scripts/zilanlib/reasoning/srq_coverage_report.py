@@ -298,7 +298,7 @@ def _readiness(
     if latest_status in MANUAL_REVIEW_STATUSES:
         return "manual_review_required"
     if "fail" in status_set and "pass" not in status_set:
-        return "partial"
+        return "fail"
     return "ready"
 
 

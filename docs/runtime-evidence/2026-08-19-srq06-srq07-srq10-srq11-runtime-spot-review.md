@@ -12,16 +12,19 @@ validate native OpenAI API, and does not validate any OpenAI-compatible provider
 
 PR #193 captured the original strict-literal answer-contract result for all four runtime answer excerpts. Later
 fixture-local calibrations added exact required-term groups for `SRQ-06`, `SRQ-07`, and `SRQ-10` without changing the
-answer text or calling a provider again:
+answer text or calling a provider again. A later `SRQ-11` fixture-local calibration also narrowed one shallow
+forbidden term without changing the answer text or calling a provider again:
 
 - `SRQ-06`: `不能决定` / `无法决定`
 - `SRQ-07`: `摄类学` / `总与别`
 - `SRQ-10`: cognitive-analysis aliases for attribution-error, motive-inference, affliction, and non-harm surfaces
+- `SRQ-11`: `性相成立` narrowed to the explicit wrong-assertion surface `这个性相成立`
 
 Under the current calibrated contract, this same batch now reports `pass=3`, `fail=1`: `SRQ-06`, `SRQ-07`, and
-`SRQ-10` pass, while `SRQ-11` still fails. See
+`SRQ-10` pass, while `SRQ-11` still fails without the earlier heading collision. See
 `docs/runtime-evidence/2026-08-19-srq06-srq07-contract-calibration-replay.md` and
-`docs/runtime-evidence/2026-08-19-srq10-contract-calibration-replay.md` for focused replay notes.
+`docs/runtime-evidence/2026-08-19-srq10-contract-calibration-replay.md` for focused pass replay notes, and
+`docs/runtime-evidence/2026-08-19-srq11-forbidden-collision-replay.md` for the focused fail replay note.
 
 ## Runtime Command Shape
 
@@ -55,8 +58,8 @@ not native DeepSeek, native OpenAI API, or OpenAI-compatible provider validation
 | Repository base | `8037b95` (`Add SRQ evidence coverage and productization triage`) |
 | Branch | `codex/srq-evidence-closeout` |
 | Transcript status | Standalone answer excerpts committed under `docs/runtime-evidence/`; raw CLI session metadata is not committed. |
-| Repository checks | PR #193 recorded a pre-calibration strict-literal fail for all four cases. Current calibrated replay of the same batch reports `pass=3`, `fail=1`. |
-| Overall result | `target-partial`: current calibrated contracts pass for `SRQ-06` / `SRQ-07` / `SRQ-10`; `SRQ-11` still needs prompt or contract follow-up before pass evidence can be recorded. |
+| Repository checks | PR #193 recorded a pre-calibration strict-literal fail for all four cases. Current calibrated replay of the same batch reports `pass=3`, `fail=1`; the focused `SRQ-11` collision replay reports `pass=0`, `fail=1`. |
+| Overall result | `target-partial`: current calibrated contracts pass for `SRQ-06` / `SRQ-07` / `SRQ-10`; `SRQ-11` remains an explicit fail after the shallow heading collision is cleared. |
 
 No second retry was used after the deterministic contract failures. Keeping the first observed answers avoids
 retry-until-pass evidence and makes the missing slots visible.
@@ -103,12 +106,14 @@ Boundary: batch fixture review only; this is not runtime platform validation.
   acceptable surfaces for those two narrow slots.
 - Current calibrated replay treats the `SRQ-10` answer's `错误地投射`, `他人心相续里的动机`, `间接推断`, `厌烦`,
   `反向攻击`, and `不把对方固化成一个"敌人"标签` as exact acceptable surfaces for the cognitive-analysis slots.
-- `SRQ-11` identified the definition as too broad in ordinary wording, but missed required literal boundary terms
-  (`性相过宽`, `唯在所表上成立`, `违②`) and included the shallow forbidden phrase `性相成立` in a heading.
+- Current calibrated replay no longer treats the `SRQ-11` heading `性相成立的标准` as a forbidden wrong assertion.
+- `SRQ-11` still identifies the definition as too broad in ordinary wording while missing required literal boundary
+  terms (`性相过宽`, `唯在所表上成立`, `违②`) and the `definiendum_boundary` slot.
 
 ## Boundary
 
 These results close the earlier manifest-side `not_reviewed` / `manual_review_required` ambiguity by recording
 contract-reviewable runtime answer excerpts. The current calibrated replay is pass evidence for `SRQ-06` / `SRQ-07` /
 `SRQ-10` answer surfaces only; it is not a new runtime run and not platform validation evidence. `SRQ-11` remains fail
-evidence. None of these entries downgrade or upgrade platform status, and they do not prove doctrinal quality.
+evidence after the shallow heading collision is cleared. None of these entries downgrade or upgrade platform status,
+and they do not prove doctrinal quality.

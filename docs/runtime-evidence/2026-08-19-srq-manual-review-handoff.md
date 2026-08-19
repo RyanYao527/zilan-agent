@@ -7,7 +7,8 @@ The completed reviewer note for this handoff is
 `docs/runtime-evidence/2026-08-19-srq-manual-review-note.md`.
 
 Later committed standalone answer excerpts and exact alias-group replays supersede the original `not_reviewed`
-observations for `SRQ-06`, `SRQ-07`, and `SRQ-10`. Use `docs/runtime-evidence/evidence_manifest.yaml` and
+observations for `SRQ-06`, `SRQ-07`, and `SRQ-10`; the committed `SRQ-11` excerpt is now tracked as explicit fail
+evidence after the shallow forbidden collision was narrowed. Use `docs/runtime-evidence/evidence_manifest.yaml` and
 `scripts/srq_coverage_report.py` for the current machine-readable status.
 
 ## Scope
@@ -27,7 +28,7 @@ Expected current triage:
 | `SRQ-06` | `ready` | `pass` | Current committed excerpt passes local exact alias-group replay; no new runtime run or platform-status change. |
 | `SRQ-07` | `ready` | `pass` | Current committed excerpt passes local exact alias-group replay; no new runtime run or platform-status change. |
 | `SRQ-10` | `ready` | `pass` | Current committed excerpt passes local exact alias-group replay; no new runtime run or platform-status change. |
-| `SRQ-11` | `manual_review_required` | `manual_review_required` | Confirm fixture sample review exists, but do not treat it as standalone runtime answer evidence. |
+| `SRQ-11` | `fail` | `fail` | Current committed excerpt no longer hits the `性相成立` heading collision, but still fails missing explicit defining-mark boundary slots; no new runtime run or platform-status change. |
 
 ## Global Rules
 
@@ -163,10 +164,11 @@ python scripts\reasoning_contract_runner.py --query-id SRQ-11 --json
 
 Reviewer must decide:
 
-- The manifest currently points to fixture sample review, not standalone runtime answer evidence.
-- Is there a committed standalone runtime answer excerpt for `SRQ-11`?
-- If yes, does it pass direct `SRQ-11` contract review as an `answer_file`?
-- If no, keep `manual_review_required`.
+- Historical note: the original handoff only saw fixture sample review, not standalone runtime answer evidence.
+- Current note: a committed standalone runtime answer excerpt exists and remains `fail` after the shallow heading
+  collision is cleared.
+- Future reviewer task: decide whether a later prompt or answer-contract change can make the defining-mark boundary
+  terms explicit without turning local replay into runtime pass evidence.
 
 Do not treat the 2026-07-17 reasoning answer review batch as runtime pass.
 

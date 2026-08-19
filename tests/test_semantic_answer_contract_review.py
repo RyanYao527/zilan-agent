@@ -499,6 +499,24 @@ def test_answer_contract_review_passes_for_collected_topics_definition_scope_sam
     assert result["reviews"][0]["present_forbidden_terms"] == []
 
 
+def test_answer_contract_review_srq11_runtime_spot_clears_heading_collision_but_keeps_boundary_fail() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-11",
+        answer_file=ROOT / "docs/runtime-evidence/2026-08-19-claude-code-srq-11-runtime-spot-answer.md",
+    )
+
+    assert result["overall_status"] == "fail"
+    review = result["reviews"][0]
+    assert review["present_forbidden_terms"] == []
+    assert review["missing_required_terms"] == [
+        "性相过宽",
+        "唯在所表上成立",
+        "违②",
+    ]
+    assert review["missing_required_slots"] == ["definiendum_boundary"]
+
+
 def test_answer_contract_review_fails_for_collected_topics_definition_scope_negative_sample() -> None:
     result = build_answer_contract_review(
         DEFAULT_FIXTURE,
@@ -513,7 +531,7 @@ def test_answer_contract_review_fails_for_collected_topics_definition_scope_nega
     assert "唯在所表上成立" in result["reviews"][0]["missing_required_terms"]
     assert result["reviews"][0]["present_forbidden_terms"] == [
         "能盛水者就是瓶",
-        "性相成立",
+        "这个性相成立",
         "不需要反例",
     ]
     assert result["reviews"][0]["missing_required_slots"] == [

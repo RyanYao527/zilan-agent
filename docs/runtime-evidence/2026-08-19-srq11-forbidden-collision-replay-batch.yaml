@@ -1,0 +1,5 @@
+version: 1
+reviews:
+  - id: 2026-08-19-srq11-definition-forbidden-collision-replay
+    query_id: SRQ-11
+    answer_file: docs/runtime-evidence/2026-08-19-claude-code-srq-11-runtime-spot-answer.md
