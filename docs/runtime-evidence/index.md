@@ -88,6 +88,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-19-srq04-manual-collation-boundary-closeout.md` | consolidated `SRQ-04` manual XML-P5 collation boundary map for anchor-located, limited theme-parallel, and still-unreviewed source-dependence/publication claims | summary-only manual collation boundary note; not runtime answer evidence, not an `answer_file`, and still `manual_review_required` |
 | `2026-08-19-srq11-definition-runtime-rerun.md` | bounded Claude Code runtime rerun attempt after `SRQ-11` definition-boundary prompt hardening | summary-only blocked note; no answer excerpt was produced because the local Claude Code custom DeepSeek model setting was rejected, so runtime remains pending |
 | `2026-08-19-srq11-definition-prompt-hardening-local-replay.md` | local prompt-invariant evidence for `SRQ-11` definition-boundary slots | summary-only prompt-prepared note; existing committed `SRQ-11` runtime answer remains fail and a new runtime rerun is pending |
 | `2026-08-19-srq11-forbidden-collision-replay.md` | local replay over committed direct `SRQ-11` runtime answer excerpt after narrowing the shallow forbidden collision | summary-only replay note; current calibrated batch remains fail for `SRQ-11`; not a new runtime run or platform validation evidence |
