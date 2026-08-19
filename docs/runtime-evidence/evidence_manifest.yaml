@@ -373,6 +373,20 @@ entries:
         status: runtime_pending
         notes: Bounded Claude Code runtime rerun attempt was blocked before answer generation by the local custom DeepSeek Anthropic-compatible model setting `deepseek-v4-pro[1m]`; no answer excerpt or runtime pass was produced.
 
+  - id: 2026-08-19-srq11-zz-claude-code-route-preflight-local
+    file: docs/runtime-evidence/2026-08-19-claude-code-route-preflight-local.md
+    date: "2026-08-19"
+    evidence_class: provider_smoke
+    related_cases:
+      - SRQ-11
+      - ZR-12
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-11
+        status: runtime_pending
+        notes: Local Claude Code route preflight confirms the CLI is present but the current custom DeepSeek Anthropic-compatible model `deepseek-v4-pro[1m]` is tied to an observed unrecognized-model blocker; no provider call, answer excerpt, or runtime pass was produced.
+
   - id: 2026-08-19-srq11-forbidden-collision-replay
     file: docs/runtime-evidence/2026-08-19-srq11-forbidden-collision-replay-batch.yaml
     date: "2026-08-19"
