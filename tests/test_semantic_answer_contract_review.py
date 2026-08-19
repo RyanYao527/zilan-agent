@@ -580,6 +580,29 @@ def test_answer_contract_review_passes_for_cognitive_caregiving_boundary_sample(
     assert result["reviews"][0]["present_forbidden_terms"] == []
 
 
+def test_answer_contract_review_passes_for_srq10_runtime_spot_after_cognitive_alias_calibration() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-10",
+        answer_file=ROOT / "docs/runtime-evidence/2026-08-19-claude-code-srq-10-runtime-spot-answer.md",
+    )
+
+    assert result["overall_status"] == "pass"
+    review = result["reviews"][0]
+    assert review["missing_required_terms"] == []
+    assert review["missing_required_term_groups"] == []
+    assert review["missing_required_slots"] == []
+    assert review["present_forbidden_terms"] == []
+    matched_by_label = {
+        group["label"]: group["matched_terms"]
+        for group in review["required_term_groups"]
+    }
+    assert matched_by_label["attribution_error_surface"] == ["错误地投射"]
+    assert matched_by_label["motive_inference_surface"] == ["他人心相续里的动机", "间接推断"]
+    assert matched_by_label["affliction_surface"] == ["厌烦", "反向攻击"]
+    assert matched_by_label["non_harm_surface"] == ['不把对方固化成一个"敌人"标签']
+
+
 def test_answer_contract_review_fails_for_cognitive_caregiving_boundary_negative_sample() -> None:
     result = build_answer_contract_review(
         DEFAULT_FIXTURE,
@@ -591,7 +614,12 @@ def test_answer_contract_review_fails_for_cognitive_caregiving_boundary_negative
     assert result["expected_status"] == "fail"
     assert result["expected_status_match"] is True
     assert "心类学" in result["reviews"][0]["missing_required_terms"]
-    assert "错误归因" in result["reviews"][0]["missing_required_terms"]
+    assert result["reviews"][0]["missing_required_term_groups"] == [
+        "attribution_error_surface",
+        "motive_inference_surface",
+        "affliction_surface",
+        "non_harm_surface",
+    ]
     assert result["reviews"][0]["present_forbidden_terms"] == [
         "对方一定故意",
         "直接压下愤怒",

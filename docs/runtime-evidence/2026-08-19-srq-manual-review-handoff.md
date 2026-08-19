@@ -6,6 +6,10 @@ This handoff is for human review of conservative evidence gaps surfaced by
 The completed reviewer note for this handoff is
 `docs/runtime-evidence/2026-08-19-srq-manual-review-note.md`.
 
+Later committed standalone answer excerpts and exact alias-group replays supersede the original `not_reviewed`
+observations for `SRQ-06`, `SRQ-07`, and `SRQ-10`. Use `docs/runtime-evidence/evidence_manifest.yaml` and
+`scripts/srq_coverage_report.py` for the current machine-readable status.
+
 ## Scope
 
 Run the local coverage report first:
@@ -20,9 +24,9 @@ Expected current triage:
 | Case | Coverage status | Runtime evidence status | Reviewer task |
 | --- | --- | --- | --- |
 | `SRQ-04` | `manual_review_required` | `pass`, `fail_expected`, `manual_review_required` | Review manual XML-P5 collation notes and confirm the semantic boundary is limited theme-parallel evidence, not textual equivalence or runtime pass. |
-| `SRQ-06` | `manual_review_required` | `not_reviewed` | Check whether any standalone runtime answer excerpt exists; if not, keep `not_reviewed`. |
-| `SRQ-07` | `manual_review_required` | `not_reviewed` | Check whether any standalone runtime answer excerpt exists; if not, keep `not_reviewed`. |
-| `SRQ-10` | `manual_review_required` | `not_reviewed` | Check whether any standalone runtime answer excerpt exists; if not, keep `not_reviewed`. |
+| `SRQ-06` | `ready` | `pass` | Current committed excerpt passes local exact alias-group replay; no new runtime run or platform-status change. |
+| `SRQ-07` | `ready` | `pass` | Current committed excerpt passes local exact alias-group replay; no new runtime run or platform-status change. |
+| `SRQ-10` | `ready` | `pass` | Current committed excerpt passes local exact alias-group replay; no new runtime run or platform-status change. |
 | `SRQ-11` | `manual_review_required` | `manual_review_required` | Confirm fixture sample review exists, but do not treat it as standalone runtime answer evidence. |
 
 ## Global Rules

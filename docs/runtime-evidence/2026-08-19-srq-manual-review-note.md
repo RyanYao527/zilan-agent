@@ -9,6 +9,10 @@ as an `answer_file`, and does not change platform validation status.
 
 This record responds to `docs/runtime-evidence/2026-08-19-srq-manual-review-handoff.md`.
 
+Postscript: later committed standalone answer excerpts and exact alias-group replays supersede the original
+`not_reviewed` observations for `SRQ-06`, `SRQ-07`, and `SRQ-10`. This note remains a historical review record, not
+current machine-readable status.
+
 ## Commands run
 
 - `python scripts\srq_coverage_report.py` (text) — triage matches the handoff expectation:
@@ -59,8 +63,8 @@ This record responds to `docs/runtime-evidence/2026-08-19-srq-manual-review-hand
 - SRQ-07: **Keep `not_reviewed`.** Manifest has zero entries. The 2026-07-02 boundary-fix
   spot review kept raw JSON and answer Markdown local-only under `C:\tmp\...`; nothing
   committed qualifies as a standalone answer excerpt.
-- SRQ-10: **Keep `not_reviewed`.** Only entry is `2026-08-18-srq10-runtime-evidence-not-reviewed`
-  (`summary_only`, status `not_reviewed`, pointing at `index.md`). No standalone excerpt exists.
+- SRQ-10: **Historical decision was `not_reviewed`.** Later committed standalone runtime answer evidence and exact
+  alias-group replay supersede this observation; use `evidence_manifest.yaml` for current status.
 - SRQ-11: **Keep `manual_review_required`.** Only entry is
   `2026-08-18-srq11-runtime-evidence-manual-review` (`batch_manifest`, status
   `manual_review_required`), which points to the 2026-07-17 reasoning answer review batch —
@@ -81,9 +85,9 @@ This record responds to `docs/runtime-evidence/2026-08-19-srq-manual-review-hand
 
 - No `docs/platform-validation.md` change.
 - No `agents/openai.yaml` change.
-- Final disposition: SRQ-04 = manual review required; SRQ-06/07/10 = not reviewed;
-  SRQ-11 = manual review required. No runtime pass or runtime fail is claimed for any
-  scoped case.
+- Historical final disposition: SRQ-04 = manual review required; SRQ-06/07/10 = not reviewed;
+  SRQ-11 = manual review required. Later evidence manifest entries now carry current status for `SRQ-06`, `SRQ-07`,
+  and `SRQ-10` without changing platform validation status.
 
 ## Limits / blockers
 

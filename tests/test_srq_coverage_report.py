@@ -87,12 +87,26 @@ def test_srq_coverage_report_groups_runtime_status_by_evidence_class() -> None:
 
     srq10 = _case_by_id(report, "SRQ-10")
     runtime_evidence = srq10["runtime_evidence"]
-    assert runtime_evidence["status_by_evidence_class"]["standalone_answer_excerpt"] == ["fail"]
+    assert srq10["coverage_status"] == "ready"
+    assert runtime_evidence["status_by_evidence_class"]["standalone_answer_excerpt"] == ["pass"]
     assert "not_reviewed" in runtime_evidence["status_by_evidence_class"]["summary_only"]
+
+    srq11 = _case_by_id(report, "SRQ-11")
+    assert srq11["coverage_status"] == "partial"
+    assert srq11["runtime_evidence"]["status_by_evidence_class"]["standalone_answer_excerpt"] == ["fail"]
 
     srq04 = _case_by_id(report, "SRQ-04")
     srq04_runtime = srq04["runtime_evidence"]
     assert srq04_runtime["status_by_evidence_class"]["manual_collation"] == ["manual_review_required"]
+
+
+def test_srq_coverage_report_preserves_hash_prefixed_manifest_note_text() -> None:
+    report = build_srq_coverage_report(ROOT)
+
+    srq10 = _case_by_id(report, "SRQ-10")
+    latest_entry = srq10["runtime_evidence"]["latest_entry"]
+
+    assert "#193 recorded the pre-calibration literal misses" in latest_entry["notes"]
 
 
 def test_srq_coverage_report_falls_back_to_markdown_index_when_manifest_missing() -> None:
