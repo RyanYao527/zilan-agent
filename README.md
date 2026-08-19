@@ -48,6 +48,11 @@ cp zilan-agent/agents/zilan-claude-code.md ~/.claude/agents/zilan.md
 terms, forbidden phrases, and boundary slots. Zilan's Buddhist fixtures are the flagship domain, not a limitation of
 the pattern. It is not an LLM judge and does not claim semantic grading.
 
+The developer-facing method is documented in
+[`docs/architecture/zilan-reliability-pattern.md`](docs/architecture/zilan-reliability-pattern.md): `zilan_contract`
+defines deterministic output checks, `evidence_manifest.yaml` records machine-readable evidence, and
+`scripts/srq_coverage_report.py` turns them into local triage without provider calls or platform-status changes.
+
 ### The hard problem · 要解决的问题
 
 LLMs in specialized domains drift: they drop critical terms, overclaim certainty, or blur safety boundaries. Most projects respond with "better prompts + human review." zilan-agent takes a different approach.
