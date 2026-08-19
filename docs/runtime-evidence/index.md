@@ -25,9 +25,10 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Report | Inputs | Status | Notes |
 |---|---|---|---|
+| `2026-08-19-srq11-forbidden-collision-replay.md` | Replays the committed 2026-08-19 direct `SRQ-11` runtime answer excerpt after narrowing the shallow forbidden term collision | fail | Collision with heading `性相成立的标准` is cleared; `SRQ-11` still fails missing `性相过宽`, `唯在所表上成立`, `违②`, and `definiendum_boundary`. |
 | `2026-08-19-srq10-contract-calibration-replay.md` | Replays the committed 2026-08-19 direct `SRQ-10` runtime answer excerpt after exact alias-group contract calibration | pass | `SRQ-10` passes the current calibrated answer contract; no new provider call, runtime rerun, prompt change, or platform-status change. |
 | `2026-08-19-srq06-srq07-contract-calibration-replay.md` | Replays the committed 2026-08-19 direct `SRQ-06` and `SRQ-07` runtime answer excerpts after exact alias-group contract calibration | pass | `SRQ-06` / `SRQ-07` pass the current calibrated answer contracts; no new provider call, runtime rerun, prompt change, or platform-status change. |
-| `2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review.md` | Reviews 2026-08-19 Claude Code direct runtime spot answers for `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` | partial | Original #193 evidence recorded four strict literal fails; current calibrated replay reports `SRQ-06` / `SRQ-07` / `SRQ-10` pass and keeps `SRQ-11` fail. |
+| `2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review.md` | Reviews 2026-08-19 Claude Code direct runtime spot answers for `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` | partial | Original #193 evidence recorded four strict literal fails; current calibrated replay reports `SRQ-06` / `SRQ-07` / `SRQ-10` pass and keeps `SRQ-11` fail without the earlier heading collision. |
 | `2026-08-10-zc-05-broad-runtime-rerun.md` | Reviews the 2026-08-10 Claude Code broad `ZC-05` runtime rerun answer against `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | pass | Confirms the new broad answer preserves the integrated no-self, prasaṅga, Agama, and nihilism-boundary slots; no provider calls through native harnesses or platform-status changes. |
 | `2026-08-10-cbeta-anchor-parallel-local-replay.md` | Replays committed broad `ZC-05` evidence while recording local CBETA XML anchor probes and a high-value no-self candidate map | pass / fail expected | Confirms `SRQ-01` / `SRQ-04` still pass for the current broad spot excerpt, `SRQ-03` / `SRQ-08` remain runtime pending, and collation aids are local-only; no provider calls or platform-status changes. |
 | `2026-08-07-zc05-srq03-srq08-local-replay.md` | Replays committed broad `ZC-05` excerpts plus `SRQ-03` / `SRQ-08` fixture samples after second-round prompt hardening | pass / fail expected | Confirms the local contracts and prompt invariants can see the target `不立自宗`, `二谛`, and `proposition_decomposition` gaps; no provider calls or platform-status changes. |
@@ -40,6 +41,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Batch | Manifest | Inputs | Status | Notes |
 |---|---|---|---|---|
+| 2026-08-19 SRQ-11 forbidden collision replay | `2026-08-19-srq11-forbidden-collision-replay-batch.yaml` | committed Claude Code direct runtime spot answer for `SRQ-11` | fail | `pass=0`, `fail=1`; collision with heading `性相成立的标准` is cleared, but explicit defining-mark boundary terms remain missing. |
 | 2026-08-19 SRQ-10 contract calibration replay | `2026-08-19-srq10-contract-calibration-replay-batch.yaml` | committed Claude Code direct runtime spot answer for `SRQ-10` | pass | `pass=1`, `fail=0`; local replay only, using exact alias groups and keeping platform status unchanged. |
 | 2026-08-19 SRQ-06/SRQ-07 contract calibration replay | `2026-08-19-srq06-srq07-contract-calibration-replay-batch.yaml` | committed Claude Code direct runtime spot answers for `SRQ-06` and `SRQ-07` | pass | `pass=2`, `fail=0`; local replay only, using exact alias groups and keeping platform status unchanged. |
 | 2026-08-19 SRQ-06/SRQ-07/SRQ-10/SRQ-11 runtime spot review | `2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml` | Claude Code direct runtime spot answers for `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` | partial | Original #193 strict-literal snapshot was `pass=0`, `fail=4`; current calibrated replay is `pass=3`, `fail=1`, with `SRQ-11` still failing. |
@@ -58,7 +60,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 | `2026-08-19-claude-code-srq-06-runtime-spot-answer.md` | direct `SRQ-06` Claude Code spot | `SRQ-06` | 2026-08-19 SRQ runtime spot review; contract calibration replay | current calibrated replay pass via exact alias `无法决定`; original #193 strict-literal note recorded missing `不能决定` |
 | `2026-08-19-claude-code-srq-07-runtime-spot-answer.md` | direct `SRQ-07` Claude Code spot | `SRQ-07` | 2026-08-19 SRQ runtime spot review; contract calibration replay | current calibrated replay pass via exact alias `总与别`; original #193 strict-literal note recorded missing `摄类学` |
 | `2026-08-19-claude-code-srq-10-runtime-spot-answer.md` | direct `SRQ-10` Claude Code spot | `SRQ-10` | 2026-08-19 SRQ runtime spot review; contract calibration replay | current calibrated replay pass via exact cognitive-analysis alias groups; original #193 strict-literal note recorded missing explicit cognitive and corrective-factor terms |
-| `2026-08-19-claude-code-srq-11-runtime-spot-answer.md` | direct `SRQ-11` Claude Code spot | `SRQ-11` | 2026-08-19 SRQ runtime spot review | fail; missing defining-mark boundary terms and includes a shallow forbidden phrase collision |
+| `2026-08-19-claude-code-srq-11-runtime-spot-answer.md` | direct `SRQ-11` Claude Code spot | `SRQ-11` | 2026-08-19 SRQ runtime spot review; forbidden collision replay | fail; heading collision cleared, but still missing explicit defining-mark boundary terms |
 | `2026-08-10-claude-code-zc-05-broad-runtime-rerun-answer.md` | broad `ZC-05` after CBETA anchor and parallel-candidate preflight merge | `SRQ-01`, `SRQ-03`, `SRQ-04`, `SRQ-08` | 2026-08-10 ZC-05 broad runtime rerun | pass for all four reviewed contracts |
 | `2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md` | broad `ZC-05` after 2026-08-06 minimum-template prompt hardening | `SRQ-01`, `SRQ-03`, `SRQ-04`, `SRQ-08` | ZC-05 SRQ-01 runtime spot review; SRQ-01 contract calibration replay | current direct `SRQ-01` pass after calibration; historical batch still records `SRQ-03` and `SRQ-08` fails |
 | `2026-07-14-claude-code-srq-04-agama-boundary-spot-answer.md` | direct `SRQ-04` Agama spot review | `SRQ-04` | compact ZC-04 progression | pass |
@@ -86,6 +88,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-19-srq11-forbidden-collision-replay.md` | local replay over committed direct `SRQ-11` runtime answer excerpt after narrowing the shallow forbidden collision | summary-only replay note; current calibrated batch remains fail for `SRQ-11`; not a new runtime run or platform validation evidence |
 | `2026-08-19-srq10-contract-calibration-replay.md` | local replay over committed direct `SRQ-10` runtime answer excerpt after exact alias-group contract calibration | summary-only replay note; current calibrated batch pass for `SRQ-10`; not a new runtime run or platform validation evidence |
 | `2026-08-19-srq06-srq07-contract-calibration-replay.md` | local replay over committed direct `SRQ-06` and `SRQ-07` runtime answer excerpts after exact alias-group contract calibration | summary-only replay note; current calibrated batch pass for `SRQ-06` / `SRQ-07`; not a new runtime run or platform validation evidence |
 | `2026-08-19-pr-193-manual-review.md` | manual blocker scan and merge-readiness note for PR #193 | summary-only PR review; recommends converting #193 from Draft to Ready and squash merging when checks remain green; not runtime answer evidence, not provider validation evidence, and not platform-status evidence |
@@ -136,6 +139,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 Use batch manifests for grouped review:
 
 ```powershell
+python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-19-srq11-forbidden-collision-replay-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-19-srq10-contract-calibration-replay-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-19-srq06-srq07-contract-calibration-replay-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-10-zc-05-broad-runtime-rerun-batch.yaml

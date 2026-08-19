@@ -255,6 +255,12 @@ def test_dry_run_returns_collected_topics_definition_scope_fixture_for_srq11() -
         "违②",
         "不成立",
     ]
+    assert result["answer_contracts"]["collected_topics_definition_scope_error"]["forbidden_terms"] == [
+        "能盛水者就是瓶",
+        "这个性相成立",
+        "不需要反例",
+        "湖也是瓶",
+    ]
     assert result["answer_contract_samples"] == [
         {
             "id": "srq11-collected-topics-definition-scope-pass",

@@ -357,7 +357,37 @@ entries:
       - query_id: SRQ-11
         status: fail
         source_file: docs/runtime-evidence/2026-08-19-claude-code-srq-11-runtime-spot-answer.md
-        notes: Standalone Claude Code answer excerpt failed strict SRQ-11 answer contract on missing defining-mark boundary terms and a shallow forbidden phrase collision.
+        notes: Current calibrated replay no longer treats the heading `性相成立的标准` as forbidden, but the standalone answer excerpt still fails on missing `性相过宽`, `唯在所表上成立`, `违②`, and `definiendum_boundary`.
+
+  - id: 2026-08-19-srq11-forbidden-collision-replay
+    file: docs/runtime-evidence/2026-08-19-srq11-forbidden-collision-replay-batch.yaml
+    date: "2026-08-19"
+    evidence_class: batch_manifest
+    related_cases:
+      - SRQ-11
+      - ZR-12
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-11
+        status: fail
+        batch: docs/runtime-evidence/2026-08-19-srq11-forbidden-collision-replay-batch.yaml
+        notes: Local replay confirms the shallow `性相成立` heading collision is cleared, while the committed answer still fails missing explicit defining-mark boundary surfaces; not a new provider call.
+
+  - id: 2026-08-19-srq11-forbidden-collision-replay-note
+    file: docs/runtime-evidence/2026-08-19-srq11-forbidden-collision-replay.md
+    date: "2026-08-19"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-11
+      - ZR-12
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-11
+        status: fail
+        batch: docs/runtime-evidence/2026-08-19-srq11-forbidden-collision-replay-batch.yaml
+        notes: Summary-only replay note; the answer excerpt remains the standalone runtime answer file, and the note itself must not be used as an answer_file.
 
   - id: 2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review
     file: docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review.md
@@ -390,7 +420,7 @@ entries:
       - query_id: SRQ-11
         status: fail
         batch: docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml
-        notes: Claude Code SRQ-11 runtime spot failed strict answer-contract review on missing defining-mark boundary terms and a shallow forbidden phrase collision.
+        notes: Current calibrated replay clears the shallow `性相成立` heading collision but still fails on missing explicit defining-mark boundary surfaces.
 
   - id: 2026-08-19-srq10-contract-calibration-replay
     file: docs/runtime-evidence/2026-08-19-srq10-contract-calibration-replay-batch.yaml

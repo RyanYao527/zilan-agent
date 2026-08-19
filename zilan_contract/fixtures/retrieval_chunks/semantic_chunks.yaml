@@ -971,7 +971,7 @@ queries:
               - 不成立
         forbidden_terms:
           - 能盛水者就是瓶
-          - 性相成立
+          - 这个性相成立
           - 不需要反例
           - 湖也是瓶
     answer_contract_samples:

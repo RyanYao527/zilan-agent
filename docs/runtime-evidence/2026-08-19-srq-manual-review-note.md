@@ -10,8 +10,9 @@ as an `answer_file`, and does not change platform validation status.
 This record responds to `docs/runtime-evidence/2026-08-19-srq-manual-review-handoff.md`.
 
 Postscript: later committed standalone answer excerpts and exact alias-group replays supersede the original
-`not_reviewed` observations for `SRQ-06`, `SRQ-07`, and `SRQ-10`. This note remains a historical review record, not
-current machine-readable status.
+`not_reviewed` observations for `SRQ-06`, `SRQ-07`, and `SRQ-10`; later `SRQ-11` collision replay supersedes the
+original `manual_review_required` observation with explicit fail evidence. This note remains a historical review
+record, not current machine-readable status.
 
 ## Commands run
 
@@ -65,11 +66,12 @@ current machine-readable status.
   committed qualifies as a standalone answer excerpt.
 - SRQ-10: **Historical decision was `not_reviewed`.** Later committed standalone runtime answer evidence and exact
   alias-group replay supersede this observation; use `evidence_manifest.yaml` for current status.
-- SRQ-11: **Keep `manual_review_required`.** Only entry is
+- SRQ-11: **Historical decision was `manual_review_required`.** Only entry at the time was
   `2026-08-18-srq11-runtime-evidence-manual-review` (`batch_manifest`, status
   `manual_review_required`), which points to the 2026-07-17 reasoning answer review batch —
   a fixture-sample review, not standalone runtime answer evidence. The 2026-07-13 SRQ-11 spot
-  review also kept its raw answer local-only; no committed standalone excerpt exists.
+  review also kept its raw answer local-only. Later committed standalone runtime answer evidence and forbidden
+  collision replay supersede this observation; use `evidence_manifest.yaml` for current status.
 
 ## Evidence recommendation
 
@@ -87,7 +89,7 @@ current machine-readable status.
 - No `agents/openai.yaml` change.
 - Historical final disposition: SRQ-04 = manual review required; SRQ-06/07/10 = not reviewed;
   SRQ-11 = manual review required. Later evidence manifest entries now carry current status for `SRQ-06`, `SRQ-07`,
-  and `SRQ-10` without changing platform validation status.
+  `SRQ-10`, and `SRQ-11` without changing platform validation status.
 
 ## Limits / blockers
 
@@ -95,8 +97,9 @@ current machine-readable status.
   embeddings, or vector search were used, per handoff rules.
 - Manual collation remains limited to theme-parallel relations between committed CBETA
   XML-P5 spans; parallel-text, Pali/Sanskrit, and variant-witness collation remain pending.
-- Any future status change for SRQ-06/07/10/11 requires a newly captured standalone answer
-  excerpt reviewed via `semantic_answer_contract_review.py --answer-file`.
+- Any future pass-status change for SRQ-06/07/10/11 requires a committed standalone answer
+  excerpt reviewed via `semantic_answer_contract_review.py --answer-file`; local replay must remain labeled as local
+  replay rather than a new runtime run.
 - Working tree note: the handoff attachment was copied into
   `docs/runtime-evidence/2026-08-19-srq-manual-review-handoff.md` (untracked) together with
   this note; neither file alters manifest or platform status.

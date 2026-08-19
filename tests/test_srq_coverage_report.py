@@ -92,8 +92,9 @@ def test_srq_coverage_report_groups_runtime_status_by_evidence_class() -> None:
     assert "not_reviewed" in runtime_evidence["status_by_evidence_class"]["summary_only"]
 
     srq11 = _case_by_id(report, "SRQ-11")
-    assert srq11["coverage_status"] == "partial"
+    assert srq11["coverage_status"] == "fail"
     assert srq11["runtime_evidence"]["status_by_evidence_class"]["standalone_answer_excerpt"] == ["fail"]
+    assert report["summary"]["coverage_status_counts"]["fail"] == 1
 
     srq04 = _case_by_id(report, "SRQ-04")
     srq04_runtime = srq04["runtime_evidence"]
@@ -127,6 +128,7 @@ def test_srq_coverage_markdown_contains_limitations_and_manual_review_language()
     assert "# SRQ/ZR Evidence Coverage Report" in markdown
     assert "## Limitations" in markdown
     assert "manual review required" in markdown
+    assert "| SRQ-11 | `fail`" in markdown
     assert "standalone_answer_excerpt: fail" in markdown
     assert "manual_collation: manual_review_required" in markdown
     assert "does not change platform validation status" in markdown
