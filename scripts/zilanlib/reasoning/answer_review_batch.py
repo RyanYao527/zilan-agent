@@ -139,6 +139,7 @@ def _compact_review(review_id: str, review: dict[str, Any]) -> dict[str, Any]:
         "missing_needs": role_summary["missing_needs"],
         "contract_status": contract_summary["status"],
         "missing_required_terms": contract_summary["missing_required_terms"],
+        "missing_required_term_groups": contract_summary["missing_required_term_groups"],
         "present_forbidden_terms": contract_summary["present_forbidden_terms"],
         "missing_required_slots": contract_summary["missing_required_slots"],
         "answer_validator_alignment_status": alignment_summary["status"],
@@ -194,7 +195,11 @@ def _render_batch_text(result: dict[str, Any]) -> str:
     ]
     for review in result["reviews"]:
         lines.append(f"- {review['id']}: {review['overall_status']} ({review['query_id']})")
-        missing = review["missing_required_terms"] + review["missing_required_slots"]
+        missing = (
+            review["missing_required_terms"]
+            + review["missing_required_term_groups"]
+            + review["missing_required_slots"]
+        )
         if missing:
             lines.append(f"  missing: {', '.join(missing)}")
         if review["missing_needs"]:

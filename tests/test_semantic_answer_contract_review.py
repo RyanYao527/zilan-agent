@@ -399,12 +399,30 @@ def test_answer_contract_review_fails_for_hetuvidya_indeterminate_negative_sampl
     assert result["expected_status"] == "fail"
     assert result["expected_status_match"] is True
     assert "不定因" in result["reviews"][0]["missing_required_terms"]
-    assert "不能决定" in result["reviews"][0]["missing_required_terms"]
+    assert "indeterminate_resolution" in result["reviews"][0]["missing_required_term_groups"]
     assert result["reviews"][0]["present_forbidden_terms"] == ["因三相完全满足", "正因成立"]
     assert result["reviews"][0]["missing_required_slots"] == [
         "subject_check",
         "error_classification",
     ]
+
+
+def test_answer_contract_review_passes_for_srq06_runtime_spot_with_cannot_decide_alias() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-06",
+        answer_file=ROOT
+        / "docs"
+        / "runtime-evidence"
+        / "2026-08-19-claude-code-srq-06-runtime-spot-answer.md",
+    )
+
+    assert result["overall_status"] == "pass"
+    review = result["reviews"][0]
+    assert review["missing_required_terms"] == []
+    assert review["missing_required_term_groups"] == []
+    assert review["required_term_groups"][0]["label"] == "indeterminate_resolution"
+    assert review["required_term_groups"][0]["matched_terms"] == ["无法决定"]
 
 
 def test_answer_contract_review_passes_for_collected_topics_total_part_sample() -> None:
@@ -445,6 +463,24 @@ def test_answer_contract_review_fails_for_collected_topics_total_part_negative_s
         "pervasion_check",
         "error_classification",
     ]
+
+
+def test_answer_contract_review_passes_for_srq07_runtime_spot_with_collected_topics_surface_alias() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-07",
+        answer_file=ROOT
+        / "docs"
+        / "runtime-evidence"
+        / "2026-08-19-claude-code-srq-07-runtime-spot-answer.md",
+    )
+
+    assert result["overall_status"] == "pass"
+    review = result["reviews"][0]
+    assert review["missing_required_terms"] == []
+    assert review["missing_required_term_groups"] == []
+    assert review["required_term_groups"][0]["label"] == "collected_topics_surface"
+    assert review["required_term_groups"][0]["matched_terms"] == ["总与别"]
 
 
 def test_answer_contract_review_passes_for_collected_topics_definition_scope_sample() -> None:

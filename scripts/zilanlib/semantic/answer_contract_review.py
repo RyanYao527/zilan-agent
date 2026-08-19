@@ -40,12 +40,20 @@ def _review_contract(contract_id: str, contract: dict[str, Any], answer_text: st
     forbidden_terms = _string_list(contract.get("forbidden_terms"))
     missing_required_terms = [term for term in required_terms if term not in answer_text]
     present_forbidden_terms = [term for term in forbidden_terms if term in answer_text]
+    required_term_groups = _mapping_list(contract.get("required_term_groups"), "required_term_groups")
+    term_group_reviews = [_review_required_term_group(group, answer_text) for group in required_term_groups]
+    missing_required_term_groups = [group["label"] for group in term_group_reviews if group["status"] == "fail"]
     required_slots = _mapping_list(contract.get("required_slots"), "required_slots")
     slot_reviews = [_review_required_slot(slot, answer_text) for slot in required_slots]
     missing_required_slots = [slot["label"] for slot in slot_reviews if slot["status"] == "fail"]
     status = (
         "pass"
-        if not missing_required_terms and not present_forbidden_terms and not missing_required_slots
+        if (
+            not missing_required_terms
+            and not present_forbidden_terms
+            and not missing_required_term_groups
+            and not missing_required_slots
+        )
         else "fail"
     )
 
@@ -55,10 +63,24 @@ def _review_contract(contract_id: str, contract: dict[str, Any], answer_text: st
         "description": contract.get("description", ""),
         "required_terms": required_terms,
         "missing_required_terms": missing_required_terms,
+        "required_term_groups": term_group_reviews,
+        "missing_required_term_groups": missing_required_term_groups,
         "forbidden_terms": forbidden_terms,
         "present_forbidden_terms": present_forbidden_terms,
         "required_slots": slot_reviews,
         "missing_required_slots": missing_required_slots,
+    }
+
+
+def _review_required_term_group(group: dict[str, Any], answer_text: str) -> dict[str, Any]:
+    label = group.get("label", "")
+    terms = _string_list(group.get("terms"))
+    matched_terms = [term for term in terms if term in answer_text]
+    return {
+        "label": label,
+        "terms": terms,
+        "matched_terms": matched_terms,
+        "status": "pass" if matched_terms else "fail",
     }
 
 
@@ -93,6 +115,7 @@ def _render_review_text(result: dict[str, Any]) -> str:
                 f"### {review['contract_id']}: {review['status']}",
                 f"- Description: {review['description']}",
                 f"- Missing required terms: {', '.join(review['missing_required_terms']) or 'none'}",
+                f"- Missing required term groups: {', '.join(review['missing_required_term_groups']) or 'none'}",
                 f"- Present forbidden terms: {', '.join(review['present_forbidden_terms']) or 'none'}",
                 f"- Missing required slots: {', '.join(review.get('missing_required_slots', [])) or 'none'}",
             ]
@@ -133,6 +156,8 @@ def build_answer_contract_review(
                     "description": "",
                     "required_terms": [],
                     "missing_required_terms": ["<invalid contract>"],
+                    "required_term_groups": [],
+                    "missing_required_term_groups": [],
                     "forbidden_terms": [],
                     "present_forbidden_terms": [],
                 }
@@ -206,5 +231,4 @@ def _resolve_answer_source(
         }
 
     raise FixtureError(f"Unknown answer contract sample id for {dry_run['query_id']}: {sample_id}")
-
 

@@ -53,6 +53,21 @@ def test_reasoning_answer_review_summarizes_failed_answer_contract_sample() -> N
     assert "Answer review: fail" in result["review_text"]
 
 
+def test_reasoning_answer_review_summarizes_missing_required_term_groups() -> None:
+    result = build_reasoning_answer_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-06",
+        sample_id="srq06-hetuvidya-indeterminate-fail",
+    )
+
+    assert result["overall_status"] == "fail"
+    assert (
+        "hetuvidya_indeterminate_detection:indeterminate_resolution"
+        in result["contract_summary"]["missing_required_term_groups"]
+    )
+    assert "Required term groups:" in result["review_text"]
+
+
 def test_reasoning_answer_review_marks_missing_answer_as_review_needed() -> None:
     result = build_reasoning_answer_review(DEFAULT_FIXTURE, query_id="SRQ-05")
 

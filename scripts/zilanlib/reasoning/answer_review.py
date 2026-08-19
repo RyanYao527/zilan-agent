@@ -22,12 +22,14 @@ def _contract_summary(answer_contract_review: dict[str, Any] | None, answer_revi
             "status": answer_review_status,
             "contracts": [],
             "missing_required_terms": [],
+            "missing_required_term_groups": [],
             "present_forbidden_terms": [],
             "missing_required_slots": [],
         }
 
     contracts: list[dict[str, Any]] = []
     missing_terms: list[str] = []
+    missing_term_groups: list[str] = []
     forbidden_terms: list[str] = []
     missing_slots: list[str] = []
 
@@ -36,6 +38,7 @@ def _contract_summary(answer_contract_review: dict[str, Any] | None, answer_revi
             continue
         contract_id = str(review.get("contract_id", ""))
         contract_missing_terms = _string_list(review.get("missing_required_terms"))
+        contract_missing_term_groups = _string_list(review.get("missing_required_term_groups"))
         contract_forbidden_terms = _string_list(review.get("present_forbidden_terms"))
         contract_missing_slots = _string_list(review.get("missing_required_slots"))
         contracts.append(
@@ -43,11 +46,13 @@ def _contract_summary(answer_contract_review: dict[str, Any] | None, answer_revi
                 "contract_id": contract_id,
                 "status": review.get("status", "unknown"),
                 "missing_required_terms": contract_missing_terms,
+                "missing_required_term_groups": contract_missing_term_groups,
                 "present_forbidden_terms": contract_forbidden_terms,
                 "missing_required_slots": contract_missing_slots,
             }
         )
         missing_terms.extend(_prefixed(contract_id, contract_missing_terms))
+        missing_term_groups.extend(_prefixed(contract_id, contract_missing_term_groups))
         forbidden_terms.extend(_prefixed(contract_id, contract_forbidden_terms))
         missing_slots.extend(_prefixed(contract_id, contract_missing_slots))
 
@@ -55,6 +60,7 @@ def _contract_summary(answer_contract_review: dict[str, Any] | None, answer_revi
         "status": answer_contract_review.get("overall_status", "unknown"),
         "contracts": contracts,
         "missing_required_terms": missing_terms,
+        "missing_required_term_groups": missing_term_groups,
         "present_forbidden_terms": forbidden_terms,
         "missing_required_slots": missing_slots,
     }
@@ -144,6 +150,7 @@ def _render_review_text(result: dict[str, Any]) -> str:
         "",
         "## Missing Contract Items",
         f"- Required terms: {', '.join(contract_summary['missing_required_terms']) or 'none'}",
+        f"- Required term groups: {', '.join(contract_summary['missing_required_term_groups']) or 'none'}",
         f"- Forbidden terms present: {', '.join(contract_summary['present_forbidden_terms']) or 'none'}",
         f"- Required slots: {', '.join(contract_summary['missing_required_slots']) or 'none'}",
         "",

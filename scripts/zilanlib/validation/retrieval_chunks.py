@@ -275,6 +275,33 @@ def check_answer_contracts(query_id: str, contracts: object, field_name: str, fa
                 f"{RETRIEVAL_CHUNKS_PATH} {query_id} {field_name}.{key}.forbidden_terms "
                 "must be a list when present."
             )
+        required_term_groups = contract.get("required_term_groups", [])
+        if required_term_groups:
+            if not isinstance(required_term_groups, list):
+                failures.append(
+                    f"{RETRIEVAL_CHUNKS_PATH} {query_id} {field_name}.{key}.required_term_groups "
+                    "must be a list when present."
+                )
+            else:
+                for index, group in enumerate(required_term_groups):
+                    if not isinstance(group, dict):
+                        failures.append(
+                            f"{RETRIEVAL_CHUNKS_PATH} {query_id} "
+                            f"{field_name}.{key}.required_term_groups[{index}] must be a mapping."
+                        )
+                        continue
+                    label = group.get("label")
+                    if not isinstance(label, str) or not re.fullmatch(r"[a-z0-9][a-z0-9_]*", label):
+                        failures.append(
+                            f"{RETRIEVAL_CHUNKS_PATH} {query_id} "
+                            f"{field_name}.{key}.required_term_groups[{index}].label must be snake_case."
+                        )
+                    if not is_non_empty_string_list(group.get("terms")):
+                        failures.append(
+                            f"{RETRIEVAL_CHUNKS_PATH} {query_id} "
+                            f"{field_name}.{key}.required_term_groups[{index}].terms "
+                            "must be a non-empty string list."
+                        )
         required_slots = contract.get("required_slots", [])
         if required_slots:
             if not isinstance(required_slots, list):

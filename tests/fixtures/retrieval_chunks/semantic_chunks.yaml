@@ -811,7 +811,11 @@ queries:
           - 所知
           - 常法
           - 无常法
-          - 不能决定
+        required_term_groups:
+          - label: indeterminate_resolution
+            terms:
+              - 不能决定
+              - 无法决定
         required_slots:
           - label: argument_decomposition
             terms:
@@ -831,6 +835,7 @@ queries:
             terms:
               - 不定因
               - 不能决定
+              - 无法决定
         forbidden_terms:
           - 因三相完全满足
           - 正因成立
@@ -865,7 +870,6 @@ queries:
       collected_topics_total_part_error:
         description: "Answer must identify the total/part confusion and failed pervasion from local report issues to whole-person value denial."
         required_terms:
-          - 摄类学
           - 总与别
           - 别法
           - 总法
@@ -876,6 +880,11 @@ queries:
           - 报告
           - 我这个人
           - 不成立
+        required_term_groups:
+          - label: collected_topics_surface
+            terms:
+              - 摄类学
+              - 总与别
         required_slots:
           - label: proposition_decomposition
             terms:

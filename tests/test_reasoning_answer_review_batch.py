@@ -62,9 +62,33 @@ def test_reasoning_answer_review_batch_summarizes_mixed_statuses(tmp_path: Path)
         "case_ids": ["ZR-05"],
     }
     assert "agama_citation_boundary:CBETA" in result["reviews"][1]["missing_required_terms"]
+    assert "missing_required_term_groups" in result["reviews"][1]
     assert result["reviews"][2]["answer_source"] is None
     assert result["reviews"][2]["overall_status"] == "review_needed"
     assert "- agama-fail: fail" in result["review_text"]
+
+
+def test_reasoning_answer_review_batch_summarizes_missing_required_term_groups(tmp_path: Path) -> None:
+    batch_path = tmp_path / "answer-review-batch.yaml"
+    batch_path.write_text(
+        """
+version: 1
+reviews:
+  - id: srq06-negative
+    query_id: SRQ-06
+    sample_id: srq06-hetuvidya-indeterminate-fail
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    result = build_reasoning_answer_review_batch(batch_path)
+
+    assert result["overall_status"] == "fail"
+    assert result["reviews"][0]["missing_required_term_groups"] == [
+        "hetuvidya_indeterminate_detection:indeterminate_resolution"
+    ]
+    assert "hetuvidya_indeterminate_detection:indeterminate_resolution" in result["review_text"]
 
 
 def test_reasoning_answer_review_batch_exposes_answer_validator_alignment_failure(tmp_path: Path) -> None:

@@ -1,0 +1,8 @@
+version: 1
+reviews:
+  - id: 2026-08-19-srq06-hetuvidya-indeterminate-contract-calibration-replay
+    query_id: SRQ-06
+    answer_file: docs/runtime-evidence/2026-08-19-claude-code-srq-06-runtime-spot-answer.md
+  - id: 2026-08-19-srq07-collected-topics-total-part-contract-calibration-replay
+    query_id: SRQ-07
+    answer_file: docs/runtime-evidence/2026-08-19-claude-code-srq-07-runtime-spot-answer.md
