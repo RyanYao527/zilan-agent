@@ -34,7 +34,7 @@ The current conservative interpretation is:
 
 - Claude Code route: validated through Claude Code CLI on 2026-06-12 and rerun successfully on 2026-06-16 after identifying the 2026-06-15 failure as a Windows PowerShell UTF-8 stdin issue; track that separately from native DeepSeek validation.
 - DeepSeek native route: still `config-only` until a native harness or dated provider run exists.
-- DeepSeek Anthropic-compatible route: keep the documented caveat visible if using Claude Code through that compatibility layer.
+- DeepSeek Anthropic-compatible route: keep the documented caveat visible if using Claude Code through that compatibility layer. Use `python scripts\claude_code_route_preflight.py --json` to record local Claude Code route blockers without treating them as native DeepSeek validation.
 
 ## Provider Preflight
 
@@ -43,9 +43,13 @@ Use preflight before any live provider call to confirm the route that will be us
 ```powershell
 python scripts/openai_api_harness.py --preflight --json
 python scripts/openai_api_harness.py --provider-route volcengine_openai_compatible --preflight --json
+python scripts\claude_code_route_preflight.py --json
 ```
 
-Preflight resolves environment overrides, provider-route defaults, endpoint, API surface, and selected key environment variable. It reports only whether the selected key exists, not the key value. Preflight is not live evidence and must not change native OpenAI API or compatible-provider validation status.
+OpenAI harness preflight resolves environment overrides, provider-route defaults, endpoint, API surface, and selected key
+environment variable. Claude Code route preflight reads local Claude settings and reports only sensitive key names as
+present, never secret values. Preflight is not live evidence and must not change native OpenAI API, compatible-provider,
+or Claude Code validation status.
 
 If a preflight result should be kept for handoff or audit, record it as provider/smoke evidence under `docs/runtime-evidence/` and mark it as preflight-only. A preflight record can explain why live validation is not attempted, but it cannot promote a route to `tested`.
 
