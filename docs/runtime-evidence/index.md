@@ -82,6 +82,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-19-pr-193-manual-review.md` | manual blocker scan and merge-readiness note for PR #193 | summary-only PR review; recommends converting #193 from Draft to Ready and squash merging when checks remain green; not runtime answer evidence, not provider validation evidence, and not platform-status evidence |
 | `2026-08-19-za-long-agama-no-self-verse-manual-collation.md` | limited manual XML-P5 review for one cross-Agama `SRQ-04` no-self candidate pair from `T02n0099` / `T01n0001` | summary-only; limited theme parallel, not textual equivalence, source-dependence evidence, runtime answer evidence, or platform validation evidence |
 | `2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review.md` | Claude Code direct runtime spot review for `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` | links standalone answer excerpts; strict answer-contract status fail for all four cases |
 | `2026-08-19-srq-manual-review-note.md` | reviewer record for `SRQ-04`, `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` manifest-facing evidence gaps | summary-only review record; confirms `SRQ-04` remains manual semantic-boundary review, `SRQ-06` / `SRQ-07` / `SRQ-10` remain not reviewed, and `SRQ-11` remains manual review required; not runtime answer evidence or platform validation evidence |
