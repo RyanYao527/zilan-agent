@@ -6,6 +6,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added 2026-08-19 Claude Code direct `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` runtime spot excerpts plus fail evidence, keeping all platform status unchanged.
+- Added a 2026-08-19 limited cross-Agama XML-P5 no-self manual collation note and candidate-map entry for `SRQ-04`, without claiming textual equivalence, source dependence, publication-ready collation, runtime pass, or platform-status changes.
 - Added a 2026-08-19 SRQ manual-review handoff and reviewer note for conservative `SRQ-04`, `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` evidence disposition without provider calls or platform-status changes.
 - Added a machine-readable runtime evidence manifest plus `scripts/srq_coverage_report.py` / `scripts/zilanlib/reasoning/srq_coverage_report.py` for local SRQ/ZR evidence coverage triage without provider calls or platform-status changes.
 - Added `docs/zilan-contract-release-checklist.md` and a domain-neutral 60-second quickstart path clarifying that `zilan_contract` is a deterministic output-contract checker, not an LLM judge or semantic grader.
@@ -33,6 +35,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Changed
 
+- Updated `scripts/srq_coverage_report.py` Markdown and JSON output to group runtime evidence status by evidence class, making standalone answer excerpts, batch manifests, summary notes, and manual collation easier to distinguish.
 - Updated runtime evidence and maintenance documentation to treat `docs/runtime-evidence/index.md` as human navigation and `docs/runtime-evidence/evidence_manifest.yaml` as the machine-readable local evidence index.
 - Refreshed public engineering metrics to the current local baseline of 285 tests, 84% zilanlib coverage, and 65 mypy-checked source files.
 

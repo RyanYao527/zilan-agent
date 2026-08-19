@@ -25,6 +25,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Report | Inputs | Status | Notes |
 |---|---|---|---|
+| `2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review.md` | Reviews 2026-08-19 Claude Code direct runtime spot answers for `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` | fail | Records contract-reviewable standalone answer excerpts for all four cases; each fails strict answer-contract review, so these are fail evidence, not runtime pass evidence. |
 | `2026-08-10-zc-05-broad-runtime-rerun.md` | Reviews the 2026-08-10 Claude Code broad `ZC-05` runtime rerun answer against `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | pass | Confirms the new broad answer preserves the integrated no-self, prasaṅga, Agama, and nihilism-boundary slots; no provider calls through native harnesses or platform-status changes. |
 | `2026-08-10-cbeta-anchor-parallel-local-replay.md` | Replays committed broad `ZC-05` evidence while recording local CBETA XML anchor probes and a high-value no-self candidate map | pass / fail expected | Confirms `SRQ-01` / `SRQ-04` still pass for the current broad spot excerpt, `SRQ-03` / `SRQ-08` remain runtime pending, and collation aids are local-only; no provider calls or platform-status changes. |
 | `2026-08-07-zc05-srq03-srq08-local-replay.md` | Replays committed broad `ZC-05` excerpts plus `SRQ-03` / `SRQ-08` fixture samples after second-round prompt hardening | pass / fail expected | Confirms the local contracts and prompt invariants can see the target `不立自宗`, `二谛`, and `proposition_decomposition` gaps; no provider calls or platform-status changes. |
@@ -37,6 +38,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Batch | Manifest | Inputs | Status | Notes |
 |---|---|---|---|---|
+| 2026-08-19 SRQ-06/SRQ-07/SRQ-10/SRQ-11 runtime spot review | `2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml` | Claude Code direct runtime spot answers for `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` | fail | `pass=0`, `fail=4`; closes earlier not-reviewed ambiguity with fail evidence and keeps platform status unchanged. |
 | 2026-08-10 ZC-05 broad runtime rerun | `2026-08-10-zc-05-broad-runtime-rerun-batch.yaml` | 2026-08-10 Claude Code broad `ZC-05` as `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | pass | `pass=4`, `fail=0`; prompt-hardening follow-up not needed for `SRQ-03` / `SRQ-08` in this run. |
 | 2026-08-06 ZC-05 SRQ-01 runtime spot review | `2026-08-06-zc-05-srq-01-runtime-spot-review-batch.yaml` | 2026-08-06 Claude Code broad `ZC-05` as `SRQ-01`, `SRQ-03`, `SRQ-04`, and `SRQ-08` | partial / fail | After 2026-08-07 contract calibration, `SRQ-01` and `SRQ-04` pass; `SRQ-03` and `SRQ-08` still fail strict answer-contract review. |
 | 2026-08-06 SRQ-01 integrated ZC-05 replay | `2026-08-06-srq-01-zc-05-integrated-contract-replay-batch.yaml` | post-#124 broad `ZC-05` as `SRQ-01` | fail expected | Strict integrated contract replay over existing evidence; records a quality gap, not a platform-status change. |
@@ -49,6 +51,10 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Answer excerpt | Runtime source | Reviewed as | Batch/report | Status |
 |---|---|---|---|---|
+| `2026-08-19-claude-code-srq-06-runtime-spot-answer.md` | direct `SRQ-06` Claude Code spot | `SRQ-06` | 2026-08-19 SRQ runtime spot review | fail; missing literal `不能决定` |
+| `2026-08-19-claude-code-srq-07-runtime-spot-answer.md` | direct `SRQ-07` Claude Code spot | `SRQ-07` | 2026-08-19 SRQ runtime spot review | fail; missing literal `摄类学` |
+| `2026-08-19-claude-code-srq-10-runtime-spot-answer.md` | direct `SRQ-10` Claude Code spot | `SRQ-10` | 2026-08-19 SRQ runtime spot review | fail; missing explicit cognitive and corrective-factor terms |
+| `2026-08-19-claude-code-srq-11-runtime-spot-answer.md` | direct `SRQ-11` Claude Code spot | `SRQ-11` | 2026-08-19 SRQ runtime spot review | fail; missing defining-mark boundary terms and includes a shallow forbidden phrase collision |
 | `2026-08-10-claude-code-zc-05-broad-runtime-rerun-answer.md` | broad `ZC-05` after CBETA anchor and parallel-candidate preflight merge | `SRQ-01`, `SRQ-03`, `SRQ-04`, `SRQ-08` | 2026-08-10 ZC-05 broad runtime rerun | pass for all four reviewed contracts |
 | `2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md` | broad `ZC-05` after 2026-08-06 minimum-template prompt hardening | `SRQ-01`, `SRQ-03`, `SRQ-04`, `SRQ-08` | ZC-05 SRQ-01 runtime spot review; SRQ-01 contract calibration replay | current direct `SRQ-01` pass after calibration; historical batch still records `SRQ-03` and `SRQ-08` fails |
 | `2026-07-14-claude-code-srq-04-agama-boundary-spot-answer.md` | direct `SRQ-04` Agama spot review | `SRQ-04` | compact ZC-04 progression | pass |
@@ -76,6 +82,9 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-19-pr-193-manual-review.md` | manual blocker scan and merge-readiness note for PR #193 | summary-only PR review; recommends converting #193 from Draft to Ready and squash merging when checks remain green; not runtime answer evidence, not provider validation evidence, and not platform-status evidence |
+| `2026-08-19-za-long-agama-no-self-verse-manual-collation.md` | limited manual XML-P5 review for one cross-Agama `SRQ-04` no-self candidate pair from `T02n0099` / `T01n0001` | summary-only; limited theme parallel, not textual equivalence, source-dependence evidence, runtime answer evidence, or platform validation evidence |
+| `2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review.md` | Claude Code direct runtime spot review for `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` | links standalone answer excerpts; strict answer-contract status fail for all four cases |
 | `2026-08-19-srq-manual-review-note.md` | reviewer record for `SRQ-04`, `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` manifest-facing evidence gaps | summary-only review record; confirms `SRQ-04` remains manual semantic-boundary review, `SRQ-06` / `SRQ-07` / `SRQ-10` remain not reviewed, and `SRQ-11` remains manual review required; not runtime answer evidence or platform validation evidence |
 | `2026-08-19-srq-manual-review-handoff.md` | human handoff checklist for conservative SRQ evidence gaps surfaced by `scripts/srq_coverage_report.py` | summary-only handoff; not runtime evidence and not an `answer_file` |
 | `2026-08-12-no-self-parallel-manual-collation.md` | limited manual XML-P5 review for one high-value no-self parallel candidate pair from `T02n0099` / `T01n0001` | summary-only; limited theme parallel, not textual equivalence, runtime answer evidence, or platform validation evidence |
@@ -122,6 +131,7 @@ Use batch manifests for grouped review:
 
 ```powershell
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-10-zc-05-broad-runtime-rerun-batch.yaml
+python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-07-20-latest-zc-answer-excerpt-review-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-06-srq-01-zc-05-integrated-contract-replay-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-07-20-compact-zc-04-answer-excerpt-progression-batch.yaml

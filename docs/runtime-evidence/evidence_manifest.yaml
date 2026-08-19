@@ -298,3 +298,110 @@ entries:
         status: manual_review_required
         batch: docs/runtime-evidence/2026-07-17-reasoning-answer-review-batch.yaml
         notes: Fixture sample review exists, but manifest v1 does not treat it as standalone runtime answer evidence.
+
+  - id: 2026-08-19-srq06-runtime-spot-answer
+    file: docs/runtime-evidence/2026-08-19-claude-code-srq-06-runtime-spot-answer.md
+    date: "2026-08-19"
+    evidence_class: standalone_answer_excerpt
+    related_cases:
+      - SRQ-06
+      - ZR-08
+    answer_file_safe: true
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-06
+        status: fail
+        source_file: docs/runtime-evidence/2026-08-19-claude-code-srq-06-runtime-spot-answer.md
+        notes: Standalone Claude Code answer excerpt failed strict SRQ-06 answer contract on missing literal `不能决定`.
+
+  - id: 2026-08-19-srq07-runtime-spot-answer
+    file: docs/runtime-evidence/2026-08-19-claude-code-srq-07-runtime-spot-answer.md
+    date: "2026-08-19"
+    evidence_class: standalone_answer_excerpt
+    related_cases:
+      - SRQ-07
+      - ZR-02
+    answer_file_safe: true
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-07
+        status: fail
+        source_file: docs/runtime-evidence/2026-08-19-claude-code-srq-07-runtime-spot-answer.md
+        notes: Standalone Claude Code answer excerpt failed strict SRQ-07 answer contract on missing literal `摄类学`.
+
+  - id: 2026-08-19-srq10-runtime-spot-answer
+    file: docs/runtime-evidence/2026-08-19-claude-code-srq-10-runtime-spot-answer.md
+    date: "2026-08-19"
+    evidence_class: standalone_answer_excerpt
+    related_cases:
+      - SRQ-10
+      - ZR-11
+    answer_file_safe: true
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-10
+        status: fail
+        source_file: docs/runtime-evidence/2026-08-19-claude-code-srq-10-runtime-spot-answer.md
+        notes: Standalone Claude Code answer excerpt failed strict SRQ-10 answer contract on missing explicit cognitive and corrective-factor terms.
+
+  - id: 2026-08-19-srq11-runtime-spot-answer
+    file: docs/runtime-evidence/2026-08-19-claude-code-srq-11-runtime-spot-answer.md
+    date: "2026-08-19"
+    evidence_class: standalone_answer_excerpt
+    related_cases:
+      - SRQ-11
+      - ZR-12
+    answer_file_safe: true
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-11
+        status: fail
+        source_file: docs/runtime-evidence/2026-08-19-claude-code-srq-11-runtime-spot-answer.md
+        notes: Standalone Claude Code answer excerpt failed strict SRQ-11 answer contract on missing defining-mark boundary terms and a shallow forbidden phrase collision.
+
+  - id: 2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review
+    file: docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review.md
+    date: "2026-08-19"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-06
+      - SRQ-07
+      - SRQ-10
+      - SRQ-11
+      - ZR-02
+      - ZR-08
+      - ZR-11
+      - ZR-12
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-06
+        status: fail
+        batch: docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml
+        notes: Claude Code SRQ-06 runtime spot failed strict answer-contract review on missing literal `不能决定`.
+      - query_id: SRQ-07
+        status: fail
+        batch: docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml
+        notes: Claude Code SRQ-07 runtime spot failed strict answer-contract review on missing literal `摄类学`.
+      - query_id: SRQ-10
+        status: fail
+        batch: docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml
+        notes: Claude Code SRQ-10 runtime spot failed strict answer-contract review on missing explicit cognitive and corrective-factor terms.
+      - query_id: SRQ-11
+        status: fail
+        batch: docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml
+        notes: Claude Code SRQ-11 runtime spot failed strict answer-contract review on missing defining-mark boundary terms and a shallow forbidden phrase collision.
+
+  - id: 2026-08-19-za-long-agama-no-self-verse-manual-collation
+    file: docs/runtime-evidence/2026-08-19-za-long-agama-no-self-verse-manual-collation.md
+    date: "2026-08-19"
+    evidence_class: manual_collation
+    related_cases:
+      - SRQ-04
+      - ZR-05
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-04
+        status: manual_review_required
+        notes: Limited cross-Agama XML-P5 theme-parallel review; not textual equivalence, source dependence, publication-ready collation, or runtime answer evidence.

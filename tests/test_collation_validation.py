@@ -78,6 +78,32 @@ def test_second_manual_collation_candidate_is_driven_by_srq04_expected_chunks() 
     assert any("does not change runtime or platform validation status" in item for item in candidate_set["boundaries"])
 
 
+def test_third_manual_collation_candidate_keeps_cross_agama_no_self_boundary() -> None:
+    import yaml
+
+    data = yaml.safe_load(PARALLEL_CANDIDATES.read_text(encoding="utf-8"))
+    candidate_sets = {item["set_id"]: item for item in data["candidate_sets"]}
+    candidate_set = candidate_sets["za-agama-and-long-agama-no-self-verse"]
+    parallel = candidate_set["candidate_parallels"][0]
+
+    assert candidate_set["status"] == "manual_collation_reviewed"
+    assert candidate_set["source_anchor_probe"] == "cbeta-anchor:T02n0099:line-147"
+    assert candidate_set["source_chunk_id"] == "agama:T02n0099:juan-1:line-147"
+    assert candidate_set["manual_review"]["evidence_file"] == (
+        "docs/runtime-evidence/2026-08-19-za-long-agama-no-self-verse-manual-collation.md"
+    )
+    assert parallel["anchor_probe"] == "cbeta-anchor:T01n0001:line-881"
+    assert parallel["chunk_id"] == "agama:T01n0001:juan-1:line-881"
+    assert parallel["confidence"] == "manual_limited_theme_parallel"
+    assert parallel["collation_status"] == "manual_xml_p5_theme_parallel_reviewed"
+    assert parallel["equivalence_claim"] is False
+    assert parallel["source_dependence_claim"] is False
+    assert parallel["publication_ready"] is False
+    assert "SRQ-04" in parallel["qualified_conclusion"]
+    assert any("does not prove textual equivalence" in item for item in candidate_set["boundaries"])
+    assert any("does not change runtime or platform validation status" in item for item in candidate_set["boundaries"])
+
+
 def test_collation_validator_rejects_unknown_parallel_anchor_probe(tmp_path: Path) -> None:
     fixtures = tmp_path / "tests" / "fixtures" / "collation"
     fixtures.mkdir(parents=True)
