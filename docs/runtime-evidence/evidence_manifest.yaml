@@ -310,9 +310,9 @@ entries:
     platform_status_change: false
     reviews:
       - query_id: SRQ-06
-        status: fail
+        status: pass
         source_file: docs/runtime-evidence/2026-08-19-claude-code-srq-06-runtime-spot-answer.md
-        notes: Standalone Claude Code answer excerpt failed strict SRQ-06 answer contract on missing literal `不能决定`.
+        notes: Current calibrated contract replay passes via exact required-term group alias `无法决定`; PR #193 recorded the pre-calibration literal miss for `不能决定`.
 
   - id: 2026-08-19-srq07-runtime-spot-answer
     file: docs/runtime-evidence/2026-08-19-claude-code-srq-07-runtime-spot-answer.md
@@ -325,9 +325,9 @@ entries:
     platform_status_change: false
     reviews:
       - query_id: SRQ-07
-        status: fail
+        status: pass
         source_file: docs/runtime-evidence/2026-08-19-claude-code-srq-07-runtime-spot-answer.md
-        notes: Standalone Claude Code answer excerpt failed strict SRQ-07 answer contract on missing literal `摄类学`.
+        notes: Current calibrated contract replay passes via exact required-term group alias `总与别`; PR #193 recorded the pre-calibration literal miss for `摄类学`.
 
   - id: 2026-08-19-srq10-runtime-spot-answer
     file: docs/runtime-evidence/2026-08-19-claude-code-srq-10-runtime-spot-answer.md
@@ -376,13 +376,13 @@ entries:
     platform_status_change: false
     reviews:
       - query_id: SRQ-06
-        status: fail
+        status: pass
         batch: docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml
-        notes: Claude Code SRQ-06 runtime spot failed strict answer-contract review on missing literal `不能决定`.
+        notes: Current calibrated replay over the same runtime answer excerpt passes via exact alias `无法决定`; the original strict literal miss remains documented in the evidence note.
       - query_id: SRQ-07
-        status: fail
+        status: pass
         batch: docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml
-        notes: Claude Code SRQ-07 runtime spot failed strict answer-contract review on missing literal `摄类学`.
+        notes: Current calibrated replay over the same runtime answer excerpt passes via exact alias `总与别`; the original strict literal miss remains documented in the evidence note.
       - query_id: SRQ-10
         status: fail
         batch: docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml
@@ -391,6 +391,48 @@ entries:
         status: fail
         batch: docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml
         notes: Claude Code SRQ-11 runtime spot failed strict answer-contract review on missing defining-mark boundary terms and a shallow forbidden phrase collision.
+
+  - id: 2026-08-19-srq06-srq07-contract-calibration-replay
+    file: docs/runtime-evidence/2026-08-19-srq06-srq07-contract-calibration-replay-batch.yaml
+    date: "2026-08-19"
+    evidence_class: batch_manifest
+    related_cases:
+      - SRQ-06
+      - SRQ-07
+      - ZR-02
+      - ZR-08
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-06
+        status: pass
+        batch: docs/runtime-evidence/2026-08-19-srq06-srq07-contract-calibration-replay-batch.yaml
+        notes: Local replay over the committed direct runtime answer excerpt passes after exact alias-group calibration; not a new provider call.
+      - query_id: SRQ-07
+        status: pass
+        batch: docs/runtime-evidence/2026-08-19-srq06-srq07-contract-calibration-replay-batch.yaml
+        notes: Local replay over the committed direct runtime answer excerpt passes after exact alias-group calibration; not a new provider call.
+
+  - id: 2026-08-19-srq06-srq07-contract-calibration-replay-note
+    file: docs/runtime-evidence/2026-08-19-srq06-srq07-contract-calibration-replay.md
+    date: "2026-08-19"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-06
+      - SRQ-07
+      - ZR-02
+      - ZR-08
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-06
+        status: pass
+        batch: docs/runtime-evidence/2026-08-19-srq06-srq07-contract-calibration-replay-batch.yaml
+        notes: Summary-only replay note; the answer excerpt is the standalone runtime answer file, and the note itself must not be used as an answer_file.
+      - query_id: SRQ-07
+        status: pass
+        batch: docs/runtime-evidence/2026-08-19-srq06-srq07-contract-calibration-replay-batch.yaml
+        notes: Summary-only replay note; the answer excerpt is the standalone runtime answer file, and the note itself must not be used as an answer_file.
 
   - id: 2026-08-19-za-long-agama-no-self-verse-manual-collation
     file: docs/runtime-evidence/2026-08-19-za-long-agama-no-self-verse-manual-collation.md

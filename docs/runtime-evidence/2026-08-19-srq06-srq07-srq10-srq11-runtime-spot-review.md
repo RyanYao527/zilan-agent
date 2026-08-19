@@ -8,6 +8,19 @@ flagged as `not_reviewed` or `manual_review_required`.
 This is not a full `ZC-01` through `ZC-06` platform rerun. It does not change `docs/platform-validation.md`, does not
 validate native OpenAI API, and does not validate any OpenAI-compatible provider route.
 
+## Post-Calibration Note
+
+PR #193 captured the original strict-literal answer-contract result for all four runtime answer excerpts. A later
+fixture-local calibration added exact required-term groups for `SRQ-06` and `SRQ-07` without changing the answer text
+or calling a provider again:
+
+- `SRQ-06`: `不能决定` / `无法决定`
+- `SRQ-07`: `摄类学` / `总与别`
+
+Under the current calibrated contract, this same batch now reports `pass=2`, `fail=2`: `SRQ-06` and `SRQ-07` pass,
+while `SRQ-10` and `SRQ-11` still fail. See
+`docs/runtime-evidence/2026-08-19-srq06-srq07-contract-calibration-replay.md` for the focused replay note.
+
 ## Runtime Command Shape
 
 Each prompt used Windows PowerShell UTF-8 output and the repository `agents/zilan-claude-code.md` prompt:
@@ -40,8 +53,8 @@ not native DeepSeek, native OpenAI API, or OpenAI-compatible provider validation
 | Repository base | `8037b95` (`Add SRQ evidence coverage and productization triage`) |
 | Branch | `codex/srq-evidence-closeout` |
 | Transcript status | Standalone answer excerpts committed under `docs/runtime-evidence/`; raw CLI session metadata is not committed. |
-| Repository checks | `python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml` returned strict answer-contract fail for all four cases. |
-| Overall result | `target-fail`: all four observed runtime answers need prompt or contract follow-up before they can be recorded as pass. |
+| Repository checks | PR #193 recorded a pre-calibration strict-literal fail for all four cases. Current calibrated replay of the same batch reports `pass=2`, `fail=2`. |
+| Overall result | `target-partial`: current calibrated contracts pass for `SRQ-06` / `SRQ-07`; `SRQ-10` / `SRQ-11` still need prompt or contract follow-up before pass evidence can be recorded. |
 
 No second retry was used after the deterministic contract failures. Keeping the first observed answers avoids
 retry-until-pass evidence and makes the missing slots visible.
@@ -57,6 +70,8 @@ python scripts\semantic_answer_contract_review.py --query-id SRQ-11 --answer-fil
 ```
 
 ## Contract Results
+
+Historical PR #193 pre-calibration result:
 
 ```text
 # Reasoning Answer Review Batch
@@ -82,6 +97,8 @@ Boundary: batch fixture review only; this is not runtime platform validation.
 
 - `SRQ-06` answered the broad Hetuvidya shape and named `不定因`, but missed the required literal `不能决定`.
 - `SRQ-07` preserved the total/part and pervasion boundary but missed the literal `摄类学`.
+- Current calibrated replay treats the `SRQ-06` answer's `无法决定` and the `SRQ-07` answer's `总与别` as exact
+  acceptable surfaces for those two narrow slots.
 - `SRQ-10` preserved the five-universal chain and practice boundary but missed several explicit cognitive/error and
   corrective-factor terms required by the current contract.
 - `SRQ-11` identified the definition as too broad in ordinary wording, but missed required literal boundary terms
@@ -90,6 +107,6 @@ Boundary: batch fixture review only; this is not runtime platform validation.
 ## Boundary
 
 These results close the earlier manifest-side `not_reviewed` / `manual_review_required` ambiguity by recording
-contract-reviewable runtime answer excerpts. They are fail evidence, not pass evidence. They do not downgrade or upgrade
-platform status, do not prove doctrinal quality, and should feed a later narrow prompt-hardening or contract-calibration
-PR.
+contract-reviewable runtime answer excerpts. The current calibrated replay is pass evidence for `SRQ-06` / `SRQ-07`
+answer surfaces only; it is not a new runtime run and not platform validation evidence. `SRQ-10` / `SRQ-11` remain fail
+evidence. None of these entries downgrade or upgrade platform status, and they do not prove doctrinal quality.

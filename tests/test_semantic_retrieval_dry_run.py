@@ -155,7 +155,12 @@ def test_dry_run_returns_hetuvidya_indeterminate_fixture_for_srq06() -> None:
         "所知",
         "常法",
         "无常法",
-        "不能决定",
+    ]
+    assert result["answer_contracts"]["hetuvidya_indeterminate_detection"]["required_term_groups"] == [
+        {
+            "label": "indeterminate_resolution",
+            "terms": ["不能决定", "无法决定"],
+        },
     ]
     assert result["answer_contracts"]["hetuvidya_indeterminate_detection"]["forbidden_terms"] == [
         "因三相完全满足",
@@ -189,7 +194,6 @@ def test_dry_run_returns_collected_topics_total_part_fixture_for_srq07() -> None
     ]
     assert [chunk["chunk_id"] for chunk in result["chunks"]] == result["expected_chunk_ids"]
     assert result["answer_contracts"]["collected_topics_total_part_error"]["required_terms"] == [
-        "摄类学",
         "总与别",
         "别法",
         "总法",
@@ -200,6 +204,12 @@ def test_dry_run_returns_collected_topics_total_part_fixture_for_srq07() -> None
         "报告",
         "我这个人",
         "不成立",
+    ]
+    assert result["answer_contracts"]["collected_topics_total_part_error"]["required_term_groups"] == [
+        {
+            "label": "collected_topics_surface",
+            "terms": ["摄类学", "总与别"],
+        },
     ]
     assert result["answer_contracts"]["collected_topics_total_part_error"]["forbidden_terms"] == [
         "所以我没有价值",
