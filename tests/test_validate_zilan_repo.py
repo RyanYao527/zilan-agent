@@ -242,6 +242,41 @@ def test_agent_prompt_validator_requires_broad_zc05_prasanga_nihilism_slots() ->
         assert required_fragments <= prompt_fragments
 
 
+def test_agent_prompt_validator_requires_srq11_definition_boundary_slots() -> None:
+    from zilanlib.validation.agent_prompts import AGENT_PROMPT_REQUIRED_FRAGMENTS
+
+    required_fragments = {
+        "SRQ-11",
+        "摄类学性相/所表定义边界输出契约",
+        "性相过宽",
+        "唯在所表上成立",
+        "违②",
+        "definiendum_boundary",
+    }
+
+    for prompt_path in ("agents/zilan-codex.md", "agents/zilan-claude-code.md"):
+        prompt_fragments = set(AGENT_PROMPT_REQUIRED_FRAGMENTS[prompt_path])
+        prompt_text = (ROOT / prompt_path).read_text(encoding="utf-8")
+
+        assert required_fragments <= prompt_fragments
+        for fragment in required_fragments:
+            assert fragment in prompt_text
+
+
+def test_openai_metadata_requires_srq11_definition_boundary_slots() -> None:
+    text = (ROOT / "agents/openai.yaml").read_text(encoding="utf-8")
+
+    for fragment in (
+        "collected_topics_definition_boundary_contract",
+        "SRQ-11",
+        "性相过宽",
+        "唯在所表上成立",
+        "违②",
+        "definiendum_boundary",
+    ):
+        assert fragment in text
+
+
 def test_broad_zc05_recommended_structure_keeps_prasanga_nihilism_slots() -> None:
     required_fragments = {
         "应成论式",
