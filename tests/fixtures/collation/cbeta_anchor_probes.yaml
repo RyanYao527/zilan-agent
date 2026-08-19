@@ -30,3 +30,31 @@ anchor_probes:
       pb: 0061c
       lb: 0061c22
     collation_status: anchor_located_collation_pending
+  - probe_id: cbeta-anchor:T01n0001:line-881
+    work_id: T01n0001
+    source_file: context/agama/T0001-chang-agama.md
+    xml_file: context/agama/_source/T01n0001.xml
+    line_range:
+      start: 881
+      end: 881
+    expected_start:
+      pb: 0009b
+      lb: 0009b12
+    expected_end:
+      pb: 0009b
+      lb: 0009b12
+    collation_status: anchor_located_collation_pending
+  - probe_id: cbeta-anchor:T01n0001:line-1829
+    work_id: T01n0001
+    source_file: context/agama/T0001-chang-agama.md
+    xml_file: context/agama/_source/T01n0001.xml
+    line_range:
+      start: 1829
+      end: 1829
+    expected_start:
+      pb: 0021a
+      lb: 0021a18
+    expected_end:
+      pb: 0021a
+      lb: 0021a18
+    collation_status: anchor_located_collation_pending

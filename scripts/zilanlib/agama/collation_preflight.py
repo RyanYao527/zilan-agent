@@ -96,6 +96,30 @@ DEFAULT_ANCHOR_PROBES = (
         expected_end_pb="0061c",
         expected_end_lb="0061c22",
     ),
+    AnchorProbe(
+        probe_id="cbeta-anchor:T01n0001:line-881",
+        work_id="T01n0001",
+        markdown_file="context/agama/T0001-chang-agama.md",
+        xml_file="context/agama/_source/T01n0001.xml",
+        start_line=881,
+        end_line=881,
+        expected_start_pb="0009b",
+        expected_start_lb="0009b12",
+        expected_end_pb="0009b",
+        expected_end_lb="0009b12",
+    ),
+    AnchorProbe(
+        probe_id="cbeta-anchor:T01n0001:line-1829",
+        work_id="T01n0001",
+        markdown_file="context/agama/T0001-chang-agama.md",
+        xml_file="context/agama/_source/T01n0001.xml",
+        start_line=1829,
+        end_line=1829,
+        expected_start_pb="0021a",
+        expected_start_lb="0021a18",
+        expected_end_pb="0021a",
+        expected_end_lb="0021a18",
+    ),
 )
 
 LIMITATIONS = (

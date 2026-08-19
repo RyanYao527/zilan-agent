@@ -217,6 +217,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │   ├── reasoning_answer_review_batch.py  # batch compact answer review
 │   ├── reasoning_validator_output.py  # compatibility shim for shared validator output envelope
 │   ├── search_agama.py                # 阿含 Markdown 检索
+│   ├── srq_coverage_report.py         # SRQ/ZR evidence coverage triage report
 │   ├── semantic_answer_boundary_review.py
 │   ├── semantic_answer_contract_review.py
 │   ├── semantic_context_bundle.py
@@ -261,6 +262,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │           ├── contract_runner.py
 │           ├── hetuvidya_validator.py
 │           ├── madhyamaka_critique_engine.py
+│           ├── srq_coverage_report.py
 │           └── validator_output.py
 │       └── semantic/                    # Semantic retrieval library helpers
 │           ├── __init__.py

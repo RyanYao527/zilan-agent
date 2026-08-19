@@ -1,0 +1,300 @@
+version: 1
+entries:
+  - id: 2026-07-17-runtime-answer-excerpt-review-batch
+    file: docs/runtime-evidence/2026-07-17-runtime-answer-excerpt-review-batch.yaml
+    date: "2026-07-17"
+    evidence_class: batch_manifest
+    related_cases:
+      - SRQ-02
+      - SRQ-03
+      - SRQ-04
+      - SRQ-05
+      - ZC-05
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-02
+        status: pass
+        batch: docs/runtime-evidence/2026-07-17-runtime-answer-excerpt-review-batch.yaml
+        notes: Claude Code committed answer excerpt batch review.
+      - query_id: SRQ-03
+        status: pass
+        batch: docs/runtime-evidence/2026-07-17-runtime-answer-excerpt-review-batch.yaml
+        notes: Claude Code committed answer excerpt batch review.
+      - query_id: SRQ-04
+        status: pass
+        batch: docs/runtime-evidence/2026-07-17-runtime-answer-excerpt-review-batch.yaml
+        notes: Claude Code committed answer excerpt batch review.
+      - query_id: SRQ-05
+        status: pass
+        batch: docs/runtime-evidence/2026-07-17-runtime-answer-excerpt-review-batch.yaml
+        notes: Claude Code committed answer excerpt batch review.
+
+  - id: 2026-07-20-latest-zc-answer-excerpt-review-batch
+    file: docs/runtime-evidence/2026-07-20-latest-zc-answer-excerpt-review-batch.yaml
+    date: "2026-07-20"
+    evidence_class: batch_manifest
+    related_cases:
+      - SRQ-03
+      - SRQ-04
+      - SRQ-08
+      - SRQ-09
+      - ZC-03
+      - ZC-04
+      - ZC-05
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-09
+        status: pass
+        batch: docs/runtime-evidence/2026-07-20-latest-zc-answer-excerpt-review-batch.yaml
+        notes: Latest committed ZC-03 answer excerpt review.
+      - query_id: SRQ-04
+        status: pass
+        batch: docs/runtime-evidence/2026-07-20-latest-zc-answer-excerpt-review-batch.yaml
+        notes: Latest committed ZC-04/ZC-05 answer excerpt review.
+      - query_id: SRQ-03
+        status: pass
+        batch: docs/runtime-evidence/2026-07-20-latest-zc-answer-excerpt-review-batch.yaml
+        notes: Latest committed broad ZC-05 answer excerpt review.
+      - query_id: SRQ-08
+        status: pass
+        batch: docs/runtime-evidence/2026-07-20-latest-zc-answer-excerpt-review-batch.yaml
+        notes: Latest committed broad ZC-05 answer excerpt review.
+
+  - id: 2026-07-20-compact-zc-04-progression-batch
+    file: docs/runtime-evidence/2026-07-20-compact-zc-04-answer-excerpt-progression-batch.yaml
+    date: "2026-07-20"
+    evidence_class: batch_manifest
+    related_cases:
+      - SRQ-04
+      - ZC-04
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-04
+        status: fail_expected
+        batch: docs/runtime-evidence/2026-07-20-compact-zc-04-answer-excerpt-progression-batch.yaml
+        notes: Historical compact ZC-04 pass to shallow-contract fail to pass progression.
+
+  - id: 2026-08-06-zc-05-srq-01-runtime-spot-review
+    file: docs/runtime-evidence/2026-08-06-zc-05-srq-01-runtime-spot-review.md
+    date: "2026-08-06"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-01
+      - SRQ-03
+      - SRQ-04
+      - SRQ-08
+      - ZC-05
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-01
+        status: pass
+        batch: docs/runtime-evidence/2026-08-06-zc-05-srq-01-runtime-spot-review-batch.yaml
+        notes: Current direct SRQ-01 pass after 2026-08-07 contract calibration.
+      - query_id: SRQ-03
+        status: fail
+        batch: docs/runtime-evidence/2026-08-06-zc-05-srq-01-runtime-spot-review-batch.yaml
+        notes: Historical strict-slot fail for the 2026-08-06 broad ZC-05 spot answer.
+      - query_id: SRQ-04
+        status: pass
+        batch: docs/runtime-evidence/2026-08-06-zc-05-srq-01-runtime-spot-review-batch.yaml
+        notes: Agama citation boundary passed for the same broad ZC-05 spot answer.
+      - query_id: SRQ-08
+        status: fail
+        batch: docs/runtime-evidence/2026-08-06-zc-05-srq-01-runtime-spot-review-batch.yaml
+        notes: Historical nihilism-boundary strict-slot fail for the 2026-08-06 broad ZC-05 spot answer.
+
+  - id: 2026-08-06-zc-05-runtime-spot-answer
+    file: docs/runtime-evidence/2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md
+    date: "2026-08-06"
+    evidence_class: standalone_answer_excerpt
+    related_cases:
+      - SRQ-01
+      - SRQ-03
+      - SRQ-04
+      - SRQ-08
+      - ZC-05
+    answer_file_safe: true
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-01
+        status: pass
+        source_file: docs/runtime-evidence/2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md
+        notes: Standalone answer excerpt safe for local contract replay.
+      - query_id: SRQ-03
+        status: fail
+        source_file: docs/runtime-evidence/2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md
+        notes: Same excerpt failed strict SRQ-03 review before later runtime rerun.
+      - query_id: SRQ-04
+        status: pass
+        source_file: docs/runtime-evidence/2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md
+        notes: Standalone answer excerpt safe for local SRQ-04 replay.
+      - query_id: SRQ-08
+        status: fail
+        source_file: docs/runtime-evidence/2026-08-06-claude-code-zc-05-srq-01-runtime-spot-answer.md
+        notes: Same excerpt failed strict SRQ-08 review before later runtime rerun.
+
+  - id: 2026-08-07-zc05-srq03-srq08-local-replay
+    file: docs/runtime-evidence/2026-08-07-zc05-srq03-srq08-local-replay.md
+    date: "2026-08-07"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-03
+      - SRQ-08
+      - ZC-05
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-03
+        status: runtime_pending
+        notes: Local prompt/fixture replay showed the target slots are visible; live runtime was still pending.
+      - query_id: SRQ-08
+        status: runtime_pending
+        notes: Local prompt/fixture replay showed the nihilism-boundary slots are visible; live runtime was still pending.
+
+  - id: 2026-08-10-zc-05-broad-runtime-rerun
+    file: docs/runtime-evidence/2026-08-10-zc-05-broad-runtime-rerun.md
+    date: "2026-08-10"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-01
+      - SRQ-03
+      - SRQ-04
+      - SRQ-08
+      - ZC-05
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-01
+        status: pass
+        batch: docs/runtime-evidence/2026-08-10-zc-05-broad-runtime-rerun-batch.yaml
+        notes: Claude Code broad ZC-05 runtime rerun local contract review.
+      - query_id: SRQ-03
+        status: pass
+        batch: docs/runtime-evidence/2026-08-10-zc-05-broad-runtime-rerun-batch.yaml
+        notes: Claude Code broad ZC-05 runtime rerun local contract review.
+      - query_id: SRQ-04
+        status: pass
+        batch: docs/runtime-evidence/2026-08-10-zc-05-broad-runtime-rerun-batch.yaml
+        notes: Claude Code broad ZC-05 runtime rerun local contract review.
+      - query_id: SRQ-08
+        status: pass
+        batch: docs/runtime-evidence/2026-08-10-zc-05-broad-runtime-rerun-batch.yaml
+        notes: Claude Code broad ZC-05 runtime rerun local contract review.
+
+  - id: 2026-08-10-zc-05-broad-runtime-answer
+    file: docs/runtime-evidence/2026-08-10-claude-code-zc-05-broad-runtime-rerun-answer.md
+    date: "2026-08-10"
+    evidence_class: standalone_answer_excerpt
+    related_cases:
+      - SRQ-01
+      - SRQ-03
+      - SRQ-04
+      - SRQ-08
+      - ZC-05
+    answer_file_safe: true
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-01
+        status: pass
+        source_file: docs/runtime-evidence/2026-08-10-claude-code-zc-05-broad-runtime-rerun-answer.md
+        notes: Standalone broad ZC-05 answer excerpt safe for local contract replay.
+      - query_id: SRQ-03
+        status: pass
+        source_file: docs/runtime-evidence/2026-08-10-claude-code-zc-05-broad-runtime-rerun-answer.md
+        notes: Standalone broad ZC-05 answer excerpt safe for local contract replay.
+      - query_id: SRQ-04
+        status: pass
+        source_file: docs/runtime-evidence/2026-08-10-claude-code-zc-05-broad-runtime-rerun-answer.md
+        notes: Standalone broad ZC-05 answer excerpt safe for local contract replay.
+      - query_id: SRQ-08
+        status: pass
+        source_file: docs/runtime-evidence/2026-08-10-claude-code-zc-05-broad-runtime-rerun-answer.md
+        notes: Standalone broad ZC-05 answer excerpt safe for local contract replay.
+
+  - id: 2026-08-10-cbeta-anchor-parallel-local-replay
+    file: docs/runtime-evidence/2026-08-10-cbeta-anchor-parallel-local-replay.md
+    date: "2026-08-10"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-01
+      - SRQ-03
+      - SRQ-04
+      - SRQ-08
+      - ZC-05
+      - ZR-05
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-01
+        status: pass
+        notes: Local replay and XML anchor preflight only; not a provider runtime pass.
+      - query_id: SRQ-03
+        status: runtime_pending
+        notes: The local replay recorded runtime pending before the later broad runtime rerun.
+      - query_id: SRQ-04
+        status: pass
+        notes: Local replay and XML anchor preflight only; not a provider runtime pass.
+      - query_id: SRQ-08
+        status: runtime_pending
+        notes: The local replay recorded runtime pending before the later broad runtime rerun.
+
+  - id: 2026-08-12-no-self-parallel-manual-collation
+    file: docs/runtime-evidence/2026-08-12-no-self-parallel-manual-collation.md
+    date: "2026-08-12"
+    evidence_class: manual_collation
+    related_cases:
+      - SRQ-04
+      - ZR-05
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-04
+        status: manual_review_required
+        notes: Limited XML-P5 theme-parallel review; not textual equivalence or runtime answer evidence.
+
+  - id: 2026-08-12-long-agama-no-self-verse-manual-collation
+    file: docs/runtime-evidence/2026-08-12-long-agama-no-self-verse-manual-collation.md
+    date: "2026-08-12"
+    evidence_class: manual_collation
+    related_cases:
+      - SRQ-04
+      - ZR-05
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-04
+        status: manual_review_required
+        notes: Limited XML-P5 theme-parallel review; not textual equivalence or runtime answer evidence.
+
+  - id: 2026-08-18-srq10-runtime-evidence-not-reviewed
+    file: docs/runtime-evidence/index.md
+    date: "2026-08-18"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-10
+      - ZR-11
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-10
+        status: not_reviewed
+        notes: No reliable standalone runtime answer excerpt is indexed for SRQ-10 in manifest v1.
+
+  - id: 2026-08-18-srq11-runtime-evidence-manual-review
+    file: docs/runtime-evidence/2026-07-17-reasoning-answer-review-batch.yaml
+    date: "2026-08-18"
+    evidence_class: batch_manifest
+    related_cases:
+      - SRQ-11
+      - ZR-12
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-11
+        status: manual_review_required
+        batch: docs/runtime-evidence/2026-07-17-reasoning-answer-review-batch.yaml
+        notes: Fixture sample review exists, but manifest v1 does not treat it as standalone runtime answer evidence.

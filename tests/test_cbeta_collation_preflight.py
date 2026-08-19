@@ -298,4 +298,6 @@ def test_default_markdown_line_anchor_report_checks_committed_fixture_subset() -
     assert {probe["probe_id"] for probe in result["probes"]} >= {
         "cbeta-anchor:T02n0099:line-147",
         "cbeta-anchor:T01n0001:line-3997",
+        "cbeta-anchor:T01n0001:line-881",
+        "cbeta-anchor:T01n0001:line-1829",
     }

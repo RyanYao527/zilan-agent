@@ -46,7 +46,7 @@ cp zilan-agent/agents/zilan-claude-code.md ~/.claude/agents/zilan.md
 
 `zilan_contract` is the reusable SDK inside this repository: a deterministic output-contract checker for required
 terms, forbidden phrases, and boundary slots. Zilan's Buddhist fixtures are the flagship domain, not a limitation of
-the pattern.
+the pattern. It is not an LLM judge and does not claim semantic grading.
 
 ### The hard problem · 要解决的问题
 
@@ -65,7 +65,7 @@ LLMs in specialized domains drift: they drop critical terms, overclaim certainty
 ### The numbers · 工程指标
 
 ```text
-277 tests    ·    84% code coverage (zilanlib)
+285 tests    ·    84% code coverage (zilanlib)
 mypy: 0 errors across 65 source files
 ruff:  0 issues (B/BLE/E/F/I/SIM/UP rules)
 CI:    lint → type-check → test → smoke-test on every push
@@ -122,6 +122,7 @@ The output-contract + deterministic-validator pattern works for **any domain whe
 | `docs/article-output-contracts.md` | 输出契约技术文章 · Output Contracts technical article |
 | `docs/zilan-contract-quickstart.md` | zilan_contract 快速上手 · zilan_contract quickstart |
 | `docs/zilan-contract-schema.md` | zilan_contract contract schema reference |
+| `docs/zilan-contract-release-checklist.md` | zilan_contract 发布前检查 · zilan_contract release checklist |
 | `docs/awesome-list-pr-entries.md` | Awesome-list PR 条目 · Awesome-list PR entries |
 | `docs/codex-manual-tasks.md` | Codex 手动操作清单 · Codex manual task checklist |
 | `docs/archive/` | 历史归档材料 · Historical archive |
