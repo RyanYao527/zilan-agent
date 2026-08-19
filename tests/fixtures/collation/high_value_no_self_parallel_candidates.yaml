@@ -54,3 +54,29 @@ candidate_sets:
       - Manual review does not prove publication-level equivalence.
       - Manual review does not change runtime or platform validation status.
       - XML anchors locate committed CBETA body spans; wider parallel-text and witness collation remains pending.
+  - set_id: za-agama-and-long-agama-no-self-verse
+    theme: cross_agama_no_self_representative_evidence
+    status: manual_collation_reviewed
+    source_anchor_probe: cbeta-anchor:T02n0099:line-147
+    source_chunk_id: agama:T02n0099:juan-1:line-147
+    manual_review:
+      date: "2026-08-19"
+      reviewer: local_manual_xml_p5_review
+      evidence_file: docs/runtime-evidence/2026-08-19-za-long-agama-no-self-verse-manual-collation.md
+      conclusion: limited_doctrinal_theme_parallel
+    candidate_parallels:
+      - anchor_probe: cbeta-anchor:T01n0001:line-881
+        chunk_id: agama:T01n0001:juan-1:line-881
+        relation: doctrinal_theme_parallel
+        confidence: manual_limited_theme_parallel
+        collation_status: manual_xml_p5_theme_parallel_reviewed
+        equivalence_claim: false
+        source_dependence_claim: false
+        publication_ready: false
+        qualified_conclusion: The passages are both SRQ-04 expected chunks and share a cross-Agama no-self citation surface, but the review only supports a limited theme-parallel relation for representative retrieval evidence.
+        rationale: Manual XML-P5 inspection confirmed the Samyukta Agama span teaches aggregates and feelings as impermanent, suffering, non-self, and not mine, while the Digha Agama verse says one who learns the determinate Dharma knows all dharmas as non-self; the spans are different genres and contexts and do not prove textual equivalence or source dependence.
+    boundaries:
+      - Manual review does not prove textual equivalence.
+      - Manual review does not prove publication-level equivalence.
+      - Manual review does not change runtime or platform validation status.
+      - XML anchors locate committed CBETA body spans; wider parallel-text and witness collation remains pending.

@@ -260,10 +260,21 @@ def _runtime_evidence_summary(
     source: str,
 ) -> dict[str, Any]:
     statuses = _ordered_statuses([str(record.get("status", "")) for record in records if record.get("status")])
+    status_by_evidence_class: dict[str, list[str]] = {}
+    for record in records:
+        evidence_class = str(record.get("evidence_class") or "unknown")
+        status = record.get("status")
+        if isinstance(status, str) and status:
+            status_by_evidence_class.setdefault(evidence_class, []).append(status)
+    status_by_evidence_class = {
+        evidence_class: _ordered_statuses(class_statuses)
+        for evidence_class, class_statuses in sorted(status_by_evidence_class.items())
+    }
     latest = records[-1] if records else None
     return {
         "source": source,
         "statuses": statuses if statuses else ["not_reviewed"],
+        "status_by_evidence_class": status_by_evidence_class,
         "latest_status": latest["status"] if latest else "not_reviewed",
         "latest_entry": latest,
         "entry_count": len(records),
@@ -406,6 +417,13 @@ def build_srq_coverage_report(
 
 def _markdown_status(case: dict[str, Any]) -> str:
     runtime_evidence = case["runtime_evidence"]
+    status_by_class = runtime_evidence.get("status_by_evidence_class")
+    if isinstance(status_by_class, dict) and status_by_class:
+        parts = []
+        for evidence_class, statuses in sorted(status_by_class.items()):
+            status_text = ", ".join(str(status) for status in statuses) if isinstance(statuses, list) else str(statuses)
+            parts.append(f"{evidence_class}: {status_text}")
+        return "; ".join(parts)
     statuses = runtime_evidence.get("statuses", [])
     if isinstance(statuses, list):
         return ", ".join(str(status) for status in statuses)

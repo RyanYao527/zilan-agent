@@ -1,6 +1,6 @@
 # Runtime Validation Log
 
-> Last updated: 2026-08-10
+> Last updated: 2026-08-19
 
 This log records manual runtime validation evidence for zilan-agent. It complements CI and repository invariant checks; it does not replace `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, pytest, ruff, or platform status maintenance in `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -27,6 +27,37 @@ Use conservative status labels:
 | `fail` | The case did not meet expected behavior. |
 | `blocked` | The case could not be executed because of missing access, tooling, or provider failure. |
 | `not-run` | The case remains in scope but was not executed in this session. |
+
+## 2026-08-19 Claude Code SRQ-06 / SRQ-07 / SRQ-10 / SRQ-11 Runtime Spot Review
+
+| Field | Value |
+|---|---|
+| Runtime | Claude Code CLI |
+| Provider / model | Claude Code `2.1.234`; the local configuration printed an `unrecognized_model` diagnostic for `deepseek-v4-pro[1m]` before returning answer text. This is Claude Code route evidence, not native DeepSeek, native OpenAI API, or OpenAI-compatible provider validation. |
+| Tool version | `claude -p` noninteractive mode with `agents/zilan-claude-code.md` appended as the system prompt |
+| Repository base | `8037b95` (`Add SRQ evidence coverage and productization triage`) |
+| Branch | `codex/srq-evidence-closeout` |
+| Prompt set | Direct `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` prompts from `tests/fixtures/retrieval_chunks/semantic_chunks.yaml`, each with `请直接回答，不要写入文件。` |
+| Encoding setup | Windows PowerShell UTF-8 stdout and console encoding were set before invoking `claude -p`. |
+| Transcript status | Standalone answer excerpts committed at `docs/runtime-evidence/2026-08-19-claude-code-srq-06-runtime-spot-answer.md`, `docs/runtime-evidence/2026-08-19-claude-code-srq-07-runtime-spot-answer.md`, `docs/runtime-evidence/2026-08-19-claude-code-srq-10-runtime-spot-answer.md`, and `docs/runtime-evidence/2026-08-19-claude-code-srq-11-runtime-spot-answer.md`; compact review committed at `docs/runtime-evidence/2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review.md`. |
+| Repository checks | `python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-19-srq06-srq07-srq10-srq11-runtime-spot-review-batch.yaml` returned strict answer-contract fail for all four cases. |
+| Overall result | `target-fail`: all four cases now have contract-reviewable runtime answer excerpts, but none pass their current strict answer contracts. No platform-status change. |
+
+### Contract Results
+
+| Answer excerpt | Reviewed as | Result | Notes |
+|---|---|---|---|
+| `2026-08-19-claude-code-srq-06-runtime-spot-answer.md` | `SRQ-06` | `fail` | The answer names `不定因` and checks the three characteristics, but misses the required literal `不能决定`. |
+| `2026-08-19-claude-code-srq-07-runtime-spot-answer.md` | `SRQ-07` | `fail` | The answer preserves the total/part and pervasion boundary, but misses the required literal `摄类学`. |
+| `2026-08-19-claude-code-srq-10-runtime-spot-answer.md` | `SRQ-10` | `fail` | The answer preserves the five-universal chain and practice boundary, but misses required explicit terms for attribution error, motive inference, affliction chain, and `不害`. |
+| `2026-08-19-claude-code-srq-11-runtime-spot-answer.md` | `SRQ-11` | `fail` | The answer identifies the definition as too broad in ordinary wording, but misses required defining-mark boundary literals and includes the shallow forbidden phrase `性相成立` in a heading. |
+
+### Known Limits
+
+- This is a targeted SRQ runtime spot review, not a full platform rerun.
+- It records fail evidence and should not be described as runtime pass evidence.
+- The contract misses are deterministic exact-string / slot-surface results, not full doctrinal quality judgments.
+- `docs/platform-validation.md` and platform tested status remain unchanged.
 
 ## 2026-08-10 Claude Code ZC-05 Broad Runtime Rerun
 

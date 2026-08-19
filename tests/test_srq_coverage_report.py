@@ -82,6 +82,19 @@ def test_srq_coverage_report_json_shape_and_manifest_runtime_evidence() -> None:
     assert "pass" in runtime_evidence["statuses"]
 
 
+def test_srq_coverage_report_groups_runtime_status_by_evidence_class() -> None:
+    report = build_srq_coverage_report(ROOT)
+
+    srq10 = _case_by_id(report, "SRQ-10")
+    runtime_evidence = srq10["runtime_evidence"]
+    assert runtime_evidence["status_by_evidence_class"]["standalone_answer_excerpt"] == ["fail"]
+    assert "not_reviewed" in runtime_evidence["status_by_evidence_class"]["summary_only"]
+
+    srq04 = _case_by_id(report, "SRQ-04")
+    srq04_runtime = srq04["runtime_evidence"]
+    assert srq04_runtime["status_by_evidence_class"]["manual_collation"] == ["manual_review_required"]
+
+
 def test_srq_coverage_report_falls_back_to_markdown_index_when_manifest_missing() -> None:
     report = build_srq_coverage_report(
         ROOT,
@@ -100,6 +113,8 @@ def test_srq_coverage_markdown_contains_limitations_and_manual_review_language()
     assert "# SRQ/ZR Evidence Coverage Report" in markdown
     assert "## Limitations" in markdown
     assert "manual review required" in markdown
+    assert "standalone_answer_excerpt: fail" in markdown
+    assert "manual_collation: manual_review_required" in markdown
     assert "does not change platform validation status" in markdown
 
 
