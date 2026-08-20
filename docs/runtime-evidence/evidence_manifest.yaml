@@ -563,3 +563,51 @@ entries:
       - query_id: SRQ-04
         status: manual_review_required
         notes: SRQ-04 manual collation boundary closeout; anchor-located spans are not textual-equivalence claims, limited theme-parallel reviews are not publication-ready collation, and source-dependence claims remain unreviewed.
+
+  - id: 2026-08-20-volcengine-srq11-definition-live-answer
+    file: docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-answer.md
+    date: "2026-08-20"
+    evidence_class: standalone_answer_excerpt
+    related_cases:
+      - SRQ-11
+      - ZC-03
+      - ZR-12
+    answer_file_safe: true
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-11
+        status: fail
+        source_file: docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-answer.md
+        notes: Volcengine OpenAI-compatible live answer excerpt; the route returned an answer, but current exact SRQ-11 answer-contract review fails on missing literal `违②`. This is not native OpenAI API evidence.
+
+  - id: 2026-08-20-volcengine-srq11-definition-live-batch
+    file: docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-batch.yaml
+    date: "2026-08-20"
+    evidence_class: batch_manifest
+    related_cases:
+      - SRQ-11
+      - ZC-03
+      - ZR-12
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-11
+        status: fail
+        batch: docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-batch.yaml
+        notes: Batch review over the Volcengine OpenAI-compatible live answer excerpt reports `pass=0`, `fail=1`, missing literal `违②`; not a platform-status change.
+
+  - id: 2026-08-20-volcengine-srq11-definition-live-note
+    file: docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live.md
+    date: "2026-08-20"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-11
+      - ZC-03
+      - ZR-12
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-11
+        status: fail
+        batch: docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-batch.yaml
+        notes: Summary-only Volcengine OpenAI-compatible live evidence note; the standalone answer excerpt is the answer_file, and this note itself must not be used as answer_file. The result is fail evidence, not native OpenAI API validation.
