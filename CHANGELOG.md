@@ -46,6 +46,9 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Changed
 
+- Updated the SRQ/ZR coverage report to expose Agama citation metadata triage, including CBETA IDs, line anchors,
+  section-label gaps, line hashes, and related manual collation candidate sets without changing runtime evidence,
+  provider routes, or platform status.
 - Updated the fixture-only `SRQ-11` definition-boundary answer contract to accept exact marker alternatives `违②` or `违三要素校验之②`, while keeping agent prompt invariants on the literal `违②` unchanged.
 - Updated `scripts/srq_coverage_report.py` Markdown and JSON output to group runtime evidence status by evidence class, making standalone answer excerpts, batch manifests, summary notes, and manual collation easier to distinguish.
 - Updated `scripts/srq_coverage_report.py` to report clear machine-readable `fail` coverage when local runtime evidence has only fail statuses instead of folding those cases into `partial`.
