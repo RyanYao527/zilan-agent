@@ -6,7 +6,8 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
-- Added a 2026-08-20 Volcengine OpenAI-compatible direct `SRQ-11` live spot answer excerpt and batch evidence, recording a current exact-contract fail on missing `违②` without validating native OpenAI API or changing platform status.
+- Added a 2026-08-20 local `SRQ-11` definition-violation marker replay over the committed Volcengine OpenAI-compatible answer excerpt, recording a calibrated pass without a new provider call, native OpenAI validation, prompt change, public API change, or platform-status change.
+- Added a 2026-08-20 Volcengine OpenAI-compatible direct `SRQ-11` live spot answer excerpt and batch evidence, preserving the #202 pre-calibration exact-literal fail on missing `违②` without validating native OpenAI API or changing platform status.
 - Added 2026-08-19 Claude Code direct `SRQ-06`, `SRQ-07`, `SRQ-10`, and `SRQ-11` runtime spot excerpts plus fail evidence, keeping all platform status unchanged.
 - Added a local Claude Code route preflight helper and 2026-08-19 provider/smoke evidence note documenting the current custom-model blocker without provider calls, answer pass evidence, or platform-status changes.
 - Added a 2026-08-19 `SRQ-04` manual collation boundary closeout note clarifying that located XML anchors and limited theme-parallel reviews remain `manual_review_required`, not textual equivalence, source-dependence, publication collation, runtime pass, or platform validation evidence.
@@ -44,6 +45,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Changed
 
+- Updated the fixture-only `SRQ-11` definition-boundary answer contract to accept exact marker alternatives `违②` or `违三要素校验之②`, while keeping agent prompt invariants on the literal `违②` unchanged.
 - Updated `scripts/srq_coverage_report.py` Markdown and JSON output to group runtime evidence status by evidence class, making standalone answer excerpts, batch manifests, summary notes, and manual collation easier to distinguish.
 - Updated `scripts/srq_coverage_report.py` to report clear machine-readable `fail` coverage when local runtime evidence has only fail statuses instead of folding those cases into `partial`.
 - Updated the fixture-only `SRQ-10` cognitive-analysis answer contract to accept exact alias groups for attribution-error, motive-inference, affliction, and non-harm surfaces without changing prompts, provider routes, or `zilan_contract` public APIs.

@@ -948,8 +948,12 @@ queries:
           - 湖
           - 性相过宽
           - 唯在所表上成立
-          - 违②
           - 不成立
+        required_term_groups:
+          - label: definition_violation_marker
+            terms:
+              - 违②
+              - 违三要素校验之②
         required_slots:
           - label: definition_decomposition
             terms:

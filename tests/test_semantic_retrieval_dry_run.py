@@ -252,8 +252,13 @@ def test_dry_run_returns_collected_topics_definition_scope_fixture_for_srq11() -
         "湖",
         "性相过宽",
         "唯在所表上成立",
-        "违②",
         "不成立",
+    ]
+    assert result["answer_contracts"]["collected_topics_definition_scope_error"]["required_term_groups"] == [
+        {
+            "label": "definition_violation_marker",
+            "terms": ["违②", "违三要素校验之②"],
+        }
     ]
     assert result["answer_contracts"]["collected_topics_definition_scope_error"]["forbidden_terms"] == [
         "能盛水者就是瓶",
