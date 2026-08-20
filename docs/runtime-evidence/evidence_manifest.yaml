@@ -564,6 +564,20 @@ entries:
         status: manual_review_required
         notes: SRQ-04 manual collation boundary closeout; anchor-located spans are not textual-equivalence claims, limited theme-parallel reviews are not publication-ready collation, and source-dependence claims remain unreviewed.
 
+  - id: 2026-08-20-srq04-manual-semantic-boundary-queue
+    file: docs/runtime-evidence/2026-08-20-srq04-manual-semantic-boundary-queue.md
+    date: "2026-08-20"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-04
+      - ZR-05
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-04
+        status: manual_review_required
+        notes: SRQ-04 manual semantic-boundary review queue; anchor-located and limited theme-parallel evidence remain insufficient for textual equivalence, source dependence, publication-ready collation, runtime pass, or platform validation evidence.
+
   - id: 2026-08-20-volcengine-srq11-definition-live-answer
     file: docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-answer.md
     date: "2026-08-20"
