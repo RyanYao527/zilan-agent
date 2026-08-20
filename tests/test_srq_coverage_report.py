@@ -62,6 +62,30 @@ def test_srq_coverage_report_exposes_structured_chunk_reasoning_metadata() -> No
     assert "ZR-05" in srq04["related_reasoning_case_ids"]
 
 
+def test_srq_coverage_report_exposes_agama_citation_metadata_triage() -> None:
+    report = build_srq_coverage_report(ROOT)
+
+    srq04 = _case_by_id(report, "SRQ-04")
+    citation_metadata = srq04["citation_metadata"]
+
+    assert citation_metadata["status"] == "partial"
+    assert citation_metadata["agama_chunk_count"] == 4
+    assert citation_metadata["chunks_with_cbeta_id"] == 4
+    assert citation_metadata["chunks_with_line_anchor"] == 4
+    assert citation_metadata["chunks_with_line_text_hash"] == 4
+    assert citation_metadata["chunks_with_section_label"] == 3
+    assert citation_metadata["chunks_missing_section_label"] == [
+        "agama:T01n0001:juan-3:line-1829"
+    ]
+    assert citation_metadata["manual_collation_candidate_set_ids"] == [
+        "long-agama-no-self-verse-and-aggregates",
+        "no-self-five-aggregates-and-feeling",
+        "za-agama-and-long-agama-no-self-verse",
+    ]
+    assert citation_metadata["manual_collation_statuses"] == ["manual_collation_reviewed"]
+    assert citation_metadata["publication_ready_claims"] == 0
+
+
 def test_srq_coverage_report_json_shape_and_manifest_runtime_evidence() -> None:
     report = build_srq_coverage_report(ROOT)
 
@@ -160,6 +184,9 @@ def test_srq_coverage_markdown_contains_limitations_and_manual_review_language()
     assert "standalone_answer_excerpt: fail" in markdown
     assert "summary_only: pass, fail, runtime_pending" in markdown
     assert "manual_collation: manual_review_required" in markdown
+    assert "## Citation Metadata" in markdown
+    assert "agama:T01n0001:juan-3:line-1829" in markdown
+    assert "manual collation candidates: 3" in markdown
     assert "does not change platform validation status" in markdown
 
 
