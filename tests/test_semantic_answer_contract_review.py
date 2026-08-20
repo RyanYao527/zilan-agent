@@ -512,9 +512,26 @@ def test_answer_contract_review_srq11_runtime_spot_clears_heading_collision_but_
     assert review["missing_required_terms"] == [
         "性相过宽",
         "唯在所表上成立",
-        "违②",
     ]
+    assert review["missing_required_term_groups"] == ["definition_violation_marker"]
     assert review["missing_required_slots"] == ["definiendum_boundary"]
+
+
+def test_answer_contract_review_srq11_volcengine_spot_accepts_violation_marker_alias() -> None:
+    result = build_answer_contract_review(
+        DEFAULT_FIXTURE,
+        query_id="SRQ-11",
+        answer_file=ROOT / "docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-answer.md",
+    )
+
+    assert result["overall_status"] == "pass"
+    review = result["reviews"][0]
+    assert review["missing_required_terms"] == []
+    assert review["missing_required_term_groups"] == []
+    assert review["required_term_groups"][0]["label"] == "definition_violation_marker"
+    assert review["required_term_groups"][0]["matched_terms"] == ["违三要素校验之②"]
+    assert review["missing_required_slots"] == []
+    assert review["present_forbidden_terms"] == []
 
 
 def test_answer_contract_review_fails_for_collected_topics_definition_scope_negative_sample() -> None:

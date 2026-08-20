@@ -93,13 +93,17 @@ def test_srq_coverage_report_groups_runtime_status_by_evidence_class() -> None:
 
     srq11 = _case_by_id(report, "SRQ-11")
     srq11_runtime = srq11["runtime_evidence"]
-    assert srq11["coverage_status"] == "fail"
-    assert srq11_runtime["latest_status"] == "fail"
-    assert srq11_runtime["latest_entry"]["entry_id"] == "2026-08-20-volcengine-srq11-definition-live-note"
+    assert srq11["coverage_status"] == "ready"
+    assert srq11_runtime["latest_status"] == "pass"
+    assert (
+        srq11_runtime["latest_entry"]["entry_id"]
+        == "2026-08-20-volcengine-srq11-definition-violation-alias-replay-note"
+    )
     assert srq11_runtime["status_by_evidence_class"]["standalone_answer_excerpt"] == ["fail"]
     assert "fail" in srq11_runtime["status_by_evidence_class"]["batch_manifest"]
+    assert "pass" in srq11_runtime["status_by_evidence_class"]["batch_manifest"]
     assert "runtime_pending" in srq11_runtime["status_by_evidence_class"]["summary_only"]
-    assert report["summary"]["coverage_status_counts"]["fail"] == 1
+    assert "pass" in srq11_runtime["status_by_evidence_class"]["summary_only"]
     assert report["summary"]["coverage_status_counts"]["manual_review_required"] == 1
 
     srq04 = _case_by_id(report, "SRQ-04")
@@ -150,9 +154,9 @@ def test_srq_coverage_markdown_contains_limitations_and_manual_review_language()
     assert "# SRQ/ZR Evidence Coverage Report" in markdown
     assert "## Limitations" in markdown
     assert "manual review required" in markdown
-    assert "| SRQ-11 | `fail`" in markdown
+    assert "| SRQ-11 | `ready`" in markdown
     assert "standalone_answer_excerpt: fail" in markdown
-    assert "summary_only: fail, runtime_pending" in markdown
+    assert "summary_only: pass, fail, runtime_pending" in markdown
     assert "manual_collation: manual_review_required" in markdown
     assert "does not change platform validation status" in markdown
 

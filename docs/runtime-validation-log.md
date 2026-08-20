@@ -28,6 +28,31 @@ Use conservative status labels:
 | `blocked` | The case could not be executed because of missing access, tooling, or provider failure. |
 | `not-run` | The case remains in scope but was not executed in this session. |
 
+## 2026-08-20 SRQ-11 Definition Violation Alias Replay
+
+| Field | Value |
+|---|---|
+| Runtime | Local answer-contract replay |
+| Provider / model | Reuses the already committed Volcengine OpenAI-compatible `ark-code-latest` answer excerpt; no new provider call |
+| Tool version | `scripts/semantic_answer_contract_review.py` and `scripts/reasoning_answer_review_batch.py` |
+| Repository commit | after the 2026-08-20 Volcengine `SRQ-11` live spot evidence merge |
+| Prompt set | No prompt execution; replay over `docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-answer.md` |
+| Transcript status | No new transcript. The original answer excerpt is unchanged; replay note is committed at `docs/runtime-evidence/2026-08-20-srq11-definition-violation-alias-replay.md`. |
+| Repository checks | Direct `SRQ-11` answer-contract review and batch replay should pass under the calibrated exact `definition_violation_marker` group accepting `违②` or `违三要素校验之②`. |
+| Overall result | `pass`: local calibrated replay passes for `SRQ-11`. The original #202 Volcengine live note remains historical pre-calibration exact-contract fail evidence. This is not native OpenAI API evidence and does not change platform status. |
+
+### Contract Results
+
+| Answer excerpt | Reviewed as | Result | Notes |
+|---|---|---:|---|
+| `2026-08-20-volcengine-srq11-definition-live-answer.md` | `SRQ-11` / `collected_topics_definition_scope_error` | `pass` | The answer matches `definition_violation_marker` through exact surface `违三要素校验之②`; prompt contracts still require generated answers to preserve literal `违②`. |
+
+### Known Limits
+
+- This is local replay over a committed answer excerpt, not a new runtime run.
+- This does not modify prompt contracts, provider route metadata, native OpenAI API status, or platform validation status.
+- The answer-contract helper remains a deterministic minimum explicitness check, not a doctrinal judge.
+
 ## 2026-08-20 Volcengine OpenAI-Compatible SRQ-11 Definition Live Spot
 
 | Field | Value |
@@ -38,14 +63,14 @@ Use conservative status labels:
 | Repository commit | post-`SRQ-04` manual collation boundary closeout on `main` |
 | Prompt set | Direct `SRQ-11` prompt override on `ZC-03`: `用摄类学检查定义：瓶的性相是能盛水者。这个定义成立吗？请直接回答，不要写入文件。` |
 | Transcript status | Standalone answer excerpt committed at `docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-answer.md`; compact summary at `docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live.md`; raw request JSON, provider response ID, API key value, and private account data are not committed. |
-| Repository checks | Direct `SRQ-11` answer-contract review and batch review both report fail on missing literal `违②`; broader repository checks run before PR handoff. |
-| Overall result | `target-fail`: the Volcengine OpenAI-compatible route returned an answer, but the current exact `SRQ-11` answer contract still fails. This is not native OpenAI API evidence and does not change platform status. |
+| Repository checks | #202 direct `SRQ-11` answer-contract review and batch review both reported fail on missing literal `违②` under the pre-calibration exact-literal contract; broader repository checks ran before PR handoff. |
+| Overall result | `target-fail`: the Volcengine OpenAI-compatible route returned an answer, but the #202 pre-calibration exact-literal `SRQ-11` answer contract failed. This is not native OpenAI API evidence and does not change platform status. |
 
 ### Contract Results
 
 | Answer excerpt | Reviewed as | Result | Notes |
 |---|---|---:|---|
-| `2026-08-20-volcengine-srq11-definition-live-answer.md` | `SRQ-11` / `collected_topics_definition_scope_error` | `fail` | Required definition-boundary surfaces are mostly present, but the answer says `违三要素校验之②` rather than the exact required literal `违②`; no forbidden wrong-assertion term is present. |
+| `2026-08-20-volcengine-srq11-definition-live-answer.md` | `SRQ-11` / `collected_topics_definition_scope_error` | `fail` | #202 pre-calibration review found required definition-boundary surfaces mostly present, but the answer says `违三要素校验之②` rather than the then-required exact literal `违②`; no forbidden wrong-assertion term is present. |
 
 ### Known Limits
 

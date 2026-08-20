@@ -578,7 +578,7 @@ entries:
       - query_id: SRQ-11
         status: fail
         source_file: docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-answer.md
-        notes: Volcengine OpenAI-compatible live answer excerpt; the route returned an answer, but current exact SRQ-11 answer-contract review fails on missing literal `违②`. This is not native OpenAI API evidence.
+        notes: Volcengine OpenAI-compatible live answer excerpt; the route returned an answer, but the #202 pre-calibration exact-literal SRQ-11 answer-contract review failed on missing literal `违②`. This is not native OpenAI API evidence.
 
   - id: 2026-08-20-volcengine-srq11-definition-live-batch
     file: docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-batch.yaml
@@ -594,7 +594,7 @@ entries:
       - query_id: SRQ-11
         status: fail
         batch: docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-batch.yaml
-        notes: Batch review over the Volcengine OpenAI-compatible live answer excerpt reports `pass=0`, `fail=1`, missing literal `违②`; not a platform-status change.
+        notes: Historical #202 batch review over the Volcengine OpenAI-compatible live answer excerpt reported `pass=0`, `fail=1`, missing literal `违②` under the pre-calibration exact-literal contract; not a platform-status change.
 
   - id: 2026-08-20-volcengine-srq11-definition-live-note
     file: docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live.md
@@ -610,4 +610,36 @@ entries:
       - query_id: SRQ-11
         status: fail
         batch: docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-batch.yaml
-        notes: Summary-only Volcengine OpenAI-compatible live evidence note; the standalone answer excerpt is the answer_file, and this note itself must not be used as answer_file. The result is fail evidence, not native OpenAI API validation.
+        notes: Summary-only Volcengine OpenAI-compatible live evidence note; the standalone answer excerpt is the answer_file, and this note itself must not be used as answer_file. The #202 result is historical pre-calibration fail evidence, not native OpenAI API validation.
+
+  - id: 2026-08-20-volcengine-srq11-definition-violation-alias-replay
+    file: docs/runtime-evidence/2026-08-20-srq11-definition-violation-alias-replay-batch.yaml
+    date: "2026-08-20"
+    evidence_class: batch_manifest
+    related_cases:
+      - SRQ-11
+      - ZC-03
+      - ZR-12
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-11
+        status: pass
+        batch: docs/runtime-evidence/2026-08-20-srq11-definition-violation-alias-replay-batch.yaml
+        notes: Local replay over the committed Volcengine OpenAI-compatible answer excerpt passes after exact fixture-local `definition_violation_marker` calibration accepting `违②` or `违三要素校验之②`; not a new provider call.
+
+  - id: 2026-08-20-volcengine-srq11-definition-violation-alias-replay-note
+    file: docs/runtime-evidence/2026-08-20-srq11-definition-violation-alias-replay.md
+    date: "2026-08-20"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-11
+      - ZC-03
+      - ZR-12
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-11
+        status: pass
+        batch: docs/runtime-evidence/2026-08-20-srq11-definition-violation-alias-replay-batch.yaml
+        notes: Summary-only replay note; the original #202 Volcengine live note remains historical pre-calibration exact-contract fail evidence, while the current calibrated fixture replay passes without a new runtime run or platform-status change.

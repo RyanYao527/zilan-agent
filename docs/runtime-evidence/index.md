@@ -25,7 +25,8 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Report | Inputs | Status | Notes |
 |---|---|---|---|
-| `2026-08-20-volcengine-srq11-definition-live.md` | Reviews one Volcengine OpenAI-compatible live `SRQ-11` definition answer excerpt | fail | Route returned an answer, but the current exact answer contract still fails on missing literal `违②`; not native OpenAI API evidence and no platform-status change. |
+| `2026-08-20-srq11-definition-violation-alias-replay.md` | Replays the committed Volcengine OpenAI-compatible `SRQ-11` answer excerpt after exact fixture-local definition-violation marker calibration | pass | Accepts `违②` or `违三要素校验之②` as exact marker surfaces; no new provider call, prompt change, public API change, native OpenAI validation, or platform-status change. |
+| `2026-08-20-volcengine-srq11-definition-live.md` | Reviews one Volcengine OpenAI-compatible live `SRQ-11` definition answer excerpt | fail | #202 route returned an answer, but the pre-calibration exact-literal answer contract failed on missing literal `违②`; not native OpenAI API evidence and no platform-status change. |
 | `2026-08-19-srq11-forbidden-collision-replay.md` | Replays the committed 2026-08-19 direct `SRQ-11` runtime answer excerpt after narrowing the shallow forbidden term collision | fail | Collision with heading `性相成立的标准` is cleared; `SRQ-11` still fails missing `性相过宽`, `唯在所表上成立`, `违②`, and `definiendum_boundary`. |
 | `2026-08-19-srq10-contract-calibration-replay.md` | Replays the committed 2026-08-19 direct `SRQ-10` runtime answer excerpt after exact alias-group contract calibration | pass | `SRQ-10` passes the current calibrated answer contract; no new provider call, runtime rerun, prompt change, or platform-status change. |
 | `2026-08-19-srq06-srq07-contract-calibration-replay.md` | Replays the committed 2026-08-19 direct `SRQ-06` and `SRQ-07` runtime answer excerpts after exact alias-group contract calibration | pass | `SRQ-06` / `SRQ-07` pass the current calibrated answer contracts; no new provider call, runtime rerun, prompt change, or platform-status change. |
@@ -42,7 +43,8 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Batch | Manifest | Inputs | Status | Notes |
 |---|---|---|---|---|
-| 2026-08-20 Volcengine SRQ-11 definition live spot | `2026-08-20-volcengine-srq11-definition-live-batch.yaml` | Volcengine OpenAI-compatible live answer excerpt for direct `SRQ-11` prompt | fail | `pass=0`, `fail=1`; route returned an answer, but exact contract review misses literal `违②`. |
+| 2026-08-20 SRQ-11 definition violation alias replay | `2026-08-20-srq11-definition-violation-alias-replay-batch.yaml` | committed Volcengine OpenAI-compatible live answer excerpt for direct `SRQ-11` prompt | pass | `pass=1`, `fail=0`; local replay only after exact fixture-local alias calibration, while the original #202 live evidence remains historical exact-contract fail evidence. |
+| 2026-08-20 Volcengine SRQ-11 definition live spot | `2026-08-20-volcengine-srq11-definition-live-batch.yaml` | Volcengine OpenAI-compatible live answer excerpt for direct `SRQ-11` prompt | fail | #202 historical batch reported `pass=0`, `fail=1`; route returned an answer, but the pre-calibration exact-literal contract missed `违②`. |
 | 2026-08-19 SRQ-11 forbidden collision replay | `2026-08-19-srq11-forbidden-collision-replay-batch.yaml` | committed Claude Code direct runtime spot answer for `SRQ-11` | fail | `pass=0`, `fail=1`; collision with heading `性相成立的标准` is cleared, but explicit defining-mark boundary terms remain missing. |
 | 2026-08-19 SRQ-10 contract calibration replay | `2026-08-19-srq10-contract-calibration-replay-batch.yaml` | committed Claude Code direct runtime spot answer for `SRQ-10` | pass | `pass=1`, `fail=0`; local replay only, using exact alias groups and keeping platform status unchanged. |
 | 2026-08-19 SRQ-06/SRQ-07 contract calibration replay | `2026-08-19-srq06-srq07-contract-calibration-replay-batch.yaml` | committed Claude Code direct runtime spot answers for `SRQ-06` and `SRQ-07` | pass | `pass=2`, `fail=0`; local replay only, using exact alias groups and keeping platform status unchanged. |
@@ -59,7 +61,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Answer excerpt | Runtime source | Reviewed as | Batch/report | Status |
 |---|---|---|---|---|
-| `2026-08-20-volcengine-srq11-definition-live-answer.md` | Volcengine OpenAI-compatible direct `SRQ-11` live spot | `SRQ-11` | 2026-08-20 Volcengine SRQ-11 definition live spot | fail; live answer preserves most definition-boundary surfaces but misses exact literal `违②` |
+| `2026-08-20-volcengine-srq11-definition-live-answer.md` | Volcengine OpenAI-compatible direct `SRQ-11` live spot | `SRQ-11` | 2026-08-20 Volcengine SRQ-11 definition live spot; definition violation alias replay | #202 historical pre-calibration exact-contract fail on missing literal `违②`; current calibrated replay pass via exact marker `违三要素校验之②` |
 | `2026-08-19-claude-code-srq-06-runtime-spot-answer.md` | direct `SRQ-06` Claude Code spot | `SRQ-06` | 2026-08-19 SRQ runtime spot review; contract calibration replay | current calibrated replay pass via exact alias `无法决定`; original #193 strict-literal note recorded missing `不能决定` |
 | `2026-08-19-claude-code-srq-07-runtime-spot-answer.md` | direct `SRQ-07` Claude Code spot | `SRQ-07` | 2026-08-19 SRQ runtime spot review; contract calibration replay | current calibrated replay pass via exact alias `总与别`; original #193 strict-literal note recorded missing `摄类学` |
 | `2026-08-19-claude-code-srq-10-runtime-spot-answer.md` | direct `SRQ-10` Claude Code spot | `SRQ-10` | 2026-08-19 SRQ runtime spot review; contract calibration replay | current calibrated replay pass via exact cognitive-analysis alias groups; original #193 strict-literal note recorded missing explicit cognitive and corrective-factor terms |
@@ -91,7 +93,8 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
-| `2026-08-20-volcengine-srq11-definition-live.md` | Volcengine OpenAI-compatible direct `SRQ-11` live spot with committed answer excerpt and batch review | links standalone answer excerpt; batch status fail on missing literal `违②`; not native OpenAI API evidence and not platform-status evidence |
+| `2026-08-20-srq11-definition-violation-alias-replay.md` | local replay over committed Volcengine OpenAI-compatible `SRQ-11` answer excerpt after exact fixture-local definition-violation marker calibration | summary-only replay note; current calibrated batch pass for `SRQ-11`; not a new runtime run or platform validation evidence |
+| `2026-08-20-volcengine-srq11-definition-live.md` | Volcengine OpenAI-compatible direct `SRQ-11` live spot with committed answer excerpt and batch review | links standalone answer excerpt; #202 batch status was pre-calibration fail on missing literal `违②`; not native OpenAI API evidence and not platform-status evidence |
 | `2026-08-19-srq04-manual-collation-boundary-closeout.md` | consolidated `SRQ-04` manual XML-P5 collation boundary map for anchor-located, limited theme-parallel, and still-unreviewed source-dependence/publication claims | summary-only manual collation boundary note; not runtime answer evidence, not an `answer_file`, and still `manual_review_required` |
 | `2026-08-19-srq11-definition-runtime-rerun.md` | bounded Claude Code runtime rerun attempt after `SRQ-11` definition-boundary prompt hardening | summary-only blocked note; no answer excerpt was produced because the local Claude Code custom DeepSeek model setting was rejected, so runtime remains pending |
 | `2026-08-19-srq11-definition-prompt-hardening-local-replay.md` | local prompt-invariant evidence for `SRQ-11` definition-boundary slots | summary-only prompt-prepared note; existing committed `SRQ-11` runtime answer remains fail and a new runtime rerun is pending |
@@ -148,6 +151,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 Use batch manifests for grouped review:
 
 ```powershell
+python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-20-srq11-definition-violation-alias-replay-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-19-srq11-forbidden-collision-replay-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-20-volcengine-srq11-definition-live-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-19-srq10-contract-calibration-replay-batch.yaml

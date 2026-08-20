@@ -53,8 +53,8 @@ Boundary: batch fixture review only; this is not runtime platform validation.
 - The Volcengine OpenAI-compatible route accepted the live request and returned an answer.
 - The answer preserves most `SRQ-11` definition-boundary surfaces, including `摄类学`, `性相`, `所表`,
   `能盛水者`, `瓶`, `湖`, `性相过宽`, `唯在所表上成立`, and `不成立`.
-- The answer fails the current exact answer contract because it says `违三要素校验之②` rather than the required
-  literal surface `违②`.
+- The answer failed the #202 pre-calibration exact-literal answer contract because it says `违三要素校验之②`
+  rather than the then-required literal surface `违②`.
 - No forbidden wrong-assertion term is present.
 
 ## Boundaries
