@@ -1,6 +1,6 @@
 # Runtime Validation Log
 
-> Last updated: 2026-08-19
+> Last updated: 2026-08-20
 
 This log records manual runtime validation evidence for zilan-agent. It complements CI and repository invariant checks; it does not replace `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, pytest, ruff, or platform status maintenance in `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -27,6 +27,32 @@ Use conservative status labels:
 | `fail` | The case did not meet expected behavior. |
 | `blocked` | The case could not be executed because of missing access, tooling, or provider failure. |
 | `not-run` | The case remains in scope but was not executed in this session. |
+
+## 2026-08-20 Volcengine OpenAI-Compatible SRQ-11 Definition Live Spot
+
+| Field | Value |
+|---|---|
+| Runtime | OpenAI-compatible harness |
+| Provider / model | Volcengine OpenAI-compatible route, `ark-code-latest` |
+| Tool version | `scripts/openai_api_harness.py` live mode with `--provider-route volcengine_openai_compatible` |
+| Repository commit | post-`SRQ-04` manual collation boundary closeout on `main` |
+| Prompt set | Direct `SRQ-11` prompt override on `ZC-03`: `用摄类学检查定义：瓶的性相是能盛水者。这个定义成立吗？请直接回答，不要写入文件。` |
+| Transcript status | Standalone answer excerpt committed at `docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live-answer.md`; compact summary at `docs/runtime-evidence/2026-08-20-volcengine-srq11-definition-live.md`; raw request JSON, provider response ID, API key value, and private account data are not committed. |
+| Repository checks | Direct `SRQ-11` answer-contract review and batch review both report fail on missing literal `违②`; broader repository checks run before PR handoff. |
+| Overall result | `target-fail`: the Volcengine OpenAI-compatible route returned an answer, but the current exact `SRQ-11` answer contract still fails. This is not native OpenAI API evidence and does not change platform status. |
+
+### Contract Results
+
+| Answer excerpt | Reviewed as | Result | Notes |
+|---|---|---:|---|
+| `2026-08-20-volcengine-srq11-definition-live-answer.md` | `SRQ-11` / `collected_topics_definition_scope_error` | `fail` | Required definition-boundary surfaces are mostly present, but the answer says `违三要素校验之②` rather than the exact required literal `违②`; no forbidden wrong-assertion term is present. |
+
+### Known Limits
+
+- This is one direct `SRQ-11` live spot, not a full Volcengine route rerun.
+- This evidence validates neither native OpenAI API nor the local Claude Code custom route.
+- The answer-contract helper is a deterministic minimum explicitness check, not a doctrinal judge.
+- `docs/platform-validation.md` and platform tested status remain unchanged.
 
 ## 2026-08-19 Claude Code SRQ-06 / SRQ-07 / SRQ-10 / SRQ-11 Runtime Spot Review
 
