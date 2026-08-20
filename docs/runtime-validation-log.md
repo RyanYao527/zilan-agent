@@ -28,6 +28,33 @@ Use conservative status labels:
 | `blocked` | The case could not be executed because of missing access, tooling, or provider failure. |
 | `not-run` | The case remains in scope but was not executed in this session. |
 
+## 2026-08-20 SRQ-04 Manual Semantic-Boundary Queue
+
+| Field | Value |
+|---|---|
+| Runtime | None; local evidence queue only |
+| Provider / model | None |
+| Tool version | `scripts/cbeta_collation_preflight.py` and `scripts/srq_coverage_report.py` |
+| Repository commit | after the 2026-08-20 `SRQ-11` definition-violation alias replay merge |
+| Prompt set | No prompt execution |
+| Transcript status | No answer excerpt. Reviewer queue note committed at `docs/runtime-evidence/2026-08-20-srq04-manual-semantic-boundary-queue.md`. |
+| Repository checks | CBETA XML-P5 anchor preflight and SRQ/ZR coverage report should continue to show `SRQ-04` as the only `manual_review_required` case. |
+| Overall result | `manual_review_required`: the three existing `SRQ-04` XML-P5 candidate sets remain anchor-located and limited theme-parallel evidence only. Textual equivalence, source dependence, publication-ready collation, runtime answer pass, and platform validation claims remain unproven. |
+
+### Queue Items
+
+| Candidate set | Current boundary | Reviewer task |
+|---|---|---|
+| `no-self-five-aggregates-and-feeling` | limited theme parallel | Decide whether any evidence supports textual equivalence, source dependence, or publication-ready collation beyond the current theme-parallel note. |
+| `long-agama-no-self-verse-and-aggregates` | limited theme parallel | Decide whether the two Long Agama verse contexts remain representative no-self parallels only. |
+| `za-agama-and-long-agama-no-self-verse` | limited cross-Agama theme parallel | Decide whether the cross-Agama relation remains representative no-self evidence only. |
+
+### Known Limits
+
+- This is not a runtime run, provider call, local replay, or answer-contract pass.
+- This does not modify the candidate map conclusions.
+- `docs/platform-validation.md` and platform tested status remain unchanged.
+
 ## 2026-08-20 SRQ-11 Definition Violation Alias Replay
 
 | Field | Value |
