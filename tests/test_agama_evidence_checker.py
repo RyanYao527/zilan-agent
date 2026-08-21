@@ -62,6 +62,22 @@ def test_agama_evidence_checker_maps_zr05_citation_boundary() -> None:
         "agama:T01n0001:juan-10:line-3997",
     ]
     assert {item["status"] for item in local_evidence["passage_anchor_checks"]} == {"pass"}
+
+    manual_boundary = evidence["manual_collation_boundary"]
+    assert manual_boundary["status"] == "manual_review_required"
+    assert manual_boundary["anchor_located"] is True
+    assert manual_boundary["limited_theme_parallel"] is True
+    assert manual_boundary["textual_equivalence_claim"] is False
+    assert manual_boundary["source_dependence_claim"] is False
+    assert manual_boundary["publication_ready"] is False
+    assert manual_boundary["candidate_set_ids"] == [
+        "long-agama-no-self-verse-and-aggregates",
+        "no-self-five-aggregates-and-feeling",
+        "za-agama-and-long-agama-no-self-verse",
+    ]
+    assert manual_boundary["xml_anchor_probe_statuses"] == ["anchor_located_collation_pending"]
+    assert manual_boundary["parallel_collation_statuses"] == ["manual_xml_p5_theme_parallel_reviewed"]
+    assert "Anchor location does not prove textual equivalence" in manual_boundary["limitations"]
     assert {item["code"] for item in review["diagnostics"]} == {
         "citation_anchor_required",
         "representative_search_scope",
@@ -69,6 +85,21 @@ def test_agama_evidence_checker_maps_zr05_citation_boundary() -> None:
         "boundary_statement_required",
         "local_evidence_anchors_verified",
     }
+
+
+def test_agama_evidence_checker_keeps_anchor_location_separate_from_publication_collation() -> None:
+    result = build_agama_evidence_check(DEFAULT_CASES, case_id="ZR-05")
+    review = result["evidence_reviews"][0]
+    evidence = review["agama_evidence"]
+    manual_boundary = evidence["manual_collation_boundary"]
+
+    assert evidence["local_evidence"]["status"] == "pass"
+    assert manual_boundary["anchor_located"] is True
+    assert manual_boundary["status"] == "manual_review_required"
+    assert manual_boundary["limited_theme_parallel"] is True
+    assert manual_boundary["textual_equivalence_claim"] is False
+    assert manual_boundary["source_dependence_claim"] is False
+    assert manual_boundary["publication_ready"] is False
 
 
 def test_agama_evidence_checker_defaults_to_agama_cases() -> None:

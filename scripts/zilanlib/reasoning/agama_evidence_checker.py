@@ -10,6 +10,8 @@ from zilanlib.yaml_io import display_path, load_yaml_mapping
 ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_CASES = ROOT / "tests" / "reasoning_cases.yaml"
 DEFAULT_RETRIEVAL_FIXTURE = ROOT / "tests" / "fixtures" / "retrieval_chunks" / "semantic_chunks.yaml"
+DEFAULT_COLLATION_CANDIDATES = ROOT / "tests" / "fixtures" / "collation" / "high_value_no_self_parallel_candidates.yaml"
+DEFAULT_XML_ANCHOR_PROBES = ROOT / "tests" / "fixtures" / "collation" / "cbeta_anchor_probes.yaml"
 DEFAULT_SOURCE_ROOT = detect_source_root(ROOT)
 VALIDATOR = "agama_evidence_checker"
 CONTRACT_FAMILY = "agama_evidence"
@@ -62,6 +64,32 @@ def _chunk_list(data: dict[str, Any], fixture_path: Path) -> list[dict[str, Any]
     if not all(isinstance(item, dict) for item in chunks):
         raise AgamaEvidenceCheckerError("Every retrieval chunk must be a mapping.")
     return chunks
+
+
+def _optional_mapping_list(data: dict[str, Any], field: str, source: Path) -> list[dict[str, Any]]:
+    values = data.get(field)
+    if values is None:
+        return []
+    if not isinstance(values, list):
+        raise AgamaEvidenceCheckerError(f"{_display_path(source)} {field} must be a list.")
+    return [item for item in values if isinstance(item, dict)]
+
+
+def _collation_candidate_sets(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    return _optional_mapping_list(_load_yaml(path), "candidate_sets", path)
+
+
+def _anchor_probes_by_id(path: Path) -> dict[str, dict[str, Any]]:
+    if not path.exists():
+        return {}
+    probes: dict[str, dict[str, Any]] = {}
+    for probe in _optional_mapping_list(_load_yaml(path), "anchor_probes", path):
+        probe_id = probe.get("probe_id")
+        if isinstance(probe_id, str) and probe_id:
+            probes[probe_id] = probe
+    return probes
 
 
 def _select_cases(cases: list[dict[str, Any]], case_id: str | None) -> list[dict[str, Any]]:
@@ -320,6 +348,117 @@ def _evidence_checks(
     ]
 
 
+def _claim_count(candidate_sets: list[dict[str, Any]], field: str) -> int:
+    count = 0
+    for candidate_set in candidate_sets:
+        parallels = candidate_set.get("candidate_parallels")
+        if not isinstance(parallels, list):
+            continue
+        for parallel in parallels:
+            if isinstance(parallel, dict) and parallel.get(field) is True:
+                count += 1
+    return count
+
+
+def _parallel_field_values(candidate_sets: list[dict[str, Any]], field: str) -> list[str]:
+    values: set[str] = set()
+    for candidate_set in candidate_sets:
+        parallels = candidate_set.get("candidate_parallels")
+        if not isinstance(parallels, list):
+            continue
+        for parallel in parallels:
+            if not isinstance(parallel, dict):
+                continue
+            value = parallel.get(field)
+            if isinstance(value, str) and value:
+                values.add(value)
+    return sorted(values)
+
+
+def _candidate_anchor_probe_ids(candidate_sets: list[dict[str, Any]]) -> list[str]:
+    probe_ids: set[str] = set()
+    for candidate_set in candidate_sets:
+        source_anchor_probe = candidate_set.get("source_anchor_probe")
+        if isinstance(source_anchor_probe, str) and source_anchor_probe:
+            probe_ids.add(source_anchor_probe)
+        parallels = candidate_set.get("candidate_parallels")
+        if not isinstance(parallels, list):
+            continue
+        for parallel in parallels:
+            if not isinstance(parallel, dict):
+                continue
+            anchor_probe = parallel.get("anchor_probe")
+            if isinstance(anchor_probe, str) and anchor_probe:
+                probe_ids.add(anchor_probe)
+    return sorted(probe_ids)
+
+
+def _manual_collation_boundary(
+    *,
+    collation_boundary_required: bool,
+    candidate_sets: list[dict[str, Any]],
+    anchor_probes: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    if not collation_boundary_required:
+        return {
+            "status": "not_required",
+            "anchor_located": False,
+            "limited_theme_parallel": False,
+            "textual_equivalence_claim": False,
+            "source_dependence_claim": False,
+            "publication_ready": False,
+            "candidate_set_ids": [],
+            "missing_xml_anchor_probe_ids": [],
+            "xml_anchor_probe_statuses": [],
+            "parallel_collation_statuses": [],
+            "limitations": [],
+        }
+
+    candidate_set_ids = sorted(
+        str(candidate_set.get("set_id"))
+        for candidate_set in candidate_sets
+        if isinstance(candidate_set.get("set_id"), str)
+    )
+    probe_ids = _candidate_anchor_probe_ids(candidate_sets)
+    missing_probe_ids = [probe_id for probe_id in probe_ids if probe_id not in anchor_probes]
+    probe_statuses = sorted(
+        {
+            str(anchor_probes[probe_id].get("collation_status"))
+            for probe_id in probe_ids
+            if probe_id in anchor_probes and isinstance(anchor_probes[probe_id].get("collation_status"), str)
+        }
+    )
+    parallel_statuses = _parallel_field_values(candidate_sets, "collation_status")
+    textual_equivalence_claim = _claim_count(candidate_sets, "equivalence_claim") > 0
+    source_dependence_claim = _claim_count(candidate_sets, "source_dependence_claim") > 0
+    publication_ready = _claim_count(candidate_sets, "publication_ready") > 0
+    limited_theme_parallel = (
+        "manual_xml_p5_theme_parallel_reviewed" in parallel_statuses
+        and not textual_equivalence_claim
+        and not source_dependence_claim
+        and not publication_ready
+    )
+    anchor_located = bool(probe_ids) and not missing_probe_ids
+    status = "publication_ready" if publication_ready else "manual_review_required"
+    return {
+        "status": status,
+        "anchor_located": anchor_located,
+        "limited_theme_parallel": limited_theme_parallel,
+        "textual_equivalence_claim": textual_equivalence_claim,
+        "source_dependence_claim": source_dependence_claim,
+        "publication_ready": publication_ready,
+        "candidate_set_ids": candidate_set_ids,
+        "missing_xml_anchor_probe_ids": missing_probe_ids,
+        "xml_anchor_probe_statuses": probe_statuses,
+        "parallel_collation_statuses": parallel_statuses,
+        "limitations": [
+            "Anchor location does not prove textual equivalence",
+            "Limited theme-parallel review does not prove source dependence",
+            "Manual collation boundary does not change runtime or platform validation status",
+        ],
+    }
+
+
 def _diagnostics(
     *,
     citation_required: bool,
@@ -384,6 +523,8 @@ def _check_case(
     case: dict[str, Any],
     retrieval_fixture_path: Path,
     source_root: Path | None,
+    candidate_sets: list[dict[str, Any]],
+    anchor_probes: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
     case_id = case.get("id")
     expected = case.get("expected")
@@ -436,6 +577,11 @@ def _check_case(
             },
             "reference_summary": _reference_summary(reference_files),
             "local_evidence": local_evidence,
+            "manual_collation_boundary": _manual_collation_boundary(
+                collation_boundary_required=collation_boundary,
+                candidate_sets=candidate_sets,
+                anchor_probes=anchor_probes,
+            ),
             "evidence_checks": _evidence_checks(
                 citation_required=citation_required,
                 search_scope=search_scope,
@@ -457,6 +603,8 @@ def build_agama_evidence_check(
     *,
     case_id: str | None = None,
     retrieval_fixture_path: Path = DEFAULT_RETRIEVAL_FIXTURE,
+    collation_candidates_path: Path = DEFAULT_COLLATION_CANDIDATES,
+    anchor_probes_path: Path = DEFAULT_XML_ANCHOR_PROBES,
     source_root: Path | None = DEFAULT_SOURCE_ROOT,
 ) -> dict[str, Any]:
     """Return structured Agama evidence checks from checked-in reasoning cases."""
@@ -466,7 +614,12 @@ def build_agama_evidence_check(
     if case_id is not None and "agama_evidence" not in selected[0].get("contracts", []):
         raise AgamaEvidenceCheckerError(f"{case_id} is not an Agama evidence reasoning case.")
 
-    evidence_reviews = [_check_case(case, retrieval_fixture_path, source_root) for case in selected]
+    candidate_sets = _collation_candidate_sets(collation_candidates_path)
+    anchor_probes = _anchor_probes_by_id(anchor_probes_path)
+    evidence_reviews = [
+        _check_case(case, retrieval_fixture_path, source_root, candidate_sets, anchor_probes)
+        for case in selected
+    ]
 
     return build_validator_output(
         validator=VALIDATOR,
