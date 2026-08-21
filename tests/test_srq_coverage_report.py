@@ -68,13 +68,14 @@ def test_srq_coverage_report_exposes_agama_citation_metadata_triage() -> None:
     srq04 = _case_by_id(report, "SRQ-04")
     citation_metadata = srq04["citation_metadata"]
 
-    assert citation_metadata["status"] == "partial"
+    assert citation_metadata["status"] == "ready"
     assert citation_metadata["agama_chunk_count"] == 4
     assert citation_metadata["chunks_with_cbeta_id"] == 4
     assert citation_metadata["chunks_with_line_anchor"] == 4
     assert citation_metadata["chunks_with_line_text_hash"] == 4
     assert citation_metadata["chunks_with_section_label"] == 3
-    assert citation_metadata["chunks_missing_section_label"] == [
+    assert citation_metadata["chunks_missing_section_label"] == []
+    assert citation_metadata["chunks_with_section_label_source_unavailable"] == [
         "agama:T01n0001:juan-3:line-1829"
     ]
     assert citation_metadata["manual_collation_candidate_set_ids"] == [
@@ -186,7 +187,7 @@ def test_srq_coverage_markdown_contains_limitations_and_manual_review_language()
     assert "summary_only: pass, fail, runtime_pending" in markdown
     assert "manual_collation: manual_review_required" in markdown
     assert "## Citation Metadata" in markdown
-    assert "agama:T01n0001:juan-3:line-1829" in markdown
+    assert "section_label source unavailable: agama:T01n0001:juan-3:line-1829" in markdown
     assert "manual collation candidates: 3" in markdown
     assert "does not change platform validation status" in markdown
 

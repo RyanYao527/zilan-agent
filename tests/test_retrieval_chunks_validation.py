@@ -14,6 +14,7 @@ def _write_retrieval_repo(tmp_path: Path, body: str) -> None:
     context.mkdir()
     (context / "sample.md").write_text("line one\nline two\nline three\n", encoding="utf-8")
     (context / "agama-sample.md").write_text("（一）Sample Section\nline one\nline two\n", encoding="utf-8")
+    (context / "agama-unsectioned.md").write_text("line one\nline two\n", encoding="utf-8")
 
     answers = tmp_path / "tests" / "fixtures" / "answers"
     answers.mkdir(parents=True)
@@ -99,6 +100,45 @@ def _valid_agama_chunk(*, extra_metadata: str = '      section_label: "（一）
           end: 2
         matched_lines:
           - 2
+        hash_algorithm: sha256
+        line_text_hash: "sha256:d9e83a19744a1a2a0408d877dbda4265b1a356913361f4403b5647df33e59d04"
+        source_hash_scope: legacy_alias_for_line_text_hash
+        line_text_hash_scope: trimmed_non_empty_lines_joined_with_lf
+"""
+
+
+def _valid_unsectioned_agama_chunk(*, extra_metadata: str = "      section_label_status: source_unavailable\n") -> str:
+    return f"""  - chunk_id: agama:unsectioned
+    chunk_type: agama_passage
+    source_file: context/agama-unsectioned.md
+    start_line: 1
+    end_line: 1
+    citation: "Sample (T02n0099) 卷 1, context/agama-unsectioned.md:1"
+    passage_citation: "Sample (T02n0099) 卷 1, context/agama-unsectioned.md:1"
+    text: "line one"
+    metadata:
+      collection: "Sample"
+      cbeta_id: T02n0099
+      juan: "卷 1"
+      section_marker:
+      section_title:
+      section_label:
+{extra_metadata}      topics:
+        - sample
+      reasoning_roles:
+        - agama_evidence
+      matched_lines:
+        - 1
+      source_hash: "sha256:d9e83a19744a1a2a0408d877dbda4265b1a356913361f4403b5647df33e59d04"
+      line_text_hash: "sha256:d9e83a19744a1a2a0408d877dbda4265b1a356913361f4403b5647df33e59d04"
+      provenance:
+        source_script: scripts/search_agama.py
+        source_file: context/agama-unsectioned.md
+        line_range:
+          start: 1
+          end: 1
+        matched_lines:
+          - 1
         hash_algorithm: sha256
         line_text_hash: "sha256:d9e83a19744a1a2a0408d877dbda4265b1a356913361f4403b5647df33e59d04"
         source_hash_scope: legacy_alias_for_line_text_hash
@@ -249,6 +289,40 @@ def test_retrieval_chunks_report_agama_section_label_drift(tmp_path: Path) -> No
     assert (
         "tests/fixtures/retrieval_chunks/semantic_chunks.yaml agama:sample "
         "metadata.section_label must match section_marker and section_title."
+    ) in failures
+
+
+def test_retrieval_chunks_allow_source_unavailable_section_label_status(tmp_path: Path) -> None:
+    _write_retrieval_repo(
+        tmp_path,
+        _retrieval_fixture(_valid_unsectioned_agama_chunk(), _valid_query(chunk_id="agama:unsectioned")),
+    )
+    failures: list[str] = []
+    warnings: list[str] = []
+
+    validate_retrieval_chunks(tmp_path, failures, warnings, strict_yaml=True)
+
+    assert warnings == []
+    assert failures == []
+
+
+def test_retrieval_chunks_require_source_unavailable_status_when_source_has_no_section(tmp_path: Path) -> None:
+    _write_retrieval_repo(
+        tmp_path,
+        _retrieval_fixture(
+            _valid_unsectioned_agama_chunk(extra_metadata=""),
+            _valid_query(chunk_id="agama:unsectioned"),
+        ),
+    )
+    failures: list[str] = []
+    warnings: list[str] = []
+
+    validate_retrieval_chunks(tmp_path, failures, warnings, strict_yaml=True)
+
+    assert warnings == []
+    assert (
+        "tests/fixtures/retrieval_chunks/semantic_chunks.yaml agama:unsectioned "
+        "metadata.section_label_status must be source_unavailable when source has no section label."
     ) in failures
 
 
