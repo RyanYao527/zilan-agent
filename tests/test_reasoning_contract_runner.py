@@ -410,3 +410,10 @@ def test_reasoning_contract_runner_runs_agama_evidence_checker_for_srq04() -> No
     assert review["agama_evidence"]["collation_boundary"]["status"] == "required"
     assert review["agama_evidence"]["local_evidence"]["status"] == "pass"
     assert review["agama_evidence"]["local_evidence"]["failed_passage_anchors"] == []
+    manual_boundary = review["agama_evidence"]["manual_collation_boundary"]
+    assert manual_boundary["anchor_located"] is True
+    assert manual_boundary["limited_theme_parallel"] is True
+    assert manual_boundary["textual_equivalence_claim"] is False
+    assert manual_boundary["source_dependence_claim"] is False
+    assert manual_boundary["publication_ready"] is False
+    assert manual_boundary["status"] == "manual_review_required"
