@@ -1,6 +1,6 @@
 # Maintenance Roadmap
 
-> Last updated: 2026-08-19
+> Last updated: 2026-08-21
 
 This roadmap records engineering maintenance state and next priorities for zilan-agent. It is not platform validation evidence. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -22,6 +22,11 @@ mainline. They make fixture coverage, structured `ZR-*` links, answer sample cov
 visible without provider calls or platform-status changes. The report also exposes Agama citation metadata counts for
 CBETA IDs, line anchors, section labels, line-text hashes, and related manual collation candidate sets so citation
 refinement can stay fixture-driven before any retrieval infrastructure is added.
+
+`SRQ-04` now has a structured reviewer-decision intake fixture for the three current XML-P5 no-self candidate sets.
+The intake keeps all rows pending until a dated human decision is recorded, so anchor-located and limited
+theme-parallel evidence still does not become textual equivalence, source-dependence evidence, publication-ready
+collation, runtime pass evidence, or platform validation evidence.
 
 `docs/architecture/zilan-reliability-pattern.md` now documents the reusable developer-facing pattern behind this
 triage layer: deterministic output contracts, machine-readable evidence, local coverage reporting, and conservative

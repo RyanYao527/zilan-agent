@@ -1,6 +1,6 @@
 # Runtime Evidence Index
 
-> Last updated: 2026-08-20
+> Last updated: 2026-08-21
 
 This index is a navigation aid for `docs/runtime-evidence/`. It does not change platform validation status. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -93,6 +93,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-08-21-srq04-reviewer-decision-intake.md` | adds a structured pending reviewer-decision intake fixture for the three current `SRQ-04` XML-P5 no-self candidate sets | summary-only intake; all decisions remain pending and do not establish textual equivalence, source dependence, publication-ready collation, runtime answer evidence, or platform validation evidence |
 | `2026-08-20-srq04-manual-semantic-boundary-queue.md` | queues the current `SRQ-04` manual semantic-boundary review over three existing XML-P5 no-self candidate sets | summary-only reviewer queue; anchor-located and limited theme-parallel evidence remains `manual_review_required`, not textual equivalence, source-dependence evidence, runtime answer evidence, or platform validation evidence |
 | `2026-08-20-srq11-definition-violation-alias-replay.md` | local replay over committed Volcengine OpenAI-compatible `SRQ-11` answer excerpt after exact fixture-local definition-violation marker calibration | summary-only replay note; current calibrated batch pass for `SRQ-11`; not a new runtime run or platform validation evidence |
 | `2026-08-20-volcengine-srq11-definition-live.md` | Volcengine OpenAI-compatible direct `SRQ-11` live spot with committed answer excerpt and batch review | links standalone answer excerpt; #202 batch status was pre-calibration fail on missing literal `违②`; not native OpenAI API evidence and not platform-status evidence |

@@ -10,12 +10,25 @@ from zilanlib.yaml_io import load_yaml_for_validation
 COLLATION_FIXTURE_DIR = Path("tests/fixtures/collation")
 ANCHOR_PROBES_PATH = COLLATION_FIXTURE_DIR / "cbeta_anchor_probes.yaml"
 PARALLEL_CANDIDATES_PATH = COLLATION_FIXTURE_DIR / "high_value_no_self_parallel_candidates.yaml"
+SRQ04_REVIEWER_DECISIONS_PATH = COLLATION_FIXTURE_DIR / "srq04_manual_semantic_boundary_decisions.yaml"
 RETRIEVAL_CHUNKS_PATH = "tests/fixtures/retrieval_chunks/semantic_chunks.yaml"
 ALLOWED_PARALLEL_RELATIONS = ("doctrinal_theme_parallel", "possible_textual_parallel")
 ALLOWED_CANDIDATE_SET_STATUSES = ("candidate_map_only", "manual_collation_reviewed")
 ALLOWED_PARALLEL_CONFIDENCE = ("review_candidate", "manual_limited_theme_parallel")
 ALLOWED_COLLATION_STATUSES = ("pending_manual_collation", "manual_xml_p5_theme_parallel_reviewed")
 ALLOWED_MANUAL_REVIEW_CONCLUSIONS = ("limited_doctrinal_theme_parallel",)
+ALLOWED_REVIEWER_DECISION_STATUSES = (
+    "pending_reviewer_decision",
+    "limited_theme_parallel_confirmed",
+    "stronger_claim_requires_separate_evidence",
+)
+REQUIRED_REVIEWER_DECISION_FIELDS = (
+    "theme_parallel",
+    "textual_equivalence",
+    "source_dependence",
+    "publication_ready",
+    "decision_notes",
+)
 
 
 def _is_text(value: object) -> bool:
@@ -175,20 +188,20 @@ def _validate_parallel_candidates(
     failures: list[str],
     warnings: list[str],
     strict_yaml: bool,
-) -> None:
+) -> set[str]:
     data = load_yaml_for_validation(root, PARALLEL_CANDIDATES_PATH.as_posix(), failures, warnings, strict_yaml)
     if data is None:
-        return
+        return set()
     if not isinstance(data, dict):
         failures.append(f"{PARALLEL_CANDIDATES_PATH.as_posix()} must contain a mapping.")
-        return
+        return set()
     if data.get("version") != 1:
         failures.append(f"{PARALLEL_CANDIDATES_PATH.as_posix()} version must be 1.")
 
     candidate_sets = data.get("candidate_sets")
     if not isinstance(candidate_sets, list) or not candidate_sets:
         failures.append(f"{PARALLEL_CANDIDATES_PATH.as_posix()} candidate_sets must be a non-empty list.")
-        return
+        return set()
 
     seen_ids: set[str] = set()
     for candidate_set in candidate_sets:
@@ -359,6 +372,102 @@ def _validate_parallel_candidates(
                         f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} manual_review.evidence_file must identify "
                         "every candidate anchor and chunk."
                     )
+    return seen_ids
+
+
+def validate_srq04_reviewer_decision_intake(
+    root: Path,
+    failures: list[str],
+    warnings: list[str],
+    strict_yaml: bool,
+    *,
+    candidate_set_ids: set[str] | None = None,
+) -> None:
+    path = SRQ04_REVIEWER_DECISIONS_PATH
+    if not (root / path).exists():
+        return
+
+    data = load_yaml_for_validation(root, path.as_posix(), failures, warnings, strict_yaml)
+    if data is None:
+        return
+    if not isinstance(data, dict):
+        failures.append(f"{path.as_posix()} must contain a mapping.")
+        return
+    if data.get("version") != 1:
+        failures.append(f"{path.as_posix()} version must be 1.")
+
+    decisions = data.get("decisions")
+    if not isinstance(decisions, list) or not decisions:
+        failures.append(f"{path.as_posix()} decisions must be a non-empty list.")
+        return
+
+    known_candidate_set_ids = candidate_set_ids or set()
+    seen_ids: set[str] = set()
+    for decision in decisions:
+        if not isinstance(decision, dict):
+            failures.append(f"{path.as_posix()} contains a non-mapping decisions item.")
+            continue
+        candidate_set_id = decision.get("candidate_set_id")
+        if not _is_text(candidate_set_id):
+            failures.append(f"{path.as_posix()} decision candidate_set_id must be non-empty.")
+            continue
+        candidate_set_id = cast(str, candidate_set_id)
+        if candidate_set_id in seen_ids:
+            failures.append(f"{path.as_posix()} contains duplicate candidate_set_id: {candidate_set_id}")
+            continue
+        seen_ids.add(candidate_set_id)
+        if known_candidate_set_ids and candidate_set_id not in known_candidate_set_ids:
+            failures.append(f"{path.as_posix()} {candidate_set_id} must reference a known candidate set.")
+
+        status = decision.get("status")
+        if status not in ALLOWED_REVIEWER_DECISION_STATUSES:
+            failures.append(
+                f"{path.as_posix()} {candidate_set_id} status must be one of "
+                f"{', '.join(ALLOWED_REVIEWER_DECISION_STATUSES)}."
+            )
+        for field in REQUIRED_REVIEWER_DECISION_FIELDS:
+            if field not in decision:
+                failures.append(f"{path.as_posix()} {candidate_set_id} {field} must be present.")
+        notes = decision.get("decision_notes")
+        if "decision_notes" in decision and not _is_text(notes):
+            failures.append(f"{path.as_posix()} {candidate_set_id} decision_notes must be non-empty.")
+
+        if status == "pending_reviewer_decision":
+            for field in REQUIRED_REVIEWER_DECISION_FIELDS[:-1]:
+                if field in decision and decision.get(field) != "pending":
+                    failures.append(f"{path.as_posix()} {candidate_set_id} pending {field} must be pending.")
+        elif status == "limited_theme_parallel_confirmed":
+            expected = {
+                "theme_parallel": "limited",
+                "textual_equivalence": "not_established",
+                "source_dependence": "not_established",
+                "publication_ready": "not_established",
+            }
+            for field, expected_value in expected.items():
+                if decision.get(field) != expected_value:
+                    failures.append(
+                        f"{path.as_posix()} {candidate_set_id} {field} must be {expected_value} "
+                        "for limited_theme_parallel_confirmed."
+                    )
+        elif status == "stronger_claim_requires_separate_evidence":
+            stronger_fields = ("textual_equivalence", "source_dependence", "publication_ready")
+            if not any(decision.get(field) == "supported_with_evidence" for field in stronger_fields):
+                failures.append(
+                    f"{path.as_posix()} {candidate_set_id} stronger claim must mark at least one stronger field "
+                    "as supported_with_evidence."
+                )
+            if _repo_relative_existing_path(root, decision.get("evidence_file")) is None:
+                failures.append(
+                    f"{path.as_posix()} {candidate_set_id} stronger claim evidence_file must exist."
+                )
+
+    if known_candidate_set_ids and seen_ids != known_candidate_set_ids:
+        missing = sorted(known_candidate_set_ids - seen_ids)
+        extra = sorted(seen_ids - known_candidate_set_ids)
+        if missing:
+            failures.append(f"{path.as_posix()} missing candidate_set_id decisions: {', '.join(missing)}")
+        if extra:
+            failures.append(f"{path.as_posix()} unknown candidate_set_id decisions: {', '.join(extra)}")
 
 
 def validate_collation_fixtures(
@@ -370,11 +479,18 @@ def validate_collation_fixtures(
     probes = _load_anchor_probes(root, failures, warnings, strict_yaml)
     _validate_anchor_probe_locations(root, probes, failures)
     retrieval_chunk_ids = _load_retrieval_chunk_ids(root, failures, warnings, strict_yaml)
-    _validate_parallel_candidates(
+    candidate_set_ids = _validate_parallel_candidates(
         root,
         {probe.probe_id for probe in probes},
         retrieval_chunk_ids,
         failures,
         warnings,
         strict_yaml,
+    )
+    validate_srq04_reviewer_decision_intake(
+        root,
+        failures,
+        warnings,
+        strict_yaml,
+        candidate_set_ids=candidate_set_ids,
     )

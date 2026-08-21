@@ -1,0 +1,25 @@
+version: 1
+source: docs/runtime-evidence/2026-08-20-srq04-manual-semantic-boundary-queue.md
+purpose: Pending SRQ-04 reviewer decision intake for conservative XML-P5 semantic-boundary review.
+decisions:
+  - candidate_set_id: no-self-five-aggregates-and-feeling
+    status: pending_reviewer_decision
+    theme_parallel: pending
+    textual_equivalence: pending
+    source_dependence: pending
+    publication_ready: pending
+    decision_notes: Pending human reviewer decision; current limited theme-parallel boundary remains unchanged.
+  - candidate_set_id: long-agama-no-self-verse-and-aggregates
+    status: pending_reviewer_decision
+    theme_parallel: pending
+    textual_equivalence: pending
+    source_dependence: pending
+    publication_ready: pending
+    decision_notes: Pending human reviewer decision; current limited theme-parallel boundary remains unchanged.
+  - candidate_set_id: za-agama-and-long-agama-no-self-verse
+    status: pending_reviewer_decision
+    theme_parallel: pending
+    textual_equivalence: pending
+    source_dependence: pending
+    publication_ready: pending
+    decision_notes: Pending human reviewer decision; current limited theme-parallel boundary remains unchanged.
