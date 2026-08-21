@@ -214,6 +214,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │   ├── mock_install_smoke.py          # Claude Code mock install smoke
 │   ├── openai_api_harness.py          # OpenAI / compatible-provider harness
 │   ├── reasoning_contract_runner.py   # fixture-only contract runner
+│   ├── reasoning_alignment_report.py  # SRQ/ZR cross-system alignment triage report
 │   ├── reasoning_answer_review.py     # compact fixture-only answer review
 │   ├── reasoning_answer_review_batch.py  # batch compact answer review
 │   ├── reasoning_validator_output.py  # compatibility shim for shared validator output envelope
@@ -263,6 +264,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │           ├── collected_topics_analyzer.py
 │           ├── answer_review.py
 │           ├── answer_review_batch.py
+│           ├── alignment_report.py
 │           ├── contract_runner.py
 │           ├── hetuvidya_validator.py
 │           ├── madhyamaka_critique_engine.py
