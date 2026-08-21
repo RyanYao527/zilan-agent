@@ -20,8 +20,8 @@ Next mainline: return to reasoning and retrieval quality. The highest-ROI work i
 The new local SRQ/ZR evidence coverage report and runtime evidence manifest are the current triage layer for that
 mainline. They make fixture coverage, structured `ZR-*` links, answer sample coverage, and evidence-classed status
 visible without provider calls or platform-status changes. The report also exposes Agama citation metadata counts for
-CBETA IDs, line anchors, section labels, line-text hashes, and related manual collation candidate sets so citation
-refinement can stay fixture-driven before any retrieval infrastructure is added.
+CBETA IDs, line anchors, section labels, source-unavailable section labels, line-text hashes, and related manual
+collation candidate sets so citation refinement can stay fixture-driven before any retrieval infrastructure is added.
 
 `SRQ-04` now has a structured reviewer-decision intake fixture for the three current XML-P5 no-self candidate sets.
 The intake keeps all rows pending until a dated human decision is recorded, so anchor-located and limited

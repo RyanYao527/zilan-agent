@@ -47,6 +47,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Changed
 
+- Updated SRQ/ZR coverage citation metadata to distinguish source-unavailable Agama section labels from missing fixture metadata, preserving `SRQ-04` manual-review status and platform boundaries.
 - Updated the SRQ/ZR coverage report to expose Agama citation metadata triage, including CBETA IDs, line anchors,
   section-label gaps, line hashes, and related manual collation candidate sets without changing runtime evidence,
   provider routes, or platform status.

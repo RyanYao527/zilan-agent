@@ -203,6 +203,7 @@ def _chunk_summary(
     metadata = _metadata(chunk)
     reasoning_case_id = _reasoning_case_id(chunk_id, chunk)
     section_label = metadata.get("section_label")
+    section_label_status = metadata.get("section_label_status")
     return {
         "chunk_id": chunk_id,
         "exists": chunk is not None,
@@ -214,6 +215,7 @@ def _chunk_summary(
         "passage_citation": _citation_value(chunk, "passage_citation"),
         "cbeta_id": _cbeta_id(chunk),
         "section_label": section_label if isinstance(section_label, str) else None,
+        "section_label_status": section_label_status if isinstance(section_label_status, str) else None,
         "line_text_hash": _line_text_hash(chunk),
         "reasoning_roles": _reasoning_roles(chunk),
         "reasoning_case_id": reasoning_case_id,
@@ -290,7 +292,16 @@ def _citation_metadata(
         if not chunk.get("source_file") or not chunk.get("start_line")
     ]
     missing_line_text_hash = [str(chunk["chunk_id"]) for chunk in agama_chunks if not chunk.get("line_text_hash")]
-    missing_section_label = [str(chunk["chunk_id"]) for chunk in agama_chunks if not chunk.get("section_label")]
+    source_unavailable_section_label = [
+        str(chunk["chunk_id"])
+        for chunk in agama_chunks
+        if not chunk.get("section_label") and chunk.get("section_label_status") == "source_unavailable"
+    ]
+    missing_section_label = [
+        str(chunk["chunk_id"])
+        for chunk in agama_chunks
+        if not chunk.get("section_label") and chunk.get("section_label_status") != "source_unavailable"
+    ]
     candidate_set_ids = sorted(
         str(candidate_set.get("set_id"))
         for candidate_set in related_candidate_sets
@@ -323,8 +334,9 @@ def _citation_metadata(
         "chunks_missing_line_anchor": missing_line_anchor,
         "chunks_with_line_text_hash": len(agama_chunks) - len(missing_line_text_hash),
         "chunks_missing_line_text_hash": missing_line_text_hash,
-        "chunks_with_section_label": len(agama_chunks) - len(missing_section_label),
+        "chunks_with_section_label": sum(1 for chunk in agama_chunks if chunk.get("section_label")),
         "chunks_missing_section_label": missing_section_label,
+        "chunks_with_section_label_source_unavailable": source_unavailable_section_label,
         "manual_collation_candidate_set_ids": candidate_set_ids,
         "manual_collation_statuses": manual_statuses,
         "equivalence_claims": _claim_count(related_candidate_sets, "equivalence_claim"),
@@ -610,6 +622,12 @@ def _markdown_citation_notes(citation_metadata: dict[str, Any]) -> str:
     missing_section = citation_metadata.get("chunks_missing_section_label")
     if isinstance(missing_section, list) and missing_section:
         notes.append("missing section_label: " + ", ".join(str(chunk_id) for chunk_id in missing_section))
+    source_unavailable_section = citation_metadata.get("chunks_with_section_label_source_unavailable")
+    if isinstance(source_unavailable_section, list) and source_unavailable_section:
+        notes.append(
+            "section_label source unavailable: "
+            + ", ".join(str(chunk_id) for chunk_id in source_unavailable_section)
+        )
     missing_line_anchor = citation_metadata.get("chunks_missing_line_anchor")
     if isinstance(missing_line_anchor, list) and missing_line_anchor:
         notes.append("missing line anchor: " + ", ".join(str(chunk_id) for chunk_id in missing_line_anchor))

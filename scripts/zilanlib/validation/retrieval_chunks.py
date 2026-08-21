@@ -19,6 +19,7 @@ RETRIEVAL_HASH_ALGORITHM = "sha256"
 RETRIEVAL_SOURCE_SCRIPT = "scripts/search_agama.py"
 RETRIEVAL_SOURCE_HASH_SCOPE = "legacy_alias_for_line_text_hash"
 RETRIEVAL_LINE_TEXT_HASH_SCOPE = "trimmed_non_empty_lines_joined_with_lf"
+SECTION_LABEL_SOURCE_UNAVAILABLE = "source_unavailable"
 
 
 def contains_membership(container: object, value: str) -> bool:
@@ -64,6 +65,23 @@ def check_agama_section_metadata(
         failures.append(
             f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} "
             "metadata.section_label must match section_marker and section_title."
+        )
+    section_label_status = metadata.get("section_label_status")
+    if expected_label is None and section_label_status != SECTION_LABEL_SOURCE_UNAVAILABLE:
+        failures.append(
+            f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} "
+            "metadata.section_label_status must be source_unavailable when source has no section label."
+        )
+    if section_label_status is not None and not isinstance(section_label_status, str):
+        failures.append(f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.section_label_status must be a string or null.")
+    elif isinstance(section_label_status, str) and section_label_status != SECTION_LABEL_SOURCE_UNAVAILABLE:
+        failures.append(
+            f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} metadata.section_label_status must be source_unavailable or null."
+        )
+    elif expected_label is not None and section_label_status == SECTION_LABEL_SOURCE_UNAVAILABLE:
+        failures.append(
+            f"{RETRIEVAL_CHUNKS_PATH} {chunk_id} "
+            "metadata.section_label_status must only be source_unavailable when source has no section label."
         )
 
 
