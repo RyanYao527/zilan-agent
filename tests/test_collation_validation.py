@@ -7,6 +7,9 @@ from zilanlib.validation import collation as collation_validation
 ROOT = Path(__file__).resolve().parents[1]
 ANCHOR_PROBES = ROOT / "tests" / "fixtures" / "collation" / "cbeta_anchor_probes.yaml"
 PARALLEL_CANDIDATES = ROOT / "tests" / "fixtures" / "collation" / "high_value_no_self_parallel_candidates.yaml"
+SRQ04_REVIEWER_DECISIONS = (
+    ROOT / "tests" / "fixtures" / "collation" / "srq04_manual_semantic_boundary_decisions.yaml"
+)
 
 
 def test_manual_review_evidence_reader_rejects_a_directory(tmp_path: Path) -> None:
@@ -26,6 +29,77 @@ def test_collation_validator_accepts_checked_in_anchor_and_parallel_fixtures() -
 
     assert failures == []
     assert warnings == []
+
+
+def test_srq04_reviewer_decision_intake_covers_current_candidate_sets() -> None:
+    import yaml
+
+    data = yaml.safe_load(SRQ04_REVIEWER_DECISIONS.read_text(encoding="utf-8"))
+    candidate_data = yaml.safe_load(PARALLEL_CANDIDATES.read_text(encoding="utf-8"))
+    candidate_set_ids = {item["set_id"] for item in candidate_data["candidate_sets"]}
+    decision_ids = {item["candidate_set_id"] for item in data["decisions"]}
+
+    assert decision_ids == candidate_set_ids
+    assert {item["status"] for item in data["decisions"]} == {"pending_reviewer_decision"}
+    for decision in data["decisions"]:
+        assert set(decision) >= {
+            "candidate_set_id",
+            "status",
+            "theme_parallel",
+            "textual_equivalence",
+            "source_dependence",
+            "publication_ready",
+            "decision_notes",
+        }
+        assert decision["theme_parallel"] == "pending"
+        assert decision["textual_equivalence"] == "pending"
+        assert decision["source_dependence"] == "pending"
+        assert decision["publication_ready"] == "pending"
+
+
+def test_collation_validator_accepts_checked_in_srq04_reviewer_decision_intake() -> None:
+    failures: list[str] = []
+    warnings: list[str] = []
+
+    collation_validation.validate_srq04_reviewer_decision_intake(ROOT, failures, warnings, strict_yaml=True)
+
+    assert failures == []
+    assert warnings == []
+
+
+def test_collation_validator_rejects_reviewer_decision_missing_required_field(tmp_path: Path) -> None:
+    fixtures = tmp_path / "tests" / "fixtures" / "collation"
+    fixtures.mkdir(parents=True)
+    (fixtures / "srq04_manual_semantic_boundary_decisions.yaml").write_text(
+        """version: 1
+source: test
+decisions:
+  - candidate_set_id: no-self-five-aggregates-and-feeling
+    status: pending_reviewer_decision
+    theme_parallel: pending
+    textual_equivalence: pending
+    publication_ready: pending
+    decision_notes: Missing source-dependence field.
+""",
+        encoding="utf-8",
+    )
+
+    failures: list[str] = []
+    warnings: list[str] = []
+
+    collation_validation.validate_srq04_reviewer_decision_intake(
+        tmp_path,
+        failures,
+        warnings,
+        strict_yaml=True,
+        candidate_set_ids={"no-self-five-aggregates-and-feeling"},
+    )
+
+    assert warnings == []
+    assert failures == [
+        "tests/fixtures/collation/srq04_manual_semantic_boundary_decisions.yaml "
+        "no-self-five-aggregates-and-feeling source_dependence must be present."
+    ]
 
 
 def test_manual_collation_candidate_preserves_limited_non_equivalence_boundary() -> None:

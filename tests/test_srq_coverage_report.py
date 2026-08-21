@@ -144,11 +144,12 @@ def test_srq04_manual_collation_boundary_stays_manual_review_required_without_ru
 
     assert srq04["coverage_status"] == "manual_review_required"
     assert runtime_evidence["latest_status"] == "manual_review_required"
-    assert latest_entry["entry_id"] == "2026-08-20-srq04-manual-semantic-boundary-queue"
+    assert latest_entry["entry_id"] == "2026-08-21-srq04-reviewer-decision-intake"
     assert latest_entry["evidence_class"] == "summary_only"
     assert latest_entry["answer_file_safe"] is False
     assert latest_entry["platform_status_change"] is False
-    assert "anchor-located and limited theme-parallel evidence remain insufficient" in latest_entry["notes"]
+    assert "Structured reviewer-decision intake exists" in latest_entry["notes"]
+    assert "all rows remain pending" in latest_entry["notes"]
     assert "source dependence" in latest_entry["notes"]
     assert "runtime pass" in latest_entry["notes"]
 

@@ -1,6 +1,6 @@
 # Runtime Validation Log
 
-> Last updated: 2026-08-20
+> Last updated: 2026-08-21
 
 This log records manual runtime validation evidence for zilan-agent. It complements CI and repository invariant checks; it does not replace `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, pytest, ruff, or platform status maintenance in `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -27,6 +27,25 @@ Use conservative status labels:
 | `fail` | The case did not meet expected behavior. |
 | `blocked` | The case could not be executed because of missing access, tooling, or provider failure. |
 | `not-run` | The case remains in scope but was not executed in this session. |
+
+## 2026-08-21 SRQ-04 Reviewer Decision Intake
+
+| Field | Value |
+|---|---|
+| Runtime | None; local reviewer-decision intake only |
+| Provider / model | None |
+| Tool version | `scripts/validate_zilan_repo.py`, `scripts/cbeta_collation_preflight.py`, and `scripts/srq_coverage_report.py` |
+| Repository commit | after the 2026-08-20 `SRQ-04` manual semantic-boundary queue |
+| Prompt set | No prompt execution |
+| Transcript status | No answer excerpt. Summary-only intake note committed at `docs/runtime-evidence/2026-08-21-srq04-reviewer-decision-intake.md`. |
+| Repository checks | The collation validator checks `tests/fixtures/collation/srq04_manual_semantic_boundary_decisions.yaml` when present. |
+| Overall result | `manual_review_required`: the repository now has a structured place for future human reviewer decisions, but all three current `SRQ-04` candidate sets remain pending and conservative. Textual equivalence, source dependence, publication-ready collation, runtime answer pass, and platform validation claims remain unproven. |
+
+### Known Limits
+
+- This is not a runtime run, provider call, local replay, or answer-contract pass.
+- This does not modify the candidate map conclusions.
+- `docs/platform-validation.md` and platform tested status remain unchanged.
 
 ## 2026-08-20 SRQ-04 Manual Semantic-Boundary Queue
 

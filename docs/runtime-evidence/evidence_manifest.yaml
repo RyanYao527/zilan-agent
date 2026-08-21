@@ -657,3 +657,16 @@ entries:
         status: pass
         batch: docs/runtime-evidence/2026-08-20-srq11-definition-violation-alias-replay-batch.yaml
         notes: Summary-only replay note; the original #202 Volcengine live note remains historical pre-calibration exact-contract fail evidence, while the current calibrated fixture replay passes without a new runtime run or platform-status change.
+
+  - id: 2026-08-21-srq04-reviewer-decision-intake
+    file: docs/runtime-evidence/2026-08-21-srq04-reviewer-decision-intake.md
+    date: "2026-08-21"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-04
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-04
+        status: manual_review_required
+        notes: Structured reviewer-decision intake exists for the three current SRQ-04 XML-P5 no-self candidate sets; all rows remain pending and do not establish textual equivalence, source dependence, publication-ready collation, runtime pass, or platform validation evidence.

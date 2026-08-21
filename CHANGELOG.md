@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added a 2026-08-21 structured `SRQ-04` reviewer-decision intake fixture and summary-only evidence note so future human semantic-boundary decisions can be recorded without upgrading current limited theme-parallel evidence, runtime status, or platform validation status.
 - Added a 2026-08-20 `SRQ-04` manual semantic-boundary review queue for the three existing XML-P5 no-self candidate sets, keeping them `manual_review_required` rather than textual-equivalence, source-dependence, publication-ready collation, runtime pass, or platform validation evidence.
 - Added a 2026-08-20 local `SRQ-11` definition-violation marker replay over the committed Volcengine OpenAI-compatible answer excerpt, recording a calibrated pass without a new provider call, native OpenAI validation, prompt change, public API change, or platform-status change.
 - Added a 2026-08-20 Volcengine OpenAI-compatible direct `SRQ-11` live spot answer excerpt and batch evidence, preserving the #202 pre-calibration exact-literal fail on missing `违②` without validating native OpenAI API or changing platform status.
