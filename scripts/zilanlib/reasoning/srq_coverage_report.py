@@ -15,6 +15,7 @@ DEFAULT_FIXTURE = ROOT / "tests" / "fixtures" / "retrieval_chunks" / "semantic_c
 DEFAULT_REASONING_CASES = ROOT / "tests" / "reasoning_cases.yaml"
 DEFAULT_MANIFEST = ROOT / "docs" / "runtime-evidence" / "evidence_manifest.yaml"
 DEFAULT_RUNTIME_EVIDENCE_INDEX = ROOT / "docs" / "runtime-evidence" / "index.md"
+DEFAULT_XML_ANCHOR_PROBES = ROOT / "tests" / "fixtures" / "collation" / "cbeta_anchor_probes.yaml"
 REPORT_VERSION = 1
 REPORT_TITLE = "SRQ/ZR Evidence Coverage Report"
 OUTPUT_SCHEMA = "srq-coverage-report-v1"
@@ -233,6 +234,23 @@ def _collation_candidate_sets(collation_path: Path, *, root: Path) -> list[dict[
     return [candidate_set for candidate_set in candidate_sets if isinstance(candidate_set, dict)]
 
 
+def _anchor_probes(anchor_probes_path: Path, *, root: Path) -> dict[str, dict[str, Any]]:
+    if not anchor_probes_path.exists():
+        return {}
+    data = _load_yaml(anchor_probes_path, root=root)
+    anchor_probes = data.get("anchor_probes")
+    if not isinstance(anchor_probes, list):
+        raise SrqCoverageReportError(f"{_display(anchor_probes_path, root)} anchor_probes must be a list.")
+    probes_by_id: dict[str, dict[str, Any]] = {}
+    for probe in anchor_probes:
+        if not isinstance(probe, dict):
+            continue
+        probe_id = probe.get("probe_id")
+        if isinstance(probe_id, str) and probe_id:
+            probes_by_id[probe_id] = probe
+    return probes_by_id
+
+
 def _candidate_set_chunk_ids(candidate_set: dict[str, Any]) -> set[str]:
     chunk_ids: set[str] = set()
     source_chunk_id = candidate_set.get("source_chunk_id")
@@ -247,6 +265,38 @@ def _candidate_set_chunk_ids(candidate_set: dict[str, Any]) -> set[str]:
             if isinstance(chunk_id, str) and chunk_id:
                 chunk_ids.add(chunk_id)
     return chunk_ids
+
+
+def _candidate_set_anchor_probes_by_chunk_id(candidate_set: dict[str, Any]) -> dict[str, str]:
+    probes_by_chunk_id: dict[str, str] = {}
+    source_chunk_id = candidate_set.get("source_chunk_id")
+    source_anchor_probe = candidate_set.get("source_anchor_probe")
+    if isinstance(source_chunk_id, str) and isinstance(source_anchor_probe, str):
+        probes_by_chunk_id[source_chunk_id] = source_anchor_probe
+    parallels = candidate_set.get("candidate_parallels")
+    if isinstance(parallels, list):
+        for parallel in parallels:
+            if not isinstance(parallel, dict):
+                continue
+            chunk_id = parallel.get("chunk_id")
+            anchor_probe = parallel.get("anchor_probe")
+            if isinstance(chunk_id, str) and isinstance(anchor_probe, str):
+                probes_by_chunk_id[chunk_id] = anchor_probe
+    return probes_by_chunk_id
+
+
+def _anchor_probes_by_chunk_id(candidate_sets: list[dict[str, Any]]) -> dict[str, str]:
+    probes_by_chunk_id: dict[str, str] = {}
+    for candidate_set in candidate_sets:
+        probes_by_chunk_id.update(_candidate_set_anchor_probes_by_chunk_id(candidate_set))
+    return probes_by_chunk_id
+
+
+def _agama_chunk_sort_key(chunk_id: str) -> tuple[str, int, int, str]:
+    match = re.match(r"^agama:([^:]+):juan-(\d+):line-(\d+)$", chunk_id)
+    if not match:
+        return chunk_id, 0, 0, chunk_id
+    return match.group(1), int(match.group(2)), int(match.group(3)), chunk_id
 
 
 def _related_collation_candidate_sets(
@@ -274,10 +324,46 @@ def _claim_count(candidate_sets: list[dict[str, Any]], field: str) -> int:
     return count
 
 
+def _parallel_field_values(candidate_sets: list[dict[str, Any]], field: str) -> list[str]:
+    values: set[str] = set()
+    for candidate_set in candidate_sets:
+        parallels = candidate_set.get("candidate_parallels")
+        if not isinstance(parallels, list):
+            continue
+        for parallel in parallels:
+            if not isinstance(parallel, dict):
+                continue
+            value = parallel.get(field)
+            if isinstance(value, str) and value:
+                values.add(value)
+    return sorted(values)
+
+
+def _manual_collation_boundary_status(candidate_sets: list[dict[str, Any]]) -> str:
+    if not candidate_sets:
+        return "not_applicable"
+    if (
+        _claim_count(candidate_sets, "equivalence_claim") > 0
+        or _claim_count(candidate_sets, "source_dependence_claim") > 0
+        or _claim_count(candidate_sets, "publication_ready") > 0
+    ):
+        return "stronger_claim_recorded"
+    if "manual_xml_p5_theme_parallel_reviewed" in _parallel_field_values(candidate_sets, "collation_status"):
+        return "theme_parallel_only"
+    return "manual_review_required"
+
+
+def _claim_status(*, candidate_sets: list[dict[str, Any]], field: str, claimed: str, unreviewed: str) -> str:
+    if not candidate_sets:
+        return "not_applicable"
+    return claimed if _claim_count(candidate_sets, field) > 0 else unreviewed
+
+
 def _citation_metadata(
     *,
     expected_chunks: list[dict[str, Any]],
     related_candidate_sets: list[dict[str, Any]],
+    anchor_probes_by_id: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
     agama_chunks = [
         chunk
@@ -314,6 +400,42 @@ def _citation_metadata(
             if isinstance(candidate_set.get("status"), str)
         }
     )
+    anchor_probe_ids_by_chunk_id = _anchor_probes_by_chunk_id(related_candidate_sets)
+    chunks_with_xml_anchor = sorted(
+        [
+            chunk_id
+            for chunk_id in chunk_ids
+            if (probe_id := anchor_probe_ids_by_chunk_id.get(chunk_id)) and probe_id in anchor_probes_by_id
+        ],
+        key=_agama_chunk_sort_key,
+    )
+    chunks_missing_xml_anchor = sorted(
+        [
+            chunk_id
+            for chunk_id in chunk_ids
+            if related_candidate_sets and chunk_id not in set(chunks_with_xml_anchor)
+        ],
+        key=_agama_chunk_sort_key,
+    )
+    xml_anchor_probe_statuses = sorted(
+        {
+            str(anchor_probes_by_id[probe_id].get("collation_status"))
+            for probe_id in anchor_probe_ids_by_chunk_id.values()
+            if probe_id in anchor_probes_by_id
+            and isinstance(anchor_probes_by_id[probe_id].get("collation_status"), str)
+        }
+    )
+    if not agama_chunks or not related_candidate_sets:
+        xml_anchor_status = "not_applicable"
+    elif chunks_missing_xml_anchor:
+        xml_anchor_status = "partial"
+    elif chunks_with_xml_anchor:
+        xml_anchor_status = "anchor_located"
+    else:
+        xml_anchor_status = "missing"
+    equivalence_claims = _claim_count(related_candidate_sets, "equivalence_claim")
+    source_dependence_claims = _claim_count(related_candidate_sets, "source_dependence_claim")
+    publication_ready_claims = _claim_count(related_candidate_sets, "publication_ready")
 
     if not agama_chunks:
         status = "not_applicable"
@@ -339,9 +461,32 @@ def _citation_metadata(
         "chunks_with_section_label_source_unavailable": source_unavailable_section_label,
         "manual_collation_candidate_set_ids": candidate_set_ids,
         "manual_collation_statuses": manual_statuses,
-        "equivalence_claims": _claim_count(related_candidate_sets, "equivalence_claim"),
-        "source_dependence_claims": _claim_count(related_candidate_sets, "source_dependence_claim"),
-        "publication_ready_claims": _claim_count(related_candidate_sets, "publication_ready"),
+        "equivalence_claims": equivalence_claims,
+        "source_dependence_claims": source_dependence_claims,
+        "publication_ready_claims": publication_ready_claims,
+        "xml_anchor_status": xml_anchor_status,
+        "chunks_with_xml_anchor": chunks_with_xml_anchor,
+        "chunks_missing_xml_anchor": chunks_missing_xml_anchor,
+        "xml_anchor_probe_statuses": xml_anchor_probe_statuses,
+        "manual_collation_boundary_status": _manual_collation_boundary_status(related_candidate_sets),
+        "textual_equivalence_status": _claim_status(
+            candidate_sets=related_candidate_sets,
+            field="equivalence_claim",
+            claimed="textual_equivalence_claimed",
+            unreviewed="textual_equivalence_unreviewed",
+        ),
+        "source_dependence_status": _claim_status(
+            candidate_sets=related_candidate_sets,
+            field="source_dependence_claim",
+            claimed="source_dependence_claimed",
+            unreviewed="source_dependence_unreviewed",
+        ),
+        "publication_ready_status": _claim_status(
+            candidate_sets=related_candidate_sets,
+            field="publication_ready",
+            claimed="publication_ready_claimed",
+            unreviewed="publication_ready_unreviewed",
+        ),
     }
 
 
@@ -478,6 +623,7 @@ def _build_case(
     declared_reasoning_cases: set[str],
     evidence_records: list[dict[str, Any]],
     collation_candidate_sets: list[dict[str, Any]],
+    anchor_probes_by_id: dict[str, dict[str, Any]],
     *,
     runtime_evidence_source: str,
 ) -> dict[str, Any]:
@@ -517,6 +663,7 @@ def _build_case(
         "citation_metadata": _citation_metadata(
             expected_chunks=expected_chunks,
             related_candidate_sets=related_candidate_sets,
+            anchor_probes_by_id=anchor_probes_by_id,
         ),
         "coverage_status": _readiness(
             expected_chunks=expected_chunks,
@@ -546,6 +693,7 @@ def build_srq_coverage_report(
     fixture_path: Path | None = None,
     reasoning_cases_path: Path | None = None,
     collation_candidates_path: Path | None = None,
+    anchor_probes_path: Path | None = None,
     manifest_path: Path | None = None,
     runtime_evidence_index_path: Path | None = None,
 ) -> dict[str, Any]:
@@ -555,6 +703,7 @@ def build_srq_coverage_report(
         collation_candidates_path
         or root / "tests" / "fixtures" / "collation" / "high_value_no_self_parallel_candidates.yaml"
     )
+    anchor_probes_path = anchor_probes_path or DEFAULT_XML_ANCHOR_PROBES
     manifest_path = manifest_path or root / "docs" / "runtime-evidence" / "evidence_manifest.yaml"
     runtime_evidence_index_path = runtime_evidence_index_path or root / "docs" / "runtime-evidence" / "index.md"
 
@@ -567,6 +716,7 @@ def build_srq_coverage_report(
     chunks_by_id = {chunk_id: chunk for chunk in chunks if (chunk_id := _chunk_id(chunk)) is not None}
     declared_reasoning_cases = _reasoning_case_ids(reasoning_cases_path, root=root)
     collation_candidate_sets = _collation_candidate_sets(collation_candidates_path, root=root)
+    anchor_probes_by_id = _anchor_probes(anchor_probes_path, root=root)
     query_ids = [str(query["id"]) for query in queries]
 
     if manifest_path.exists():
@@ -583,6 +733,7 @@ def build_srq_coverage_report(
             declared_reasoning_cases,
             evidence_by_query.get(str(query["id"]), []),
             collation_candidate_sets,
+            anchor_probes_by_id,
             runtime_evidence_source=runtime_evidence_source,
         )
         for query in queries
@@ -594,6 +745,7 @@ def build_srq_coverage_report(
             "fixture": _display(fixture_path, root),
             "reasoning_cases": _display(reasoning_cases_path, root),
             "collation_candidates": _display(collation_candidates_path, root),
+            "xml_anchor_probes": _display(anchor_probes_path, root),
         },
         "runtime_evidence_source": runtime_evidence_source,
         "summary": _summary(cases),
@@ -634,6 +786,15 @@ def _markdown_citation_notes(citation_metadata: dict[str, Any]) -> str:
     candidate_ids = citation_metadata.get("manual_collation_candidate_set_ids")
     if isinstance(candidate_ids, list) and candidate_ids:
         notes.append(f"manual collation candidates: {len(candidate_ids)}")
+    xml_anchor_status = citation_metadata.get("xml_anchor_status")
+    if isinstance(xml_anchor_status, str) and xml_anchor_status != "not_applicable":
+        notes.append(f"XML anchors: {xml_anchor_status}")
+    manual_boundary_status = citation_metadata.get("manual_collation_boundary_status")
+    if isinstance(manual_boundary_status, str) and manual_boundary_status != "not_applicable":
+        notes.append(f"manual boundary: {manual_boundary_status}")
+    textual_equivalence_status = citation_metadata.get("textual_equivalence_status")
+    if isinstance(textual_equivalence_status, str) and textual_equivalence_status != "not_applicable":
+        notes.append(f"textual equivalence: {textual_equivalence_status}")
     if citation_metadata.get("publication_ready_claims") == 0 and candidate_ids:
         notes.append("publication-ready claims: 0")
     return "; ".join(notes) or "-"

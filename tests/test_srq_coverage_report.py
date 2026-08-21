@@ -85,6 +85,34 @@ def test_srq_coverage_report_exposes_agama_citation_metadata_triage() -> None:
     ]
     assert citation_metadata["manual_collation_statuses"] == ["manual_collation_reviewed"]
     assert citation_metadata["publication_ready_claims"] == 0
+    assert citation_metadata["xml_anchor_status"] == "anchor_located"
+    assert citation_metadata["chunks_with_xml_anchor"] == [
+        "agama:T01n0001:juan-1:line-881",
+        "agama:T01n0001:juan-3:line-1829",
+        "agama:T01n0001:juan-10:line-3997",
+        "agama:T02n0099:juan-1:line-147",
+    ]
+    assert citation_metadata["chunks_missing_xml_anchor"] == []
+    assert citation_metadata["xml_anchor_probe_statuses"] == ["anchor_located_collation_pending"]
+    assert citation_metadata["manual_collation_boundary_status"] == "theme_parallel_only"
+    assert citation_metadata["textual_equivalence_status"] == "textual_equivalence_unreviewed"
+    assert citation_metadata["source_dependence_status"] == "source_dependence_unreviewed"
+    assert citation_metadata["publication_ready_status"] == "publication_ready_unreviewed"
+
+
+def test_srq_coverage_report_does_not_treat_anchor_location_as_completed_collation() -> None:
+    report = build_srq_coverage_report(ROOT)
+
+    srq04 = _case_by_id(report, "SRQ-04")
+    citation_metadata = srq04["citation_metadata"]
+
+    assert srq04["coverage_status"] == "manual_review_required"
+    assert citation_metadata["xml_anchor_status"] == "anchor_located"
+    assert citation_metadata["manual_collation_boundary_status"] == "theme_parallel_only"
+    assert citation_metadata["textual_equivalence_status"] == "textual_equivalence_unreviewed"
+    assert citation_metadata["source_dependence_status"] == "source_dependence_unreviewed"
+    assert citation_metadata["publication_ready_claims"] == 0
+    assert citation_metadata["publication_ready_status"] == "publication_ready_unreviewed"
 
 
 def test_srq_coverage_report_json_shape_and_manifest_runtime_evidence() -> None:
@@ -188,6 +216,9 @@ def test_srq_coverage_markdown_contains_limitations_and_manual_review_language()
     assert "manual_collation: manual_review_required" in markdown
     assert "## Citation Metadata" in markdown
     assert "section_label source unavailable: agama:T01n0001:juan-3:line-1829" in markdown
+    assert "XML anchors: anchor_located" in markdown
+    assert "manual boundary: theme_parallel_only" in markdown
+    assert "textual equivalence: textual_equivalence_unreviewed" in markdown
     assert "manual collation candidates: 3" in markdown
     assert "does not change platform validation status" in markdown
 
