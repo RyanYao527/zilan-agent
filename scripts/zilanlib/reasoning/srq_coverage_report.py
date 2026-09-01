@@ -19,9 +19,9 @@ DEFAULT_XML_ANCHOR_PROBES = ROOT / "tests" / "fixtures" / "collation" / "cbeta_a
 DEFAULT_REVIEWER_DECISIONS = (
     ROOT / "tests" / "fixtures" / "collation" / "srq04_manual_semantic_boundary_decisions.yaml"
 )
-REPORT_VERSION = 1
+REPORT_VERSION = 2
 REPORT_TITLE = "SRQ/ZR Evidence Coverage Report"
-OUTPUT_SCHEMA = "srq-coverage-report-v1"
+OUTPUT_SCHEMA = "srq-coverage-report-v2"
 LIMITATIONS = (
     "Coverage/audit only; this report does not grade answer quality or prove runtime correctness.",
     "No provider calls, live runtime calls, embeddings, vector search, or reranking are performed.",
@@ -746,6 +746,98 @@ def _summary(cases: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def _case_reasoning_roles(case: dict[str, Any]) -> list[str]:
+    roles: set[str] = set()
+    expected_chunks = case.get("expected_chunks")
+    if not isinstance(expected_chunks, list):
+        return []
+    for chunk in expected_chunks:
+        if not isinstance(chunk, dict):
+            continue
+        chunk_roles = chunk.get("reasoning_roles")
+        if isinstance(chunk_roles, list):
+            roles.update(str(role) for role in chunk_roles if isinstance(role, str) and role)
+    return sorted(roles)
+
+
+def _runtime_evidence_classes(case: dict[str, Any]) -> list[str]:
+    runtime_evidence = case.get("runtime_evidence")
+    if not isinstance(runtime_evidence, dict):
+        return []
+    status_by_class = runtime_evidence.get("status_by_evidence_class")
+    if not isinstance(status_by_class, dict):
+        return []
+    return sorted(str(evidence_class) for evidence_class in status_by_class if evidence_class)
+
+
+def _manual_review_boundary(case: dict[str, Any]) -> dict[str, Any]:
+    citation_metadata = case.get("citation_metadata")
+    if not isinstance(citation_metadata, dict):
+        return {
+            "status": "not_applicable",
+            "reviewer_decision_status_counts": {},
+            "pending_reviewer_decisions": [],
+            "limited_theme_parallel_confirmed": [],
+            "stronger_claim_requires_separate_evidence": [],
+        }
+    return {
+        "status": citation_metadata.get("manual_collation_boundary_status", "not_applicable"),
+        "reviewer_decision_status_counts": citation_metadata.get("reviewer_decision_status_counts", {}),
+        "pending_reviewer_decisions": citation_metadata.get("pending_reviewer_decisions", []),
+        "limited_theme_parallel_confirmed": citation_metadata.get("limited_theme_parallel_confirmed", []),
+        "stronger_claim_requires_separate_evidence": citation_metadata.get(
+            "stronger_claim_requires_separate_evidence",
+            [],
+        ),
+    }
+
+
+def _recommended_next_action(case: dict[str, Any]) -> str:
+    coverage_status = case.get("coverage_status")
+    manual_boundary = _manual_review_boundary(case)
+    if coverage_status == "manual_review_required" and manual_boundary["status"] != "not_applicable":
+        return "manual_semantic_boundary_review"
+    if coverage_status == "manual_review_required":
+        return "review_runtime_or_manual_evidence"
+    if manual_boundary["status"] in {"manual_review_required", "theme_parallel_only"}:
+        return "manual_collation_review_before_publication_claims"
+    if coverage_status == "missing":
+        return "repair_expected_chunk_fixture"
+    if coverage_status == "partial":
+        return "add_answer_sample_or_evidence"
+    if coverage_status == "fail":
+        return "calibrate_prompt_or_contract"
+    return "ready_for_runtime_or_retrieval_triage"
+
+
+def _triage_matrix(cases: list[dict[str, Any]]) -> dict[str, Any]:
+    coverage_counts = Counter(str(case["coverage_status"]) for case in cases)
+    rows: list[dict[str, Any]] = []
+    for case in cases:
+        citation_metadata = case["citation_metadata"]
+        runtime_evidence = case["runtime_evidence"]
+        rows.append(
+            {
+                "query_id": case["query_id"],
+                "coverage_status": case["coverage_status"],
+                "citation_readiness": citation_metadata["status"],
+                "runtime_latest_status": runtime_evidence["latest_status"],
+                "runtime_evidence_classes": _runtime_evidence_classes(case),
+                "reasoning_family_coverage": {
+                    "related_reasoning_case_ids": case["related_reasoning_case_ids"],
+                    "reasoning_roles": _case_reasoning_roles(case),
+                },
+                "manual_review_boundary": _manual_review_boundary(case),
+                "recommended_next_action": _recommended_next_action(case),
+            }
+        )
+    return {
+        "case_count": len(cases),
+        "coverage_status_counts": dict(sorted(coverage_counts.items())),
+        "rows": rows,
+    }
+
+
 def build_srq_coverage_report(
     root: Path = ROOT,
     *,
@@ -813,6 +905,7 @@ def build_srq_coverage_report(
         },
         "runtime_evidence_source": runtime_evidence_source,
         "summary": _summary(cases),
+        "triage_matrix": _triage_matrix(cases),
         "cases": cases,
         "limitations": list(LIMITATIONS),
     }
@@ -906,6 +999,59 @@ def render_markdown_report(report: dict[str, Any]) -> str:
                 zr_links=zr_links,
                 runtime_status=runtime_status,
                 notes=notes,
+            )
+        )
+
+    lines.extend(
+        [
+            "",
+            "## Citation / Reasoning Triage Matrix",
+            "",
+            "This matrix is for local triage only. It links citation readiness, runtime evidence class, "
+            "reasoning family coverage, and manual-review boundary status without changing platform validation status.",
+            "",
+            "| SRQ | Coverage | Citation | Runtime latest | Runtime classes | ZR links | Reasoning roles | "
+            "Manual boundary | Next action |",
+            "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        ]
+    )
+    matrix = report["triage_matrix"]
+    rows = matrix["rows"] if isinstance(matrix, dict) else []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        reasoning_family = row.get("reasoning_family_coverage")
+        if not isinstance(reasoning_family, dict):
+            reasoning_family = {}
+        zr_links_value = reasoning_family.get("related_reasoning_case_ids")
+        reasoning_roles_value = reasoning_family.get("reasoning_roles")
+        zr_links = ", ".join(str(case_id) for case_id in zr_links_value) if isinstance(zr_links_value, list) else "-"
+        reasoning_roles = (
+            ", ".join(str(role) for role in reasoning_roles_value) if isinstance(reasoning_roles_value, list) else "-"
+        )
+        runtime_classes = row.get("runtime_evidence_classes")
+        runtime_class_text = (
+            ", ".join(str(evidence_class) for evidence_class in runtime_classes)
+            if isinstance(runtime_classes, list) and runtime_classes
+            else "-"
+        )
+        manual_boundary = row.get("manual_review_boundary")
+        manual_boundary_status = "-"
+        if isinstance(manual_boundary, dict):
+            status = manual_boundary.get("status")
+            manual_boundary_status = str(status) if isinstance(status, str) and status else "-"
+        lines.append(
+            "| {query_id} | `{coverage}` | `{citation}` | `{runtime}` | {runtime_classes} | {zr_links} | "
+            "{reasoning_roles} | {manual_boundary} | {next_action} |".format(
+                query_id=row["query_id"],
+                coverage=row["coverage_status"],
+                citation=row["citation_readiness"],
+                runtime=row["runtime_latest_status"],
+                runtime_classes=runtime_class_text,
+                zr_links=zr_links or "-",
+                reasoning_roles=reasoning_roles or "-",
+                manual_boundary=manual_boundary_status,
+                next_action=row["recommended_next_action"],
             )
         )
 
