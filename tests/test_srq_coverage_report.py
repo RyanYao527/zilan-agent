@@ -134,15 +134,67 @@ def test_srq_coverage_report_json_shape_and_manifest_runtime_evidence() -> None:
         "source",
         "runtime_evidence_source",
         "summary",
+        "triage_matrix",
         "cases",
         "limitations",
     }
     assert report["runtime_evidence_source"] == "manifest"
+    assert report["source"]["output_schema"] == "srq-coverage-report-v2"
 
     srq04 = _case_by_id(report, "SRQ-04")
     runtime_evidence = srq04["runtime_evidence"]
     assert runtime_evidence["source"] == "manifest"
     assert "pass" in runtime_evidence["statuses"]
+
+
+def test_srq_coverage_report_exposes_citation_reasoning_triage_matrix() -> None:
+    report = build_srq_coverage_report(ROOT)
+    matrix = report["triage_matrix"]
+
+    assert matrix["case_count"] == 11
+    assert matrix["coverage_status_counts"] == {
+        "manual_review_required": 1,
+        "ready": 10,
+    }
+    rows = {row["query_id"]: row for row in matrix["rows"]}
+
+    srq01 = rows["SRQ-01"]
+    assert set(srq01) == {
+        "query_id",
+        "coverage_status",
+        "citation_readiness",
+        "runtime_latest_status",
+        "runtime_evidence_classes",
+        "reasoning_family_coverage",
+        "manual_review_boundary",
+        "recommended_next_action",
+    }
+    assert set(srq01["reasoning_family_coverage"]) == {
+        "related_reasoning_case_ids",
+        "reasoning_roles",
+    }
+    assert srq01["coverage_status"] == "ready"
+    assert srq01["citation_readiness"] == "ready"
+    assert "ZR-06" in srq01["reasoning_family_coverage"]["related_reasoning_case_ids"]
+    assert "agama_evidence" in srq01["reasoning_family_coverage"]["reasoning_roles"]
+    assert srq01["manual_review_boundary"]["status"] == "theme_parallel_only"
+    assert srq01["recommended_next_action"] == "manual_collation_review_before_publication_claims"
+
+    srq04 = rows["SRQ-04"]
+    assert srq04["coverage_status"] == "manual_review_required"
+    assert srq04["citation_readiness"] == "ready"
+    assert srq04["runtime_latest_status"] == "manual_review_required"
+    assert "manual_collation" in srq04["runtime_evidence_classes"]
+    assert srq04["manual_review_boundary"]["status"] == "theme_parallel_only"
+    assert srq04["manual_review_boundary"]["reviewer_decision_status_counts"] == {
+        "pending_reviewer_decision": 3,
+    }
+    assert srq04["manual_review_boundary"]["pending_reviewer_decisions"] == [
+        "long-agama-no-self-verse-and-aggregates",
+        "no-self-five-aggregates-and-feeling",
+        "za-agama-and-long-agama-no-self-verse",
+    ]
+    assert srq04["recommended_next_action"] == "manual_semantic_boundary_review"
 
 
 def test_srq_coverage_report_groups_runtime_status_by_evidence_class() -> None:
@@ -231,6 +283,10 @@ def test_srq_coverage_markdown_contains_limitations_and_manual_review_language()
     assert "reviewer decisions: pending_reviewer_decision=3" in markdown
     assert "textual equivalence: textual_equivalence_unreviewed" in markdown
     assert "manual collation candidates: 3" in markdown
+    assert "## Citation / Reasoning Triage Matrix" in markdown
+    assert "manual_semantic_boundary_review" in markdown
+    assert "theme_parallel_only" in markdown
+    assert "ZR-06" in markdown
     assert "does not change platform validation status" in markdown
 
 
