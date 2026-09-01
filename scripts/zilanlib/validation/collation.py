@@ -66,6 +66,15 @@ def _repo_relative_existing_path(root: Path, value: object) -> str | None:
     return rel_path if path.is_file() else None
 
 
+def _repo_relative_dated_evidence_note(root: Path, value: object) -> str | None:
+    rel_path = _repo_relative_existing_path(root, value)
+    if rel_path is None:
+        return None
+    if re.fullmatch(r"docs/runtime-evidence/\d{4}-\d{2}-\d{2}-[^/]+\.md", rel_path):
+        return rel_path
+    return None
+
+
 def _validate_manual_review(root: Path, set_id: str, manual_review: object, failures: list[str]) -> None:
     if not isinstance(manual_review, dict):
         failures.append(f"{PARALLEL_CANDIDATES_PATH.as_posix()} {set_id} manual_review must be a mapping.")
@@ -456,9 +465,10 @@ def validate_srq04_reviewer_decision_intake(
                     f"{path.as_posix()} {candidate_set_id} stronger claim must mark at least one stronger field "
                     "as supported_with_evidence."
                 )
-            if _repo_relative_existing_path(root, decision.get("evidence_file")) is None:
+            if _repo_relative_dated_evidence_note(root, decision.get("evidence_file")) is None:
                 failures.append(
-                    f"{path.as_posix()} {candidate_set_id} stronger claim evidence_file must exist."
+                    f"{path.as_posix()} {candidate_set_id} stronger claim evidence_file must reference a dated "
+                    "docs/runtime-evidence/YYYY-MM-DD-*.md note."
                 )
 
     if known_candidate_set_ids and seen_ids != known_candidate_set_ids:

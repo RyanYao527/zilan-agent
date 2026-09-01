@@ -27,7 +27,9 @@ infrastructure is added.
 `SRQ-04` now has a structured reviewer-decision intake fixture for the three current XML-P5 no-self candidate sets.
 The intake keeps all rows pending until a dated human decision is recorded, so anchor-located and limited
 theme-parallel evidence still does not become textual equivalence, source-dependence evidence, publication-ready
-collation, runtime pass evidence, or platform validation evidence.
+collation, runtime pass evidence, or platform validation evidence. The repository validator rejects pending rows that
+carry stronger boundary claims, and stronger textual-equivalence/source-dependence/publication-ready claims must point
+to a dated `docs/runtime-evidence/YYYY-MM-DD-*.md` note.
 
 `docs/architecture/zilan-reliability-pattern.md` now documents the reusable developer-facing pattern behind this
 triage layer: deterministic output contracts, machine-readable evidence, local coverage reporting, and conservative
@@ -48,7 +50,7 @@ separation between fixture pass, local replay, manual collation, provider smoke,
 | Runtime evidence manifest | `docs/runtime-evidence/evidence_manifest.yaml` is the machine-readable v1 index for high-value SRQ/ZC/ZR evidence. It records evidence class, answer-file safety, platform-status-change boundaries, and review status for local coverage reporting while preserving the Markdown index as human navigation. |
 | Architecture overview | `ARCHITECTURE.md` provides the contributor-facing architecture entrypoint for the Skill/Agent dual track, `zilanlib` CLI-wrapper pattern, fixture-only validators, platform-status boundaries, and local validation workflow. |
 | Reliability pattern | `docs/architecture/zilan-reliability-pattern.md` describes the reusable developer-facing method that combines `zilan_contract`, the runtime evidence manifest, and the SRQ/ZR coverage report without provider calls or platform-status changes. |
-| Coverage baseline | `pytest-cov` is available in dev dependencies and `python -m pytest` reports `scripts/zilanlib` coverage without a fail-under gate. The current 2026-09-01 local baseline is 336 passing tests, 83% zilanlib coverage, and 74 mypy-checked source files; root CLI wrappers remain exercised by tests but no longer dominate the reported coverage surface. |
+| Coverage baseline | `pytest-cov` is available in dev dependencies and `python -m pytest` reports `scripts/zilanlib` coverage without a fail-under gate. The current 2026-09-01 local baseline is 339 passing tests, 84% zilanlib coverage, and 74 mypy-checked source files; root CLI wrappers remain exercised by tests but no longer dominate the reported coverage surface. |
 | Contribution intake | `.github/ISSUE_TEMPLATE/` provides structured bug-report and feature-request templates for platform, validation, documentation, CI, and reasoning-contract work. |
 | Community conduct | `CODE_OF_CONDUCT.md` adopts Contributor Covenant 2.1 with maintainer contact via GitHub `@RyanYao527`, and `CONTRIBUTING.md` / `CONTRIBUTING-en.md` link to it. |
 | Community deliverables | `docs/article-output-contracts.md` is an LLM-engineering-facing article pitching the output-contract pattern; `docs/zilan-contract-quickstart.md` is a standalone quickstart for the `zilan_contract` pip package; `docs/awesome-list-pr-entries.md` provides pre-written PR entries for four curated awesome lists; `docs/codex-manual-tasks.md` is a checklist for recording demos, uploading HF datasets, submitting awesome-list PRs, and publishing the article. |
