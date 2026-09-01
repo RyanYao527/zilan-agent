@@ -95,6 +95,16 @@ def test_srq_coverage_report_exposes_agama_citation_metadata_triage() -> None:
     assert citation_metadata["chunks_missing_xml_anchor"] == []
     assert citation_metadata["xml_anchor_probe_statuses"] == ["anchor_located_collation_pending"]
     assert citation_metadata["manual_collation_boundary_status"] == "theme_parallel_only"
+    assert citation_metadata["reviewer_decision_status_counts"] == {
+        "pending_reviewer_decision": 3,
+    }
+    assert citation_metadata["pending_reviewer_decisions"] == [
+        "long-agama-no-self-verse-and-aggregates",
+        "no-self-five-aggregates-and-feeling",
+        "za-agama-and-long-agama-no-self-verse",
+    ]
+    assert citation_metadata["limited_theme_parallel_confirmed"] == []
+    assert citation_metadata["stronger_claim_requires_separate_evidence"] == []
     assert citation_metadata["textual_equivalence_status"] == "textual_equivalence_unreviewed"
     assert citation_metadata["source_dependence_status"] == "source_dependence_unreviewed"
     assert citation_metadata["publication_ready_status"] == "publication_ready_unreviewed"
@@ -218,6 +228,7 @@ def test_srq_coverage_markdown_contains_limitations_and_manual_review_language()
     assert "section_label source unavailable: agama:T01n0001:juan-3:line-1829" in markdown
     assert "XML anchors: anchor_located" in markdown
     assert "manual boundary: theme_parallel_only" in markdown
+    assert "reviewer decisions: pending_reviewer_decision=3" in markdown
     assert "textual equivalence: textual_equivalence_unreviewed" in markdown
     assert "manual collation candidates: 3" in markdown
     assert "does not change platform validation status" in markdown
