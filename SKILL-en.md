@@ -238,6 +238,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │   ├── semantic_fixture_review.py
 │   ├── semantic_retrieval_dry_run.py
 │   ├── semantic_role_coverage.py
+│   ├── srq04_manual_review_packet.py # SRQ-04 manual semantic-boundary review packet
 │   ├── validate_zilan_repo.py         # repository invariant checks
 │   ├── hf_upload_dataset.py           # HuggingFace Dataset upload helper
 │   └── zilanlib/                      # shared script helpers
@@ -262,6 +263,7 @@ This section describes Zilan's knowledge sources and method boundaries. The publ
 │           ├── candidates.py
 │           ├── collation_preflight.py
 │           ├── fixture_review.py
+│           ├── manual_review_packet.py
 │           └── search.py
 │       ├── provider/                  # provider-route preflight helpers
 │           ├── __init__.py

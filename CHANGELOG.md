@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added `scripts/srq04_manual_review_packet.py` as a local Markdown/JSON packet for handing the three current `SRQ-04` XML-P5 no-self candidate sets to human reviewers without provider calls, runtime evidence, publication-ready claims, or platform-status changes.
 - Added `scripts/reasoning_alignment_report.py` and a local `SRQ-01` / `ZR-06` alignment report so Agama evidence, Hetuvidya, Collected Topics, Madhyamaka, cognitive mapping, and practice-boundary coverage can be triaged independently without provider calls, semantic grading, or platform-status changes.
 - Added a 2026-08-21 structured `SRQ-04` reviewer-decision intake fixture and summary-only evidence note so future human semantic-boundary decisions can be recorded without upgrading current limited theme-parallel evidence, runtime status, or platform validation status.
 - Added a 2026-08-20 `SRQ-04` manual semantic-boundary review queue for the three existing XML-P5 no-self candidate sets, keeping them `manual_review_required` rather than textual-equivalence, source-dependence, publication-ready collation, runtime pass, or platform validation evidence.
