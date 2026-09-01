@@ -102,6 +102,21 @@ def _claim_section(contract_run: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _has_answer_contract_practice_boundary_slot(retrieval: dict[str, Any]) -> bool:
+    answer_contracts = retrieval.get("answer_contracts")
+    if not isinstance(answer_contracts, dict):
+        return False
+    for contract in answer_contracts.values():
+        if not isinstance(contract, dict):
+            continue
+        required_slots = contract.get("required_slots")
+        if not isinstance(required_slots, list):
+            continue
+        if any(isinstance(slot, dict) and slot.get("label") == "practice_boundary" for slot in required_slots):
+            return True
+    return False
+
+
 def _practice_boundary_section(contract_run: dict[str, Any]) -> dict[str, Any]:
     retrieval = contract_run.get("retrieval", {})
     role_coverage = contract_run.get("role_coverage", {})
@@ -109,9 +124,13 @@ def _practice_boundary_section(contract_run: dict[str, Any]) -> dict[str, Any]:
     answer_boundary_contracts = retrieval.get("answer_boundary_contracts", {})
     declared = isinstance(non_chunk_needs, list) and "practice_boundary" in non_chunk_needs
     has_contract = isinstance(answer_boundary_contracts, dict) and "practice_boundary" in answer_boundary_contracts
+    has_answer_contract_slot = isinstance(retrieval, dict) and _has_answer_contract_practice_boundary_slot(retrieval)
     if declared and has_contract:
         status = "present"
         reason = "non_chunk_boundary_contract_present"
+    elif declared and has_answer_contract_slot:
+        status = "present"
+        reason = "answer_contract_practice_boundary_slot_present"
     elif declared:
         status = "missing"
         reason = "non_chunk_boundary_contract_missing"

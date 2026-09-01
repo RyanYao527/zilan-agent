@@ -70,6 +70,44 @@ def test_reasoning_alignment_report_does_not_substitute_one_system_for_another(t
     assert report["summary"]["missing_sections"] == ["madhyamaka_boundary"]
 
 
+def test_reasoning_alignment_report_uses_answer_contract_practice_boundary_slots() -> None:
+    srq09 = build_reasoning_alignment_report(query_id="SRQ-09")
+    srq10 = build_reasoning_alignment_report(query_id="SRQ-10")
+
+    assert srq09["alignment"]["cognitive_mapping"]["status"] == "present"
+    assert srq09["alignment"]["practice_boundary"]["status"] == "present"
+    assert srq09["alignment"]["practice_boundary"]["reason"] == "answer_contract_practice_boundary_slot_present"
+    assert srq10["alignment"]["cognitive_mapping"]["status"] == "present"
+    assert srq10["alignment"]["practice_boundary"]["status"] == "present"
+    assert srq10["alignment"]["practice_boundary"]["reason"] == "answer_contract_practice_boundary_slot_present"
+
+
+def test_reasoning_alignment_report_does_not_substitute_cognitive_mapping_for_practice_boundary(
+    tmp_path: Path,
+) -> None:
+    fixture = yaml.safe_load(DEFAULT_FIXTURE.read_text(encoding="utf-8"))
+    for query in fixture["queries"]:
+        if query.get("id") != "SRQ-10":
+            continue
+        for contract in query["answer_contracts"].values():
+            contract["required_slots"] = [
+                slot
+                for slot in contract["required_slots"]
+                if slot.get("label") != "practice_boundary"
+            ]
+        break
+    fixture_path = tmp_path / "semantic_chunks_without_practice_boundary_slot.yaml"
+    fixture_path.write_text(yaml.safe_dump(fixture, allow_unicode=True, sort_keys=False), encoding="utf-8")
+
+    report = build_reasoning_alignment_report(fixture_path=fixture_path, query_id="SRQ-10")
+    alignment = report["alignment"]
+
+    assert alignment["cognitive_mapping"]["status"] == "present"
+    assert alignment["practice_boundary"]["status"] == "missing"
+    assert alignment["practice_boundary"]["reason"] == "non_chunk_boundary_contract_missing"
+    assert report["summary"]["missing_sections"] == ["practice_boundary"]
+
+
 def test_reasoning_alignment_markdown_contains_boundaries_and_limitations() -> None:
     report = build_reasoning_alignment_report(query_id="SRQ-01")
     markdown = render_markdown_report(report)
