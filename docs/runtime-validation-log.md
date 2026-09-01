@@ -1,6 +1,6 @@
 # Runtime Validation Log
 
-> Last updated: 2026-08-21
+> Last updated: 2026-09-01
 
 This log records manual runtime validation evidence for zilan-agent. It complements CI and repository invariant checks; it does not replace `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, pytest, ruff, or platform status maintenance in `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -27,6 +27,25 @@ Use conservative status labels:
 | `fail` | The case did not meet expected behavior. |
 | `blocked` | The case could not be executed because of missing access, tooling, or provider failure. |
 | `not-run` | The case remains in scope but was not executed in this session. |
+
+## 2026-09-01 SRQ-04 Reviewer Decision Ingestion Path
+
+| Field | Value |
+|---|---|
+| Runtime | None; local reviewer-decision ingestion path only |
+| Provider / model | None |
+| Tool version | `scripts/srq04_manual_review_packet.py` and `scripts/validate_zilan_repo.py` |
+| Repository commit | after the 2026-09-01 `SRQ-04` reviewer decision guard |
+| Prompt set | No prompt execution |
+| Transcript status | No answer excerpt. Summary-only ingestion-path note committed at `docs/runtime-evidence/2026-09-01-srq04-reviewer-decision-ingestion-path.md`. |
+| Repository checks | The packet exposes machine-readable ingestion rules. The collation validator requires dated `docs/runtime-evidence/YYYY-MM-DD-*.md` notes for non-pending reviewer decisions. |
+| Overall result | `manual_review_required`: no new human reviewer conclusion was supplied. All three current `SRQ-04` candidate sets remain pending in the reviewer-decision fixture, and textual equivalence, source dependence, publication-ready collation, runtime answer pass, and platform validation claims remain unproven. |
+
+### Known Limits
+
+- This is not a runtime run, provider call, local replay, or answer-contract pass.
+- This does not modify the candidate map conclusions.
+- `docs/platform-validation.md` and platform tested status remain unchanged.
 
 ## 2026-08-21 SRQ-04 Reviewer Decision Intake
 

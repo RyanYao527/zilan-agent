@@ -35,6 +35,32 @@ def test_srq04_manual_review_packet_lists_current_candidate_sets() -> None:
     ]
 
 
+def test_srq04_manual_review_packet_exposes_decision_ingestion_rules() -> None:
+    packet = build_srq04_manual_review_packet()
+
+    ingestion_rules = packet["ingestion_rules"]
+    assert ingestion_rules["decision_fixture"] == (
+        "tests/fixtures/collation/srq04_manual_semantic_boundary_decisions.yaml"
+    )
+    assert ingestion_rules["dated_evidence_note_pattern"] == "docs/runtime-evidence/YYYY-MM-DD-*.md"
+    assert ingestion_rules["status_transitions"]["pending_reviewer_decision"]["candidate_map_update"] == (
+        "blocked_until_dated_decision"
+    )
+    assert ingestion_rules["status_transitions"]["limited_theme_parallel_confirmed"]["evidence_file"] == (
+        "required_dated_note"
+    )
+    assert ingestion_rules["status_transitions"]["stronger_claim_requires_separate_evidence"][
+        "candidate_map_update"
+    ] == "matching_candidate_set_only"
+
+    for candidate in packet["candidate_sets"]:
+        ingestion = candidate["ingestion"]
+        assert ingestion["next_action"] == "await_dated_human_reviewer_decision"
+        assert ingestion["requires_dated_evidence_note"] is False
+        assert ingestion["candidate_map_update_allowed"] is False
+        assert ingestion["manifest_status"] == "manual_review_required"
+
+
 def test_srq04_manual_review_packet_keeps_pending_decisions_conservative() -> None:
     packet = build_srq04_manual_review_packet()
 
@@ -65,6 +91,9 @@ def test_srq04_manual_review_packet_markdown_is_human_review_ready() -> None:
     assert "publication_ready" in markdown
     assert "anchor located does not prove textual equivalence" in markdown
     assert "limited theme-parallel does not prove source dependence" in markdown
+    assert "## Ingestion Rules" in markdown
+    assert "docs/runtime-evidence/YYYY-MM-DD-*.md" in markdown
+    assert "candidate map update" in markdown
     assert "not runtime evidence" in markdown
     assert "no-self-five-aggregates-and-feeling" in markdown
 

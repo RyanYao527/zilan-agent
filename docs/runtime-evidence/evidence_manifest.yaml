@@ -670,3 +670,17 @@ entries:
       - query_id: SRQ-04
         status: manual_review_required
         notes: Structured reviewer-decision intake exists for the three current SRQ-04 XML-P5 no-self candidate sets; all rows remain pending and do not establish textual equivalence, source dependence, publication-ready collation, runtime pass, or platform validation evidence.
+
+  - id: 2026-09-01-srq04-reviewer-decision-ingestion-path
+    file: docs/runtime-evidence/2026-09-01-srq04-reviewer-decision-ingestion-path.md
+    date: "2026-09-01"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-04
+      - ZR-05
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-04
+        status: manual_review_required
+        notes: Local reviewer-decision ingestion path only; future limited or stronger semantic-boundary decisions must cite dated evidence notes, while all current rows remain pending; textual equivalence, source dependence, publication-ready collation, and runtime pass remain unproven, and platform status remains unchanged.

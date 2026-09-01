@@ -23,6 +23,31 @@ REQUIRED_REVIEWER_FIELDS = (
     "publication_ready",
     "decision_notes",
 )
+DATED_EVIDENCE_NOTE_PATTERN = "docs/runtime-evidence/YYYY-MM-DD-*.md"
+INGESTION_RULES = {
+    "decision_fixture": "tests/fixtures/collation/srq04_manual_semantic_boundary_decisions.yaml",
+    "dated_evidence_note_pattern": DATED_EVIDENCE_NOTE_PATTERN,
+    "status_transitions": {
+        "pending_reviewer_decision": {
+            "field_values": "all reviewer boundary fields remain pending",
+            "evidence_file": "not_allowed",
+            "candidate_map_update": "blocked_until_dated_decision",
+            "manifest_status": "manual_review_required",
+        },
+        "limited_theme_parallel_confirmed": {
+            "field_values": "theme_parallel=limited; stronger boundary fields=not_established",
+            "evidence_file": "required_dated_note",
+            "candidate_map_update": "not_required_for_stronger_claims",
+            "manifest_status": "manual_review_required",
+        },
+        "stronger_claim_requires_separate_evidence": {
+            "field_values": "at least one stronger boundary field=supported_with_evidence",
+            "evidence_file": "required_dated_note",
+            "candidate_map_update": "matching_candidate_set_only",
+            "manifest_status": "manual_review_required_until_scoped_evidence_pr",
+        },
+    },
+}
 LIMITATIONS = (
     "anchor located does not prove textual equivalence",
     "limited theme-parallel does not prove source dependence",
@@ -150,6 +175,33 @@ def _parallel_summary(candidate_set: dict[str, Any]) -> list[dict[str, Any]]:
     return summaries
 
 
+def _decision_ingestion(decision: dict[str, Any]) -> dict[str, Any]:
+    status = decision.get("status")
+    if status == "limited_theme_parallel_confirmed":
+        return {
+            "next_action": "record_dated_limited_theme_parallel_decision",
+            "requires_dated_evidence_note": True,
+            "candidate_map_update_allowed": False,
+            "candidate_map_update_scope": "none_for_stronger_claims",
+            "manifest_status": "manual_review_required",
+        }
+    if status == "stronger_claim_requires_separate_evidence":
+        return {
+            "next_action": "open_scoped_candidate_map_evidence_pr",
+            "requires_dated_evidence_note": True,
+            "candidate_map_update_allowed": True,
+            "candidate_map_update_scope": "matching_candidate_set_only",
+            "manifest_status": "manual_review_required_until_scoped_evidence_pr",
+        }
+    return {
+        "next_action": "await_dated_human_reviewer_decision",
+        "requires_dated_evidence_note": False,
+        "candidate_map_update_allowed": False,
+        "candidate_map_update_scope": "none",
+        "manifest_status": "manual_review_required",
+    }
+
+
 def _candidate_packet(
     candidate_set: dict[str, Any],
     *,
@@ -176,6 +228,7 @@ def _candidate_packet(
         "manual_review": manual_review if isinstance(manual_review, dict) else {},
         "candidate_parallels": _parallel_summary(candidate_set),
         "decision": decision,
+        "ingestion": _decision_ingestion(decision),
         "reviewer_required_fields": list(REQUIRED_REVIEWER_FIELDS),
         "boundary_claims": boundary_claims,
         "reviewer_questions": {
@@ -244,6 +297,7 @@ def build_srq04_manual_review_packet(
             "xml_anchor_probes": _display(anchor_probes_path),
         },
         "reviewer_required_fields": list(REQUIRED_REVIEWER_FIELDS),
+        "ingestion_rules": INGESTION_RULES,
         "summary": _summary(packets),
         "candidate_sets": packets,
         "limitations": list(LIMITATIONS),
@@ -267,6 +321,18 @@ def render_markdown_packet(packet: dict[str, Any]) -> str:
         "",
     ]
     lines.extend(f"- `{field}`" for field in packet["reviewer_required_fields"])
+    lines.extend(
+        [
+            "",
+            "## Ingestion Rules",
+            "",
+            f"- Decision fixture: `{packet['ingestion_rules']['decision_fixture']}`",
+            f"- Dated evidence note pattern: `{packet['ingestion_rules']['dated_evidence_note_pattern']}`",
+            "- Pending rows block candidate map update until a dated human decision is recorded.",
+            "- Stronger claims require a scoped evidence PR and candidate map update "
+            "for the matching candidate set only.",
+        ]
+    )
     lines.extend(
         [
             "",

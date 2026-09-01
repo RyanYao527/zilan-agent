@@ -183,14 +183,14 @@ def test_srq04_manual_collation_boundary_stays_manual_review_required_without_ru
 
     assert srq04["coverage_status"] == "manual_review_required"
     assert runtime_evidence["latest_status"] == "manual_review_required"
-    assert latest_entry["entry_id"] == "2026-08-21-srq04-reviewer-decision-intake"
+    assert latest_entry["entry_id"] == "2026-09-01-srq04-reviewer-decision-ingestion-path"
     assert latest_entry["evidence_class"] == "summary_only"
     assert latest_entry["answer_file_safe"] is False
     assert latest_entry["platform_status_change"] is False
-    assert "Structured reviewer-decision intake exists" in latest_entry["notes"]
-    assert "all rows remain pending" in latest_entry["notes"]
+    assert "Local reviewer-decision ingestion path only" in latest_entry["notes"]
+    assert "all current rows remain pending" in latest_entry["notes"]
     assert "source dependence" in latest_entry["notes"]
-    assert "runtime pass" in latest_entry["notes"]
+    assert "platform status remains unchanged" in latest_entry["notes"]
 
 
 def test_srq_coverage_report_preserves_hash_prefixed_manifest_note_text() -> None:

@@ -445,6 +445,8 @@ def validate_srq04_reviewer_decision_intake(
             for field in REQUIRED_REVIEWER_DECISION_FIELDS[:-1]:
                 if field in decision and decision.get(field) != "pending":
                     failures.append(f"{path.as_posix()} {candidate_set_id} pending {field} must be pending.")
+            if "evidence_file" in decision:
+                failures.append(f"{path.as_posix()} {candidate_set_id} pending evidence_file must be omitted.")
         elif status == "limited_theme_parallel_confirmed":
             expected = {
                 "theme_parallel": "limited",
@@ -458,6 +460,11 @@ def validate_srq04_reviewer_decision_intake(
                         f"{path.as_posix()} {candidate_set_id} {field} must be {expected_value} "
                         "for limited_theme_parallel_confirmed."
                     )
+            if _repo_relative_dated_evidence_note(root, decision.get("evidence_file")) is None:
+                failures.append(
+                    f"{path.as_posix()} {candidate_set_id} limited reviewer decision evidence_file must reference "
+                    "a dated docs/runtime-evidence/YYYY-MM-DD-*.md note."
+                )
         elif status == "stronger_claim_requires_separate_evidence":
             stronger_fields = ("textual_equivalence", "source_dependence", "publication_ready")
             if not any(decision.get(field) == "supported_with_evidence" for field in stronger_fields):
