@@ -49,6 +49,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Changed
 
+- Updated the reasoning alignment report with a local `--all` mode that summarizes every `SRQ-*` case, highlights `SRQ-01` / `ZR-06` as the current full-chain exemplar, and keeps `SRQ-04` manual-review-required boundaries visible without provider calls or platform-status changes.
 - Updated the reasoning alignment report to count explicit answer-contract `practice_boundary` slots as practice-boundary evidence for `SRQ-09` / `SRQ-10`, while still preventing cognitive-mapping coverage from substituting for a missing practice boundary.
 - Updated the Agama evidence checker and SRQ/ZR coverage report to expose `SRQ-04` reviewer-decision intake status counts and pending candidate-set IDs without changing candidate conclusions, runtime evidence, provider routes, or platform status.
 - Updated the Agama evidence checker and reasoning contract runner output to expose manual collation boundary fields (`anchor_located`, `limited_theme_parallel`, textual-equivalence/source-dependence/publication-ready claims) without promoting `SRQ-04` answer-contract pass evidence into publication collation or platform status.

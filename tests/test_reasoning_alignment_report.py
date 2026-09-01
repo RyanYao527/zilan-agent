@@ -8,7 +8,9 @@ from pathlib import Path
 import yaml
 from zilanlib.reasoning.alignment_report import (
     ALIGNMENT_SECTION_IDS,
+    ALL_OUTPUT_SCHEMA,
     OUTPUT_SCHEMA,
+    build_all_reasoning_alignment_report,
     build_reasoning_alignment_report,
     render_markdown_report,
 )
@@ -108,6 +110,43 @@ def test_reasoning_alignment_report_does_not_substitute_cognitive_mapping_for_pr
     assert report["summary"]["missing_sections"] == ["practice_boundary"]
 
 
+def test_reasoning_alignment_all_report_summarizes_all_srq_cases() -> None:
+    report = build_all_reasoning_alignment_report()
+
+    assert report["output_schema"] == ALL_OUTPUT_SCHEMA
+    assert report["summary"]["case_count"] == 11
+    assert report["summary"]["status_counts"] == {
+        "manual_review_required": 1,
+        "ready": 10,
+    }
+    assert report["summary"]["cases_with_manual_review_required"] == ["SRQ-04"]
+    assert report["summary"]["cases_with_missing_sections"] == []
+
+    srq01 = next(case for case in report["cases"] if case["query_id"] == "SRQ-01")
+    assert srq01["focus_reasoning_case_id"] == "ZR-06"
+    assert srq01["summary"]["missing_sections"] == []
+
+    srq04 = next(case for case in report["cases"] if case["query_id"] == "SRQ-04")
+    assert srq04["coverage_status"] == "manual_review_required"
+
+    srq09 = next(case for case in report["cases"] if case["query_id"] == "SRQ-09")
+    srq10 = next(case for case in report["cases"] if case["query_id"] == "SRQ-10")
+    assert srq09["alignment"]["practice_boundary"]["status"] == "present"
+    assert srq10["alignment"]["practice_boundary"]["status"] == "present"
+
+
+def test_reasoning_alignment_all_markdown_highlights_exemplar_and_manual_boundary() -> None:
+    report = build_all_reasoning_alignment_report()
+    markdown = render_markdown_report(report)
+
+    assert "# Reasoning Alignment Report" in markdown
+    assert "All SRQ summary" in markdown
+    assert "SRQ-01 / ZR-06" in markdown
+    assert "SRQ-04" in markdown
+    assert "manual_review_required" in markdown
+    assert "one present section cannot substitute for another missing section" in markdown
+
+
 def test_reasoning_alignment_markdown_contains_boundaries_and_limitations() -> None:
     report = build_reasoning_alignment_report(query_id="SRQ-01")
     markdown = render_markdown_report(report)
@@ -132,3 +171,19 @@ def test_reasoning_alignment_report_cli_outputs_json() -> None:
     assert payload["output_schema"] == OUTPUT_SCHEMA
     assert payload["query_id"] == "SRQ-01"
     assert payload["alignment"]["practice_boundary"]["status"] == "present"
+
+
+def test_reasoning_alignment_report_cli_all_outputs_json() -> None:
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT), "--all", "--json"],
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8",
+        capture_output=True,
+        check=True,
+    )
+    payload = json.loads(result.stdout)
+
+    assert payload["output_schema"] == ALL_OUTPUT_SCHEMA
+    assert payload["summary"]["case_count"] == 11
+    assert payload["summary"]["cases_with_manual_review_required"] == ["SRQ-04"]
