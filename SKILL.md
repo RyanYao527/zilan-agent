@@ -227,6 +227,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │   ├── semantic_fixture_review.py
 │   ├── semantic_retrieval_dry_run.py
 │   ├── semantic_role_coverage.py
+│   ├── srq04_manual_review_packet.py # SRQ-04 人工语义边界 review packet
 │   ├── validate_zilan_repo.py         # 仓库 invariant 校验
 │   ├── demo.sh                        # CLI demo recording script
 │   ├── demo.tape                      # vhs tape for demo GIF generation
@@ -253,6 +254,7 @@ description: Digital human Buddhist practice skill for Zilan; supports Buddhist 
 │           ├── candidates.py
 │           ├── collation_preflight.py
 │           ├── fixture_review.py
+│           ├── manual_review_packet.py
 │           └── search.py
 │       ├── provider/                  # provider-route preflight helpers
 │           ├── __init__.py
