@@ -16,6 +16,9 @@ DEFAULT_REASONING_CASES = ROOT / "tests" / "reasoning_cases.yaml"
 DEFAULT_MANIFEST = ROOT / "docs" / "runtime-evidence" / "evidence_manifest.yaml"
 DEFAULT_RUNTIME_EVIDENCE_INDEX = ROOT / "docs" / "runtime-evidence" / "index.md"
 DEFAULT_XML_ANCHOR_PROBES = ROOT / "tests" / "fixtures" / "collation" / "cbeta_anchor_probes.yaml"
+DEFAULT_REVIEWER_DECISIONS = (
+    ROOT / "tests" / "fixtures" / "collation" / "srq04_manual_semantic_boundary_decisions.yaml"
+)
 REPORT_VERSION = 1
 REPORT_TITLE = "SRQ/ZR Evidence Coverage Report"
 OUTPUT_SCHEMA = "srq-coverage-report-v1"
@@ -251,6 +254,16 @@ def _anchor_probes(anchor_probes_path: Path, *, root: Path) -> dict[str, dict[st
     return probes_by_id
 
 
+def _reviewer_decisions(reviewer_decisions_path: Path, *, root: Path) -> list[dict[str, Any]]:
+    if not reviewer_decisions_path.exists():
+        return []
+    data = _load_yaml(reviewer_decisions_path, root=root)
+    decisions = data.get("decisions")
+    if not isinstance(decisions, list):
+        raise SrqCoverageReportError(f"{_display(reviewer_decisions_path, root)} decisions must be a list.")
+    return [decision for decision in decisions if isinstance(decision, dict)]
+
+
 def _candidate_set_chunk_ids(candidate_set: dict[str, Any]) -> set[str]:
     chunk_ids: set[str] = set()
     source_chunk_id = candidate_set.get("source_chunk_id")
@@ -339,6 +352,47 @@ def _parallel_field_values(candidate_sets: list[dict[str, Any]], field: str) -> 
     return sorted(values)
 
 
+def _candidate_set_ids(candidate_sets: list[dict[str, Any]]) -> list[str]:
+    return sorted(
+        str(candidate_set.get("set_id"))
+        for candidate_set in candidate_sets
+        if isinstance(candidate_set.get("set_id"), str)
+    )
+
+
+def _reviewer_decision_summary(
+    *,
+    candidate_sets: list[dict[str, Any]],
+    reviewer_decisions: list[dict[str, Any]],
+) -> dict[str, Any]:
+    candidate_ids = set(_candidate_set_ids(candidate_sets))
+    related_decisions = [
+        decision
+        for decision in reviewer_decisions
+        if isinstance(decision.get("candidate_set_id"), str)
+        and str(decision["candidate_set_id"]) in candidate_ids
+    ]
+    status_counts = Counter(
+        str(decision["status"])
+        for decision in related_decisions
+        if isinstance(decision.get("status"), str) and decision.get("status")
+    )
+
+    def ids_for(status: str) -> list[str]:
+        return sorted(
+            str(decision["candidate_set_id"])
+            for decision in related_decisions
+            if decision.get("status") == status and isinstance(decision.get("candidate_set_id"), str)
+        )
+
+    return {
+        "reviewer_decision_status_counts": dict(sorted(status_counts.items())),
+        "pending_reviewer_decisions": ids_for("pending_reviewer_decision"),
+        "limited_theme_parallel_confirmed": ids_for("limited_theme_parallel_confirmed"),
+        "stronger_claim_requires_separate_evidence": ids_for("stronger_claim_requires_separate_evidence"),
+    }
+
+
 def _manual_collation_boundary_status(candidate_sets: list[dict[str, Any]]) -> str:
     if not candidate_sets:
         return "not_applicable"
@@ -364,6 +418,7 @@ def _citation_metadata(
     expected_chunks: list[dict[str, Any]],
     related_candidate_sets: list[dict[str, Any]],
     anchor_probes_by_id: dict[str, dict[str, Any]],
+    reviewer_decisions: list[dict[str, Any]],
 ) -> dict[str, Any]:
     agama_chunks = [
         chunk
@@ -388,11 +443,7 @@ def _citation_metadata(
         for chunk in agama_chunks
         if not chunk.get("section_label") and chunk.get("section_label_status") != "source_unavailable"
     ]
-    candidate_set_ids = sorted(
-        str(candidate_set.get("set_id"))
-        for candidate_set in related_candidate_sets
-        if isinstance(candidate_set.get("set_id"), str)
-    )
+    candidate_set_ids = _candidate_set_ids(related_candidate_sets)
     manual_statuses = sorted(
         {
             str(candidate_set.get("status"))
@@ -446,6 +497,11 @@ def _citation_metadata(
     else:
         status = "ready"
 
+    reviewer_decision_summary = _reviewer_decision_summary(
+        candidate_sets=related_candidate_sets,
+        reviewer_decisions=reviewer_decisions,
+    )
+
     return {
         "status": status,
         "agama_chunk_count": len(agama_chunks),
@@ -487,6 +543,7 @@ def _citation_metadata(
             claimed="publication_ready_claimed",
             unreviewed="publication_ready_unreviewed",
         ),
+        **reviewer_decision_summary,
     }
 
 
@@ -624,6 +681,7 @@ def _build_case(
     evidence_records: list[dict[str, Any]],
     collation_candidate_sets: list[dict[str, Any]],
     anchor_probes_by_id: dict[str, dict[str, Any]],
+    reviewer_decisions: list[dict[str, Any]],
     *,
     runtime_evidence_source: str,
 ) -> dict[str, Any]:
@@ -664,6 +722,7 @@ def _build_case(
             expected_chunks=expected_chunks,
             related_candidate_sets=related_candidate_sets,
             anchor_probes_by_id=anchor_probes_by_id,
+            reviewer_decisions=reviewer_decisions,
         ),
         "coverage_status": _readiness(
             expected_chunks=expected_chunks,
@@ -694,6 +753,7 @@ def build_srq_coverage_report(
     reasoning_cases_path: Path | None = None,
     collation_candidates_path: Path | None = None,
     anchor_probes_path: Path | None = None,
+    reviewer_decisions_path: Path | None = None,
     manifest_path: Path | None = None,
     runtime_evidence_index_path: Path | None = None,
 ) -> dict[str, Any]:
@@ -704,6 +764,7 @@ def build_srq_coverage_report(
         or root / "tests" / "fixtures" / "collation" / "high_value_no_self_parallel_candidates.yaml"
     )
     anchor_probes_path = anchor_probes_path or DEFAULT_XML_ANCHOR_PROBES
+    reviewer_decisions_path = reviewer_decisions_path or DEFAULT_REVIEWER_DECISIONS
     manifest_path = manifest_path or root / "docs" / "runtime-evidence" / "evidence_manifest.yaml"
     runtime_evidence_index_path = runtime_evidence_index_path or root / "docs" / "runtime-evidence" / "index.md"
 
@@ -717,6 +778,7 @@ def build_srq_coverage_report(
     declared_reasoning_cases = _reasoning_case_ids(reasoning_cases_path, root=root)
     collation_candidate_sets = _collation_candidate_sets(collation_candidates_path, root=root)
     anchor_probes_by_id = _anchor_probes(anchor_probes_path, root=root)
+    reviewer_decisions = _reviewer_decisions(reviewer_decisions_path, root=root)
     query_ids = [str(query["id"]) for query in queries]
 
     if manifest_path.exists():
@@ -734,6 +796,7 @@ def build_srq_coverage_report(
             evidence_by_query.get(str(query["id"]), []),
             collation_candidate_sets,
             anchor_probes_by_id,
+            reviewer_decisions,
             runtime_evidence_source=runtime_evidence_source,
         )
         for query in queries
@@ -746,6 +809,7 @@ def build_srq_coverage_report(
             "reasoning_cases": _display(reasoning_cases_path, root),
             "collation_candidates": _display(collation_candidates_path, root),
             "xml_anchor_probes": _display(anchor_probes_path, root),
+            "reviewer_decisions": _display(reviewer_decisions_path, root),
         },
         "runtime_evidence_source": runtime_evidence_source,
         "summary": _summary(cases),
@@ -792,6 +856,12 @@ def _markdown_citation_notes(citation_metadata: dict[str, Any]) -> str:
     manual_boundary_status = citation_metadata.get("manual_collation_boundary_status")
     if isinstance(manual_boundary_status, str) and manual_boundary_status != "not_applicable":
         notes.append(f"manual boundary: {manual_boundary_status}")
+    reviewer_counts = citation_metadata.get("reviewer_decision_status_counts")
+    if isinstance(reviewer_counts, dict) and reviewer_counts:
+        count_text = ", ".join(
+            f"{status}={count}" for status, count in sorted(reviewer_counts.items())
+        )
+        notes.append(f"reviewer decisions: {count_text}")
     textual_equivalence_status = citation_metadata.get("textual_equivalence_status")
     if isinstance(textual_equivalence_status, str) and textual_equivalence_status != "not_applicable":
         notes.append(f"textual equivalence: {textual_equivalence_status}")

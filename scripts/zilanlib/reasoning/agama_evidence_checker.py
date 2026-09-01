@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -12,6 +13,9 @@ DEFAULT_CASES = ROOT / "tests" / "reasoning_cases.yaml"
 DEFAULT_RETRIEVAL_FIXTURE = ROOT / "tests" / "fixtures" / "retrieval_chunks" / "semantic_chunks.yaml"
 DEFAULT_COLLATION_CANDIDATES = ROOT / "tests" / "fixtures" / "collation" / "high_value_no_self_parallel_candidates.yaml"
 DEFAULT_XML_ANCHOR_PROBES = ROOT / "tests" / "fixtures" / "collation" / "cbeta_anchor_probes.yaml"
+DEFAULT_REVIEWER_DECISIONS = (
+    ROOT / "tests" / "fixtures" / "collation" / "srq04_manual_semantic_boundary_decisions.yaml"
+)
 DEFAULT_SOURCE_ROOT = detect_source_root(ROOT)
 VALIDATOR = "agama_evidence_checker"
 CONTRACT_FAMILY = "agama_evidence"
@@ -90,6 +94,12 @@ def _anchor_probes_by_id(path: Path) -> dict[str, dict[str, Any]]:
         if isinstance(probe_id, str) and probe_id:
             probes[probe_id] = probe
     return probes
+
+
+def _reviewer_decisions(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    return _optional_mapping_list(_load_yaml(path), "decisions", path)
 
 
 def _select_cases(cases: list[dict[str, Any]], case_id: str | None) -> list[dict[str, Any]]:
@@ -375,6 +385,47 @@ def _parallel_field_values(candidate_sets: list[dict[str, Any]], field: str) -> 
     return sorted(values)
 
 
+def _candidate_set_ids(candidate_sets: list[dict[str, Any]]) -> list[str]:
+    return sorted(
+        str(candidate_set.get("set_id"))
+        for candidate_set in candidate_sets
+        if isinstance(candidate_set.get("set_id"), str)
+    )
+
+
+def _reviewer_decision_summary(
+    *,
+    candidate_sets: list[dict[str, Any]],
+    reviewer_decisions: list[dict[str, Any]],
+) -> dict[str, Any]:
+    candidate_ids = set(_candidate_set_ids(candidate_sets))
+    related_decisions = [
+        decision
+        for decision in reviewer_decisions
+        if isinstance(decision.get("candidate_set_id"), str)
+        and str(decision["candidate_set_id"]) in candidate_ids
+    ]
+    status_counts: Counter[str] = Counter(
+        str(decision["status"])
+        for decision in related_decisions
+        if isinstance(decision.get("status"), str) and decision.get("status")
+    )
+
+    def ids_for(status: str) -> list[str]:
+        return sorted(
+            str(decision["candidate_set_id"])
+            for decision in related_decisions
+            if decision.get("status") == status and isinstance(decision.get("candidate_set_id"), str)
+        )
+
+    return {
+        "reviewer_decision_status_counts": dict(sorted(status_counts.items())),
+        "pending_reviewer_decisions": ids_for("pending_reviewer_decision"),
+        "limited_theme_parallel_confirmed": ids_for("limited_theme_parallel_confirmed"),
+        "stronger_claim_requires_separate_evidence": ids_for("stronger_claim_requires_separate_evidence"),
+    }
+
+
 def _candidate_anchor_probe_ids(candidate_sets: list[dict[str, Any]]) -> list[str]:
     probe_ids: set[str] = set()
     for candidate_set in candidate_sets:
@@ -398,6 +449,7 @@ def _manual_collation_boundary(
     collation_boundary_required: bool,
     candidate_sets: list[dict[str, Any]],
     anchor_probes: dict[str, dict[str, Any]],
+    reviewer_decisions: list[dict[str, Any]],
 ) -> dict[str, Any]:
     if not collation_boundary_required:
         return {
@@ -411,14 +463,14 @@ def _manual_collation_boundary(
             "missing_xml_anchor_probe_ids": [],
             "xml_anchor_probe_statuses": [],
             "parallel_collation_statuses": [],
+            "reviewer_decision_status_counts": {},
+            "pending_reviewer_decisions": [],
+            "limited_theme_parallel_confirmed": [],
+            "stronger_claim_requires_separate_evidence": [],
             "limitations": [],
         }
 
-    candidate_set_ids = sorted(
-        str(candidate_set.get("set_id"))
-        for candidate_set in candidate_sets
-        if isinstance(candidate_set.get("set_id"), str)
-    )
+    candidate_set_ids = _candidate_set_ids(candidate_sets)
     probe_ids = _candidate_anchor_probe_ids(candidate_sets)
     missing_probe_ids = [probe_id for probe_id in probe_ids if probe_id not in anchor_probes]
     probe_statuses = sorted(
@@ -440,6 +492,11 @@ def _manual_collation_boundary(
     )
     anchor_located = bool(probe_ids) and not missing_probe_ids
     status = "publication_ready" if publication_ready else "manual_review_required"
+    reviewer_decision_summary = _reviewer_decision_summary(
+        candidate_sets=candidate_sets,
+        reviewer_decisions=reviewer_decisions,
+    )
+
     return {
         "status": status,
         "anchor_located": anchor_located,
@@ -451,6 +508,7 @@ def _manual_collation_boundary(
         "missing_xml_anchor_probe_ids": missing_probe_ids,
         "xml_anchor_probe_statuses": probe_statuses,
         "parallel_collation_statuses": parallel_statuses,
+        **reviewer_decision_summary,
         "limitations": [
             "Anchor location does not prove textual equivalence",
             "Limited theme-parallel review does not prove source dependence",
@@ -525,6 +583,7 @@ def _check_case(
     source_root: Path | None,
     candidate_sets: list[dict[str, Any]],
     anchor_probes: dict[str, dict[str, Any]],
+    reviewer_decisions: list[dict[str, Any]],
 ) -> dict[str, Any]:
     case_id = case.get("id")
     expected = case.get("expected")
@@ -581,6 +640,7 @@ def _check_case(
                 collation_boundary_required=collation_boundary,
                 candidate_sets=candidate_sets,
                 anchor_probes=anchor_probes,
+                reviewer_decisions=reviewer_decisions,
             ),
             "evidence_checks": _evidence_checks(
                 citation_required=citation_required,
@@ -605,6 +665,7 @@ def build_agama_evidence_check(
     retrieval_fixture_path: Path = DEFAULT_RETRIEVAL_FIXTURE,
     collation_candidates_path: Path = DEFAULT_COLLATION_CANDIDATES,
     anchor_probes_path: Path = DEFAULT_XML_ANCHOR_PROBES,
+    reviewer_decisions_path: Path = DEFAULT_REVIEWER_DECISIONS,
     source_root: Path | None = DEFAULT_SOURCE_ROOT,
 ) -> dict[str, Any]:
     """Return structured Agama evidence checks from checked-in reasoning cases."""
@@ -616,8 +677,9 @@ def build_agama_evidence_check(
 
     candidate_sets = _collation_candidate_sets(collation_candidates_path)
     anchor_probes = _anchor_probes_by_id(anchor_probes_path)
+    reviewer_decisions = _reviewer_decisions(reviewer_decisions_path)
     evidence_reviews = [
-        _check_case(case, retrieval_fixture_path, source_root, candidate_sets, anchor_probes)
+        _check_case(case, retrieval_fixture_path, source_root, candidate_sets, anchor_probes, reviewer_decisions)
         for case in selected
     ]
 

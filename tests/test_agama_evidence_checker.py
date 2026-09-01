@@ -75,6 +75,16 @@ def test_agama_evidence_checker_maps_zr05_citation_boundary() -> None:
         "no-self-five-aggregates-and-feeling",
         "za-agama-and-long-agama-no-self-verse",
     ]
+    assert manual_boundary["reviewer_decision_status_counts"] == {
+        "pending_reviewer_decision": 3,
+    }
+    assert manual_boundary["pending_reviewer_decisions"] == [
+        "long-agama-no-self-verse-and-aggregates",
+        "no-self-five-aggregates-and-feeling",
+        "za-agama-and-long-agama-no-self-verse",
+    ]
+    assert manual_boundary["limited_theme_parallel_confirmed"] == []
+    assert manual_boundary["stronger_claim_requires_separate_evidence"] == []
     assert manual_boundary["xml_anchor_probe_statuses"] == ["anchor_located_collation_pending"]
     assert manual_boundary["parallel_collation_statuses"] == ["manual_xml_p5_theme_parallel_reviewed"]
     assert "Anchor location does not prove textual equivalence" in manual_boundary["limitations"]
