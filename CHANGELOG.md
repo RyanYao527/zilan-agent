@@ -65,7 +65,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Narrowed the fixture-only `SRQ-11` forbidden phrase from the broad heading-colliding `性相成立` fragment to the explicit wrong assertion `这个性相成立`, while keeping required defining-mark boundary terms strict.
 - Updated fixture-only semantic answer contracts to support exact required-term groups for narrow alias surfaces such as `不能决定` / `无法决定` and `摄类学` / `总与别`, without fuzzy matching, semantic grading, provider calls, or public `zilan_contract` API changes.
 - Updated runtime evidence and maintenance documentation to treat `docs/runtime-evidence/index.md` as human navigation and `docs/runtime-evidence/evidence_manifest.yaml` as the machine-readable local evidence index.
-- Refreshed public engineering metrics to the current local baseline of 285 tests, 84% zilanlib coverage, and 65 mypy-checked source files.
+- Refreshed public engineering metrics to the current 2026-09-01 local baseline of 336 tests, 83% zilanlib coverage, and 74 mypy-checked source files.
 
 - Calibrated the integrated `SRQ-01` answer contract so heading-like labels (`阿含证据`, `代表性检索`, `因明校验`) are no longer mandatory global literals when concrete Agama and Hetuvidya surfaces are present.
 - Tightened broad `ZC-05` minimum-template prompt wording and narrowed the `SRQ-01` nihilism forbidden phrase to avoid a shallow collision with negated causality-boundary wording.
