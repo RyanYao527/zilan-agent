@@ -8,10 +8,12 @@ from pathlib import Path
 from typing import Any
 
 from zilanlib.reasoning.contract_runner import build_reasoning_contract_run
+from zilanlib.reasoning.srq_coverage_report import build_srq_coverage_report
 from zilanlib.semantic.retrieval_dry_run import DEFAULT_FIXTURE, ROOT
 
 MODE = "reasoning-alignment-report-v0"
 OUTPUT_SCHEMA = "reasoning-alignment-report-output-v0"
+ALL_OUTPUT_SCHEMA = "reasoning-alignment-all-srq-report-v1"
 REPORT_TITLE = "Reasoning Alignment Report"
 ALIGNMENT_SECTION_IDS = (
     "claim",
@@ -180,6 +182,34 @@ def _summary(alignment: dict[str, dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def _all_summary(cases: list[dict[str, Any]]) -> dict[str, Any]:
+    coverage_status_counts = Counter(str(case["coverage_status"]) for case in cases)
+    alignment_status_counts: Counter[str] = Counter()
+    for case in cases:
+        alignment = case.get("alignment", {})
+        if isinstance(alignment, dict):
+            alignment_status_counts.update(
+                str(section["status"])
+                for section in alignment.values()
+                if isinstance(section, dict) and "status" in section
+            )
+    return {
+        "case_count": len(cases),
+        "status_counts": dict(sorted(coverage_status_counts.items())),
+        "alignment_status_counts": dict(sorted(alignment_status_counts.items())),
+        "cases_with_missing_sections": [
+            str(case["query_id"])
+            for case in cases
+            if case.get("summary", {}).get("missing_sections")
+        ],
+        "cases_with_manual_review_required": [
+            str(case["query_id"])
+            for case in cases
+            if case.get("coverage_status") == "manual_review_required"
+        ],
+    }
+
+
 def build_reasoning_alignment_report(
     fixture_path: Path = DEFAULT_FIXTURE,
     *,
@@ -207,7 +237,101 @@ def build_reasoning_alignment_report(
     }
 
 
+def build_all_reasoning_alignment_report(
+    fixture_path: Path = DEFAULT_FIXTURE,
+    *,
+    cases_path: Path | None = None,
+) -> dict[str, Any]:
+    """Build a local reasoning alignment summary for every SRQ fixture."""
+
+    coverage_report = build_srq_coverage_report(
+        ROOT,
+        fixture_path=fixture_path,
+        reasoning_cases_path=cases_path,
+    )
+    cases: list[dict[str, Any]] = []
+    for coverage_case in coverage_report["cases"]:
+        query_id = str(coverage_case["query_id"])
+        alignment_report = build_reasoning_alignment_report(
+            fixture_path,
+            query_id=query_id,
+            cases_path=cases_path,
+        )
+        cases.append(
+            {
+                "query_id": query_id,
+                "query": alignment_report["query"],
+                "coverage_status": coverage_case["coverage_status"],
+                "related_reasoning_case_ids": coverage_case["related_reasoning_case_ids"],
+                "focus_reasoning_case_id": alignment_report["focus_reasoning_case_id"],
+                "summary": alignment_report["summary"],
+                "alignment": alignment_report["alignment"],
+            }
+        )
+    return {
+        "mode": MODE,
+        "output_schema": ALL_OUTPUT_SCHEMA,
+        "fixture": _display_path(fixture_path),
+        "reasoning_cases": (
+            _display_path(cases_path)
+            if cases_path is not None
+            else "tests/reasoning_cases.yaml"
+        ),
+        "coverage_source": coverage_report["source"],
+        "summary": _all_summary(cases),
+        "cases": cases,
+        "limitations": list(LIMITATIONS),
+    }
+
+
+def _render_all_markdown_report(report: dict[str, Any]) -> str:
+    lines = [
+        f"# {REPORT_TITLE}",
+        "",
+        "All SRQ summary",
+        "",
+        f"- Cases: `{report['summary']['case_count']}`",
+        f"- Coverage status counts: `{report['summary']['status_counts']}`",
+        f"- Cases with missing sections: `{report['summary']['cases_with_missing_sections']}`",
+        f"- Cases requiring manual review: `{report['summary']['cases_with_manual_review_required']}`",
+        "- SRQ-01 / ZR-06 is the current full-chain exemplar.",
+        "- SRQ-04 remains manual_review_required for the manual collation boundary.",
+        "- Each reasoning system is checked independently; one present section cannot substitute for "
+        "another missing section.",
+        "",
+        "| SRQ | Coverage | Focus ZR | Missing sections | Present sections | Manual review |",
+        "| --- | --- | --- | --- | --- | --- |",
+    ]
+    for case in report["cases"]:
+        summary = case["summary"]
+        missing_sections = summary["missing_sections"]
+        alignment = case["alignment"]
+        present_sections = [
+            section_id
+            for section_id, section in alignment.items()
+            if section.get("status") == "present"
+        ]
+        manual_review = "yes" if case["coverage_status"] == "manual_review_required" else "-"
+        lines.append(
+            "| {query_id} | `{coverage}` | {focus} | {missing} | {present} | {manual} |".format(
+                query_id=case["query_id"],
+                coverage=case["coverage_status"],
+                focus=case.get("focus_reasoning_case_id") or "-",
+                missing=", ".join(missing_sections) if missing_sections else "-",
+                present=", ".join(present_sections) if present_sections else "-",
+                manual=manual_review,
+            )
+        )
+    lines.extend(["", "## Limitations", ""])
+    lines.extend(f"- {limitation}" for limitation in report["limitations"])
+    lines.append("")
+    return "\n".join(lines)
+
+
 def render_markdown_report(report: dict[str, Any]) -> str:
+    if report.get("output_schema") == ALL_OUTPUT_SCHEMA:
+        return _render_all_markdown_report(report)
+
     lines = [
         f"# {REPORT_TITLE}",
         "",
@@ -243,10 +367,14 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Build a local reasoning alignment report.")
     parser.add_argument("--fixture", type=Path, default=DEFAULT_FIXTURE, help="Semantic chunks fixture YAML path.")
     parser.add_argument("--query-id", default="SRQ-01", help="Query fixture id to inspect.")
+    parser.add_argument("--all", action="store_true", dest="all_cases", help="Emit an all-SRQ alignment summary.")
     parser.add_argument("--json", action="store_true", dest="json_output", help="Emit machine-readable JSON.")
     args = parser.parse_args(argv)
 
-    report = build_reasoning_alignment_report(args.fixture, query_id=args.query_id)
+    if args.all_cases:
+        report = build_all_reasoning_alignment_report(args.fixture)
+    else:
+        report = build_reasoning_alignment_report(args.fixture, query_id=args.query_id)
     if args.json_output:
         print(json.dumps(report, ensure_ascii=False, indent=2))
     else:
