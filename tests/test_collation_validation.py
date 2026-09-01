@@ -138,6 +138,46 @@ decisions:
     ]
 
 
+def test_collation_validator_rejects_pending_reviewer_decision_with_evidence_file(tmp_path: Path) -> None:
+    fixtures = tmp_path / "tests" / "fixtures" / "collation"
+    fixtures.mkdir(parents=True)
+    evidence = tmp_path / "docs" / "runtime-evidence" / "2026-09-01-srq04-reviewer-decision.md"
+    evidence.parent.mkdir(parents=True)
+    evidence.write_text("# Pending row should not cite evidence\n", encoding="utf-8")
+    (fixtures / "srq04_manual_semantic_boundary_decisions.yaml").write_text(
+        """version: 1
+source: test
+decisions:
+  - candidate_set_id: no-self-five-aggregates-and-feeling
+    status: pending_reviewer_decision
+    theme_parallel: pending
+    textual_equivalence: pending
+    source_dependence: pending
+    publication_ready: pending
+    evidence_file: docs/runtime-evidence/2026-09-01-srq04-reviewer-decision.md
+    decision_notes: Pending rows cannot cite evidence because no decision has been made.
+""",
+        encoding="utf-8",
+    )
+
+    failures: list[str] = []
+    warnings: list[str] = []
+
+    collation_validation.validate_srq04_reviewer_decision_intake(
+        tmp_path,
+        failures,
+        warnings,
+        strict_yaml=True,
+        candidate_set_ids={"no-self-five-aggregates-and-feeling"},
+    )
+
+    assert warnings == []
+    assert failures == [
+        "tests/fixtures/collation/srq04_manual_semantic_boundary_decisions.yaml "
+        "no-self-five-aggregates-and-feeling pending evidence_file must be omitted."
+    ]
+
+
 def test_collation_validator_rejects_stronger_claim_without_dated_evidence_note(tmp_path: Path) -> None:
     fixtures = tmp_path / "tests" / "fixtures" / "collation"
     fixtures.mkdir(parents=True)
@@ -197,6 +237,80 @@ decisions:
     publication_ready: not_established
     evidence_file: docs/runtime-evidence/2026-09-01-srq04-reviewer-decision.md
     decision_notes: Stronger claim cites a dated evidence note.
+""",
+        encoding="utf-8",
+    )
+
+    failures: list[str] = []
+    warnings: list[str] = []
+
+    collation_validation.validate_srq04_reviewer_decision_intake(
+        tmp_path,
+        failures,
+        warnings,
+        strict_yaml=True,
+        candidate_set_ids={"no-self-five-aggregates-and-feeling"},
+    )
+
+    assert failures == []
+    assert warnings == []
+
+
+def test_collation_validator_rejects_limited_confirmation_without_dated_evidence_note(tmp_path: Path) -> None:
+    fixtures = tmp_path / "tests" / "fixtures" / "collation"
+    fixtures.mkdir(parents=True)
+    (fixtures / "srq04_manual_semantic_boundary_decisions.yaml").write_text(
+        """version: 1
+source: test
+decisions:
+  - candidate_set_id: no-self-five-aggregates-and-feeling
+    status: limited_theme_parallel_confirmed
+    theme_parallel: limited
+    textual_equivalence: not_established
+    source_dependence: not_established
+    publication_ready: not_established
+    decision_notes: Limited confirmation is not auditable without a dated note.
+""",
+        encoding="utf-8",
+    )
+
+    failures: list[str] = []
+    warnings: list[str] = []
+
+    collation_validation.validate_srq04_reviewer_decision_intake(
+        tmp_path,
+        failures,
+        warnings,
+        strict_yaml=True,
+        candidate_set_ids={"no-self-five-aggregates-and-feeling"},
+    )
+
+    assert warnings == []
+    assert failures == [
+        "tests/fixtures/collation/srq04_manual_semantic_boundary_decisions.yaml "
+        "no-self-five-aggregates-and-feeling limited reviewer decision evidence_file must reference a dated "
+        "docs/runtime-evidence/YYYY-MM-DD-*.md note."
+    ]
+
+
+def test_collation_validator_accepts_limited_confirmation_with_dated_evidence_note(tmp_path: Path) -> None:
+    fixtures = tmp_path / "tests" / "fixtures" / "collation"
+    fixtures.mkdir(parents=True)
+    evidence = tmp_path / "docs" / "runtime-evidence" / "2026-09-01-srq04-limited-reviewer-decision.md"
+    evidence.parent.mkdir(parents=True)
+    evidence.write_text("# Limited reviewer decision\n", encoding="utf-8")
+    (fixtures / "srq04_manual_semantic_boundary_decisions.yaml").write_text(
+        """version: 1
+source: test
+decisions:
+  - candidate_set_id: no-self-five-aggregates-and-feeling
+    status: limited_theme_parallel_confirmed
+    theme_parallel: limited
+    textual_equivalence: not_established
+    source_dependence: not_established
+    publication_ready: not_established
+    evidence_file: docs/runtime-evidence/2026-09-01-srq04-limited-reviewer-decision.md
+    decision_notes: Limited confirmation cites a dated note.
 """,
         encoding="utf-8",
     )

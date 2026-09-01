@@ -1,6 +1,6 @@
 # Runtime Evidence Index
 
-> Last updated: 2026-08-21
+> Last updated: 2026-09-01
 
 This index is a navigation aid for `docs/runtime-evidence/`. It does not change platform validation status. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -93,6 +93,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-09-01-srq04-reviewer-decision-ingestion-path.md` | documents the local ingestion path for future `SRQ-04` reviewer decisions, including dated evidence-note requirements for non-pending decisions | summary-only ingestion path; no new human conclusion, no answer excerpt, no candidate-map conclusion change, and `SRQ-04` remains `manual_review_required` |
 | `2026-08-21-srq04-reviewer-decision-intake.md` | adds a structured pending reviewer-decision intake fixture for the three current `SRQ-04` XML-P5 no-self candidate sets | summary-only intake; all decisions remain pending and do not establish textual equivalence, source dependence, publication-ready collation, runtime answer evidence, or platform validation evidence |
 | `2026-08-20-srq04-manual-semantic-boundary-queue.md` | queues the current `SRQ-04` manual semantic-boundary review over three existing XML-P5 no-self candidate sets | summary-only reviewer queue; anchor-located and limited theme-parallel evidence remains `manual_review_required`, not textual equivalence, source-dependence evidence, runtime answer evidence, or platform validation evidence |
 | `2026-08-20-srq11-definition-violation-alias-replay.md` | local replay over committed Volcengine OpenAI-compatible `SRQ-11` answer excerpt after exact fixture-local definition-violation marker calibration | summary-only replay note; current calibrated batch pass for `SRQ-11`; not a new runtime run or platform validation evidence |
@@ -164,6 +165,13 @@ python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\20
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-08-06-srq-01-zc-05-integrated-contract-replay-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-07-20-compact-zc-04-answer-excerpt-progression-batch.yaml
 python scripts\reasoning_answer_review_batch.py --batch docs\runtime-evidence\2026-07-17-runtime-answer-excerpt-review-batch.yaml
+```
+
+Build the local SRQ-04 human-review packet:
+
+```powershell
+python scripts\srq04_manual_review_packet.py
+python scripts\srq04_manual_review_packet.py --json
 ```
 
 Use direct review for an individual answer excerpt:
