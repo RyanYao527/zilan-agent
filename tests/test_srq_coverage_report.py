@@ -7,6 +7,7 @@ from pathlib import Path
 
 from zilanlib.reasoning.srq_coverage_report import (
     REPORT_VERSION,
+    _decision_gate,
     build_srq_coverage_report,
     render_markdown_report,
 )
@@ -197,11 +198,12 @@ def test_srq_coverage_report_json_shape_and_manifest_runtime_evidence() -> None:
         "runtime_evidence_source",
         "summary",
         "triage_matrix",
+        "decision_gate",
         "cases",
         "limitations",
     }
     assert report["runtime_evidence_source"] == "manifest"
-    assert report["source"]["output_schema"] == "srq-coverage-report-v2"
+    assert report["source"]["output_schema"] == "srq-coverage-report-v3"
 
     srq04 = _case_by_id(report, "SRQ-04")
     runtime_evidence = srq04["runtime_evidence"]
@@ -257,6 +259,86 @@ def test_srq_coverage_report_exposes_citation_reasoning_triage_matrix() -> None:
         "za-agama-and-long-agama-no-self-verse",
     ]
     assert srq04["recommended_next_action"] == "manual_semantic_boundary_review"
+
+
+def test_srq_coverage_report_exposes_next_work_decision_gate() -> None:
+    report = build_srq_coverage_report(ROOT)
+    gate = report["decision_gate"]
+
+    assert set(gate) == {
+        "runtime_rerun_candidate",
+        "prompt_hardening_candidate",
+        "fixture_refinement_candidate",
+        "manual_review_candidate",
+    }
+
+    manual_review_ids = [item["query_id"] for item in gate["manual_review_candidate"]]
+    runtime_ids = [item["query_id"] for item in gate["runtime_rerun_candidate"]]
+    prompt_ids = [item["query_id"] for item in gate["prompt_hardening_candidate"]]
+    fixture_ids = [item["query_id"] for item in gate["fixture_refinement_candidate"]]
+
+    assert manual_review_ids == ["SRQ-04"]
+    assert "SRQ-04" not in runtime_ids
+    assert "SRQ-04" not in prompt_ids
+    assert "SRQ-04" not in fixture_ids
+    assert "SRQ-01" in fixture_ids
+
+    srq04 = gate["manual_review_candidate"][0]
+    assert srq04 == {
+        "query_id": "SRQ-04",
+        "primary_reason": "manual_semantic_boundary_review",
+        "coverage_status": "manual_review_required",
+        "runtime_latest_status": "manual_review_required",
+        "citation_readiness": "ready",
+        "manual_boundary_status": "theme_parallel_only",
+        "reasoning_roles": ["agama_evidence"],
+        "details": [
+            "coverage_status=manual_review_required",
+            "runtime_latest_status=manual_review_required",
+            "manual_boundary=theme_parallel_only",
+            "pending_reviewer_decisions=3",
+        ],
+    }
+
+
+def test_srq_coverage_decision_gate_routes_missing_and_partial_cases() -> None:
+    cases = [
+        {
+            "query_id": "SRQ-99",
+            "coverage_status": "missing",
+            "runtime_evidence": {"latest_status": "pass"},
+            "citation_metadata": {
+                "status": "not_applicable",
+                "manual_collation_boundary_status": "not_applicable",
+            },
+            "expected_chunks": [],
+        },
+        {
+            "query_id": "SRQ-100",
+            "coverage_status": "partial",
+            "runtime_evidence": {"latest_status": "pass"},
+            "citation_metadata": {
+                "status": "ready",
+                "manual_collation_boundary_status": "not_applicable",
+            },
+            "expected_chunks": [],
+        },
+    ]
+
+    gate = _decision_gate(cases)
+
+    fixture_items = {item["query_id"]: item for item in gate["fixture_refinement_candidate"]}
+    assert set(fixture_items) == {"SRQ-99", "SRQ-100"}
+    assert fixture_items["SRQ-99"]["primary_reason"] == "fixture_or_sample_refinement"
+    assert fixture_items["SRQ-99"]["details"] == [
+        "coverage_status=missing",
+        "runtime_latest_status=pass",
+    ]
+    assert fixture_items["SRQ-100"]["primary_reason"] == "fixture_or_sample_refinement"
+    assert fixture_items["SRQ-100"]["details"] == [
+        "coverage_status=partial",
+        "runtime_latest_status=pass",
+    ]
 
 
 def test_srq_coverage_report_groups_runtime_status_by_evidence_class() -> None:
@@ -354,6 +436,9 @@ def test_srq_coverage_markdown_contains_limitations_and_manual_review_language()
     ) in markdown
     assert "manual collation candidates: 3" in markdown
     assert "## Citation / Reasoning Triage Matrix" in markdown
+    assert "## Citation / Reasoning Decision Gate" in markdown
+    assert "| manual_review_candidate | SRQ-04 | manual_semantic_boundary_review |" in markdown
+    assert "| fixture_refinement_candidate | SRQ-01 | citation_fixture_refinement |" in markdown
     assert "manual_semantic_boundary_review" in markdown
     assert "theme_parallel_only" in markdown
     assert "ZR-06" in markdown
