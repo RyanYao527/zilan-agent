@@ -281,7 +281,7 @@ def test_srq_coverage_report_exposes_next_work_decision_gate() -> None:
     assert "SRQ-04" not in runtime_ids
     assert "SRQ-04" not in prompt_ids
     assert "SRQ-04" not in fixture_ids
-    assert "SRQ-01" in fixture_ids
+    assert fixture_ids == []
 
     srq04 = gate["manual_review_candidate"][0]
     assert srq04 == {
@@ -338,6 +338,75 @@ def test_srq_coverage_decision_gate_routes_missing_and_partial_cases() -> None:
     assert fixture_items["SRQ-100"]["details"] == [
         "coverage_status=partial",
         "runtime_latest_status=pass",
+    ]
+
+
+def test_srq_coverage_decision_gate_does_not_treat_source_unavailable_as_fixture_gap() -> None:
+    cases = [
+        {
+            "query_id": "SRQ-99",
+            "coverage_status": "ready",
+            "runtime_evidence": {"latest_status": "pass"},
+            "citation_metadata": {
+                "status": "ready",
+                "chunks_with_section_label_source_unavailable": [
+                    "agama:T01n0001:juan-3:line-1829",
+                ],
+                "chunks_missing_xml_anchor": [],
+                "manual_collation_boundary_status": "theme_parallel_only",
+            },
+            "expected_chunks": [],
+        }
+    ]
+
+    gate = _decision_gate(cases)
+
+    assert gate["fixture_refinement_candidate"] == []
+    assert gate["manual_review_candidate"] == []
+
+
+def test_srq_coverage_decision_gate_routes_actionable_citation_gaps() -> None:
+    cases = [
+        {
+            "query_id": "SRQ-99",
+            "coverage_status": "ready",
+            "runtime_evidence": {"latest_status": "pass"},
+            "citation_metadata": {
+                "status": "ready",
+                "chunks_with_section_label_source_unavailable": [],
+                "chunks_missing_xml_anchor": [
+                    "agama:T01n0001:juan-3:line-1829",
+                ],
+                "manual_collation_boundary_status": "not_applicable",
+            },
+            "expected_chunks": [],
+        },
+        {
+            "query_id": "SRQ-100",
+            "coverage_status": "ready",
+            "runtime_evidence": {"latest_status": "pass"},
+            "citation_metadata": {
+                "status": "partial",
+                "chunks_with_section_label_source_unavailable": [],
+                "chunks_missing_xml_anchor": [],
+                "manual_collation_boundary_status": "not_applicable",
+            },
+            "expected_chunks": [],
+        },
+    ]
+
+    gate = _decision_gate(cases)
+
+    fixture_items = {item["query_id"]: item for item in gate["fixture_refinement_candidate"]}
+    assert set(fixture_items) == {"SRQ-99", "SRQ-100"}
+    assert fixture_items["SRQ-99"]["primary_reason"] == "citation_fixture_refinement"
+    assert fixture_items["SRQ-99"]["details"] == [
+        "citation_readiness=ready",
+        "chunks_missing_xml_anchor=1",
+    ]
+    assert fixture_items["SRQ-100"]["primary_reason"] == "citation_fixture_refinement"
+    assert fixture_items["SRQ-100"]["details"] == [
+        "citation_readiness=partial",
     ]
 
 
@@ -438,7 +507,7 @@ def test_srq_coverage_markdown_contains_limitations_and_manual_review_language()
     assert "## Citation / Reasoning Triage Matrix" in markdown
     assert "## Citation / Reasoning Decision Gate" in markdown
     assert "| manual_review_candidate | SRQ-04 | manual_semantic_boundary_review |" in markdown
-    assert "| fixture_refinement_candidate | SRQ-01 | citation_fixture_refinement |" in markdown
+    assert "| fixture_refinement_candidate | - | - | - |" in markdown
     assert "manual_semantic_boundary_review" in markdown
     assert "theme_parallel_only" in markdown
     assert "ZR-06" in markdown

@@ -999,8 +999,7 @@ def _decision_gate(cases: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]
         source_unavailable = citation_metadata.get("chunks_with_section_label_source_unavailable")
         chunks_missing_xml_anchor = citation_metadata.get("chunks_missing_xml_anchor")
         needs_citation_fixture_refinement = (
-            bool(source_unavailable)
-            or bool(chunks_missing_xml_anchor)
+            bool(chunks_missing_xml_anchor)
             or citation_metadata.get("status") in {"missing", "partial"}
         )
         if needs_citation_fixture_refinement:
