@@ -369,6 +369,62 @@ def render_markdown_packet(packet: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def render_reviewer_decision_template(packet: dict[str, Any]) -> str:
+    """Render a fillable SRQ-04 reviewer-decision YAML template."""
+
+    try:
+        import yaml
+    except ModuleNotFoundError as exc:
+        raise Srq04ManualReviewPacketError("PyYAML is required to render the SRQ-04 review template.") from exc
+
+    template = {
+        "version": 1,
+        "source": "scripts/srq04_manual_review_packet.py --template",
+        "purpose": (
+            "Fillable SRQ-04 reviewer decision template; no row becomes evidence until a dated "
+            "docs/runtime-evidence/YYYY-MM-DD-*.md note is recorded."
+        ),
+        "allowed_statuses": list(packet["ingestion_rules"]["status_transitions"].keys()),
+        "allowed_field_values": {
+            "pending_reviewer_decision": {
+                "theme_parallel": "pending",
+                "textual_equivalence": "pending",
+                "source_dependence": "pending",
+                "publication_ready": "pending",
+                "evidence_file": "omit",
+            },
+            "limited_theme_parallel_confirmed": {
+                "theme_parallel": "limited",
+                "textual_equivalence": "not_established",
+                "source_dependence": "not_established",
+                "publication_ready": "not_established",
+                "evidence_file": DATED_EVIDENCE_NOTE_PATTERN,
+            },
+            "stronger_claim_requires_separate_evidence": {
+                "theme_parallel": "limited_or_not_established",
+                "textual_equivalence": "supported_with_evidence_or_not_established",
+                "source_dependence": "supported_with_evidence_or_not_established",
+                "publication_ready": "supported_with_evidence_or_not_established",
+                "evidence_file": DATED_EVIDENCE_NOTE_PATTERN,
+            },
+        },
+        "decisions": [
+            {
+                "candidate_set_id": candidate["set_id"],
+                "status": "pending_reviewer_decision",
+                "theme_parallel": "pending",
+                "textual_equivalence": "pending",
+                "source_dependence": "pending",
+                "publication_ready": "pending",
+                "decision_notes": "TODO: replace with dated human reviewer decision notes before ingestion.",
+                "reviewer_required_fields": list(packet["reviewer_required_fields"]),
+            }
+            for candidate in packet["candidate_sets"]
+        ],
+    }
+    return yaml.safe_dump(template, allow_unicode=True, sort_keys=False)
+
+
 def main(argv: list[str] | None = None) -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
@@ -376,11 +432,19 @@ def main(argv: list[str] | None = None) -> int:
         sys.stderr.reconfigure(encoding="utf-8")
 
     parser = argparse.ArgumentParser(description="Build a local SRQ-04 manual semantic-boundary review packet.")
-    parser.add_argument("--json", action="store_true", dest="json_output", help="Emit machine-readable JSON.")
+    output_group = parser.add_mutually_exclusive_group()
+    output_group.add_argument("--json", action="store_true", dest="json_output", help="Emit machine-readable JSON.")
+    output_group.add_argument(
+        "--template",
+        action="store_true",
+        help="Emit a fillable reviewer-decision YAML template.",
+    )
     args = parser.parse_args(argv)
 
     packet = build_srq04_manual_review_packet()
-    if args.json_output:
+    if args.template:
+        print(render_reviewer_decision_template(packet), end="")
+    elif args.json_output:
         print(json.dumps(packet, ensure_ascii=False, indent=2))
     else:
         print(render_markdown_packet(packet), end="")

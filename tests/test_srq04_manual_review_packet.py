@@ -5,11 +5,13 @@ import subprocess
 import sys
 from pathlib import Path
 
+import yaml
 from zilanlib.agama.manual_review_packet import (
     OUTPUT_SCHEMA,
     REQUIRED_REVIEWER_FIELDS,
     build_srq04_manual_review_packet,
     render_markdown_packet,
+    render_reviewer_decision_template,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -98,6 +100,38 @@ def test_srq04_manual_review_packet_markdown_is_human_review_ready() -> None:
     assert "no-self-five-aggregates-and-feeling" in markdown
 
 
+def test_srq04_manual_review_packet_renders_fillable_yaml_template() -> None:
+    packet = build_srq04_manual_review_packet()
+    template = render_reviewer_decision_template(packet)
+    payload = yaml.safe_load(template)
+
+    assert payload["version"] == 1
+    assert payload["source"] == "scripts/srq04_manual_review_packet.py --template"
+    assert payload["purpose"] == (
+        "Fillable SRQ-04 reviewer decision template; no row becomes evidence until a dated "
+        "docs/runtime-evidence/YYYY-MM-DD-*.md note is recorded."
+    )
+    assert payload["allowed_statuses"] == [
+        "pending_reviewer_decision",
+        "limited_theme_parallel_confirmed",
+        "stronger_claim_requires_separate_evidence",
+    ]
+    assert [decision["candidate_set_id"] for decision in payload["decisions"]] == [
+        "long-agama-no-self-verse-and-aggregates",
+        "no-self-five-aggregates-and-feeling",
+        "za-agama-and-long-agama-no-self-verse",
+    ]
+    for decision in payload["decisions"]:
+        assert decision["status"] == "pending_reviewer_decision"
+        assert decision["theme_parallel"] == "pending"
+        assert decision["textual_equivalence"] == "pending"
+        assert decision["source_dependence"] == "pending"
+        assert decision["publication_ready"] == "pending"
+        assert "evidence_file" not in decision
+        assert "TODO" in decision["decision_notes"]
+        assert decision["reviewer_required_fields"] == list(REQUIRED_REVIEWER_FIELDS)
+
+
 def test_srq04_manual_review_packet_root_cli_outputs_json() -> None:
     result = subprocess.run(
         [sys.executable, str(SCRIPT), "--json"],
@@ -115,3 +149,19 @@ def test_srq04_manual_review_packet_root_cli_outputs_json() -> None:
         "no-self-five-aggregates-and-feeling",
         "za-agama-and-long-agama-no-self-verse",
     ]
+
+
+def test_srq04_manual_review_packet_root_cli_outputs_template_yaml() -> None:
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT), "--template"],
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8",
+        capture_output=True,
+        check=True,
+    )
+    payload = yaml.safe_load(result.stdout)
+
+    assert payload["source"] == "scripts/srq04_manual_review_packet.py --template"
+    assert payload["decisions"][0]["candidate_set_id"] == "long-agama-no-self-verse-and-aggregates"
+    assert all(decision["status"] == "pending_reviewer_decision" for decision in payload["decisions"])

@@ -6,6 +6,9 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added `scripts/srq04_manual_review_packet.py --template` to emit a fillable YAML reviewer-decision template for the
+  three pending `SRQ-04` candidate sets without changing reviewer conclusions, runtime evidence, provider routes, or
+  platform status.
 - Added a 2026-09-02 `SRQ-04` citation anchor / section refinement note recording that `agama:T01n0001:juan-3:line-1829` is XML-anchor-located but still has `section_label_status=source_unavailable`, without provider calls, runtime evidence, candidate-map changes, or platform-status changes.
 - Added a 2026-09-01 `SRQ-04` reviewer-decision ingestion-path note so future human semantic-boundary results can be recorded with dated evidence without changing current candidate conclusions, runtime status, provider routes, or platform validation status.
 - Added `scripts/srq04_manual_review_packet.py` as a local Markdown/JSON packet for handing the three current `SRQ-04` XML-P5 no-self candidate sets to human reviewers without provider calls, runtime evidence, publication-ready claims, or platform-status changes.
@@ -73,7 +76,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 - Narrowed the fixture-only `SRQ-11` forbidden phrase from the broad heading-colliding `性相成立` fragment to the explicit wrong assertion `这个性相成立`, while keeping required defining-mark boundary terms strict.
 - Updated fixture-only semantic answer contracts to support exact required-term groups for narrow alias surfaces such as `不能决定` / `无法决定` and `摄类学` / `总与别`, without fuzzy matching, semantic grading, provider calls, or public `zilan_contract` API changes.
 - Updated runtime evidence and maintenance documentation to treat `docs/runtime-evidence/index.md` as human navigation and `docs/runtime-evidence/evidence_manifest.yaml` as the machine-readable local evidence index.
-- Refreshed public engineering metrics to the current 2026-09-02 local baseline of 350 tests, 84% zilanlib coverage, and 74 mypy-checked source files.
+- Refreshed public engineering metrics to the current 2026-09-02 local baseline of 352 tests, 84% zilanlib coverage, and 74 mypy-checked source files.
 
 - Calibrated the integrated `SRQ-01` answer contract so heading-like labels (`阿含证据`, `代表性检索`, `因明校验`) are no longer mandatory global literals when concrete Agama and Hetuvidya surfaces are present.
 - Tightened broad `ZC-05` minimum-template prompt wording and narrowed the `SRQ-01` nihilism forbidden phrase to avoid a shallow collision with negated causality-boundary wording.
