@@ -19,9 +19,9 @@ DEFAULT_XML_ANCHOR_PROBES = ROOT / "tests" / "fixtures" / "collation" / "cbeta_a
 DEFAULT_REVIEWER_DECISIONS = (
     ROOT / "tests" / "fixtures" / "collation" / "srq04_manual_semantic_boundary_decisions.yaml"
 )
-REPORT_VERSION = 2
+REPORT_VERSION = 3
 REPORT_TITLE = "SRQ/ZR Evidence Coverage Report"
-OUTPUT_SCHEMA = "srq-coverage-report-v2"
+OUTPUT_SCHEMA = "srq-coverage-report-v3"
 LIMITATIONS = (
     "Coverage/audit only; this report does not grade answer quality or prove runtime correctness.",
     "No provider calls, live runtime calls, embeddings, vector search, or reranking are performed.",
@@ -919,6 +919,121 @@ def _triage_matrix(cases: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def _pending_reviewer_decision_count(manual_boundary: dict[str, Any]) -> int:
+    pending = manual_boundary.get("pending_reviewer_decisions")
+    return len(pending) if isinstance(pending, list) else 0
+
+
+def _decision_gate_item(case: dict[str, Any], *, primary_reason: str, details: list[str]) -> dict[str, Any]:
+    citation_metadata = case["citation_metadata"]
+    runtime_evidence = case["runtime_evidence"]
+    manual_boundary = _manual_review_boundary(case)
+    return {
+        "query_id": case["query_id"],
+        "primary_reason": primary_reason,
+        "coverage_status": case["coverage_status"],
+        "runtime_latest_status": runtime_evidence["latest_status"],
+        "citation_readiness": citation_metadata["status"],
+        "manual_boundary_status": manual_boundary["status"],
+        "reasoning_roles": _case_reasoning_roles(case),
+        "details": details,
+    }
+
+
+def _decision_gate(cases: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    gate: dict[str, list[dict[str, Any]]] = {
+        "runtime_rerun_candidate": [],
+        "prompt_hardening_candidate": [],
+        "fixture_refinement_candidate": [],
+        "manual_review_candidate": [],
+    }
+    for case in cases:
+        coverage_status = str(case["coverage_status"])
+        runtime_evidence = case["runtime_evidence"]
+        runtime_latest_status = str(runtime_evidence["latest_status"])
+        citation_metadata = case["citation_metadata"]
+        manual_boundary = _manual_review_boundary(case)
+        manual_boundary_status = str(manual_boundary["status"])
+
+        if coverage_status == "manual_review_required":
+            gate["manual_review_candidate"].append(
+                _decision_gate_item(
+                    case,
+                    primary_reason="manual_semantic_boundary_review",
+                    details=[
+                        "coverage_status=manual_review_required",
+                        f"runtime_latest_status={runtime_latest_status}",
+                        f"manual_boundary={manual_boundary_status}",
+                        f"pending_reviewer_decisions={_pending_reviewer_decision_count(manual_boundary)}",
+                    ],
+                )
+            )
+            continue
+
+        if coverage_status == "fail" or runtime_latest_status == "fail":
+            gate["prompt_hardening_candidate"].append(
+                _decision_gate_item(
+                    case,
+                    primary_reason="prompt_or_contract_calibration",
+                    details=[
+                        f"coverage_status={coverage_status}",
+                        f"runtime_latest_status={runtime_latest_status}",
+                    ],
+                )
+            )
+            continue
+
+        if coverage_status in {"missing", "partial"}:
+            gate["fixture_refinement_candidate"].append(
+                _decision_gate_item(
+                    case,
+                    primary_reason="fixture_or_sample_refinement",
+                    details=[
+                        f"coverage_status={coverage_status}",
+                        f"runtime_latest_status={runtime_latest_status}",
+                    ],
+                )
+            )
+            continue
+
+        source_unavailable = citation_metadata.get("chunks_with_section_label_source_unavailable")
+        chunks_missing_xml_anchor = citation_metadata.get("chunks_missing_xml_anchor")
+        needs_citation_fixture_refinement = (
+            bool(source_unavailable)
+            or bool(chunks_missing_xml_anchor)
+            or citation_metadata.get("status") in {"missing", "partial"}
+        )
+        if needs_citation_fixture_refinement:
+            details = [f"citation_readiness={citation_metadata['status']}"]
+            if isinstance(source_unavailable, list) and source_unavailable:
+                details.append(f"section_label_source_unavailable={len(source_unavailable)}")
+            if isinstance(chunks_missing_xml_anchor, list) and chunks_missing_xml_anchor:
+                details.append(f"chunks_missing_xml_anchor={len(chunks_missing_xml_anchor)}")
+            if manual_boundary_status != "not_applicable":
+                details.append(f"manual_boundary={manual_boundary_status}")
+            gate["fixture_refinement_candidate"].append(
+                _decision_gate_item(
+                    case,
+                    primary_reason="citation_fixture_refinement",
+                    details=details,
+                )
+            )
+            continue
+
+        if runtime_latest_status in {"runtime_pending", "not_reviewed", "manual_review_required"}:
+            gate["runtime_rerun_candidate"].append(
+                _decision_gate_item(
+                    case,
+                    primary_reason="runtime_evidence_refresh",
+                    details=[f"runtime_latest_status={runtime_latest_status}"],
+                )
+            )
+
+    for candidates in gate.values():
+        candidates.sort(key=lambda item: _srq_sort_key({"id": item["query_id"]}))
+    return gate
+
+
 def build_srq_coverage_report(
     root: Path = ROOT,
     *,
@@ -987,6 +1102,7 @@ def build_srq_coverage_report(
         "runtime_evidence_source": runtime_evidence_source,
         "summary": _summary(cases),
         "triage_matrix": _triage_matrix(cases),
+        "decision_gate": _decision_gate(cases),
         "cases": cases,
         "limitations": list(LIMITATIONS),
     }
@@ -1151,6 +1267,48 @@ def render_markdown_report(report: dict[str, Any]) -> str:
                 next_action=row["recommended_next_action"],
             )
         )
+
+    lines.extend(
+        [
+            "",
+            "## Citation / Reasoning Decision Gate",
+            "",
+            "This gate is a deterministic next-work summary. It separates runtime rerun, prompt hardening, "
+            "fixture refinement, and manual review candidates without treating any item as runtime pass evidence.",
+            "",
+            "| Gate | SRQ | Primary reason | Details |",
+            "| --- | --- | --- | --- |",
+        ]
+    )
+    decision_gate = report.get("decision_gate")
+    if isinstance(decision_gate, dict):
+        for gate_name in (
+            "runtime_rerun_candidate",
+            "prompt_hardening_candidate",
+            "fixture_refinement_candidate",
+            "manual_review_candidate",
+        ):
+            candidates = decision_gate.get(gate_name)
+            if not isinstance(candidates, list) or not candidates:
+                lines.append(f"| {gate_name} | - | - | - |")
+                continue
+            for candidate in candidates:
+                if not isinstance(candidate, dict):
+                    continue
+                details = candidate.get("details")
+                detail_text = (
+                    ", ".join(str(detail) for detail in details)
+                    if isinstance(details, list) and details
+                    else "-"
+                )
+                lines.append(
+                    "| {gate_name} | {query_id} | {primary_reason} | {details} |".format(
+                        gate_name=gate_name,
+                        query_id=candidate.get("query_id", "-"),
+                        primary_reason=candidate.get("primary_reason", "-"),
+                        details=detail_text,
+                    )
+                )
 
     lines.extend(
         [

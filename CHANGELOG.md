@@ -51,6 +51,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Changed
 
+- Updated the SRQ/ZR coverage report to schema v3 with a deterministic Citation / Reasoning Decision Gate that groups next-work candidates for runtime rerun, prompt hardening, fixture refinement, and manual review without provider calls or platform-status changes.
 - Updated the SRQ/ZR coverage report to expose per-chunk Agama citation anchor details, including CBETA IDs, section-label status, XML anchor status, anchor probe IDs, manual-boundary status, and candidate-set links without treating anchor location as textual equivalence or publication-ready collation.
 - Updated the SRQ/ZR coverage report to schema v2 with a Citation / Reasoning Triage Matrix that combines citation readiness, runtime evidence class, `ZR-*` links, reasoning roles, manual-review boundary status, and next-action hints without provider calls or platform-status changes.
 - Updated the reasoning alignment report with a local `--all` mode that summarizes every `SRQ-*` case, highlights `SRQ-01` / `ZR-06` as the current full-chain exemplar, and keeps `SRQ-04` manual-review-required boundaries visible without provider calls or platform-status changes.
