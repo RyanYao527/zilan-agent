@@ -684,3 +684,17 @@ entries:
       - query_id: SRQ-04
         status: manual_review_required
         notes: Local reviewer-decision ingestion path only; future limited or stronger semantic-boundary decisions must cite dated evidence notes, while all current rows remain pending; textual equivalence, source dependence, publication-ready collation, and runtime pass remain unproven, and platform status remains unchanged.
+
+  - id: 2026-09-02-srq04-citation-anchor-section-refinement
+    file: docs/runtime-evidence/2026-09-02-srq04-citation-anchor-section-refinement.md
+    date: "2026-09-02"
+    evidence_class: summary_only
+    related_cases:
+      - SRQ-04
+      - ZR-05
+    answer_file_safe: false
+    platform_status_change: false
+    reviews:
+      - query_id: SRQ-04
+        status: manual_review_required
+        notes: Local citation-anchor refinement only; the XML-P5 anchor for agama:T01n0001:juan-3:line-1829 is located, but no stable source-derived section label is available, and textual equivalence, source dependence, publication-ready collation, runtime pass, and platform status remain unchanged.

@@ -110,6 +110,68 @@ def test_srq_coverage_report_exposes_agama_citation_metadata_triage() -> None:
     assert citation_metadata["publication_ready_status"] == "publication_ready_unreviewed"
 
 
+def test_srq_coverage_report_exposes_per_chunk_citation_anchor_details() -> None:
+    report = build_srq_coverage_report(ROOT)
+
+    srq04 = _case_by_id(report, "SRQ-04")
+    citation_metadata = srq04["citation_metadata"]
+    details = citation_metadata["citation_anchor_details"]
+
+    assert citation_metadata["citation_anchor_detail_status_counts"] == {
+        "anchor_located": 4,
+    }
+    assert len(details) == 4
+    by_chunk = {detail["chunk_id"]: detail for detail in details}
+    long_agama_unsectioned = by_chunk["agama:T01n0001:juan-3:line-1829"]
+
+    assert long_agama_unsectioned == {
+        "chunk_id": "agama:T01n0001:juan-3:line-1829",
+        "cbeta_id": "T01n0001",
+        "section_label": None,
+        "section_label_status": "source_unavailable",
+        "xml_anchor_status": "anchor_located",
+        "anchor_probe_id": "cbeta-anchor:T01n0001:line-1829",
+        "manual_boundary_status": "theme_parallel_only",
+        "candidate_set_ids": [
+            "long-agama-no-self-verse-and-aggregates",
+        ],
+    }
+    assert by_chunk["agama:T02n0099:juan-1:line-147"]["candidate_set_ids"] == [
+        "no-self-five-aggregates-and-feeling",
+        "za-agama-and-long-agama-no-self-verse",
+    ]
+
+
+def test_srq_coverage_report_marks_referenced_missing_anchor_probe(tmp_path: Path) -> None:
+    collation_fixture = tmp_path / "high_value_no_self_parallel_candidates.yaml"
+    collation_fixture.write_text(
+        """
+version: 1
+candidate_sets:
+  - set_id: broken-anchor-fixture
+    status: manual_collation_reviewed
+    source_chunk_id: agama:T02n0099:juan-1:line-147
+    source_anchor_probe: cbeta-anchor:missing
+    candidate_parallels: []
+""",
+        encoding="utf-8",
+    )
+
+    report = build_srq_coverage_report(ROOT, collation_candidates_path=collation_fixture)
+
+    srq04 = _case_by_id(report, "SRQ-04")
+    details = srq04["citation_metadata"]["citation_anchor_details"]
+    by_chunk = {detail["chunk_id"]: detail for detail in details}
+
+    assert srq04["citation_metadata"]["citation_anchor_detail_status_counts"] == {
+        "anchor_probe_missing": 1,
+        "not_applicable": 3,
+    }
+    assert by_chunk["agama:T02n0099:juan-1:line-147"]["xml_anchor_status"] == "anchor_probe_missing"
+    assert by_chunk["agama:T02n0099:juan-1:line-147"]["anchor_probe_id"] == "cbeta-anchor:missing"
+    assert by_chunk["agama:T02n0099:juan-1:line-147"]["candidate_set_ids"] == ["broken-anchor-fixture"]
+
+
 def test_srq_coverage_report_does_not_treat_anchor_location_as_completed_collation() -> None:
     report = build_srq_coverage_report(ROOT)
 
@@ -235,14 +297,15 @@ def test_srq04_manual_collation_boundary_stays_manual_review_required_without_ru
 
     assert srq04["coverage_status"] == "manual_review_required"
     assert runtime_evidence["latest_status"] == "manual_review_required"
-    assert latest_entry["entry_id"] == "2026-09-01-srq04-reviewer-decision-ingestion-path"
+    assert latest_entry["entry_id"] == "2026-09-02-srq04-citation-anchor-section-refinement"
     assert latest_entry["evidence_class"] == "summary_only"
     assert latest_entry["answer_file_safe"] is False
     assert latest_entry["platform_status_change"] is False
-    assert "Local reviewer-decision ingestion path only" in latest_entry["notes"]
-    assert "all current rows remain pending" in latest_entry["notes"]
+    assert "Local citation-anchor refinement only" in latest_entry["notes"]
+    assert "XML-P5 anchor" in latest_entry["notes"]
+    assert "no stable source-derived section label is available" in latest_entry["notes"]
     assert "source dependence" in latest_entry["notes"]
-    assert "platform status remains unchanged" in latest_entry["notes"]
+    assert "platform status remain unchanged" in latest_entry["notes"]
 
 
 def test_srq_coverage_report_preserves_hash_prefixed_manifest_note_text() -> None:
@@ -282,6 +345,13 @@ def test_srq_coverage_markdown_contains_limitations_and_manual_review_language()
     assert "manual boundary: theme_parallel_only" in markdown
     assert "reviewer decisions: pending_reviewer_decision=3" in markdown
     assert "textual equivalence: textual_equivalence_unreviewed" in markdown
+    assert "## Citation Anchor Details" in markdown
+    assert (
+        "| SRQ-04 | `agama:T01n0001:juan-3:line-1829` | `T01n0001` | "
+        "`source_unavailable` | `anchor_located` | "
+        "`cbeta-anchor:T01n0001:line-1829` | `theme_parallel_only` | "
+        "long-agama-no-self-verse-and-aggregates |"
+    ) in markdown
     assert "manual collation candidates: 3" in markdown
     assert "## Citation / Reasoning Triage Matrix" in markdown
     assert "manual_semantic_boundary_review" in markdown

@@ -1,6 +1,6 @@
 # Runtime Validation Log
 
-> Last updated: 2026-09-01
+> Last updated: 2026-09-02
 
 This log records manual runtime validation evidence for zilan-agent. It complements CI and repository invariant checks; it does not replace `python scripts/validate_zilan_repo.py --check-generated --strict-yaml`, pytest, ruff, or platform status maintenance in `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -27,6 +27,25 @@ Use conservative status labels:
 | `fail` | The case did not meet expected behavior. |
 | `blocked` | The case could not be executed because of missing access, tooling, or provider failure. |
 | `not-run` | The case remains in scope but was not executed in this session. |
+
+## 2026-09-02 SRQ-04 Citation Anchor / Section Refinement
+
+| Field | Value |
+|---|---|
+| Runtime | None; local citation/coverage refinement only |
+| Provider / model | None |
+| Tool version | `scripts/srq_coverage_report.py` and committed CBETA XML-P5 fixture probes |
+| Repository commit | after the 2026-09-01 `SRQ-04` reviewer decision ingestion path |
+| Prompt set | No prompt execution |
+| Transcript status | No answer excerpt. Summary-only citation refinement note committed at `docs/runtime-evidence/2026-09-02-srq04-citation-anchor-section-refinement.md`. |
+| Repository checks | The SRQ/ZR coverage report now exposes per-chunk citation anchor details for Agama chunks, including `section_label_status`, `xml_anchor_status`, `anchor_probe_id`, manual boundary status, and candidate-set IDs. |
+| Overall result | `manual_review_required`: `agama:T01n0001:juan-3:line-1829` is XML-anchor-located at `T01.0001.0021a` / `0021a18`, but no stable source-derived section label is available. Textual equivalence, source dependence, publication-ready collation, runtime answer pass, and platform validation claims remain unproven. |
+
+### Known Limits
+
+- This is not a runtime run, provider call, local replay, or answer-contract pass.
+- This does not modify the candidate map conclusions or the pending reviewer-decision fixture rows.
+- `docs/platform-validation.md` and platform tested status remain unchanged.
 
 ## 2026-09-01 SRQ-04 Reviewer Decision Ingestion Path
 

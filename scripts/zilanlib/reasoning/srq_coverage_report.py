@@ -305,6 +305,77 @@ def _anchor_probes_by_chunk_id(candidate_sets: list[dict[str, Any]]) -> dict[str
     return probes_by_chunk_id
 
 
+def _candidate_sets_by_chunk_id(candidate_sets: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    sets_by_chunk_id: dict[str, list[dict[str, Any]]] = {}
+    for candidate_set in candidate_sets:
+        for chunk_id in _candidate_set_chunk_ids(candidate_set):
+            sets_by_chunk_id.setdefault(chunk_id, []).append(candidate_set)
+    return sets_by_chunk_id
+
+
+def _candidate_set_ids_by_chunk_id(candidate_sets: list[dict[str, Any]]) -> dict[str, list[str]]:
+    ids_by_chunk_id: dict[str, set[str]] = {}
+    for candidate_set in candidate_sets:
+        set_id = candidate_set.get("set_id")
+        if not isinstance(set_id, str) or not set_id:
+            continue
+        for chunk_id in _candidate_set_chunk_ids(candidate_set):
+            ids_by_chunk_id.setdefault(chunk_id, set()).add(set_id)
+    return {chunk_id: sorted(set_ids) for chunk_id, set_ids in ids_by_chunk_id.items()}
+
+
+def _chunk_xml_anchor_status(
+    *,
+    chunk_id: str,
+    anchor_probe_ids_by_chunk_id: dict[str, str],
+    anchor_probes_by_id: dict[str, dict[str, Any]],
+) -> str:
+    probe_id = anchor_probe_ids_by_chunk_id.get(chunk_id)
+    if probe_id and probe_id in anchor_probes_by_id:
+        return "anchor_located"
+    if probe_id:
+        return "anchor_probe_missing"
+    return "not_applicable"
+
+
+def _citation_anchor_details(
+    *,
+    agama_chunks: list[dict[str, Any]],
+    related_candidate_sets: list[dict[str, Any]],
+    anchor_probes_by_id: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    anchor_probe_ids_by_chunk_id = _anchor_probes_by_chunk_id(related_candidate_sets)
+    candidate_sets_by_chunk_id = _candidate_sets_by_chunk_id(related_candidate_sets)
+    candidate_set_ids_by_chunk_id = _candidate_set_ids_by_chunk_id(related_candidate_sets)
+    details: list[dict[str, Any]] = []
+    for chunk in agama_chunks:
+        chunk_id = str(chunk["chunk_id"])
+        probe_id = anchor_probe_ids_by_chunk_id.get(chunk_id)
+        details.append(
+            {
+                "chunk_id": chunk_id,
+                "cbeta_id": chunk.get("cbeta_id") if isinstance(chunk.get("cbeta_id"), str) else None,
+                "section_label": chunk.get("section_label")
+                if isinstance(chunk.get("section_label"), str)
+                else None,
+                "section_label_status": chunk.get("section_label_status")
+                if isinstance(chunk.get("section_label_status"), str)
+                else None,
+                "xml_anchor_status": _chunk_xml_anchor_status(
+                    chunk_id=chunk_id,
+                    anchor_probe_ids_by_chunk_id=anchor_probe_ids_by_chunk_id,
+                    anchor_probes_by_id=anchor_probes_by_id,
+                ),
+                "anchor_probe_id": probe_id if isinstance(probe_id, str) else None,
+                "manual_boundary_status": _manual_collation_boundary_status(
+                    candidate_sets_by_chunk_id.get(chunk_id, [])
+                ),
+                "candidate_set_ids": candidate_set_ids_by_chunk_id.get(chunk_id, []),
+            }
+        )
+    return details
+
+
 def _agama_chunk_sort_key(chunk_id: str) -> tuple[str, int, int, str]:
     match = re.match(r"^agama:([^:]+):juan-(\d+):line-(\d+)$", chunk_id)
     if not match:
@@ -501,6 +572,14 @@ def _citation_metadata(
         candidate_sets=related_candidate_sets,
         reviewer_decisions=reviewer_decisions,
     )
+    citation_anchor_details = _citation_anchor_details(
+        agama_chunks=agama_chunks,
+        related_candidate_sets=related_candidate_sets,
+        anchor_probes_by_id=anchor_probes_by_id,
+    )
+    citation_anchor_detail_status_counts = Counter(
+        str(detail["xml_anchor_status"]) for detail in citation_anchor_details
+    )
 
     return {
         "status": status,
@@ -543,6 +622,8 @@ def _citation_metadata(
             claimed="publication_ready_claimed",
             unreviewed="publication_ready_unreviewed",
         ),
+        "citation_anchor_details": citation_anchor_details,
+        "citation_anchor_detail_status_counts": dict(sorted(citation_anchor_detail_status_counts.items())),
         **reviewer_decision_summary,
     }
 
@@ -963,6 +1044,22 @@ def _markdown_citation_notes(citation_metadata: dict[str, Any]) -> str:
     return "; ".join(notes) or "-"
 
 
+def _markdown_code_or_dash(value: object) -> str:
+    if isinstance(value, str) and value:
+        return f"`{value}`"
+    return "-"
+
+
+def _markdown_section_label_status(detail: dict[str, Any]) -> str:
+    section_label = detail.get("section_label")
+    if isinstance(section_label, str) and section_label:
+        return f"`{section_label}`"
+    section_label_status = detail.get("section_label_status")
+    if isinstance(section_label_status, str) and section_label_status:
+        return f"`{section_label_status}`"
+    return "-"
+
+
 def render_markdown_report(report: dict[str, Any]) -> str:
     lines = [
         f"# {REPORT_TITLE}",
@@ -1092,6 +1189,48 @@ def render_markdown_report(report: dict[str, Any]) -> str:
                 notes=_markdown_citation_notes(citation_metadata),
             )
         )
+
+    lines.extend(
+        [
+            "",
+            "## Citation Anchor Details",
+            "",
+            "Per-chunk details keep XML anchor location, source section-label availability, and manual semantic "
+            "boundary status separate. Anchor location alone is not textual equivalence or publication-ready "
+            "collation.",
+            "",
+            "| SRQ | Chunk | CBETA | Section label/status | XML anchor | Anchor probe | Manual boundary | "
+            "Candidate sets |",
+            "| --- | --- | --- | --- | --- | --- | --- | --- |",
+        ]
+    )
+    for case in report["cases"]:
+        citation_metadata = case["citation_metadata"]
+        details = citation_metadata.get("citation_anchor_details")
+        if not isinstance(details, list):
+            continue
+        for detail in details:
+            if not isinstance(detail, dict):
+                continue
+            candidate_ids = detail.get("candidate_set_ids")
+            candidate_text = (
+                ", ".join(str(candidate_id) for candidate_id in candidate_ids)
+                if isinstance(candidate_ids, list) and candidate_ids
+                else "-"
+            )
+            lines.append(
+                "| {query_id} | {chunk_id} | {cbeta_id} | {section_label_status} | {xml_anchor_status} | "
+                "{anchor_probe_id} | {manual_boundary_status} | {candidate_sets} |".format(
+                    query_id=case["query_id"],
+                    chunk_id=_markdown_code_or_dash(detail.get("chunk_id")),
+                    cbeta_id=_markdown_code_or_dash(detail.get("cbeta_id")),
+                    section_label_status=_markdown_section_label_status(detail),
+                    xml_anchor_status=_markdown_code_or_dash(detail.get("xml_anchor_status")),
+                    anchor_probe_id=_markdown_code_or_dash(detail.get("anchor_probe_id")),
+                    manual_boundary_status=_markdown_code_or_dash(detail.get("manual_boundary_status")),
+                    candidate_sets=candidate_text,
+                )
+            )
 
     lines.extend(["", "## Limitations", ""])
     lines.extend(f"- {limitation}" for limitation in report["limitations"])

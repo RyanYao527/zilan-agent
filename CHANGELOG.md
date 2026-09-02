@@ -6,6 +6,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Added
 
+- Added a 2026-09-02 `SRQ-04` citation anchor / section refinement note recording that `agama:T01n0001:juan-3:line-1829` is XML-anchor-located but still has `section_label_status=source_unavailable`, without provider calls, runtime evidence, candidate-map changes, or platform-status changes.
 - Added a 2026-09-01 `SRQ-04` reviewer-decision ingestion-path note so future human semantic-boundary results can be recorded with dated evidence without changing current candidate conclusions, runtime status, provider routes, or platform validation status.
 - Added `scripts/srq04_manual_review_packet.py` as a local Markdown/JSON packet for handing the three current `SRQ-04` XML-P5 no-self candidate sets to human reviewers without provider calls, runtime evidence, publication-ready claims, or platform-status changes.
 - Added `scripts/reasoning_alignment_report.py` and a local `SRQ-01` / `ZR-06` alignment report so Agama evidence, Hetuvidya, Collected Topics, Madhyamaka, cognitive mapping, and practice-boundary coverage can be triaged independently without provider calls, semantic grading, or platform-status changes.
@@ -50,6 +51,7 @@ All notable changes to zilan-agent are tracked here. Platform validation status 
 
 ### Changed
 
+- Updated the SRQ/ZR coverage report to expose per-chunk Agama citation anchor details, including CBETA IDs, section-label status, XML anchor status, anchor probe IDs, manual-boundary status, and candidate-set links without treating anchor location as textual equivalence or publication-ready collation.
 - Updated the SRQ/ZR coverage report to schema v2 with a Citation / Reasoning Triage Matrix that combines citation readiness, runtime evidence class, `ZR-*` links, reasoning roles, manual-review boundary status, and next-action hints without provider calls or platform-status changes.
 - Updated the reasoning alignment report with a local `--all` mode that summarizes every `SRQ-*` case, highlights `SRQ-01` / `ZR-06` as the current full-chain exemplar, and keeps `SRQ-04` manual-review-required boundaries visible without provider calls or platform-status changes.
 - Updated the reasoning alignment report to count explicit answer-contract `practice_boundary` slots as practice-boundary evidence for `SRQ-09` / `SRQ-10`, while still preventing cognitive-mapping coverage from substituting for a missing practice boundary.
