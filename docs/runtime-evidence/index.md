@@ -1,6 +1,6 @@
 # Runtime Evidence Index
 
-> Last updated: 2026-09-01
+> Last updated: 2026-09-02
 
 This index is a navigation aid for `docs/runtime-evidence/`. It does not change platform validation status. Platform status remains governed by `agents/openai.yaml` and `docs/platform-validation.md`.
 
@@ -93,6 +93,7 @@ Do not use summary-only evidence as `answer_file` input. Use the standalone answ
 
 | Evidence summary | Scope | Answer excerpt status |
 |---|---|---|
+| `2026-09-02-srq04-citation-anchor-section-refinement.md` | records per-chunk SRQ-04 citation anchor detail and confirms `agama:T01n0001:juan-3:line-1829` remains `section_label_status=source_unavailable` after local Markdown/XML-P5 inspection | summary-only citation refinement; XML anchor location is visible, but textual equivalence, source dependence, publication-ready collation, runtime answer pass, and platform validation remain unproven |
 | `2026-09-01-srq04-reviewer-decision-ingestion-path.md` | documents the local ingestion path for future `SRQ-04` reviewer decisions, including dated evidence-note requirements for non-pending decisions | summary-only ingestion path; no new human conclusion, no answer excerpt, no candidate-map conclusion change, and `SRQ-04` remains `manual_review_required` |
 | `2026-08-21-srq04-reviewer-decision-intake.md` | adds a structured pending reviewer-decision intake fixture for the three current `SRQ-04` XML-P5 no-self candidate sets | summary-only intake; all decisions remain pending and do not establish textual equivalence, source dependence, publication-ready collation, runtime answer evidence, or platform validation evidence |
 | `2026-08-20-srq04-manual-semantic-boundary-queue.md` | queues the current `SRQ-04` manual semantic-boundary review over three existing XML-P5 no-self candidate sets | summary-only reviewer queue; anchor-located and limited theme-parallel evidence remains `manual_review_required`, not textual equivalence, source-dependence evidence, runtime answer evidence, or platform validation evidence |
